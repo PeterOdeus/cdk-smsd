@@ -1,0 +1,149 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.openscience.cdk.smsd.core.tools;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openscience.cdk.ChemModel;
+import org.openscience.cdk.Molecule;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
+
+/**
+ *
+ * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK.
+ * @e-mail: asad@ebi.ac.uk
+ */
+public class EBIMDLReader {
+
+    private static IMolecule Mol = null;
+
+    public EBIMDLReader(InputStream in, Mode mode) throws IOException {
+
+        try {
+            MDLV2000Reader reader2 = new MDLV2000Reader(in, mode);
+            Mol = (IMolecule) reader2.read(new Molecule());
+            reader2.close();
+        } catch (CDKException e) {
+            String s = e.toString();
+            if (s.contains("This file must be read with the MDLV3000Reader.")) {
+                MDLV3000Reader reader2 = new MDLV3000Reader(in, mode);
+                try {
+                    Mol = (IMolecule) reader2.read(new Molecule());
+                } catch (CDKException ex) {
+                    Logger.getLogger(EBIMDLReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                reader2.close();
+
+            } else if (s.contains("This file must be read with the MDLReader.")) {
+                try {
+                    MDLReader reader2 = new MDLReader(in, mode);
+                    Mol = (IMolecule) reader2.read(new Molecule());
+                    reader2.close();
+                } catch (CDKException ex) {
+                    Logger.getLogger(EBIMDLReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
+            }
+
+
+        }
+
+    }
+
+    public EBIMDLReader(InputStream in) throws IOException, CDKException {
+        this(in, Mode.RELAXED);
+    }
+
+    public EBIMDLReader(Reader in) throws IOException, CDKException {
+        this(in, Mode.RELAXED);
+    }
+
+    public EBIMDLReader(Reader in, Mode mode) throws IOException {
+
+        try {
+            MDLV2000Reader reader2 = new MDLV2000Reader(in, mode);
+            Mol = (IMolecule) reader2.read(new Molecule());
+            reader2.close();
+        } catch (CDKException e) {
+            String s = e.toString();
+            if (s.contains("This file must be read with the MDLV3000Reader.")) {
+                MDLV3000Reader reader2 = new MDLV3000Reader(in, mode);
+                try {
+                    Mol = (IMolecule) reader2.read(new Molecule());
+                } catch (CDKException ex) {
+                    Logger.getLogger(EBIMDLReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                reader2.close();
+
+            } else if (s.contains("This file must be read with the MDLReader.")) {
+                try {
+                    MDLReader reader2 = new MDLReader(in, mode);
+                    Mol = (IMolecule) reader2.read(new Molecule());
+                    reader2.close();
+                } catch (CDKException ex) {
+                    Logger.getLogger(EBIMDLReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
+            }
+
+
+        }
+
+    }
+
+    public IMolecule getMolecule() {
+        return Mol;
+    }
+
+    public IMolecule getMoleculeWithLayoutCheck() {
+        if (GeometryTools.has2DCoordinatesNew(Mol) != 2) {
+            try {
+                StructureDiagramGenerator sdg = new StructureDiagramGenerator(Mol);
+                sdg.generateCoordinates();
+                Mol = sdg.getMolecule();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return Mol;
+    }
+
+    
+    public IChemModel getChemModelWithMoleculeWithLayoutCheck() {
+        IChemModel chemModel = new ChemModel();
+        chemModel.setMoleculeSet(ConnectivityChecker.partitionIntoMolecules(Mol));
+        for (IAtomContainer molecule : MoleculeSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
+            if (GeometryTools.has2DCoordinatesNew(molecule) != 2) {
+                try {
+                    StructureDiagramGenerator sdg = new StructureDiagramGenerator((IMolecule) molecule);
+                    sdg.generateCoordinates();
+                    molecule = sdg.getMolecule();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return chemModel;
+    }
+}
+
+

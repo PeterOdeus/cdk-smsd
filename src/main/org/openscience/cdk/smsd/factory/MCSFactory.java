@@ -1,0 +1,1076 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.openscience.cdk.smsd.factory;
+
+import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+import org.openscience.cdk.smsd.interfaces.IMCSBase;
+import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
+import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
+import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
+import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openscience.cdk.smsd.filters.ChemicalFilters;
+import org.openscience.cdk.smsd.filters.FragmentMatcher;
+import org.openscience.cdk.smsd.global.BondType;
+import org.openscience.cdk.smsd.global.TimeOut;
+import org.openscience.cdk.smsd.helper.MolHandler;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
+
+/**
+ *
+ * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  
+ * @contact asad@ebi.ac.uk
+ */
+public class MCSFactory implements IMCSAlgorithm {
+
+    private Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private TreeMap<Integer, Integer> firstSolution = null;
+    private Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private Map<IAtom, IAtom> firstAtomMCS = null;
+    private static double tanimoto = -1.0;
+    private static double euclidean = -1.0;
+    private MolHandler RMol = null;
+    private MolHandler PMol = null;
+    private IAtomContainerSet RFrag = null;
+    private IAtomContainerSet PFrag = null;
+    private Vector<Integer> StereoScore = null;
+    private Vector<Integer> fragmentSize = null;
+    private Vector<Double> bEnergies = null;
+    private boolean removeHydrogen = false;
+    private boolean stereoFilter = false;
+    private boolean fragmentFilter = false;
+    private boolean energyFilter = false;
+    private IMCS mcs = null;
+    private int algorithmType = 0;
+
+    /**
+     * 
+     * @param algorithmType 0 default, 1 MCSPlus, 2 VFLib, 3 CDKMCS
+     * @param bondTypeFlag
+     * @param removeHydrogen
+     * @param stereoFilter
+     * @param fragmentFilter
+     * @param energyFilter
+     * @throws java.lang.Exception
+     */
+    public MCSFactory(
+            int algorithmType,
+            boolean bondTypeFlag,
+            boolean removeHydrogen,
+            boolean stereoFilter,
+            boolean fragmentFilter,
+            boolean energyFilter) throws Exception {
+
+        this.removeHydrogen = removeHydrogen;
+        this.stereoFilter = stereoFilter;
+        this.fragmentFilter = fragmentFilter;
+        this.energyFilter = energyFilter;
+        this.algorithmType = algorithmType;
+
+
+        firstSolution = new TreeMap<Integer, Integer>();
+        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        firstAtomMCS = new HashMap<IAtom, IAtom>();
+
+        if (bondTypeFlag) {
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.10);
+        } else {
+
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.15);
+        }
+
+        BondType BT = BondType.getInstance();
+        BT.reset();
+        BT.setBondSensitiveFlag(bondTypeFlag);
+
+
+    }
+
+    public MCSFactory(
+            boolean bondTypeFlag,
+            boolean removeHydrogen,
+            boolean stereoFilter,
+            boolean fragmentFilter,
+            boolean energyFilter) throws Exception {
+
+        this.removeHydrogen = removeHydrogen;
+        this.stereoFilter = stereoFilter;
+        this.fragmentFilter = fragmentFilter;
+        this.energyFilter = energyFilter;
+
+
+        firstSolution = new TreeMap<Integer, Integer>();
+        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        firstAtomMCS = new HashMap<IAtom, IAtom>();
+
+        if (bondTypeFlag) {
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.10);
+        } else {
+
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.15);
+        }
+
+        BondType BT = BondType.getInstance();
+        BT.reset();
+        BT.setBondSensitiveFlag(bondTypeFlag);
+
+
+    }
+
+    private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
+        ArrayList<String> a = new ArrayList<String>();
+        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
+            if (removeHydrogen && !reactantMolecule.getAtom(i).getSymbol().equals("H")) {
+                a.add(reactantMolecule.getAtom(i).getSymbol());
+            } else {
+                a.add(reactantMolecule.getAtom(i).getSymbol());
+            }
+        }
+
+
+        int common = 0;
+        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
+
+            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
+                a.remove(productMolecule.getAtom(i).getSymbol());
+                common++;
+            }
+        }
+        return common - a.size();
+    }
+
+    //IRingSet irs = ringFinder.findAllRings(A);
+    /**
+     * 
+     * @param Molecule1
+     * @param Molecule2
+     */
+    private void printMolecules(IAtomContainer Molecule1, IAtomContainer Molecule2) {
+
+        System.out.println("Molecule 1: " + Molecule1.getAtomCount());
+
+        for (int i = 0; i < Molecule1.getAtomCount(); i++) {
+
+            System.out.print(Molecule1.getAtom(i).getSymbol() + " ");
+        }
+
+        System.out.println();
+        System.out.println("Molecule 2: " + Molecule2.getAtomCount());
+        for (int i = 0; i < Molecule2.getAtomCount(); i++) {
+
+            System.out.print(Molecule2.getAtom(i).getSymbol() + " ");
+        }
+        System.out.println();
+
+    }
+
+    private synchronized void MCSBuilder() {
+        System.out.println("MCSBuilder");
+        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+
+        try {
+
+
+            int rBondCount = RMol.getMolecule().getBondCount();
+            int pBondCount = PMol.getMolecule().getBondCount();
+
+            int rAtomCount = RMol.getMolecule().getAtomCount();
+            int pAtomCount = PMol.getMolecule().getAtomCount();
+
+//            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
+
+            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
+
+//            long startTime = System.currentTimeMillis();
+//
+            if ((rBondCount <= 1 && rAtomCount == 1) || (pBondCount <= 1 && pAtomCount == 1)) {
+//                System.out.println("Single Mapping");
+                SingleMapping();
+            } else if (algorithmType == 0) {
+//                 System.err.println("MCSPlus");
+                MCSPlus();
+                if (getFirstMapping() == null) {
+                    mcs = null;
+                    System.gc();
+//                    System.err.println("Many d-edges, switching to VF-McGregor");
+                    VFLibMCS();
+//                    System.out.println("Mapped with VF-McGregor");
+                }
+            } else if (algorithmType == 1) {
+//                 System.err.println("MCSPlus");
+                MCSPlus();
+                if (getFirstMapping() == null) {
+                    mcs = null;
+                    System.out.println("Time-out occured MCSPlus");
+                    System.gc();
+                }
+
+            } else if (algorithmType == 2) {
+//                 System.err.println("VFLibMCS");
+
+                if (rBondCount >= 6 && rBondCount >= 6) {
+                    VFLibMCS();
+                    if (getFirstMapping() == null) {
+                        mcs = null;
+                        System.gc();
+                    }
+                } else {
+                    CDKMCS();
+                }
+
+//              System.out.println("Mapped with VFLibMCS");
+
+            } else if (algorithmType == 3) {
+//                 System.err.println("CDKMCS");
+                CDKMCS();
+                if (getFirstMapping() == null) {
+                    System.out.println("Time-out occured MCSPlus");
+                    mcs = null;
+                    System.gc();
+                }
+
+//              System.out.println("Mapped with CDKMCS");
+
+            }
+//            
+//
+//            System.out.println("MCS solution count:" + this.allMCS.size());
+//            System.out.println("solution Size:" + this.allMCS.firstElement().size());
+//            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
+//                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
+//                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
+//            }
+//            long endTime = System.currentTimeMillis();
+            System.gc();
+//            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
+//            System.out.println("!Done!\n");
+
+        } catch (Exception ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+//    private synchronized void MCSBuilder() {
+////        System.out.println("MCSBuilder");
+////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+//
+//        try {
+//
+//
+//            int rBondCount = RMol.getMolecule().getBondCount();
+//            int pBondCount = PMol.getMolecule().getBondCount();
+//
+//            int rAtomCount = RMol.getMolecule().getAtomCount();
+//            int pAtomCount = PMol.getMolecule().getAtomCount();
+//
+////            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
+//
+//            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
+//
+////            long startTime = System.currentTimeMillis();
+////
+//            if ((rBondCount <= 1 && rAtomCount == 1) || (pBondCount <= 1 && pAtomCount == 1)) {
+////                System.out.println("Single Mapping");
+//                SingleMapping();
+//            } else if (rBondCount > 6 && pBondCount > 6) {
+//                if ((rAtomCount != pAtomCount && rBondCount != pBondCount) ||
+//                        (rAtomCount == pAtomCount && rBondCount == pBondCount)) {
+//                    System.out.println("CDKMCS-VF-McGregor");
+//                    CDKMCS();
+//                    if (getFirstMapping() == null) {
+//                        //Reset the mapping
+//                        mcs = null;
+//                        System.gc();
+//
+//                        VFLibMCS();
+//                        System.out.println("Mapped with VF-McGregor");
+//                    }
+////                    else {
+////                        System.out.println("Mapped with CDKMCS");
+////                    }
+//                } else {
+//
+////                System.out.println("Mapped with VF-McGregor");
+//                    VFLibMCS();
+//                }
+//
+//            } else {
+////                System.err.println("MCSPlus");
+//                MCSPlus();
+//                if (getFirstMapping() == null) {
+//                    mcs = null;
+//                    System.gc();
+////                    System.err.println("Many d-edges, switching to VF-McGregor");
+//                    VFLibMCS();
+////                    System.out.println("Mapped with VF-McGregor");
+//                }
+////                else {
+////                    System.out.println("Mapped with MCSPlus");
+////                }
+//            }
+//
+////
+////            System.out.println("MCS solution count:" + this.allMCS.size());
+////            System.out.println("solution Size:" + this.allMCS.firstElement().size());
+////            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
+////                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
+////                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
+////            }
+////            long endTime = System.currentTimeMillis();
+//            System.gc();
+////            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
+////            System.out.println("!Done!\n");
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+//        private synchronized void MCSBuilder() {
+////        System.out.println("MCSBuilder");
+////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+//
+//        try {
+//            System.out.println("CDKMCS");
+//            CDKMCS();
+//
+//            System.gc();
+//        } catch (Exception ex) {
+//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//
+//    }
+//    private synchronized void MCSBuilder() {
+////        System.out.println("MCSBuilder");
+////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+//
+//        try {
+//            System.out.println("VFLib");
+//            VFLibMCS();
+//
+//            System.gc();
+//        } catch (Exception ex) {
+//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//
+//    }
+//
+//        private synchronized void MCSBuilder() {
+////        System.out.println("MCSBuilder");
+////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+//
+//        try {
+//            System.out.println("MCSPlus");
+//            MCSPlus();
+//
+//            System.gc();
+//        } catch (Exception ex) {
+//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        System.out.println("MCS solution count:" + this.allMCS.size());
+//////            System.out.println("solution Size:" + this.allMCS.firstElement().size());
+//////            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
+//////                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
+//////                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
+//////            }
+//
+//    }
+//
+//    private synchronized void MCSBuilder() {
+////        System.out.println("MCSBuilder");
+////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
+//
+//        try {
+//
+//
+//            int rBondCount = RMol.getMolecule().getBondCount();
+//            int pBondCount = PMol.getMolecule().getBondCount();
+//
+//            int rAtomCount = RMol.getMolecule().getAtomCount();
+//            int pAtomCount = PMol.getMolecule().getAtomCount();
+//
+////            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
+//
+//            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
+//
+////            long startTime = System.currentTimeMillis();
+////
+//            if ((rBondCount <= 1 && rAtomCount == 1) || (pBondCount <= 1 && pAtomCount == 1)) {
+////                System.out.println("Single Mapping");
+//                SingleMapping();
+//            } else if (rBondCount > 12 && pBondCount > 12) {
+//                if ((rAtomCount != pAtomCount && rBondCount != pBondCount) ||
+//                        (rAtomCount == pAtomCount && rBondCount == pBondCount)) {
+////                    System.out.println("CDKMCS-VF-McGregor");
+//                    CDKMCS();
+//                    if (getFirstMapping() == null) {
+//                        //Reset the mapping
+//                        mcs = null;
+//                        System.gc();
+//
+//                        VFLibMCS();
+////                        System.out.println("Mapped with VF-McGregor");
+//                    }
+////                    else {
+////                        System.out.println("Mapped with CDKMCS");
+////                    }
+//                } else {
+//
+////                System.out.println("Mapped with VF-McGregor");
+//                    VFLibMCS();
+//                }
+//
+//            } else {
+////                System.err.println("MCSPlus");
+//                MCSPlus();
+//                if (getFirstMapping() == null) {
+//                    mcs = null;
+//                    System.gc();
+////                    System.err.println("Many d-edges, switching to VF-McGregor");
+//                    VFLibMCS();
+////                    System.out.println("Mapped with VF-McGregor");
+//                }
+////                else {
+////                    System.out.println("Mapped with MCSPlus");
+////                }
+//            }
+//
+////            else if (commonAtoms == rAtomCount ||
+////                    commonAtoms == pAtomCount) {
+////                System.out.println("VF-McGregor");
+////                VFLibMCS();
+////
+////            }
+//
+////            else if (rAtomCount != pAtomCount && rBondCount != pBondCount) {
+////
+////                System.out.println("CDKMCS-MCSPlus-VF-McGregor");
+////                CDKMCS();
+////                if (getFirstMapping() == null) {
+////                    //Reset the mapping
+////                    mcs = null;
+////                    System.gc();
+////                    System.err.println("Time out, switching to MCSPlus");
+////                    MCSPlus();
+////                    if (getFirstMapping() == null) {
+////                        mcs = null;
+////                        System.gc();
+////                        System.err.println("Many d-edges, switching to VF-McGregor");
+////                        VFLibMCS();
+////                        System.out.println("Mapped with VF-McGregor");
+////                    } else {
+////                        System.err.println("Mapped with MCSPlus");
+////                    }
+////                } else {
+////                    System.out.println("Mapped with CDKMCS");
+////                }
+////
+////            } else {
+//////                System.err.println("MCSPlus");
+////                MCSPlus();
+////                if (getFirstMapping() == null) {
+////                    mcs = null;
+////                    System.gc();
+////                    System.err.println("Many d-edges, switching to VF-McGregor");
+////                    VFLibMCS();
+////                    System.out.println("Mapped with VF-McGregor");
+////                } else {
+////                    System.out.println("Mapped with MCSPlus");
+////                }
+////
+////
+////            }
+//
+////            System.out.println("MCS solution count:" + this.allMCS.size());
+////            System.out.println("solution Size:" + this.allMCS.firstElement().size());
+////            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
+////                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
+////                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
+////            }
+////            long endTime = System.currentTimeMillis();
+//            System.gc();
+////            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
+////            System.out.println("!Done!\n");
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//
+//    }
+//    
+    private synchronized void FragmentBuilder(Boolean RConFlag, Boolean PConFlag) {
+
+        //printMolecules(RFrag.getMolecule(0), PFrag.getMolecule(0));
+        //System.out.println("In FragmentMatcher FragmentBuilder");
+        //System.out.println("R Mol Size:" + RFrag.getMoleculeCount() + " P Mol Size: " + PFrag.getMoleculeCount());
+
+        if (!RConFlag || !PConFlag) {
+            IMCSBase FM = new FragmentMatcher(RFrag, PFrag, removeHydrogen);
+
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+            firstSolution.putAll(FM.getFirstMapping());
+            allMCS.addAll(FM.getAllMapping());
+
+            firstAtomMCS.putAll(FM.getFirstAtomMapping());
+            allAtomMCS.addAll(FM.getAllAtomMapping());
+
+
+
+        }
+
+    }
+
+    private synchronized void CDKMCS() {
+        try {
+            mcs = new CDKMCSHandler();
+
+            mcs.set(RMol, PMol);
+            mcs.search_MCS(removeHydrogen);
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+
+
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EBIException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private synchronized void MCSPlus() {
+        try {
+            mcs = new MCSPlusHandler();
+
+            mcs.set(RMol, PMol);
+            mcs.search_MCS(removeHydrogen);
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EBIException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    /**
+     *
+     * @param Reactant
+     * @param Product
+     *
+     */
+    @Override
+    public void init(MolHandler Reactant, MolHandler Product) {
+        try {
+
+            this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
+            this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
+
+
+            MCSBuilder();
+            setChemFilters();
+        } catch (EBIException ex) {
+            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     *
+     * @param Reactant
+     * @param Product
+     */
+    @Override
+    public synchronized void init(IMolecule Reactant, IMolecule Product) {
+        //System.out.println(" Container Size " + Reactant.getAtomCount());
+        //System.out.println(" Container Size " + Product.getAtomCount());
+        this.RMol = new MolHandler(Reactant, false, removeHydrogen);
+        this.PMol = new MolHandler(Product, false, removeHydrogen);
+
+        init(RMol, PMol);
+
+    }
+
+    /**
+     *
+     * @param Reactant
+     * @param Product
+     */
+    @Override
+    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product) {
+
+        //System.out.println(" Container Size " + Reactant.getBondCount());
+        //System.out.println(" Container Size " + Product.getBondCount());
+        this.RMol = new MolHandler(Reactant, false, removeHydrogen);
+        this.PMol = new MolHandler(Product, false, removeHydrogen);
+
+        init(RMol, PMol);
+
+    }
+
+    public synchronized void setChemFilters() throws EBIException {
+        if (firstAtomMCS != null) {
+            ChemicalFilters CF = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
+
+            if (stereoFilter) {
+                CF.sortResultsByStereoAndBondMatch();
+            }
+            if (fragmentFilter) {
+                CF.sortResultsByFragments();
+            }
+
+            if (energyFilter) {
+                CF.sortResultsByEnergies();
+            }
+
+            this.StereoScore = CF.getStereoMatches();
+            this.fragmentSize = CF.getSortedFragment();
+            this.bEnergies = CF.getSortedEnergy();
+        }
+    }
+
+    @Override
+    public synchronized Integer getFragmentSize(
+            int Key) {
+        Integer Value = null;
+        // System.out.println("Key" + Key);
+        if (fragmentSize != null &&
+                firstSolution.size() > 0 &&
+                fragmentSize.size() > Key &&
+                Key >= 0) {
+            Value = fragmentSize.get(Key);
+        }
+
+        return Value;
+
+    }
+
+    @Override
+    public Integer getStereoScore(
+            int Key) {
+
+        Integer Value = null;
+//        System.out.println(StereoScore.size() + " :Key " + Key);
+        if (StereoScore != null &&
+                StereoScore.size() > Key &&
+                Key >= 0) {
+            Value = StereoScore.get(Key);
+        }
+
+        return Value;
+    }
+
+    @Override
+    public Double getEnergyScore(
+            int Key) {
+
+        Double Value = null;
+//        System.out.println(StereoScore.size() + " :Key " + Key);
+        if (bEnergies != null &&
+                bEnergies.size() > Key &&
+                Key >= 0) {
+            Value = bEnergies.get(Key);
+        }
+
+        return Value;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public synchronized TreeMap<Integer, Integer> getFirstMapping() {
+
+
+        if (firstSolution.size() > 0) {
+            return firstSolution;
+        } else {
+
+            return null;
+        }
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public synchronized Vector<TreeMap<Integer, Integer>> getAllMapping() {
+
+
+        if (allMCS.size() > 0) {
+//            System.out.println("Total Sol= " + allMCS.size());
+            return allMCS;
+        } else {
+
+            return null;
+        }
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public synchronized Map<IAtom, IAtom> getFirstAtomMapping() {
+
+        if (firstSolution.size() > 0) {
+//            System.out.println("firstSolution: " + firstAtomMCS);
+            return firstAtomMCS;
+        } else {
+
+            return null;
+        }
+
+    }
+
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public synchronized Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+
+        if (allMCS.size() > 0) {
+
+            return allAtomMCS;
+        } else {
+            try {
+                throw new EBIException("No Solutions!");
+            } catch (EBIException ex) {
+                Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
+        }
+
+    }
+
+    @Override
+    public IAtomContainer getReactantMolecule() {
+
+        return RMol.getMolecule();
+    }
+
+    @Override
+    public IAtomContainer getProductMolecule() {
+
+        return PMol.getMolecule();
+    }
+
+    @Override
+    public double getTanimotoSimilarity() throws IOException {
+        int decimalPlaces = 4;
+
+
+        int a = 0;
+        int b = 0;
+        if (!removeHydrogen) {
+            a = RMol.getMolecule().getAtomCount();
+            b = PMol.getMolecule().getAtomCount();
+        } else {
+            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+        }
+        double c = getFirstMapping().size();
+
+        tanimoto = (c) / (a + b - c);
+
+
+        BigDecimal tan = new BigDecimal(tanimoto);
+
+        tan = tan.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
+        tanimoto = tan.doubleValue();
+        return tanimoto;
+    }
+
+    @Override
+    /**
+     * 
+     * @return true if mols have different stereo 
+     * chemistry else flase if no stereo mismatch
+     */
+    public boolean isStereoMisMatch() {
+        boolean flag = true;
+
+
+        IAtomContainer Reactant = RMol.getMolecule();
+        IAtomContainer Product = PMol.getMolecule();
+
+
+        int Score = 0;
+
+        for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
+            IAtom indexI = mappingI.getKey();
+            IAtom indexJ = mappingI.getValue();
+            for (Map.Entry<IAtom, IAtom> mappingJ : firstAtomMCS.entrySet()) {
+
+                IAtom indexIPlus = mappingJ.getKey();
+                IAtom indexJPlus = mappingJ.getValue();
+                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
+
+                    IAtom R1 = indexI;
+                    IAtom R2 = indexIPlus;
+
+                    IBond RBond = Reactant.getBond(R1, R2);
+
+                    if (RBond != null) {
+
+                        IAtom P1 = indexJ;
+                        IAtom P2 = indexJPlus;
+                        IBond PBond = Product.getBond(P1, P2);
+
+                        if (PBond != null) {
+
+                            if (RBond.getStereo() != PBond.getStereo()) {
+                                Score++;
+                            }
+
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+
+        if (Score == 0) {
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    /**
+     * @return true if ac1 is a subgraph of ac2
+     */
+    @Override
+    public boolean isSubgraph() {
+        BondType BT = BondType.getInstance();
+        int score = 0;
+        for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
+            IAtom indexI = mappingI.getKey();
+            IAtom indexJ = mappingI.getValue();
+            for (Map.Entry<IAtom, IAtom> mappingJ : firstAtomMCS.entrySet()) {
+
+                IAtom indexIPlus = mappingJ.getKey();
+                IAtom indexJPlus = mappingJ.getValue();
+                if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
+
+                    IAtom R1 = indexI;
+                    IAtom R2 = indexIPlus;
+
+                    IBond RBond = RMol.getMolecule().getBond(R1, R2);
+
+                    if (RBond != null) {
+
+                        IAtom P1 = indexJ;
+                        IAtom P2 = indexJPlus;
+                        IBond PBond = PMol.getMolecule().getBond(P1, P2);
+
+                        if (PBond != null) {
+
+                            if (BT.getBondSensitiveFlag()) {
+                                int RBondType = RBond.getOrder().ordinal();
+
+                                int PBondType = PBond.getOrder().ordinal();
+
+                                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+                                    score++;
+                                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
+                                    score++;
+                                }
+
+                            } else {
+                                score++;
+                            }
+
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
+
+        boolean flag = false;
+        float size = firstSolution.size();
+        int a = 0;
+        int b = 0;
+        if (!removeHydrogen) {
+            a = RMol.getMolecule().getAtomCount();
+            b = PMol.getMolecule().getAtomCount();
+        } else {
+            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+        }
+        if (size == a && score == RMol.getMolecule().getBondCount()) {
+
+            if (b >= size && PMol.getMolecule().getBondCount() >= score) {
+                flag = true;
+            }
+
+        }
+        return flag;
+    }
+
+    @Override
+    public double getEuclideanDistance() throws IOException {
+        int decimalPlaces = 4;
+
+
+        int a = 0;
+        int b = 0;
+        if (!removeHydrogen) {
+            a = RMol.getMolecule().getAtomCount();
+            b = PMol.getMolecule().getAtomCount();
+        } else {
+            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+        }
+        double c = getFirstMapping().size();
+
+        euclidean = Math.sqrt(a + b - 2 * c);
+
+//        System.out.println("c" + c);
+//        System.out.println("a" + a);
+//        System.out.println("b" + b);
+//        System.out.println("Distance: (a+b-2*c)^2 " + euclidean);
+
+
+
+        BigDecimal dist = new BigDecimal(euclidean);
+
+        dist = dist.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
+        euclidean = dist.doubleValue();
+        return euclidean;
+    }
+
+    private void VFLibMCS() {
+        try {
+
+            mcs = new VFlibMCSHandler();
+
+            mcs.set(RMol, PMol);
+
+            mcs.search_MCS(removeHydrogen);
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EBIException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void SingleMapping() {
+        try {
+
+            mcs = new SingleMappingHandler();
+
+            mcs.set(RMol, PMol);
+
+            mcs.search_MCS(removeHydrogen);
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EBIException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private int HCount(IAtomContainer molecule) {
+        int count = 0;
+        for (IAtom atom : molecule.atoms()) {
+            if (atom.getSymbol().equalsIgnoreCase("H")) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+}
+        
