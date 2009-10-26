@@ -7,8 +7,8 @@
 package org.openscience.cdk.smsd.interfaces;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
-import java.util.Vector;
 
 /**
  *
@@ -17,14 +17,7 @@ import java.util.Vector;
  */
 public interface IFinalMapping {
 
-    /**
-     * 
-     * @param v MCS mapping between a given
-     * reactant and product 
-     * @throws java.lang.Exception
-     */
-    public void addElement(TreeMap<Integer, Integer> v) throws Exception;
-
+   
     /**
      * 
      * @param v List of all MCS mapping between a given
@@ -38,7 +31,7 @@ public interface IFinalMapping {
      * @param v List of all MCS mapping between a given
      * reactant and product 
      */
-    public void set(Vector<TreeMap<Integer, Integer>> v);
+    public void set(List<TreeMap<Integer, Integer>> v);
 
     /**
      * 
@@ -55,7 +48,7 @@ public interface IFinalMapping {
      * 
      * @return get of MCS mapping List
      */
-    public Vector<TreeMap<Integer, Integer>> getFinalMapping();
+    public List<TreeMap<Integer, Integer>> getFinalMapping();
 
     /**
      * 

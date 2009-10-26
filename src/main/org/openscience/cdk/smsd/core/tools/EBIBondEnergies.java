@@ -4,6 +4,7 @@
  */
 package org.openscience.cdk.smsd.core.tools;
 
+import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
@@ -11,19 +12,19 @@ import org.openscience.cdk.interfaces.IBond.Order;
 
 
 /**
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  * @contact asad@ebi.ac.uk
- */
+ * */
 public class EBIBondEnergies {
 
-    private static TreeMap<Integer, Vector<Object>> bondEngergies = null;
+    private static TreeMap<Integer, List<Object>> bondEngergies = null;
     private static EBIBondEnergies _instance = null;
     private Integer key = null;
 
     /**
      * 
      * @return
-     * @throws chemlib.ebi.core.tools.EBIException
+     * @throws EBIException 
      */
     public synchronized static EBIBondEnergies getInstance()
             throws EBIException {
@@ -40,8 +41,8 @@ public class EBIBondEnergies {
 
         // =========Hydrogen Block==============
 
-        bondEngergies = new TreeMap<Integer, Vector<Object>>();
-        Vector<Object> v = new Vector<Object>();
+        bondEngergies = new TreeMap<Integer, List<Object>>();
+        List<Object> v = new Vector<Object>();
         v.add("H");
         v.add("H");
         v.add(Order.SINGLE);
@@ -847,7 +848,7 @@ public class EBIBondEnergies {
     public Integer getEnergies(IAtom a1, IAtom a2, Order bondOrder) {
         Integer D_kJ_per_mol = -1;
 
-        for (Vector<Object> V : bondEngergies.values()) {
+        for (List<Object> V : bondEngergies.values()) {
 
             String atom1 = (String) V.get(0);
             String atom2 = (String) V.get(1);

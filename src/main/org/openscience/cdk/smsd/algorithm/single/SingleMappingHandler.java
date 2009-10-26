@@ -1,12 +1,5 @@
 /*
- * SearchCliques.java
- *
- * Created on January 17, 2007, 11:25 PM
- *
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  */
 package org.openscience.cdk.smsd.algorithm.single;
@@ -16,6 +9,7 @@ package org.openscience.cdk.smsd.algorithm.single;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -37,10 +31,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class SingleMappingHandler implements IMCS {
 
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
 
@@ -114,7 +108,6 @@ public class SingleMappingHandler implements IMCS {
      *
      * @return
      * @throws java.io.IOException
-     * @throws chemlib.ebi.core.tools.EBIException
      */
     @Override
     public int search_MCS(boolean removeHydrogen) throws IOException, EBIException {
@@ -140,7 +133,7 @@ public class SingleMappingHandler implements IMCS {
         //System.out.println("Output of the final FinalMappings: ");
         try {
 
-            Vector<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
+            List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
 //                System.out.println("Numner of MCS solution: " + count_final_sol++);
@@ -159,7 +152,7 @@ public class SingleMappingHandler implements IMCS {
         try {
 //            int count_final_sol = 1;
             //System.out.println("Output of the final FinalMappings: ");
-            Vector<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
+            List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
 
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
@@ -226,7 +219,7 @@ public class SingleMappingHandler implements IMCS {
 
         IAtomContainer needle = new AtomContainer();
 
-        Vector<IAtom> idlist = new Vector<IAtom>();
+        List<IAtom> idlist = new Vector<IAtom>();
 
         // get the ID's (corresponding to the serial number of the Bond object in
         // the AtomContainer for the supplied molecule) of the matching bonds
@@ -257,7 +250,7 @@ public class SingleMappingHandler implements IMCS {
     }
 
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return allMCS;
     }
 
@@ -268,7 +261,7 @@ public class SingleMappingHandler implements IMCS {
     }
 
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
     }
 

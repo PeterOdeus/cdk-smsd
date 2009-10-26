@@ -4,7 +4,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.cdk;
 
-
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -33,7 +32,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
 public class CDKRMapHandler {
 
 //    boolean RonPFlag = false;
-    private Vector<TreeMap<Integer, Integer>> _mapping;
+    private List<TreeMap<Integer, Integer>> _mapping;
     static IAtomContainer ac1;
     static IAtomContainer ac2;
     private boolean timeoutFlag = false;

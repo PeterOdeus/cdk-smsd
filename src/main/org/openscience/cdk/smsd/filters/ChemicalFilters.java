@@ -4,7 +4,6 @@
  */
 package org.openscience.cdk.smsd.filters;
 
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,18 +32,17 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 
 /**
- *
- * @author      Syed Asad Rahman {asad@ebi.ac.uk}
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class ChemicalFilters {
 
-    private Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private List<TreeMap<Integer, Integer>> allMCS = null;
     private TreeMap<Integer, Integer> firstSolution = null;
-    private Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
-    private Vector<Integer> StereoScore = null;
-    private Vector<Integer> fragmentSize = null;
-    private Vector<Double> bEnergies = null;
+    private List<Integer> StereoScore = null;
+    private List<Integer> fragmentSize = null;
+    private List<Double> bEnergies = null;
     private MolHandler RMol = null;
     private MolHandler PMol = null;
 
@@ -57,8 +55,8 @@ public class ChemicalFilters {
      * @param RMol
      * @param PMol
      */
-    public ChemicalFilters(Vector<TreeMap<Integer, Integer>> allMCS,
-            Vector<Map<IAtom, IAtom>> allAtomMCS,
+    public ChemicalFilters(List<TreeMap<Integer, Integer>> allMCS,
+            List<Map<IAtom, IAtom>> allAtomMCS,
             TreeMap<Integer, Integer> firstSolution,
             Map<IAtom, IAtom> firstAtomMCS,
             MolHandler RMol,
@@ -224,10 +222,6 @@ public class ChemicalFilters {
 //                System.out.println("Score in Loop " + Score);
 
             }
-
-
-
-
             SSSRFinder ringFinderR = new SSSRFinder(subgraphRContainer);
             IRingSet rRings = ringFinderR.findRelevantRings();
             SSSRFinder ringFinderP = new SSSRFinder(subgraphPContainer);
@@ -333,8 +327,8 @@ public class ChemicalFilters {
 
             }
             if (flag) {
-                firstSolution.putAll(allMCS.firstElement());
-                firstAtomMCS.putAll(allAtomMCS.firstElement());
+                firstSolution.putAll(allMCS.get(0));
+                firstAtomMCS.putAll(allAtomMCS.get(0));
             }
         }
 
@@ -553,8 +547,8 @@ public class ChemicalFilters {
         }
 
         if (flag) {
-            firstSolution.putAll(allMCS.firstElement());
-            firstAtomMCS.putAll(allAtomMCS.firstElement());
+            firstSolution.putAll(allMCS.get(0));
+            firstAtomMCS.putAll(allAtomMCS.get(0));
         }
 
     }
@@ -564,10 +558,6 @@ public class ChemicalFilters {
 //        System.out.println("\nSort By Energies");
         EBIBondEnergies bE = EBIBondEnergies.getInstance();
         double totalBondEnergy = -9999.0;
-
-//     System.out.println("Mol EName: " + RMol.getMolecule().getID() + " , Mol PName: " + PMol.getMolecule().getID());
-
-//        System.out.println("Mol Size Eorg: " + RMol.getMolecule().getAtomCount() + " , Mol Size Porg: " + PMol.getMolecule().getAtomCount());
 
         IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(RMol.getMolecule());
         IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(PMol.getMolecule());
@@ -724,8 +714,8 @@ public class ChemicalFilters {
         }
 
         if (flag) {
-            firstSolution.putAll(allMCS.firstElement());
-            firstAtomMCS.putAll(allAtomMCS.firstElement());
+            firstSolution.putAll(allMCS.get(0));
+            firstAtomMCS.putAll(allAtomMCS.get(0));
         }
 
     }
@@ -770,15 +760,27 @@ public class ChemicalFilters {
         return result;
     }
 
-    public Vector<Double> getSortedEnergy() {
+    /**
+     * 
+     * @return
+     */
+    public List<Double> getSortedEnergy() {
         return bEnergies;
     }
 
-    public Vector<Integer> getSortedFragment() {
+    /**
+     * 
+     * @return
+     */
+    public List<Integer> getSortedFragment() {
         return fragmentSize;
     }
 
-    public Vector<Integer> getStereoMatches() {
+    /**
+     * 
+     * @return
+     */
+    public List<Integer> getStereoMatches() {
 
         return StereoScore;
     }

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -40,9 +41,9 @@ import org.openscience.cdk.interfaces.IMolecule;
  */
 public class MCSFactory implements IMCSAlgorithm {
 
-    private Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private List<TreeMap<Integer, Integer>> allMCS = null;
     private TreeMap<Integer, Integer> firstSolution = null;
-    private Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
     private static double tanimoto = -1.0;
     private static double euclidean = -1.0;
@@ -50,9 +51,9 @@ public class MCSFactory implements IMCSAlgorithm {
     private MolHandler PMol = null;
     private IAtomContainerSet RFrag = null;
     private IAtomContainerSet PFrag = null;
-    private Vector<Integer> StereoScore = null;
-    private Vector<Integer> fragmentSize = null;
-    private Vector<Double> bEnergies = null;
+    private List<Integer> StereoScore = null;
+    private List<Integer> fragmentSize = null;
+    private List<Double> bEnergies = null;
     private boolean removeHydrogen = false;
     private boolean stereoFilter = false;
     private boolean fragmentFilter = false;
@@ -274,135 +275,6 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-//    private synchronized void MCSBuilder() {
-////        System.out.println("MCSBuilder");
-////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
-//
-//        try {
-//
-//
-//            int rBondCount = RMol.getMolecule().getBondCount();
-//            int pBondCount = PMol.getMolecule().getBondCount();
-//
-//            int rAtomCount = RMol.getMolecule().getAtomCount();
-//            int pAtomCount = PMol.getMolecule().getAtomCount();
-//
-////            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
-//
-//            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
-//
-////            long startTime = System.currentTimeMillis();
-////
-//            if ((rBondCount <= 1 && rAtomCount == 1) || (pBondCount <= 1 && pAtomCount == 1)) {
-////                System.out.println("Single Mapping");
-//                SingleMapping();
-//            } else if (rBondCount > 6 && pBondCount > 6) {
-//                if ((rAtomCount != pAtomCount && rBondCount != pBondCount) ||
-//                        (rAtomCount == pAtomCount && rBondCount == pBondCount)) {
-//                    System.out.println("CDKMCS-VF-McGregor");
-//                    CDKMCS();
-//                    if (getFirstMapping() == null) {
-//                        //Reset the mapping
-//                        mcs = null;
-//                        System.gc();
-//
-//                        VFLibMCS();
-//                        System.out.println("Mapped with VF-McGregor");
-//                    }
-////                    else {
-////                        System.out.println("Mapped with CDKMCS");
-////                    }
-//                } else {
-//
-////                System.out.println("Mapped with VF-McGregor");
-//                    VFLibMCS();
-//                }
-//
-//            } else {
-////                System.err.println("MCSPlus");
-//                MCSPlus();
-//                if (getFirstMapping() == null) {
-//                    mcs = null;
-//                    System.gc();
-////                    System.err.println("Many d-edges, switching to VF-McGregor");
-//                    VFLibMCS();
-////                    System.out.println("Mapped with VF-McGregor");
-//                }
-////                else {
-////                    System.out.println("Mapped with MCSPlus");
-////                }
-//            }
-//
-////
-////            System.out.println("MCS solution count:" + this.allMCS.size());
-////            System.out.println("solution Size:" + this.allMCS.firstElement().size());
-////            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
-////                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
-////                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
-////            }
-////            long endTime = System.currentTimeMillis();
-//            System.gc();
-////            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
-////            System.out.println("!Done!\n");
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
-//        private synchronized void MCSBuilder() {
-////        System.out.println("MCSBuilder");
-////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
-//
-//        try {
-//            System.out.println("CDKMCS");
-//            CDKMCS();
-//
-//            System.gc();
-//        } catch (Exception ex) {
-//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//
-//    }
-//    private synchronized void MCSBuilder() {
-////        System.out.println("MCSBuilder");
-////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
-//
-//        try {
-//            System.out.println("VFLib");
-//            VFLibMCS();
-//
-//            System.gc();
-//        } catch (Exception ex) {
-//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//
-//    }
-//
-//        private synchronized void MCSBuilder() {
-////        System.out.println("MCSBuilder");
-////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
-//
-//        try {
-//            System.out.println("MCSPlus");
-//            MCSPlus();
-//
-//            System.gc();
-//        } catch (Exception ex) {
-//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        System.out.println("MCS solution count:" + this.allMCS.size());
-//////            System.out.println("solution Size:" + this.allMCS.firstElement().size());
-//////            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
-//////                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
-//////                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
-//////            }
-//
-//    }
-//
 //    private synchronized void MCSBuilder() {
 ////        System.out.println("MCSBuilder");
 ////        printMolecules(RMol.getMolecule(), PMol.getMolecule());
@@ -750,7 +622,7 @@ public class MCSFactory implements IMCSAlgorithm {
      * @return
      */
     @Override
-    public synchronized Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public synchronized List<TreeMap<Integer, Integer>> getAllMapping() {
 
 
         if (allMCS.size() > 0) {
@@ -785,7 +657,7 @@ public class MCSFactory implements IMCSAlgorithm {
      * @return
      */
     @Override
-    public synchronized Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public synchronized List<Map<IAtom, IAtom>> getAllAtomMapping() {
 
         if (allMCS.size() > 0) {
 

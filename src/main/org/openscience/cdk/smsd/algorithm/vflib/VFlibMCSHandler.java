@@ -31,12 +31,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class VFlibMCSHandler implements IMCS {
 
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS_copy = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS_copy = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS_copy = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS_copy = null;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
     private List<Map<INode, IAtom>> vfLibSolutions = null;
@@ -61,7 +61,6 @@ public class VFlibMCSHandler implements IMCS {
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
      * @throws java.io.IOException
-     * @throws chemlib.ebi.core.tools.EBIException
      */
     @Override
     public int search_MCS(boolean removeHydrogen) throws IOException, EBIException {
@@ -80,7 +79,7 @@ public class VFlibMCSHandler implements IMCS {
 
 
         if (flag) {
-            Vector<Vector<Integer>> _mappings = new Vector<Vector<Integer>>();
+            List<List<Integer>> _mappings = new Vector<List<Integer>>();
 
             for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
 //
@@ -100,7 +99,8 @@ public class VFlibMCSHandler implements IMCS {
 //            System.out.println("Solution Count After McGregor " + _mappings.size());
 //            System.out.println("Solution Size After Calling McGregor" + _mappings.firstElement().size() / 2);
 
-            for (Vector<Integer> mapping : _mappings) {
+            int counter = 0;
+            for (List<Integer> mapping : _mappings) {
 
                 Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
                 TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
@@ -128,8 +128,9 @@ public class VFlibMCSHandler implements IMCS {
 
                 if (!atomatomMapping.isEmpty()) {
                     if (!hasMap(indexindexMapping, allMCS)) {
-                        allAtomMCS.add(atomatomMapping);
-                        allMCS.add(indexindexMapping);
+                        allAtomMCS.add(counter, atomatomMapping);
+                        allMCS.add(counter, indexindexMapping);
+                        counter++;
                     }
                 }
 
@@ -146,8 +147,8 @@ public class VFlibMCSHandler implements IMCS {
 
 
         if (!allAtomMCS.isEmpty()) {
-            atomsMCS.putAll(allAtomMCS.firstElement());
-            firstMCS.putAll(allMCS.firstElement());
+            atomsMCS.putAll(allAtomMCS.get(0));
+            firstMCS.putAll(allMCS.get(0));
 
 
         }
@@ -300,18 +301,6 @@ public class VFlibMCSHandler implements IMCS {
 
         }
 
-//        if (vfLibSolutions.size() > 0) {
-//            System.out.println("Bond Type Search " +
-//                    BondType.getInstance().getBondSensitiveFlag());
-//            System.out.println("Mapping count " + vfLibSolutions.size() + ", Mapping Size: " + vfLibSolutions.get(0).size());
-//        } else {
-//            System.out.println("No Match reported");
-//        }
-//
-//        System.out.println("\n\n\n");
-//
-
-
 
     }
 
@@ -333,7 +322,7 @@ public class VFlibMCSHandler implements IMCS {
 
     }
 
-    private boolean hasMap(Map<Integer, Integer> map, Vector<TreeMap<Integer, Integer>> mapGlobal) {
+    private boolean hasMap(Map<Integer, Integer> map, List<TreeMap<Integer, Integer>> mapGlobal) {
 
         for (Map<Integer, Integer> test : mapGlobal) {
 
@@ -352,12 +341,12 @@ public class VFlibMCSHandler implements IMCS {
      * @return
      */
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
     }
 
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return allMCS;
     }
 

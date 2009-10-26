@@ -6,6 +6,7 @@ package org.openscience.cdk.smsd.algorithm.mcsplus;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -36,9 +37,9 @@ public class MCSPlus {
      * @return
      * @throws EBIException
      */
-    public Vector<Vector<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws EBIException {
-        Stack<Vector<Integer>> Max_Cliques_Set = null;
-        Vector<Vector<Integer>> _mappings = new Vector<Vector<Integer>>();
+    public List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws EBIException {
+        Stack<List<Integer>> Max_Cliques_Set = null;
+        List<List<Integer>> _mappings = new Vector<List<Integer>>();
 
 
         try {
@@ -49,10 +50,10 @@ public class MCSPlus {
 //            System.out.println("Best Clique Size: " + best_clique_size);
 
 
-            Vector<Integer> comp_graph_nodes = gcg.get_comp_graph_nodes();
+            List<Integer> comp_graph_nodes = gcg.get_comp_graph_nodes();
 
-            Vector<Integer> C_edges = gcg.get_C_egdes();
-            Vector<Integer> D_edges = gcg.get_D_egdes();
+            List<Integer> C_edges = gcg.get_C_egdes();
+            List<Integer> D_edges = gcg.get_D_egdes();
 
             if (D_edges.size() > 99999 && C_edges.size() > 2000) {
                 System.err.println("D-edges Size " + D_edges.size() + " > : " + 99999);
@@ -84,8 +85,8 @@ public class MCSPlus {
                 throw new EBIException("Timeout exceeded in getOverlaps");
             }
 
-            int solution_size_pass1 = Max_Cliques_Set.size();
-            int max_map_size_allowed = init.getBestCliqueSize();
+//            int solution_size_pass1 = Max_Cliques_Set.size();
+//            int max_map_size_allowed = init.getBestCliqueSize();
 //            System.err.println("best_clique_size: vorher " + init.getBestCliqueSize());
 //            System.err.println("Max_Cliques_Set: " + solution_size_pass1);
 //            System.out.println("Maximum Mapping size allowed " + max_map_size_allowed);
@@ -108,7 +109,7 @@ public class MCSPlus {
 
 
 //                System.out.println("Clique number: " + clique_number);
-                Vector<Integer> clique_vector = Max_Cliques_Set.peek();
+                List<Integer> clique_vector = Max_Cliques_Set.peek();
 
                 int clique_size = clique_vector.size();
 

@@ -25,6 +25,7 @@ public interface IMCS extends IMCSBase {
      * @param removeHydrogen 
      * @return
      * @throws java.io.IOException
+     * @throws EBIException
      */
     int search_MCS(boolean removeHydrogen) throws IOException, EBIException;
 
@@ -54,14 +55,5 @@ public interface IMCS extends IMCSBase {
      */
     void set(IAtomContainer ReactantMol, IAtomContainer ProductMol) throws IOException;
 
-//    void setAllAtomMapping();
-//
-//    void setAllMapping();
-//
-//    void setFirstAtomMapping();
-//
-//    void setFirstMapping();
-    
-    
 
 }

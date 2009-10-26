@@ -16,9 +16,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 /**
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK. e-mail: asad@ebi.ac.uk
- */
+ *@Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
+ **/
 public class SubGraphMapper {
 
     /**
@@ -59,8 +58,13 @@ public class SubGraphMapper {
         return needle;
     }
 
-    public static Vector<List<Integer>> getNeedleList(List<Integer> matchedCore) {
-        Vector<List<Integer>> matchedList = new Vector<List<Integer>>();
+    /**
+     * 
+     * @param matchedCore
+     * @return
+     */
+    public static List<List<Integer>> getNeedleList(List<Integer> matchedCore) {
+        List<List<Integer>> matchedList = new Vector<List<Integer>>();
         List<Integer> rList = new LinkedList<Integer>();
         List<Integer> pList = new LinkedList<Integer>();
 
@@ -76,8 +80,13 @@ public class SubGraphMapper {
         return matchedList;
     }
 
-    public static Vector<List<Integer>> getNeedleList(Map<Integer, Integer> matchedCore) {
-        Vector<List<Integer>> matchedList = new Vector<List<Integer>>();
+    /**
+     * 
+     * @param matchedCore
+     * @return
+     */
+    public static List<List<Integer>> getNeedleList(Map<Integer, Integer> matchedCore) {
+        List<List<Integer>> matchedList = new Vector<List<Integer>>();
         List<Integer> rList = new LinkedList<Integer>();
         List<Integer> pList = new LinkedList<Integer>();
 
@@ -93,59 +102,13 @@ public class SubGraphMapper {
         return matchedList;
     }
 
-//    /**
-//     *
-//     * @param ac1 Query Container
-//     * @param ac2 Target Container
-//     * @param mappings Atom mapping
-//     * @return Bond mapping
-//     */
-//    public static Map<IBond, IBond> makeBondMapsOfAtomMaps(IAtomContainer ac1, IAtomContainer ac2, TreeMap<Integer, Integer> mappings) {
-//
-//        HashMap<IBond, IBond> maps = new HashMap<IBond, IBond>();
-//
-//        for (IAtom atoms : ac1.atoms()) {
-//
-//            int ac1AtomNumber = ac1.getAtomNumber(atoms);
-//
-//            if (mappings.containsKey(ac1AtomNumber)) {
-//
-//                int ac2AtomNumber = mappings.get(ac1AtomNumber);
-//
-//                List<IAtom> connectedAtoms = ac1.getConnectedAtomsList(atoms);
-//
-//                for (IAtom cAtoms : connectedAtoms) {
-//                    int ac1ConnectedAtomNumber = ac1.getAtomNumber(cAtoms);
-//
-//                    if (mappings.containsKey(ac1ConnectedAtomNumber)) {
-//                        {
-//
-//                            int ac2ConnectedAtomNumber = mappings.get(ac1ConnectedAtomNumber);
-//
-//                            IBond ac1Bond = ac1.getBond(atoms, cAtoms);
-//
-//                            IBond ac2Bond = ac2.getBond(ac2.getAtom(ac2AtomNumber), ac2.getAtom(ac2ConnectedAtomNumber));
-//
-//                            if (ac2Bond == null) {
-//                                ac2Bond = ac2.getBond(ac2.getAtom(ac2ConnectedAtomNumber), ac2.getAtom(ac2AtomNumber));
-//
-//                            }
-//
-//                            if (ac1Bond != null && ac2Bond != null) {
-//                                maps.put(ac1Bond, ac2Bond);
-//                            }
-//
-//                        }
-//
-//
-//                    }
-//                }
-//            }
-//        }
-//
-//        return maps;
-//
-//    }
+    /**
+     * 
+     * @param ac1
+     * @param ac2
+     * @param mappings
+     * @return
+     */
     public static Map<IBond, IBond> makeBondMapsOfAtomMaps(IAtomContainer ac1, IAtomContainer ac2, TreeMap<Integer, Integer> mappings) {
 
         HashMap<IBond, IBond> maps = new HashMap<IBond, IBond>();

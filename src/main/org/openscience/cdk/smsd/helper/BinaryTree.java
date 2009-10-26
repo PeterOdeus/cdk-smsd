@@ -33,14 +33,6 @@ public class BinaryTree {
     public BinaryTree not_equal = null;
     private int Value = -1;
 
-//    /**
-//     *
-//     * @param val set the value of the current node
-//     */
-//    public void setValue(int val) {
-//        //    System.err.println("Value Set: " + val);
-//        this.Value = val;
-//    }
     /**
      * 
      * @return get the value of the current node

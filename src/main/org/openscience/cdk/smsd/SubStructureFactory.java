@@ -5,9 +5,9 @@
 package org.openscience.cdk.smsd;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
@@ -18,9 +18,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 /**
-
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class SubStructureFactory implements IMCSAlgorithm {
 
@@ -155,13 +153,8 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * i+1 is product index
      */
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
-
-        Vector<Map<IAtom, IAtom>> solution;
-
-        solution = comparison.getAllAtomMapping();
-
-        return solution;
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
+        return comparison.getAllAtomMapping();
     }
 
     /**
@@ -172,12 +165,8 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * i+1 is product index
      */
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
-        Vector<TreeMap<Integer, Integer>> solution;
-
-        solution = comparison.getAllMapping();
-
-        return solution;
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
+        return comparison.getAllMapping();
     }
 
     /**
@@ -188,10 +177,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
      */
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-        Map<IAtom, IAtom> solution;
-
-        solution = comparison.getFirstAtomMapping();
-        return solution;
+        return comparison.getFirstAtomMapping();
     }
 
     /**
@@ -202,11 +188,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
      */
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
-        TreeMap<Integer, Integer> solution;
-
-        solution = comparison.getFirstMapping();
-
-        return solution;
+        return comparison.getFirstMapping();
     }
 
     /**
@@ -217,8 +199,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * 
      */
     @Override
-    public Integer getStereoScore(
-            int Key) {
+    public Integer getStereoScore(int Key) {
 
 //        System.out.println("Key: " + Key);
         Integer solution = null;

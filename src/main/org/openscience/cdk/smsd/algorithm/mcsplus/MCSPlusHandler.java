@@ -15,6 +15,7 @@ package org.openscience.cdk.smsd.algorithm.mcsplus;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -35,10 +36,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class MCSPlusHandler implements IMCS {
 
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
     private boolean flagExchange = false;
@@ -117,7 +118,7 @@ public class MCSPlusHandler implements IMCS {
      */
     @Override
     public int search_MCS(boolean removeHydrogen) throws IOException {
-        Vector<Vector<Integer>> _mappings = null;
+        List<List<Integer>> _mappings = null;
         try {
             if (ac1.getAtomCount() > ac2.getAtomCount()) {
                 _mappings = new MCSPlus().getOverlaps(ac1, ac2, removeHydrogen);
@@ -148,7 +149,7 @@ public class MCSPlusHandler implements IMCS {
         //System.out.println("Output of the final FinalMappings: ");
         try {
 
-            Vector<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
+            List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
 //                System.out.println("Number of MCS solution: " + solution);
@@ -180,7 +181,7 @@ public class MCSPlusHandler implements IMCS {
         try {
 //            int count_final_sol = 1;
             //System.out.println("Output of the final FinalMappings: ");
-            Vector<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
+            List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
 
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
@@ -283,7 +284,7 @@ public class MCSPlusHandler implements IMCS {
     }
 
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return allMCS;
     }
 
@@ -294,7 +295,7 @@ public class MCSPlusHandler implements IMCS {
     }
 
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
     }
 

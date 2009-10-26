@@ -3,16 +3,12 @@
  * MappingHandler.java
  *
  * Created on March 1, 2006, 7:57 PM
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  */
 package org.openscience.cdk.smsd.algorithm.cdk;
 
 //~--- classes ----------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,10 +37,10 @@ public class CDKMCSHandler implements IMCS {
     private IAtomContainer Reactant;
     private IAtomContainer Product;
     private boolean RonPFlag = false;
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     //~--- constructors -------------------------------------------------------
     /** Creates a new instance of MappingHandler
@@ -126,7 +122,6 @@ public class CDKMCSHandler implements IMCS {
     /**
      * 
      * @return
-     * @throws chemlib.ebi.core.tools.EBIException
      */
     @Override
     public int search_MCS(boolean removeHydrogen) throws EBIException {
@@ -161,7 +156,7 @@ public class CDKMCSHandler implements IMCS {
             setFirstAtomMapping();
 
         } catch (EBIException e) {
-              rmap=null;
+            rmap = null;
 //            System.err.println("WARNING: CDKMCS: most probably time out error ");
         }
 
@@ -286,7 +281,7 @@ public class CDKMCSHandler implements IMCS {
         //int count_final_sol = 1;
         //System.out.println("Output of the final FinalMappings: ");
         try {
-            Vector<TreeMap<Integer, Integer>> sol = FinalMappings.getInstance().getFinalMapping();
+            List<TreeMap<Integer, Integer>> sol = FinalMappings.getInstance().getFinalMapping();
             int counter = 0;
             for (TreeMap<Integer, Integer> final_solution : sol) {
                 TreeMap<Integer, Integer> atomMappings = new TreeMap<Integer, Integer>();
@@ -318,7 +313,7 @@ public class CDKMCSHandler implements IMCS {
     public final synchronized void setAllAtomMapping() {
         //int count_final_sol = 1;
         //System.out.println("Output of the final FinalMappings: ");
-        Vector<TreeMap<Integer, Integer>> sol = allMCS;
+        List<TreeMap<Integer, Integer>> sol = allMCS;
 
         int counter = 0;
         for (TreeMap<Integer, Integer> final_solution : sol) {
@@ -354,20 +349,20 @@ public class CDKMCSHandler implements IMCS {
     public final synchronized void setFirstMapping() {
 
         if (allMCS.size() > 0) {
-            firstMCS = new TreeMap<Integer, Integer>(allMCS.firstElement());
+            firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
         }
 
     }
 
     public final synchronized void setFirstAtomMapping() {
         if (atomsMCS.size() > 0) {
-            atomsMCS = new TreeMap<IAtom, IAtom>(allAtomMCS.firstElement());
+            atomsMCS = new TreeMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 
     }
 
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return allMCS;
     }
 
@@ -377,7 +372,7 @@ public class CDKMCSHandler implements IMCS {
     }
 
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
     }
 

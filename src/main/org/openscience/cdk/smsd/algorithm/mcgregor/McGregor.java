@@ -4,17 +4,17 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcgregor;
 
-
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
-import org.openscience.cdk.smsd.global.BondType;
-import org.openscience.cdk.smsd.helper.BinaryTree;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.smsd.global.BondType;
+import org.openscience.cdk.smsd.helper.BinaryTree;
 
 /**
  *
@@ -41,7 +41,7 @@ public class McGregor {
     private int nNum_globalB = 0;
     private int bestarcsleft = 0;
     private int globalMCSSize = 0;
-    private Vector<Vector<Integer>> _mappings = null;
+    private List<List<Integer>> _mappings = null;
     private int neighbor_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private int neighbor_bondnum_B = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
@@ -53,18 +53,16 @@ public class McGregor {
         "$37", "$38", "$39", "$40", "$41", "$42", "$43", "$44", "$45", "$46",
         "$47", "$48", "$49", "$50", "$51", "$52", "$53", "$54", "$55"
     };
-//    String[] SignROW = {"D", "G", "J", "T", "V", "W", "Y", "Z", "$", "%", "&", "*", "#", "?", "!", "~", "^", "<", ">", "=", "(",
-//        ")", "[", "]"};
     protected boolean new_matrix = false;
     protected boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
-     * Creates z new instance of McGregor
+     * Creates a new instance of McGregor
      * @param ac1
      * @param ac2 
      * @param _mappings
      */
-    public McGregor(IAtomContainer ac1, IAtomContainer ac2, Vector<Vector<Integer>> _mappings) {
+    public McGregor(IAtomContainer ac1, IAtomContainer ac2, List<List<Integer>> _mappings) {
 
 
         this.ac1 = ac1;
@@ -77,7 +75,7 @@ public class McGregor {
         if (_mappings.isEmpty()) {
             this.globalMCSSize = 0;
         } else {
-            this.globalMCSSize = _mappings.firstElement().size();
+            this.globalMCSSize = _mappings.get(0).size();
         }
         MARCS = new Vector<Integer>();
 
@@ -106,7 +104,7 @@ public class McGregor {
      */
     public void McGregor_IterationStart(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
 
-        this.globalMCSSize = (best_Mapping_size/2);
+        this.globalMCSSize = (best_Mapping_size / 2);
         c_tab1_copy.clear();
         generate_c_tab1_copy();
 
@@ -263,11 +261,8 @@ public class McGregor {
      * @param comp_graph_nodes
      * @throws IOException
      */
-    public void McGregor_IterationStart(int best_Mapping_size, Vector<Integer> clique_vector, Vector<Integer> comp_graph_nodes) throws IOException {
-
-        //protected void McGregor_IterationStart(Vector<Integer> clique_vector) throws IOException {
-
-        this.globalMCSSize = (best_Mapping_size/2);
+    public void McGregor_IterationStart(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
+        this.globalMCSSize = (best_Mapping_size / 2);
         int SR_count = 0;
 
 
@@ -310,10 +305,10 @@ public class McGregor {
 
         for (int a = 0; a < clique_siz; a++) {
             //go through all clique nodes
-            cliqueNumber = clique_vector.elementAt(a);
+            cliqueNumber = clique_vector.get(a);
             for (int b = 0; b < vec_size; b = b + 3) {
-                //go through all knots in the compatibility graph
-                if (cliqueNumber == comp_graph_nodes.elementAt(b + 2)) {
+                //go through all nodes in the compatibility graph
+                if (cliqueNumber == comp_graph_nodes.get(b + 2)) {
                     mapped_atoms.add(comp_graph_nodes.get(b));
                     mapped_atoms.add(comp_graph_nodes.get(b + 1));
                     mapped_atom_number++;
@@ -568,7 +563,7 @@ public class McGregor {
                         //_mappings=new Vector<Vector<Integer>>();
                     }
 
-                    _mappings.addElement(mapped_atoms);
+                    _mappings.add(mapped_atoms);
 //                    System.out.println("_mappings " + _mappings);
                 }
 
@@ -1158,7 +1153,7 @@ public class McGregor {
         return unique_MAPPING;
     }
 
-    //Function compaires z structure array with itself. Sometimes z mapping occurs several times within the array.
+    //Function compaires a structure array with itself. Sometimes a mapping occurs several times within the array.
 //The function eliminates these recurring mappings. Function is called in function best_solution.
 //The function is called by itself as long as the last list element is processed.
     private Vector<Integer> remove_recurring_mappings(Vector<Integer> atom_mapping) {
@@ -1306,7 +1301,7 @@ public class McGregor {
         }
     }
 
-    //The function is called in function partsearch. The function is given z temporary matrix and z position (row/column)
+    //The function is called in function partsearch. The function is given a temporary matrix and a position (row/column)
 //within this matrix. First the function sets all entries to zero, which can be exlcuded in respect to the current
 //atom by atom matching. After this the function replaces all entries in the same row and column of the current
 //position by zeros. Only the entry of the current position is set to one.
@@ -1403,14 +1398,8 @@ public class McGregor {
             if (MARCS_T.elementAt(x) == 1) {
                 posnum_list.setElementAt(x, y++);
                 count_entries++;
-
             }
-
-
         }
-
-
-
         boolean flag = false;
 
         verify_nodes(posnum_list, first, 0, count_entries);
@@ -1556,7 +1545,7 @@ public class McGregor {
      *
      * @return
      */
-    public Vector<Vector<Integer>> getMappings() {
+    public List<List<Integer>> getMappings() {
 
         return this._mappings;
     }

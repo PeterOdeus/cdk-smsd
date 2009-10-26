@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.BondTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -119,6 +120,11 @@ public class MolHandler {
         }
     }
 
+    /**
+     *
+     * @param MolFile
+     * @param cleanMolecule
+     */
     public MolHandler(String MolFile, boolean cleanMolecule) {
 
         MDLReader MolRead;
@@ -166,6 +172,11 @@ public class MolHandler {
      * @param removeHydrogen
      */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule, boolean removeHydrogen) {
+        try {
+            CDKHueckelAromaticityDetector.detectAromaticity(_molecule);
+        } catch (CDKException ex) {
+            Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         String ID = _molecule.getID();
         this.removeHydrogen = removeHydrogen;
@@ -177,10 +188,7 @@ public class MolHandler {
         if (cleanMolecule) {
             MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
         }
-
-
-        //
-//         /*Hydrogen are always removed for this molecule before mapping*/
+        /*Hydrogen are always removed for this molecule before mapping*/
 
         if (removeHydrogen) {
             try {
@@ -201,6 +209,11 @@ public class MolHandler {
 
     }
 
+    /**
+     *
+     * @param _molecule
+     * @param cleanMolecule
+     */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule) {
 
         String ID = _molecule.getID();

@@ -10,6 +10,7 @@
  */
 package org.openscience.cdk.smsd.filters;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -24,7 +25,7 @@ public class PostFilter {
      * 
      * @param _mappings 
      */
-    public static void filter(Vector<Vector<Integer>> _mappings) {
+    public static void filter(List<List<Integer>> _mappings) {
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
 
 //        System.out.println("Total Number of Solutions " + _mappings.size());
@@ -41,7 +42,7 @@ public class PostFilter {
         return;
     }
 
-    private static boolean hasMap(TreeMap<Integer, Integer> newMap, Vector<TreeMap<Integer, Integer>> nonRedundantMapping) {
+    private static boolean hasMap(TreeMap<Integer, Integer> newMap, List<TreeMap<Integer, Integer>> nonRedundantMapping) {
         boolean flag = false;
 
         for (Map<Integer, Integer> map : nonRedundantMapping) {
@@ -58,11 +59,11 @@ public class PostFilter {
         return flag;
     }
 
-    private static Vector<TreeMap<Integer, Integer>> removeRedundantMapping(Vector<Vector<Integer>> mapping_org) {
+    private static List<TreeMap<Integer, Integer>> removeRedundantMapping(List<List<Integer>> mapping_org) {
 
 //        System.out.println("Total Number of Solutions " + mapping_org.size());
-        Vector<TreeMap<Integer, Integer>> nonRedundantMapping = new Vector<TreeMap<Integer, Integer>>();
-        for (Vector<Integer> M : mapping_org) {
+        List<TreeMap<Integer, Integer>> nonRedundantMapping = new Vector<TreeMap<Integer, Integer>>();
+        for (List<Integer> M : mapping_org) {
 //            System.out.println("Solutions " + M);
             TreeMap<Integer, Integer> newMap = new TreeMap<Integer, Integer>();
             for (int index = 0; index < M.size(); index += 2) {

@@ -4,11 +4,7 @@
  *
  * Created on February 3, 2006, 12:06 AM
  *
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
- *
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 package org.openscience.cdk.smsd.filters;
 
@@ -17,6 +13,7 @@ package org.openscience.cdk.smsd.filters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -51,16 +48,16 @@ public class FragmentMatcher implements IFragment {
     //private EBIMatrix SimMatrix = null;
     private IAtomContainerSet ReactantSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
     private IAtomContainerSet ProductSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
     double tanimoto = 0;
     double euclidean = 0;
     int stereoScore = 0;
-    Vector<TreeMap<Integer, Integer>> GallMCS;
+    List<TreeMap<Integer, Integer>> GallMCS;
     TreeMap<Integer, Integer> GfirstSolution;
-    Vector<Map<IAtom, IAtom>> GallAtomMCS;
+    List<Map<IAtom, IAtom>> GallAtomMCS;
     Map<IAtom, IAtom> GfirstAtomMCS;
     double Gtanimoto;
     double Geuclidean;
@@ -430,7 +427,7 @@ public class FragmentMatcher implements IFragment {
      * @return
      */
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return GallAtomMCS;
     }
 
@@ -439,7 +436,7 @@ public class FragmentMatcher implements IFragment {
      * @return
      */
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return GallMCS;
     }
 

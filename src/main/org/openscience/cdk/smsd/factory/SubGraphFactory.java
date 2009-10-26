@@ -4,10 +4,10 @@
  */
 package org.openscience.cdk.smsd.factory;
 
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -28,23 +28,21 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 
 /**
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class SubGraphFactory implements IMCSAlgorithm {
 
-    private Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private List<TreeMap<Integer, Integer>> allMCS = null;
     private TreeMap<Integer, Integer> firstSolution = null;
-    private Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
     private double tanimoto = -1;
     private double euclidean = -1;
     private MolHandler RMol = null;
     private MolHandler PMol = null;
-    private Vector<Integer> StereoScore;
-    private Vector<Integer> fragmentSize;
-    private Vector<Double> bEnergies;
+    private List<Integer> StereoScore;
+    private List<Integer> fragmentSize;
+    private List<Double> bEnergies;
     private boolean removeHydrogen = false;
     private boolean stereoFilter = false;
     private boolean fragmentFilter = false;
@@ -241,8 +239,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
      * @return
      */
     @Override
-    public synchronized Vector<TreeMap<Integer, Integer>> getAllMapping() {
-
+    public synchronized List<TreeMap<Integer, Integer>> getAllMapping() {
 
         if (allMCS.size() > 0) {
             //System.out.println("Total Sol= " + allMCS.size());
@@ -276,17 +273,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
      * @return
      */
     @Override
-    public synchronized Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public synchronized List<Map<IAtom, IAtom>> getAllAtomMapping() {
 
         if (allMCS.size() > 0) {
-
             return allAtomMCS;
         } else {
-//            try {
-//                throw new EBIException("No Solutions!");
-//            } catch (EBIException ex) {
-//                Logger.getLogger(AlgorithmFactoryBS.class.getName()).log(Level.SEVERE, null, ex);
-//            }
             return null;
         }
 
