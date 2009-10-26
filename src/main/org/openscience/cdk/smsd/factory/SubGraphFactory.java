@@ -390,6 +390,10 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     public boolean isSubgraph() {
+        if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
+
+            return false;
+        }
         BondType BT = BondType.getInstance();
         int score = 0;
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
