@@ -94,7 +94,7 @@ import org.openscience.cdk.smsd.global.TimeOut;
  *  {@cdk.cite HAN90} and modified in the thesis of T. Hanser {@cdk.cite HAN93}.
  *
  * @author      Stephane Werner from IXELIS mail@ixelis.net
- * @author      Syed Asad Rahman {asad@ebi.ac.uk} modfied the orignal code
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  * @cdk.created 2002-07-17
  * @cdk.require java1.4+
  * @cdk.module  standard

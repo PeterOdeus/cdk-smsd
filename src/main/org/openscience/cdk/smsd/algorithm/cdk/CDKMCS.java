@@ -92,7 +92,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  * </p>
  *
  * @author      Stephane Werner from IXELIS mail@ixelis.net
- * @author      Syed Asad Rahman {asad@ebi.ac.uk} modfied the orignal code
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  * @cdk.created 2002-07-17
  * @cdk.require java1.4+
  * @cdk.module  standard

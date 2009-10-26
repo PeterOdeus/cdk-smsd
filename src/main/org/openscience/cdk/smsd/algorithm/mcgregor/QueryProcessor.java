@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IBond;
 
 /**
  *
- * @author Syed Asad Rahman, EBI-EMBL, UK {asad@ebi.ac.uk}
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  */
 public class QueryProcessor {

@@ -30,7 +30,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * 
- * @author Syed Asad Rahman 
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  * @version March 2007
  * This is the main interface of the MCS algorithm. 
  */

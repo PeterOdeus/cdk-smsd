@@ -23,7 +23,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  *
- * @author sar
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class VFlibHandler implements ISubGraph {
 

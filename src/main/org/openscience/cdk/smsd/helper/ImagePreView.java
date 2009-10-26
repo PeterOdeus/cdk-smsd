@@ -7,7 +7,7 @@ package org.openscience.cdk.smsd.helper;
 
 /**
  *
- * @author      Syed Asad Rahman {asad@ebi.ac.uk} modfied the orignal code
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> modfied the orignal code
  */
 
 import javax.swing.*;

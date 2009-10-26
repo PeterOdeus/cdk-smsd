@@ -2,12 +2,7 @@
  * BinaryTree.java
  *
  * Created on January 27, 2007, 9:36 PM
- *
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
- *
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  * @Revised by Asad, EBI, Java 1.5 Compatable
  */

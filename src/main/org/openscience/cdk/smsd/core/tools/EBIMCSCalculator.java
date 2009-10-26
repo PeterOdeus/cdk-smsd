@@ -8,8 +8,7 @@ import org.openscience.cdk.smsd.SubStructureFactory;
 
 /**
  *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class EBIMCSCalculator extends SubStructureFactory {
 

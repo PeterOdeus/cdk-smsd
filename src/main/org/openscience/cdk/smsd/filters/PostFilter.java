@@ -2,10 +2,7 @@
  * PostFilter.java
  *
  * Created on 06 March 2007, 14:52
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  */
 package org.openscience.cdk.smsd.filters;

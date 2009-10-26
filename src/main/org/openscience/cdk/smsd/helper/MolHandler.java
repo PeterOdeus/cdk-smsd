@@ -3,10 +3,7 @@
  *
  * Created on January 28, 2007, 11:37 AM
  *
- *
- *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  */
 package org.openscience.cdk.smsd.helper;

@@ -19,8 +19,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
 
 /**
  *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  * This algorithm derives from the algorithm described in
  * [Tonnelier, C. and Jauffret, Ph. and Hanser, Th. and Jauffret, Ph. and Kaufmann, G.,
  * Machine Learning of generic reactions:

@@ -10,7 +10,7 @@ import org.openscience.cdk.math.Primes;
 
 /**
  *
- * @author sar
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the code)
  */
 /*  $RCSfile$
  *  $Author$

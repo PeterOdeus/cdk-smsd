@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IBond;
  */
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
- * @author Syed Asad Rahman <asad @ ebi.ac.uk> (modified the orignal code)
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  */
 public class VFBondMatcher implements IBondMatcher {
 

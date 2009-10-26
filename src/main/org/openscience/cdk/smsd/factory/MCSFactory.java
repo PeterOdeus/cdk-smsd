@@ -35,7 +35,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 
 /**
- *
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  
  * @contact asad@ebi.ac.uk
  */

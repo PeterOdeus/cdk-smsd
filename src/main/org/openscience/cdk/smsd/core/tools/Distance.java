@@ -8,7 +8,7 @@ import java.util.BitSet;
 
 /**
  *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK. e-mail: asad@ebi.ac.uk
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  * 
  *
  * <PRE>

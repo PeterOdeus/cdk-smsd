@@ -14,7 +14,7 @@ import org.apache.commons.cli.PosixParser;
 
 /**
  *
- * @author      Syed Asad Rahman {asad@ebi.ac.uk}
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 
 public class FinderArguments {

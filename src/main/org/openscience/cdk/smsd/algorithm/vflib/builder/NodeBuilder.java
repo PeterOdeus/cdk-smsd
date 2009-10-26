@@ -13,7 +13,7 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 
 /**
  *
- * @author Syed Asad Rahman <asad @ ebi.ac.uk>
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class NodeBuilder implements INode {
 

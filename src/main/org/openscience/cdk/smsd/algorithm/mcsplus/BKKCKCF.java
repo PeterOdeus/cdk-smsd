@@ -21,7 +21,7 @@ import java.util.Vector;
  * T.Comp. Sc. (2005); vol 349; pp.
  * 484-490]
  *
- * @author Syed Asad Rahman, EMBL-EBI
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class BKKCKCF {
 

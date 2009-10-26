@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 /**
- * This is used in RGraph and UniversialIsomorphismTester
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  * @contact asad@ebi.ac.uk
+ * This is used in MCSPlus, RGraph and UniversialIsomorphismTester
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
 public class EBITimeManager {
 

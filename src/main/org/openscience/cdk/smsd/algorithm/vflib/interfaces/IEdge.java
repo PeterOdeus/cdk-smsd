@@ -31,7 +31,7 @@ package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
  */
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
- * @author Syed Asad Rahman <asad @ ebi.ac.uk> (modified the orignal code)
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  */
 public interface IEdge {
 
