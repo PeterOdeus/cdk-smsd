@@ -10,8 +10,28 @@ import org.openscience.cdk.interfaces.IBond;
 
 /**
  *
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
+ * Copyright (C) 2005-2006  Markus Leber
+ *               2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
+ * Contact: cdk-devel@lists.sourceforge.net
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 public class TargetProcessor {
 
@@ -20,15 +40,12 @@ public class TargetProcessor {
     private String[] SignROW;
     private int neighbor_bondnum_B = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_B = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
-    private IAtomContainer query;
     private IAtomContainer target;
-    int neighbor_bondnum_A;
-    Vector<Integer> i_bond_neighborsA;
-    Vector<String> c_bond_neighborsA;
+    private int neighbor_bondnum_A;
+    private Vector<Integer> i_bond_neighborsA;
+    private Vector<String> c_bond_neighborsA;
 
     /**
-     * 
-     * @param query
      * @param target
      * @param c_tab1_copy
      * @param c_tab2_copy
@@ -39,9 +56,8 @@ public class TargetProcessor {
      * @param i_bond_neighborsA
      * @param c_bond_neighborsA 
      */
-    public TargetProcessor(IAtomContainer query, IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, Vector<Integer> i_bond_neighborsA, Vector<String> c_bond_neighborsA) {
+    public TargetProcessor(IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, Vector<Integer> i_bond_neighborsA, Vector<String> c_bond_neighborsA) {
 
-        this.query = query;
         this.target = target;
 
         this.c_tab1_copy = c_tab1_copy;
