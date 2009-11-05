@@ -222,8 +222,8 @@ public class MCSPlusHandler implements IMCS {
                         A = ac1.getAtom(IIndex);
                         B = ac2.getAtom(JIndex);
                     } else {
-                        A = ac2.getAtom(IIndex);
-                        B = ac1.getAtom(JIndex);
+                        A = ac1.getAtom(JIndex);
+                        B = ac2.getAtom(IIndex);
                     }
 
                     atomMappings.put(A, B);
