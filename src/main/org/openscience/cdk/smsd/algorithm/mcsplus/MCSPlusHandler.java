@@ -204,17 +204,10 @@ public class MCSPlusHandler implements IMCS {
 
                 for (Map.Entry<Integer, Integer> map : solution.entrySet()) {
 
-                    //  int IIndex = Solutions.get(i) -1;
-                    //  int JIndex = Solutions.get(i + 1) -1;
-
                     int IIndex = map.getKey();
                     int JIndex = map.getValue();
 
-                    //System.out.println("I " + IIndex + " J " + JIndex);
-
-                    //IAtom A = ac1.getAtom(IIndex);
-                    //IAtom B = ac2.getAtom(JIndex);
-
+                    
                     IAtom A = null;
                     IAtom B = null;
 
