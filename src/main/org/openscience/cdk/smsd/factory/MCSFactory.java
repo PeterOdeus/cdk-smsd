@@ -794,6 +794,10 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public boolean isSubgraph() {
+          if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
+
+            return false;
+        }
         BondType BT = BondType.getInstance();
         int score = 0;
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
@@ -803,7 +807,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
                 IAtom indexIPlus = mappingJ.getKey();
                 IAtom indexJPlus = mappingJ.getValue();
-                if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
+                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
 
                     IAtom R1 = indexI;
                     IAtom R2 = indexIPlus;
@@ -828,7 +832,6 @@ public class MCSFactory implements IMCSAlgorithm {
                                 } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
                                     score++;
                                 }
-
                             } else {
                                 score++;
                             }
@@ -854,9 +857,9 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
             b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
         }
-        if (size == a && score == RMol.getMolecule().getBondCount()) {
+        if (size == a && score/2 == RMol.getMolecule().getBondCount()) {
 
-            if (b >= size && PMol.getMolecule().getBondCount() >= score) {
+            if (b >= size && PMol.getMolecule().getBondCount() >= score/2) {
                 flag = true;
             }
 
