@@ -1,22 +1,4 @@
-package org.openscience.cdk.smsd.helper;
-
-import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
-
-import javax.swing.JFileChooser;
-
-/**
- * An export filter for JCP file formats
- *
- * @cdk.module jchempaint 
- * @author  Egon Willighagen
- * @cdk.created 2003-04-01
- */
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -37,6 +19,21 @@ import javax.swing.JFileChooser;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.helper;
+
+import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
+
+/**
+ * An export filter for JCP file formats
+ *
+ * @cdk.module  smsd
+ * @author      Egon Willighagen
+ * @cdk.created 2003-04-01
  */
 public class FileExportFilter extends javax.swing.filechooser.FileFilter{
 

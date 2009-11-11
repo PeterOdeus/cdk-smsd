@@ -32,8 +32,7 @@ import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- *
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
+ * @cdk.module smsd
  */
 public interface IMCS extends IMCSBase {
 

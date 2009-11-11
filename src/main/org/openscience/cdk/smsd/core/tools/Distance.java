@@ -74,6 +74,7 @@ import java.util.BitSet;
  *
  * @ref <B>Willett et.al., Chemical Similarity Searching,</B> <I>J.Chem. Inf. Comput. Sci.</I>, Vol. 38, No. 6, 1998
  *
+ * @cdk.module smsd
  */
 public class Distance {
 

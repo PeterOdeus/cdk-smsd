@@ -1,15 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.helper;
-
-import java.io.File;
-import javax.swing.ImageIcon;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -30,6 +19,14 @@ import javax.swing.ImageIcon;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.helper;
+
+import java.io.File;
+import javax.swing.ImageIcon;
+
+/**
+ * @cdk.module smsd
  */
 public class FileFilterUtility {
 

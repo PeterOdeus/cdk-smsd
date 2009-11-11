@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
 
+/**
+ * @cdk.module smsd
+ */
 public class FinalMappings implements IFinalMapping {
 
     private List<TreeMap<Integer, Integer>> _mappings;

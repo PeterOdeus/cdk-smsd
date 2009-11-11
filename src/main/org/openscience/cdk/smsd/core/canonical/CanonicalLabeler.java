@@ -74,7 +74,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * The Collections.sort() method uses a merge sort which is
  * stable and runs in n log(n).
  *
- * @cdk.module standard
+ * @cdk.module smsd
  * @cdk.githash
  *
  * @author   Oliver Horlacher <oliver.horlacher@therastrat.com>

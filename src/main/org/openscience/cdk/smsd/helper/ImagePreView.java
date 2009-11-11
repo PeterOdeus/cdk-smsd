@@ -1,13 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package org.openscience.cdk.smsd.helper;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -29,6 +20,7 @@ package org.openscience.cdk.smsd.helper;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+package org.openscience.cdk.smsd.helper;
 
 import javax.swing.*;
 import java.beans.*;
@@ -36,6 +28,9 @@ import java.awt.*;
 import java.io.File;
 
 /* ImagePreview.java by FileChooserDemo2.java. */
+/**
+ * @cdk.module smsd
+ */
 public class ImagePreView extends JComponent
                           implements PropertyChangeListener {
     ImageIcon thumbnail = null;

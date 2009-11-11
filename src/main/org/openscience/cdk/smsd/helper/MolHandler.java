@@ -49,6 +49,7 @@ import org.openscience.cdk.io.MDLReader;
  *
  * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
  * @contact asad@ebi.ac.uk
+ * @cdk.module smsd
  */
 public class MolHandler {
 

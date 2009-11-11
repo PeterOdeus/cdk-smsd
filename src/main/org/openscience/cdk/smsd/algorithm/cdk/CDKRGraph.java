@@ -99,7 +99,7 @@ import org.openscience.cdk.smsd.global.TimeOut;
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  * @cdk.created 2002-07-17
  * @cdk.require java1.4+
- * @cdk.module  standard
+ * @cdk.module  smsd
  * @cdk.svnrev  $Revision$
  */
 public class CDKRGraph {

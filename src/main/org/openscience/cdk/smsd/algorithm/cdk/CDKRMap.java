@@ -35,7 +35,7 @@ package org.openscience.cdk.smsd.algorithm.cdk;
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
  * @author      Stephane Werner, IXELIS <mail@ixelis.net>
  * @cdk.created 2002-07-24
- * @cdk.module  standard
+ * @cdk.module  smsd
  * @cdk.svnrev  $Revision$
  */
 public class CDKRMap {

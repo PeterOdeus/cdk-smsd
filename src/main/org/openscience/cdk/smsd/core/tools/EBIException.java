@@ -25,6 +25,9 @@ package org.openscience.cdk.smsd.core.tools;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/**
+ * @cdk.module smsd
+ */
 public class EBIException extends Exception {
 
     private static final long serialVersionUID = 8371328769230823678L;

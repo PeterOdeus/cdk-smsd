@@ -1,25 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import org.openscience.cdk.smsd.core.tools.EBIException;
-import org.openscience.cdk.smsd.factory.MCSFactory;
-import org.openscience.cdk.smsd.factory.SubGraphFactory;
-import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -40,6 +19,24 @@ import org.openscience.cdk.interfaces.IMolecule;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.smsd.factory.MCSFactory;
+import org.openscience.cdk.smsd.factory.SubGraphFactory;
+import org.openscience.cdk.smsd.helper.MolHandler;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+
+/**
+ * @cdk.module smsd
  */
 public class SubStructureFactory implements IMCSAlgorithm {
 

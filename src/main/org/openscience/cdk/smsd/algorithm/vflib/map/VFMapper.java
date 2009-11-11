@@ -1,26 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.map;
-
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IState;
-import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
-import org.openscience.cdk.smsd.algorithm.vflib.validator.VFMatch;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -41,9 +19,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-
-/*
+ * 
  * MX Cheminformatics Tools for Java
  *
  * Copyright (c) 2007-2009 Metamolecular, LLC
@@ -68,7 +44,25 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.openscience.cdk.smsd.algorithm.vflib.map;
 
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IState;
+import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
+import org.openscience.cdk.smsd.algorithm.vflib.validator.VFMatch;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+/**
+ * @cdk.module smsd
+ */
 public class VFMapper implements IMapper {
 
     private IQuery query;

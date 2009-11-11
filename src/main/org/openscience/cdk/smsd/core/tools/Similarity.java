@@ -75,6 +75,9 @@ import java.util.BitSet;
  *
  *
  */
+/**
+ * @cdk.module smsd
+ */
 public class Similarity {
 
     private static BitSet A;

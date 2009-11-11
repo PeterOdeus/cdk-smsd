@@ -53,6 +53,9 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
  *
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  */
+/**
+ * @cdk.module smsd
+ */
 public class FragmentMatcher implements IFragment {
 
     // private boolean[][] localFlagMatrix;

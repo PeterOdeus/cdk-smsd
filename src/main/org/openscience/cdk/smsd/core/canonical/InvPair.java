@@ -67,6 +67,9 @@ import org.openscience.cdk.math.Primes;
  * @cdk.module standard
  * @cdk.githash
  */
+/**
+ * @cdk.module smsd
+ */
 public class InvPair implements java.io.Serializable {
 
     private static final long serialVersionUID = -1397634098919863122L;

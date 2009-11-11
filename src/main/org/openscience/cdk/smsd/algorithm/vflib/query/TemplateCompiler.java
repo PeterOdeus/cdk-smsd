@@ -1,24 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.query;
-
-
-import org.openscience.cdk.smsd.algorithm.vflib.builder.VFQueryBuilder;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQueryCompiler;
-import org.openscience.cdk.smsd.algorithm.vflib.validator.VFAtomMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -39,9 +19,7 @@ import org.openscience.cdk.interfaces.IBond;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-
-/*
+ * 
  * MX Cheminformatics Tools for Java
  *
  * Copyright (c) 2007-2009 Metamolecular, LLC
@@ -66,9 +44,25 @@ import org.openscience.cdk.interfaces.IBond;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.openscience.cdk.smsd.algorithm.vflib.query;
+
+
+import org.openscience.cdk.smsd.algorithm.vflib.builder.VFQueryBuilder;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQueryCompiler;
+import org.openscience.cdk.smsd.algorithm.vflib.validator.VFAtomMatcher;
+import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
+ * 
+ * @cdk.module smsd
  */
 public class TemplateCompiler implements IQueryCompiler {
 

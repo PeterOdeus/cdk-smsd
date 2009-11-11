@@ -44,6 +44,9 @@ import org.openscience.cdk.interfaces.ISingleElectron;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/**
+ * @cdk.module smsd
+ */
 public class ReOrganizeAtomContainer {
 
     public final static String INVARIANCE_PAIR = "InvariancePair";

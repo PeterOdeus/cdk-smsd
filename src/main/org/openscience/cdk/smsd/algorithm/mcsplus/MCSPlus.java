@@ -1,26 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.mcsplus;
-
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Stack;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
-import org.openscience.cdk.smsd.core.tools.EBIException;
-import org.openscience.cdk.smsd.core.tools.EBITimeManager;
-import org.openscience.cdk.smsd.filters.ExactMapping;
-import org.openscience.cdk.smsd.global.TimeOut;
-import org.openscience.cdk.interfaces.IAtomContainer;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -41,6 +19,24 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.algorithm.mcsplus;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
+import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.smsd.core.tools.EBITimeManager;
+import org.openscience.cdk.smsd.filters.ExactMapping;
+import org.openscience.cdk.smsd.global.TimeOut;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+/**
+ * @cdk.module smsd
  */
 public class MCSPlus {
 

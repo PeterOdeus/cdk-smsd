@@ -1,7 +1,4 @@
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -25,7 +22,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.cdk;
 
-//~--- classes ----------------------------------------------------------------
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,6 +39,9 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 
+/**
+ * @cdk.module smsd
+ */
 public class CDKMCSHandler implements IMCS {
 
 //    //~--- fields -------------------------------------------------------------

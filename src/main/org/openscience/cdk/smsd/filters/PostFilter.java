@@ -31,6 +31,9 @@ import java.util.Vector;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 
 
+/**
+ * @cdk.module smsd
+ */
 public class PostFilter {
 
     /** 

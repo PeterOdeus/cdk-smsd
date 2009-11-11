@@ -27,6 +27,9 @@ package org.openscience.cdk.smsd.helper;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @cdk.module smsd
+ */
 public class LabelContainer {
 
     private HashMap<String, Integer> _labelMap;

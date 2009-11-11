@@ -1,18 +1,4 @@
-/*
- * IFinalMapping.java
- *
- * Created on Sep 12, 2007, 8:58:45 PM
- *
- */
-package org.openscience.cdk.smsd.interfaces;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -33,6 +19,15 @@ import java.util.TreeMap;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.interfaces;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeMap;
+
+/**
+ * @cdk.module smsd
  */
 public interface IFinalMapping {
 

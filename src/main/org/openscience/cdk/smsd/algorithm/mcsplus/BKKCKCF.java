@@ -38,6 +38,8 @@ import java.util.Vector;
  * described in [F. Cazals, R. Karande: An Algorithm for reporting maximal c-cliques;
  * T.Comp. Sc. (2005); vol 349; pp.
  * 484-490]
+ * 
+ * @cdk.module smsd
  */
 public class BKKCKCF {
 

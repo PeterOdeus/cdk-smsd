@@ -73,6 +73,8 @@ import org.w3c.dom.NodeList;
 /**
  * This is an extension of CDK Atom container where we have modfiled few methods
  * Some part of this code was taken from CDK source code and modified
+ * 
+ * @cdk.module smsd
  */
 public class EBIAtomContainerManipulator extends AtomContainerManipulator {
 

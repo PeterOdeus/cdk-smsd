@@ -31,6 +31,9 @@ import java.util.Vector;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/**
+ * @cdk.module smsd
+ */
 public class ExactMapping {
 
     //extract atom mapping from the clique vector and store it in vector clique_MAPPING
