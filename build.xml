@@ -255,7 +255,7 @@
             <mkdir dir="${build}" />
         	<javac includes="net/sf/cdk/tools/MakeJavafilesFiles.java"
         	    srcdir="${src}/main/" destdir="${build}" optimize="${optimization}"
-        	    debug="${debug}" deprecation="${deprecation}" source="1.5"/>
+        	    debug="${debug}" deprecation="${deprecation}" source="1.6"/>
         	<java classpath="${build}" classname="net.sf.cdk.tools.MakeJavafilesFiles">
                   <arg value="${src}/META-INF"/>
                   <arg value="${src}/main"/>
@@ -342,7 +342,7 @@
 
             <!-- ok, now that we have a copy, compile this copy -->
             <javac srcdir="${build.src}/${module}" destdir="${build}/${module}" optimize="${optimization}"
-                    debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
+                    debug="${debug}" deprecation="${deprecation}" target="1.6" source="1.6">
                 <classpath>
                     <fileset dir="${lib}" >
                         <exclude name="**/*" unless="module.libdepends.present" />
