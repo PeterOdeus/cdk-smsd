@@ -1,14 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
-
-import org.openscience.cdk.interfaces.IBond;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -29,8 +19,7 @@ import org.openscience.cdk.interfaces.IBond;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-/*
+ * 
  * MX Cheminformatics Tools for Java
  *
  * Copyright (c) 2007-2009 Metamolecular, LLC
@@ -55,7 +44,13 @@ import org.openscience.cdk.interfaces.IBond;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
 
+import org.openscience.cdk.interfaces.IBond;
+
+/**
+ * @cdk.module smsd
+ */
 public interface IBondMatcher {
 
     public boolean matches(IBond bond);

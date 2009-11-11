@@ -1,19 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.builder;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -34,6 +19,17 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.algorithm.vflib.builder;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+
+/**
+ * @cdk.module smsd
  */
 public class NodeBuilder implements INode {
 

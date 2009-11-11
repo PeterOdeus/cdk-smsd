@@ -501,7 +501,7 @@
             list="pdb,smiles,sdg,inchi,libiocml"/>
         <foreach target="compile-module" param="module"
             parallel="${parallel}" maxthreads="${threadCount}"
-            list="control,extra,reaction,pdbcml,libiomd"/>
+            list="control,extra,reaction,pdbcml,libiomd,smsd"/>
         <foreach target="compile-module" param="module"
             parallel="${parallel}" maxthreads="${threadCount}"
             list="charges,smarts"/>

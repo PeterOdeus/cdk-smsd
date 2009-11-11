@@ -1,14 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
-
-import java.util.List;
-import org.openscience.cdk.smsd.algorithm.vflib.builder.EdgeBuilder;
-import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
-
-/*
  * MX Cheminformatics Tools for Java
  *
  * Copyright (c) 2007-2009 Metamolecular, LLC
@@ -32,8 +22,6 @@ import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
-/**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
@@ -56,6 +44,15 @@ import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
+
+import java.util.List;
+import org.openscience.cdk.smsd.algorithm.vflib.builder.EdgeBuilder;
+import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
+
+/**
+ * @cdk.module smsd
  */
 public interface INode {
 

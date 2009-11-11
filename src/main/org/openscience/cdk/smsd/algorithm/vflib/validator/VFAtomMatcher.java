@@ -1,16 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.algorithm.vflib.validator;
-
-
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
-import org.openscience.cdk.interfaces.IAtom;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -31,9 +19,7 @@ import org.openscience.cdk.interfaces.IAtom;
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-
-/*
+ * 
  * MX Cheminformatics Tools for Java
  *
  * Copyright (c) 2007-2009 Metamolecular, LLC
@@ -58,7 +44,15 @@ import org.openscience.cdk.interfaces.IAtom;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
+
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+import org.openscience.cdk.interfaces.IAtom;
+
+/**
+ * @cdk.module smsd
+ */
 public class VFAtomMatcher implements IAtomMatcher {
 
     private String symbol;
