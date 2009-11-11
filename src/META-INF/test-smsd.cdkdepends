@@ -1,0 +1,10 @@
+cdk-annotation.jar
+cdk-interfaces.jar
+cdk-core.jar
+cdk-standard.jar
+cdk-data.jar
+cdk-smsd.jar
+cdk-extra.jar
+cdk-test.jar
+cdk-smiles.jar
+cdk-valencycheck.jar

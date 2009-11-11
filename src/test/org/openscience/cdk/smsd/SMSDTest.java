@@ -23,6 +23,8 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
+ * 
+ * @cdk.module test-smsd
  */
 public class SMSDTest extends CDKTestCase {
 
