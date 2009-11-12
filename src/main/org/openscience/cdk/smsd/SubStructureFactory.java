@@ -44,19 +44,16 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param subStructureMode
-     * @param bondTypeFlag This flag if set to true will considered bond
-     * types for mapping. Hence only similar bon types will be mapped.
-     * @param removeHydrogen
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
+     * @param subStructureMode true for fast substructure search without
+     * exhaustive MCS else false
+     * @param bondTypeFlag   true will considered bond types for mapping else false
+     * @param removeHydrogen true if Hydrogen are not to be mapped else false
+     * @param stereoFilter   true if stereo match is considered else false
+     * @param fragmentFilter true if fragement filter is switched on else false
+     * @param energyFilter   true if bond energy filter is switched on else false
      * @throws Exception
      */
     public SubStructureFactory(boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
-
-//        this.bondFlag = bondTypeFlag;
-
         if (subStructureMode) {
 
             comparison = new SubGraphFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
@@ -73,26 +70,20 @@ public class SubStructureFactory implements IMCSAlgorithm {
     /**
      *
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
-     * @param subStructureMode
-     * @param bondTypeFlag This flag if set to true will considered bond
-     * types for mapping. Hence only similar bon types will be mapped.
-     * @param removeHydrogen
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
+     * @param subStructureMode true for fast substructure search without
+     * exhaustive MCS else false
+     * @param bondTypeFlag   true will considered bond types for mapping else false
+     * @param removeHydrogen true if Hydrogen are not to be mapped else false
+     * @param stereoFilter   true if stereo match is considered else false
+     * @param fragmentFilter true if fragement filter is switched on else false
+     * @param energyFilter   true if bond energy filter is switched on else false
      * @throws Exception
      */
     public SubStructureFactory(int algorithmType, boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
-
-//        this.bondFlag = bondTypeFlag;
-
         if (subStructureMode) {
-
             comparison = new SubGraphFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
-
         } else {
             comparison = new MCSFactory(algorithmType, bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
-
         }
 
         System.gc();
@@ -101,18 +92,16 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param Reactant
-     * @param Product
+     * @param Query
+     * @param Target
      * @throws EBIException 
      * 
      */
     @Override
-    public void init(MolHandler Reactant, MolHandler Product) throws EBIException {
+    public void init(MolHandler Query, MolHandler Target) throws EBIException {
 
-        if (Reactant.getMolecule().getAtomCount() > 0 && Product.getMolecule().getAtomCount() > 0) {
-
-            comparison.init(Reactant, Product);
-
+        if (Query.getMolecule().getAtomCount() > 0 && Target.getMolecule().getAtomCount() > 0) {
+            comparison.init(Query, Target);
         } else {
             throw new EBIException("Each molecule should have atleast one atom to compare");
         }
@@ -123,17 +112,15 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param Reactant
-     * @param Product
+     * @param Query
+     * @param Target
      * @throws EBIException 
      */
     @Override
-    public synchronized void init(IMolecule Reactant, IMolecule Product) throws EBIException {
+    public synchronized void init(IMolecule Query, IMolecule Target) throws EBIException {
 
-        if (Reactant.getAtomCount() > 0 && Product.getAtomCount() > 0) {
-//           
-            comparison.init(Reactant, Product);
-
+        if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
+            comparison.init(Query, Target);
         } else {
             throw new EBIException("Each molecule should have atleast one atom to compare");
         }
@@ -143,18 +130,15 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param Reactant
-     * @param Product
+     * @param Query
+     * @param Target
      * @throws EBIException 
      */
     @Override
-    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product) throws EBIException {
+    public synchronized void init(IAtomContainer Query, IAtomContainer Target) throws EBIException {
 
-        if (Reactant.getAtomCount() > 0 && Product.getAtomCount() > 0) {
-//            System.out.println("SMSDTest");
-//            printMolecules(Reactant, Product);
-            comparison.init(Reactant, Product);
-
+        if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
+            comparison.init(Query, Target);
         } else {
             throw new EBIException("Each molecule should have atleast one atom to compare");
         }
@@ -165,10 +149,12 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @return All the possible MCS Atoms
-     * List of mapped position
-     * i.e if i=0 is reactant mapping index,
-     * i+1 is product index
+     * @return All the possible mapped MCS atoms
+     * List of mappings. Each map in the list has
+     * atom-atom equivalence of the mappings
+     * between query and target molecule i.e.
+     * map.getKey() for the query and map.getValue()
+     * for the target molecule
      */
     @Override
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
@@ -176,11 +162,13 @@ public class SubStructureFactory implements IMCSAlgorithm {
     }
 
     /**
-     * 
-     * @return All the possible MCS mapping
-     * List of mapped position
-     * i.e if i=0 is reactant mapping index,
-     * i+1 is product index
+     *
+     * @return All the possible mapped MCS atom index
+     * List of mappings. Each map in the list has
+     * atom-atom equivalence of the mappings
+     * between query and target molecule i.e.
+     * map.getKey() for the query and map.getValue()
+     * for the target molecule
      */
     @Override
     public List<TreeMap<Integer, Integer>> getAllMapping() {
@@ -189,9 +177,8 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @return MCS list of mapped Atoms
-     * i.e if i=0 is reactant mapping index,
-     * i+1 is product index
+     * @return One of the best MCS hits
+     *
      */
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
@@ -200,9 +187,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @return MCS list of mapped positions
-     * i.e if i=0 is reactant mapping index,
-     * i+1 is product index
+     * @return One of the best MCS hits
      */
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
@@ -218,8 +203,6 @@ public class SubStructureFactory implements IMCSAlgorithm {
      */
     @Override
     public Integer getStereoScore(int Key) {
-
-//        System.out.println("Key: " + Key);
         Integer solution = null;
         solution = comparison.getStereoScore(Key);
         if (solution == null) {
@@ -236,8 +219,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * 
      */
     @Override
-    public Integer getFragmentSize(
-            int Key) {
+    public Integer getFragmentSize(int Key) {
         Integer solution = null;
 
         solution = comparison.getFragmentSize(Key);
@@ -254,8 +236,7 @@ public class SubStructureFactory implements IMCSAlgorithm {
      *
      */
     @Override
-    public Double getEnergyScore(
-            int Key) {
+    public Double getEnergyScore(int Key) {
         Double solution = 0.0;
 
         solution = comparison.getEnergyScore(Key);
@@ -267,28 +248,20 @@ public class SubStructureFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @return Reactant Molecule AtomContainer
+     * @return Query Molecule AtomContainer
      */
     @Override
     public IAtomContainer getReactantMolecule() {
-        IAtomContainer solution;
-
-        solution = comparison.getReactantMolecule();
-
-        return solution;
+        return comparison.getReactantMolecule();
     }
 
     /**
      * 
-     * @return Product Molecule AtomContainer
+     * @return Target Molecule AtomContainer
      */
     @Override
     public IAtomContainer getProductMolecule() {
-        IAtomContainer solution;
-
-        solution = comparison.getProductMolecule();
-
-        return solution;
+        return comparison.getProductMolecule();
     }
 
     /**
@@ -344,6 +317,11 @@ public class SubStructureFactory implements IMCSAlgorithm {
         return comparison.isSubgraph();
 
     }
+
+    /**
+     * @return Euclidean Distance between query and target molecule
+     * @throws IOException
+     */
 
     @Override
     public double getEuclideanDistance() throws IOException {
