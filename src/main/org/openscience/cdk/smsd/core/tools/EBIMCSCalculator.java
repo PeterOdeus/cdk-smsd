@@ -5,6 +5,7 @@
 package org.openscience.cdk.smsd.core.tools;
 
 import org.openscience.cdk.smsd.SubStructureFactory;
+
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -34,33 +35,33 @@ import org.openscience.cdk.smsd.SubStructureFactory;
  */
 public class EBIMCSCalculator extends SubStructureFactory {
 
-
-
     /**
-     *
-     * @param subStructureMode
-     * @param bondTypeMatch
-     * @param removeHydrogen
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
+    @param subStructureMode true for fast substructure search without
+     * exhaustive MCS else false
+     * @param bondTypeMatch   true will considered bond types for mapping else false
+     * @param removeHydrogen true if Hydrogen are not to be mapped else false
+     * @param stereoFilter   true if stereo match is considered else false
+     * @param fragmentFilter true if fragement filter is switched on else false
+     * @param energyFilter   true if bond energy filter is switched on else false
      * @throws Exception
      */
     public EBIMCSCalculator(boolean subStructureMode, boolean bondTypeMatch, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
         super(subStructureMode, bondTypeMatch, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
     }
+
     /**
      *
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
-     * @param subStructureMode
-     * @param bondTypeMatch
-     * @param removeHydrogen
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
+     * @param subStructureMode true for fast substructure search without
+     * exhaustive MCS else false
+     * @param bondTypeMatch   true will considered bond types for mapping else false
+     * @param removeHydrogen true if Hydrogen are not to be mapped else false
+     * @param stereoFilter   true if stereo match is considered else false
+     * @param fragmentFilter true if fragement filter is switched on else false
+     * @param energyFilter   true if bond energy filter is switched on else false
      * @throws Exception
      */
     public EBIMCSCalculator(int algorithmType, boolean subStructureMode, boolean bondTypeMatch, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
-        super(algorithmType,subStructureMode, bondTypeMatch, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
+        super(algorithmType, subStructureMode, bondTypeMatch, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
     }
 }
