@@ -26,7 +26,7 @@ import org.junit.Test;
  *
  * @cdk.module test-smsd
  */
-public class SmsdCoverageTest extends CoverageTest {
+public class SmsdCoverageTest extends CoverageAnnotationTest {
 
     private final static String CLASS_LIST = "smsd.javafiles";
     
