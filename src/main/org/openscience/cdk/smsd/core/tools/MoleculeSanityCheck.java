@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.ringsearch.AllRingsFinder;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
+
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -100,8 +101,8 @@ public class MoleculeSanityCheck {
             AllRingsFinder arf = new AllRingsFinder();
             rs = arf.findAllRings(m);
 
-        // SSSRFinder s = new SSSRFinder(m);
-        // srs = s.findEssentialRings();
+            // SSSRFinder s = new SSSRFinder(m);
+            // srs = s.findEssentialRings();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,8 +114,8 @@ public class MoleculeSanityCheck {
             CDKHueckelAromaticityDetector.detectAromaticity(m);
             // figure out which rings are aromatic:
             RingSetManipulator.markAromaticRings(rs);
-        // figure out which simple (non cycles) rings are aromatic:
-        // HueckelAromaticityDetector.detectAromaticity(m, srs);
+            // figure out which simple (non cycles) rings are aromatic:
+            // HueckelAromaticityDetector.detectAromaticity(m, srs);
         } catch (Exception e) {
             e.printStackTrace();
         }

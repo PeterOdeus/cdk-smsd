@@ -1,4 +1,3 @@
-
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -52,7 +51,6 @@
  *
  */
 package org.openscience.cdk.smsd.algorithm.cdk;
-
 
 import java.util.ArrayList;
 import java.util.BitSet;
