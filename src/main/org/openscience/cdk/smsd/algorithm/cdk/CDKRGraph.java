@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.core.tools.EBITimeManager;
 import org.openscience.cdk.smsd.global.TimeOut;
 
@@ -214,14 +214,14 @@ public class CDKRGraph {
      * @param  findAllStructure true if we want all results to be generated
      * @param  findAllMap true is we want all possible 'mappings'
      * @param TM
-     * @throws EBIException
+     * @throws CDKException
      */
-    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws EBIException {
+    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws CDKException {
         // initialize the list of solution
 
         this.TM = TM;
         if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
-            throw new EBIException("Timeout exceeded in getOverlaps");
+            throw new CDKException("Timeout exceeded in getOverlaps");
         }
         // initialize the list of solution
         solutionList.clear();
@@ -248,14 +248,14 @@ public class CDKRGraph {
      * @param  extension  possible extension node (allowed neighbors)
      * @param  forbiden   node forbidden (set of node incompatible with the current solution)
      */
-    private void parseRec(BitSet traversed, BitSet extension, BitSet forbidden) throws EBIException {
+    private void parseRec(BitSet traversed, BitSet extension, BitSet forbidden) throws CDKException {
         BitSet newTraversed = null;
         BitSet newExtension = null;
         BitSet newForbidden = null;
         BitSet potentialNode = null;
 
         if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
-            throw new EBIException("Timeout exceeded in getOverlaps");
+            throw new CDKException("Timeout exceeded in getOverlaps");
         }
 
         // if there is no more extension possible we
@@ -325,7 +325,7 @@ public class CDKRGraph {
      *
      * @param  traversed  new potential solution
      */
-    private void solution(BitSet traversed) throws EBIException {
+    private void solution(BitSet traversed) throws CDKException {
         boolean included = false;
         BitSet projG1 = projectG1(traversed);
         BitSet projG2 = projectG2(traversed);
@@ -342,7 +342,7 @@ public class CDKRGraph {
 
                 if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                     //System.out.println("|Hello|");
-                    throw new EBIException("Timeout exceeded in getOverlaps");
+                    throw new CDKException("Timeout exceeded in getOverlaps");
                 }
 
                 if (!sol.equals(traversed)) {
@@ -426,7 +426,7 @@ public class CDKRGraph {
      * @param  c2  constraint in the graph G2
      * @return
      */
-    private BitSet buildB(BitSet c1, BitSet c2) throws EBIException {
+    private BitSet buildB(BitSet c1, BitSet c2) throws CDKException {
         this.c1 = c1;
         this.c2 = c2;
 
@@ -439,7 +439,7 @@ public class CDKRGraph {
 
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
-                throw new EBIException("Timeout exceeded in getOverlaps");
+                throw new CDKException("Timeout exceeded in getOverlaps");
             }
 
             if ((c1.get(rn.getRMap().id1) || c1.isEmpty()) && (c2.get(rn.getRMap().id2) || c2.isEmpty())) {
@@ -616,7 +616,7 @@ public class CDKRGraph {
 // */
 //package chemlib.ebi.molecule.mcs.algorithm.cdk;
 //
-//import chemlib.ebi.core.tools.EBIException;
+//import chemlib.ebi.core.tools.CDKException;
 //import chemlib.ebi.core.tools.EBITimeManager;
 //import chemlib.ebi.molecule.mcs.global.TimeOut;
 //import java.util.ArrayList;
@@ -797,9 +797,9 @@ public class CDKRGraph {
 //     * @param  findAllStructure true if we want all results to be generated
 //     * @param  findAllMap true is we want all possible 'mappings'
 //     * @param TM
-//     * @throws EBIException
+//     * @throws CDKException
 //     */
-//    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws EBIException {
+//    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws CDKException {
 //        // initialize the list of solution
 //
 //        this.TM = TM;
@@ -808,7 +808,7 @@ public class CDKRGraph {
 //            //System.out.println("|Hello|");
 //
 //
-//            throw new EBIException("Timeout exceeded in getOverlaps");
+//            throw new CDKException("Timeout exceeded in getOverlaps");
 //        }
 //        solutionList.clear();
 //
@@ -829,7 +829,7 @@ public class CDKRGraph {
 //            //System.out.println("|Hello|");
 //
 //
-//            throw new EBIException("Timeout exceeded in getOverlaps");
+//            throw new CDKException("Timeout exceeded in getOverlaps");
 //        }
 //    }
 //
@@ -843,7 +843,7 @@ public class CDKRGraph {
 //     * @param  extension  possible extension node (allowed neighbours)
 //     * @param  forbiden   node forbiden (set of node incompatible with the current solution)
 //     */
-//    private void parseRec(BitSet traversed, BitSet extension, BitSet forbidden) throws EBIException {
+//    private void parseRec(BitSet traversed, BitSet extension, BitSet forbidden) throws CDKException {
 //        BitSet newTraversed = null;
 //        BitSet newExtension = null;
 //        BitSet newForbidden = null;
@@ -855,7 +855,7 @@ public class CDKRGraph {
 //            //System.out.println("|Hello|");
 //
 //
-//            throw new EBIException("Timeout exceeded in getOverlaps");
+//            throw new CDKException("Timeout exceeded in getOverlaps");
 //        }
 //
 //        // if there is no more extension possible we
@@ -929,7 +929,7 @@ public class CDKRGraph {
 //     * @param  traversed  new potential solution
 //     */
 //    @SuppressWarnings("unchecked")
-//    private void solution(BitSet traversed) throws EBIException {
+//    private void solution(BitSet traversed) throws CDKException {
 //        boolean included = false;
 //        BitSet projG1 = projectG1(traversed);
 //        BitSet projG2 = projectG2(traversed);
@@ -948,7 +948,7 @@ public class CDKRGraph {
 //                    //System.out.println("|Hello|");
 //
 //
-//                    throw new EBIException("Timeout exceeded in getOverlaps");
+//                    throw new CDKException("Timeout exceeded in getOverlaps");
 //                }
 //
 //                if (!sol.equals(traversed)) {
@@ -988,7 +988,7 @@ public class CDKRGraph {
 //     * @param       potentialNode  set of remaining potential nodes
 //     * @return      true if it is worse to continue the search
 //     */
-//    private boolean mustContinue(BitSet potentialNode) throws EBIException {
+//    private boolean mustContinue(BitSet potentialNode) throws CDKException {
 //        boolean result = true;
 //        boolean cancel = false;
 //        BitSet projG1 = projectG1(potentialNode);
@@ -1014,7 +1014,7 @@ public class CDKRGraph {
 //                //System.out.println("|Hello|");
 //
 //
-//                throw new EBIException("Timeout exceeded in getOverlaps");
+//                throw new CDKException("Timeout exceeded in getOverlaps");
 //            }
 //
 //            // if we want every 'mappings' do not stop
@@ -1039,7 +1039,7 @@ public class CDKRGraph {
 //     * @param  c2  constraint in the graph G2
 //     * @return
 //     */
-//    private BitSet buildB(BitSet c1, BitSet c2) throws EBIException {
+//    private BitSet buildB(BitSet c1, BitSet c2) throws CDKException {
 //        this.c1 = c1;
 //        this.c2 = c2;
 //
@@ -1053,7 +1053,7 @@ public class CDKRGraph {
 //                //System.out.println("|Hello|");
 //
 //
-//                throw new EBIException("Timeout exceeded in getOverlaps");
+//                throw new CDKException("Timeout exceeded in getOverlaps");
 //            }
 //            CDKRNode rn = (CDKRNode) i.next();
 //

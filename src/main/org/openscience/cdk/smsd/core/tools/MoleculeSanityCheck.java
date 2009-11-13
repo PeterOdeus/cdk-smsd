@@ -86,7 +86,7 @@ public class MoleculeSanityCheck {
 //        try {
 //            CDKHueckelAromaticityDetector.detectAromaticity(molecule);
 //        } catch (CDKException e) {
-//            throw new EBIException("Error in aromaticity detection");
+//            throw new CDKException("Error in aromaticity detection");
 //        }
 
         return molecule;

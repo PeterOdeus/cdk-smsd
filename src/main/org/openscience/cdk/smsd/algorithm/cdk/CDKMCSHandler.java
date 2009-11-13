@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -135,7 +135,7 @@ public class CDKMCSHandler implements IMCS {
      * @return
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws EBIException {
+    public int search_MCS(boolean removeHydrogen) throws CDKException {
 
 
         CDKRMapHandler rmap = new CDKRMapHandler();
@@ -166,7 +166,7 @@ public class CDKMCSHandler implements IMCS {
             setFirstMapping();
             setFirstAtomMapping();
 
-        } catch (EBIException e) {
+        } catch (CDKException e) {
             rmap = null;
 //            System.err.println("WARNING: CDKMCS: most probably time out error ");
         }
@@ -180,7 +180,7 @@ public class CDKMCSHandler implements IMCS {
      * @param ac2
      * 
      */
-    private IAtomContainer CalculateMCSS(IAtomContainer ac1, IAtomContainer ac2) throws EBIException {
+    private IAtomContainer CalculateMCSS(IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
 
 
 
@@ -205,9 +205,9 @@ public class CDKMCSHandler implements IMCS {
      * @param mol
      * @param mcss
      * @return
-     * @throws EBIException 
+     * @throws CDKException 
      */
-    protected IMoleculeSet getUncommon(IAtomContainer mol, IAtomContainer mcss) throws EBIException {
+    protected IMoleculeSet getUncommon(IAtomContainer mol, IAtomContainer mcss) throws CDKException {
         ArrayList<Integer> atomSerialsToDelete = new ArrayList<Integer>();
 
         List matches = CDKMCS.getSubgraphAtomsMaps(mol, mcss);

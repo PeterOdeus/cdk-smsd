@@ -4,7 +4,6 @@
  */
 package org.openscience.cdk.smsd.factory;
 
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 import org.openscience.cdk.smsd.interfaces.IMCSBase;
@@ -28,6 +27,7 @@ import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -466,9 +466,7 @@ public class MCSFactory implements IMCSAlgorithm {
             allAtomMCS.addAll(mcs.getAllAtomMapping());
 
 
-        } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -493,9 +491,7 @@ public class MCSFactory implements IMCSAlgorithm {
             allAtomMCS.addAll(mcs.getAllAtomMapping());
 
 
-        } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -517,7 +513,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
             MCSBuilder();
             setChemFilters();
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -555,7 +551,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    public synchronized void setChemFilters() throws EBIException {
+    public synchronized void setChemFilters() throws CDKException {
         if (firstAtomMCS != null) {
             ChemicalFilters CF = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
@@ -686,8 +682,8 @@ public class MCSFactory implements IMCSAlgorithm {
             return allAtomMCS;
         } else {
             try {
-                throw new EBIException("No Solutions!");
-            } catch (EBIException ex) {
+                throw new CDKException("No Solutions!");
+            } catch (CDKException ex) {
                 Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
             return null;
@@ -797,7 +793,7 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public boolean isSubgraph() {
-          if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
+        if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
 
             return false;
         }
@@ -860,9 +856,9 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
             b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
         }
-        if (size == a && score/2 == RMol.getMolecule().getBondCount()) {
+        if (size == a && score / 2 == RMol.getMolecule().getBondCount()) {
 
-            if (b >= size && PMol.getMolecule().getBondCount() >= score/2) {
+            if (b >= size && PMol.getMolecule().getBondCount() >= score / 2) {
                 flag = true;
             }
 
@@ -923,9 +919,7 @@ public class MCSFactory implements IMCSAlgorithm {
             allAtomMCS.addAll(mcs.getAllAtomMapping());
 
 
-        } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -952,9 +946,7 @@ public class MCSFactory implements IMCSAlgorithm {
             allAtomMCS.addAll(mcs.getAllAtomMapping());
 
 
-        } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -121,7 +121,7 @@ public class SingleMappingHandler implements IMCS {
      * @throws java.io.IOException
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws IOException, EBIException {
+    public int search_MCS(boolean removeHydrogen) throws IOException, CDKException {
 
 
         SingleMapping SM = new SingleMapping();

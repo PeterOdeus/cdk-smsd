@@ -22,12 +22,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 package org.openscience.cdk.smsd.interfaces;
 
-
 import java.io.IOException;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -36,16 +34,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public interface IMCS extends IMCSBase {
 
-  
-
     /**
      *
      * @param removeHydrogen 
      * @return
      * @throws java.io.IOException
-     * @throws EBIException
+     * @throws CDKException
      */
-    int search_MCS(boolean removeHydrogen) throws IOException, EBIException;
+    int search_MCS(boolean removeHydrogen) throws IOException, CDKException;
 
     /**
      * Creates a new instance of SearchCliques
@@ -72,6 +68,4 @@ public interface IMCS extends IMCSBase {
      * @throws java.io.IOException
      */
     void set(IAtomContainer ReactantMol, IAtomContainer ProductMol) throws IOException;
-
-
 }

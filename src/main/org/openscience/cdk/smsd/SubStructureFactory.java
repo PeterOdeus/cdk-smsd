@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
 import org.openscience.cdk.smsd.helper.MolHandler;
@@ -94,16 +94,16 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * 
      * @param Query
      * @param Target
-     * @throws EBIException 
+     * @throws CDKException
      * 
      */
     @Override
-    public void init(MolHandler Query, MolHandler Target) throws EBIException {
+    public void init(MolHandler Query, MolHandler Target) throws CDKException {
 
         if (Query.getMolecule().getAtomCount() > 0 && Target.getMolecule().getAtomCount() > 0) {
             comparison.init(Query, Target);
         } else {
-            throw new EBIException("Each molecule should have atleast one atom to compare");
+            throw new CDKException("Each molecule should have atleast one atom to compare");
         }
 
         System.gc();
@@ -114,15 +114,15 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * 
      * @param Query
      * @param Target
-     * @throws EBIException 
+     * @throws CDKException
      */
     @Override
-    public synchronized void init(IMolecule Query, IMolecule Target) throws EBIException {
+    public synchronized void init(IMolecule Query, IMolecule Target) throws CDKException {
 
         if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
             comparison.init(Query, Target);
         } else {
-            throw new EBIException("Each molecule should have atleast one atom to compare");
+            throw new CDKException("Each molecule should have atleast one atom to compare");
         }
 
         System.gc();
@@ -132,15 +132,15 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * 
      * @param Query
      * @param Target
-     * @throws EBIException 
+     * @throws CDKException
      */
     @Override
-    public synchronized void init(IAtomContainer Query, IAtomContainer Target) throws EBIException {
+    public synchronized void init(IAtomContainer Query, IAtomContainer Target) throws CDKException {
 
         if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
             comparison.init(Query, Target);
         } else {
-            throw new EBIException("Each molecule should have atleast one atom to compare");
+            throw new CDKException("Each molecule should have atleast one atom to compare");
         }
 
         System.gc();

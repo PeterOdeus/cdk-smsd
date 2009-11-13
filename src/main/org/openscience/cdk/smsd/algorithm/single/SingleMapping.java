@@ -167,8 +167,8 @@ public class SingleMapping {
             System.err.println("skippping Hydrogen mapping");
 //            try {
 //                
-//                throw new EBIException("Hydrogens can't be Mapped");
-//            } catch (EBIException ex) {
+//                throw new CDKException("Hydrogens can't be Mapped");
+//            } catch (CDKException ex) {
 //                Logger.getLogger(SingleMapping.class.getName()).log(Level.SEVERE, null, ex);
 //            }
         }

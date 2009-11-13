@@ -23,7 +23,7 @@
 package org.openscience.cdk.smsd.interfaces;
 
 import java.io.IOException;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -37,9 +37,9 @@ public interface ISubGraph extends IMCSBase {
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
      * @throws java.io.IOException
-     * @throws EBIException 
+     * @throws CDKException 
      */
-    boolean isSubgraph() throws IOException, EBIException;
+    boolean isSubgraph() throws IOException, CDKException;
 
     /**
      * Creates a new instance of SearchCliques

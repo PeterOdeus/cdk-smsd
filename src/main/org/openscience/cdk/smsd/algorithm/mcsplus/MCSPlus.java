@@ -28,8 +28,8 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.core.tools.EBITimeManager;
 import org.openscience.cdk.smsd.filters.ExactMapping;
 import org.openscience.cdk.smsd.global.TimeOut;
@@ -50,9 +50,9 @@ public class MCSPlus {
      * @param ac2
      * @param removeHydrogen
      * @return
-     * @throws EBIException
+     * @throws CDKException
      */
-    public List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws EBIException {
+    public List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
         Stack<List<Integer>> Max_Cliques_Set = null;
         List<List<Integer>> _mappings = new Vector<List<Integer>>();
 
@@ -86,7 +86,7 @@ public class MCSPlus {
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
-                throw new EBIException("Timeout exceeded in getOverlaps");
+                throw new CDKException("Timeout exceeded in getOverlaps");
             }
             BKKCKCF init = new BKKCKCF(comp_graph_nodes, C_edges, D_edges);
 //            BronKerboschKochCliqueFinder init = new BronKerboschKochCliqueFinder(comp_graph_nodes, C_edges, D_edges);
@@ -97,7 +97,7 @@ public class MCSPlus {
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
-                throw new EBIException("Timeout exceeded in getOverlaps");
+                throw new CDKException("Timeout exceeded in getOverlaps");
             }
 
 //            int solution_size_pass1 = Max_Cliques_Set.size();
@@ -119,7 +119,7 @@ public class MCSPlus {
                 if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                     //System.out.println("|Hello|");
                     timeoutFlag = true;
-                    throw new EBIException("Timeout exceeded in getOverlaps");
+                    throw new CDKException("Timeout exceeded in getOverlaps");
                 }
 
 

@@ -31,13 +31,13 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.map.VFMCSMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.interfaces.IAtom;
@@ -78,9 +78,10 @@ public class VFlibMCSHandler implements IMCS {
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
      * @throws java.io.IOException
+     * @throws CDKException 
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws IOException, EBIException {
+    public int search_MCS(boolean removeHydrogen) throws IOException, CDKException {
 
 
 //        System.out.println("VF Solution Count: " + vfLibSolutions.size());
@@ -139,7 +140,7 @@ public class VFlibMCSHandler implements IMCS {
                         indexindexMapping.put(qIndex, tIndex);
                     } else {
 
-                        throw new EBIException("Atom index pointing to NULL");
+                        throw new CDKException("Atom index pointing to NULL");
                     }
                 }
 
@@ -302,8 +303,8 @@ public class VFlibMCSHandler implements IMCS {
                     indexindexMapping.put(qIndex, tIndex);
                 } else {
                     try {
-                        throw new EBIException("Atom index pointing to NULL");
-                    } catch (EBIException ex) {
+                        throw new CDKException("Atom index pointing to NULL");
+                    } catch (CDKException ex) {
                         Logger.getLogger(VFlibMCSHandler.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

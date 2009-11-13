@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -57,9 +57,9 @@ public class CDKRMapHandler {
      * This function calculates all the possible combinations of MCS
      * @param Molecule1
      * @param Molecule2
-     * @throws EBIException
+     * @throws CDKException
      */
-    public void calculateOverlapsAndReduce(IAtomContainer Molecule1, IAtomContainer Molecule2) throws EBIException {
+    public void calculateOverlapsAndReduce(IAtomContainer Molecule1, IAtomContainer Molecule2) throws CDKException {
 
         ac1 = Molecule1;
         ac2 = Molecule2;
@@ -136,9 +136,9 @@ public class CDKRMapHandler {
      * Fingerprint
      * @param Molecule1
      * @param Molecule2
-     * @throws EBIException
+     * @throws CDKException
      */
-    public void calculateOverlapsAndReduceExactMatch(IAtomContainer Molecule1, IAtomContainer Molecule2) throws EBIException {
+    public void calculateOverlapsAndReduceExactMatch(IAtomContainer Molecule1, IAtomContainer Molecule2) throws CDKException {
 
         ac1 = Molecule1;
         ac2 = Molecule2;

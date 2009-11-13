@@ -16,7 +16,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.smsd.core.tools.EBIBondEnergies;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -577,7 +576,7 @@ public class ChemicalFilters {
 
     }
 
-    private synchronized Double getMappedMoleculeEnergies(TreeMap<Integer, Integer> MCSAtomSolution) throws EBIException {
+    private synchronized Double getMappedMoleculeEnergies(TreeMap<Integer, Integer> MCSAtomSolution) throws CDKException {
 
 //        System.out.println("\nSort By Energies");
         EBIBondEnergies bE = EBIBondEnergies.getInstance();
@@ -659,7 +658,7 @@ public class ChemicalFilters {
         return totalBondEnergy;
     }
 
-    public synchronized void sortResultsByEnergies() throws EBIException {
+    public synchronized void sortResultsByEnergies() throws CDKException {
 
 //        System.out.println("\nSort By Energies");
         Map<Integer, TreeMap<Integer, Integer>> allEnergyMCS = new TreeMap<Integer, TreeMap<Integer, Integer>>();

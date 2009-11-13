@@ -27,13 +27,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.map.VFMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
 import org.openscience.cdk.smsd.core.tools.EBIAtomContainerManipulator;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.ISubGraph;
 import org.openscience.cdk.interfaces.IAtom;
@@ -66,10 +66,10 @@ public class VFlibTurboHandler implements ISubGraph {
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
      * @throws java.io.IOException
-     * @throws chemlib.ebi.core.tools.EBIException
+     * @throws chemlib.ebi.core.tools.CDKException
      */
     @Override
-    public boolean isSubgraph() throws IOException, EBIException {
+    public boolean isSubgraph() throws IOException, CDKException {
 
         IQuery query = TemplateCompiler.compile(Reactant);
 

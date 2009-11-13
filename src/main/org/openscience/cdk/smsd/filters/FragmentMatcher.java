@@ -40,11 +40,11 @@ import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
 import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
 import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IFragment;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -283,7 +283,7 @@ public class FragmentMatcher implements IFragment {
             allAtomMCS = mcs.getAllAtomMapping();
             atomsMCS = mcs.getFirstAtomMapping();
 
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -319,7 +319,7 @@ public class FragmentMatcher implements IFragment {
 
         } catch (IOException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -372,7 +372,7 @@ public class FragmentMatcher implements IFragment {
 
         } catch (IOException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

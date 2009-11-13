@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.filters.PostFilter;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -141,7 +141,7 @@ public class MCSPlusHandler implements IMCS {
             setAllAtomMapping();
             setFirstMapping();
             setFirstAtomMapping();
-        } catch (EBIException e) {
+        } catch (CDKException e) {
             _mappings = null;
 //            System.err.println("WARNING: MCSPlus: most probably time out error ");
         }

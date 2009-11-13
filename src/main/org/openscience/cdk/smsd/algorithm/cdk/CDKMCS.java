@@ -60,11 +60,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.core.tools.EBITimeManager;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -160,12 +160,12 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     true if the 2 molecule are isomorph
-     * @throws EBIException if the first molecule is an instance
+     * @throws CDKException if the first molecule is an instance
      * of IQueryAtomContainer
      */
-    public static boolean isIsomorph(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static boolean isIsomorph(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         if (g1 instanceof IQueryAtomContainer) {
-            throw new EBIException("The first IAtomContainer must not be an IQueryAtomContainer");
+            throw new CDKException("The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
         if (g2.getAtomCount() != g1.getAtomCount()) {
@@ -195,11 +195,11 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the first isomorph mapping found projected of g1. This is a List of CDKRMap objects containing Ids of matching bonds.
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static List<CDKRMap> getIsomorphMap(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<CDKRMap> getIsomorphMap(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         if (g1 instanceof IQueryAtomContainer) {
-            throw new EBIException("The first IAtomContainer must not be an IQueryAtomContainer");
+            throw new CDKException("The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
         List<CDKRMap> result = null;
@@ -220,12 +220,12 @@ public class CDKMCS {
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the first isomorph atom mapping found projected on g1.
      * This is a List of CDKRMap objects containing Ids of matching atoms.
-     * @throws EBIException if the first molecules is not an instance of
+     * @throws CDKException if the first molecules is not an instance of
      *  {@link org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer}
      */
-    public static List<CDKRMap> getIsomorphAtomsMap(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<CDKRMap> getIsomorphAtomsMap(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         if (g1 instanceof IQueryAtomContainer) {
-            throw new EBIException("The first IAtomContainer must not be an IQueryAtomContainer");
+            throw new CDKException("The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
         List<CDKRMap> list = checkSingleAtomCases(g1, g2);
@@ -245,9 +245,9 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the list of all the 'mappings'
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static List<List<CDKRMap>> getIsomorphMaps(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<List<CDKRMap>> getIsomorphMaps(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         return search(g1, g2, getBitSet(g1), getBitSet(g2), true, true);
     }
 
@@ -260,9 +260,9 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the list of all the 'mappings' found projected of g1
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static List<List<CDKRMap>> getSubgraphMaps(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<List<CDKRMap>> getSubgraphMaps(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         return search(g1, g2, new BitSet(), getBitSet(g2), true, true);
     }
 
@@ -272,9 +272,9 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the first subgraph bond mapping found projected on g1. This is a List of CDKRMap objects containing Ids of matching bonds.
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static List<CDKRMap> getSubgraphMap(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<CDKRMap> getSubgraphMap(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         List<CDKRMap> result = null;
         List<List<CDKRMap>> rMapsList = search(g1, g2, new BitSet(), getBitSet(g2), false, false);
 
@@ -292,10 +292,10 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     all subgraph atom mappings found projected on g1. This is a List of CDKRMap objects containing Ids of matching atoms.
-     * @throws EBIException
+     * @throws CDKException
      */
     //Fixed by Asad
-    public static List<List<CDKRMap>> getSubgraphAtomsMaps(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<List<CDKRMap>> getSubgraphAtomsMaps(IAtomContainer g1, IAtomContainer g2) throws CDKException {
 
         List<List<CDKRMap>> l = new ArrayList<List<CDKRMap>>();
 
@@ -326,10 +326,10 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the first subgraph atom mapping found projected on g1. This is a List of CDKRMap objects containing Ids of matching atoms.
-     * @throws EBIException
+     * @throws CDKException
      */
     //Fixed by Asad
-    public static List<CDKRMap> getSubgraphAtomsMap(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<CDKRMap> getSubgraphAtomsMap(IAtomContainer g1, IAtomContainer g2) throws CDKException {
 
         List<CDKRMap> l = new ArrayList<CDKRMap>();
         List<CDKRMap> list = checkSingleAtomCases(g1, g2);
@@ -357,11 +357,11 @@ public class CDKMCS {
      * @param  g1  first molecule. Must not be an IQueryAtomContainer.
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     true if g2 a subgraph on g1
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static boolean isSubgraph(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static boolean isSubgraph(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         if (g1 instanceof IQueryAtomContainer) {
-            throw new EBIException("The first IAtomContainer must not be an IQueryAtomContainer");
+            throw new CDKException("The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
         if (g2.getAtomCount() > g1.getAtomCount()) {
@@ -405,9 +405,9 @@ public class CDKMCS {
      * @param  g2  second molecule. May be an IQueryAtomContainer.
      * @return     the list of all the maximal common substructure
      *             found projected of g1 (list of AtomContainer )
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static List<IAtomContainer> getOverlaps(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<IAtomContainer> getOverlaps(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         List<List<CDKRMap>> rMapsList = search(g1, g2, new BitSet(), new BitSet(), true, false);
 
         // projection on G1
@@ -453,9 +453,9 @@ public class CDKMCS {
      * @param  g1  Description of the first molecule
      * @param  g2  Description of the second molecule
      * @return     the rGraph
-     * @throws EBIException
+     * @throws CDKException
      */
-    public static CDKRGraph buildRGraph(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static CDKRGraph buildRGraph(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         CDKRGraph rGraph = new CDKRGraph();
         nodeConstructor(rGraph, g1, g2);
         arcConstructor(rGraph, g1, g2);
@@ -477,10 +477,10 @@ public class CDKMCS {
      * @param  findAllMap        if true search all the 'mappings' for one same
      *                           structure
      * @return                   a List of Lists of CDKRMap objects that represent the search solutions
-     * @throws EBIException
+     * @throws CDKException
      */
     public static List<List<CDKRMap>> search(IAtomContainer g1, IAtomContainer g2, BitSet c1,
-            BitSet c2, boolean findAllStructure, boolean findAllMap) throws EBIException {
+            BitSet c2, boolean findAllStructure, boolean findAllMap) throws CDKException {
 
         // reset result
         List<List<CDKRMap>> rMapsList = new ArrayList<List<CDKRMap>>();
@@ -492,7 +492,7 @@ public class CDKMCS {
             //System.out.println("|Hello|");
             timeoutFlag = true;
 
-            throw new EBIException("Timeout exceeded in getOverlaps");
+            throw new CDKException("Timeout exceeded in getOverlaps");
         }
 
 
@@ -502,7 +502,7 @@ public class CDKMCS {
             //System.out.println("|Hello|");
             timeoutFlag = true;
 
-            throw new EBIException("Timeout exceeded in getOverlaps");
+            throw new CDKException("Timeout exceeded in getOverlaps");
         }
         // parse the CDKRGraph with the given constrains and options
         rGraph.parse(c1, c2, findAllStructure, findAllMap, TM);
@@ -514,7 +514,7 @@ public class CDKMCS {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
 
-                throw new EBIException("Timeout exceeded in getOverlaps");
+                throw new CDKException("Timeout exceeded in getOverlaps");
             }
             rMapsList.add(rGraph.bitSetToRMap(set));
         }
@@ -607,10 +607,10 @@ public class CDKMCS {
      *
      * @param  graphList  the list of structure to clean
      * @return            the list cleaned
-     * @throws org.openscience.cdk.exception.EBIException if there is a problem in obtaining
+     * @throws org.openscience.cdk.exception.CDKException if there is a problem in obtaining
      * subgraphs
      */
-    private static List<IAtomContainer> getMaximum(ArrayList<IAtomContainer> graphList) throws EBIException {
+    private static List<IAtomContainer> getMaximum(ArrayList<IAtomContainer> graphList) throws CDKException {
         @SuppressWarnings("unchecked")
         List<IAtomContainer> reducedGraphList = (List<IAtomContainer>) graphList.clone();
 
@@ -638,12 +638,12 @@ public class CDKMCS {
      * @param  g1  AtomContainer to match on. Must not be an IQueryAtomContainer.
      * @param  g2  AtomContainer as query. May be an IQueryAtomContainer.
      * @return     List of List of CDKRMap objects for the Atoms (not Bonds!), null if no single atom case
-     * @throws EBIException if the first molecule is an instance
+     * @throws CDKException if the first molecule is an instance
      * of IQueryAtomContainer
      */
-    public static List<CDKRMap> checkSingleAtomCases(IAtomContainer g1, IAtomContainer g2) throws EBIException {
+    public static List<CDKRMap> checkSingleAtomCases(IAtomContainer g1, IAtomContainer g2) throws CDKException {
         if (g1 instanceof IQueryAtomContainer) {
-            throw new EBIException(
+            throw new CDKException(
                     "The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
@@ -773,11 +773,11 @@ public class CDKMCS {
      * @param  gr   the target CDKRGraph
      * @param  ac1   first molecule. Must not be an IQueryAtomContainer.
      * @param  ac2   second molecule. May be an IQueryAtomContainer.
-     * @throws org.openscience.cdk.exception.EBIException if it takes too long to identify overlaps
+     * @throws org.openscience.cdk.exception.CDKException if it takes too long to identify overlaps
      */
-    private static void nodeConstructor(CDKRGraph gr, IAtomContainer ac1, IAtomContainer ac2) throws EBIException {
+    private static void nodeConstructor(CDKRGraph gr, IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
         if (ac1 instanceof IQueryAtomContainer) {
-            throw new EBIException(
+            throw new CDKException(
                     "The first IAtomContainer must not be an IQueryAtomContainer");
         }
 
@@ -791,7 +791,7 @@ public class CDKMCS {
                     //System.out.println("|Hello|");
                     timeoutFlag = true;
 
-                    throw new EBIException("Timeout exceeded in getOverlaps");
+                    throw new CDKException("Timeout exceeded in getOverlaps");
                 }
                 IBond bondA2 = ac2.getBond(j);
                 if (bondA2 instanceof IQueryBond) {
@@ -873,9 +873,9 @@ public class CDKMCS {
      * @param  gr   the rGraph
      * @param  ac1   first molecule. Must not be an IQueryAtomContainer.
      * @param  ac2   second molecule. May be an IQueryAtomContainer.
-     * @throws org.openscience.cdk.exception.EBIException if it takes too long to get the overlaps
+     * @throws org.openscience.cdk.exception.CDKException if it takes too long to get the overlaps
      */
-    private static void arcConstructor(CDKRGraph gr, IAtomContainer ac1, IAtomContainer ac2) throws EBIException {
+    private static void arcConstructor(CDKRGraph gr, IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
         // each node is incompatible with himself
         for (int i = 0; i < gr.getGraph().size(); i++) {
             CDKRNode x = gr.getGraph().get(i);
@@ -901,7 +901,7 @@ public class CDKMCS {
                     //System.out.println("|Hello|");
                     timeoutFlag = true;
 
-                    throw new EBIException("Timeout exceeded in getOverlaps");
+                    throw new CDKException("Timeout exceeded in getOverlaps");
                 }
                 CDKRNode y = gr.getGraph().get(j);
 
@@ -1052,13 +1052,13 @@ public class CDKMCS {
      * @param  ac1  the supergraph to be checked. Must not be an IQueryAtomContainer.
      * @param  ac2  the subgraph to be tested for. May be an IQueryAtomContainer.
      * @return    true if the subgraph ac2 has a chance to be a subgraph of ac1
-     * @throws org.openscience.cdk.exception.EBIException if the first molecule is an instance
+     * @throws org.openscience.cdk.exception.CDKException if the first molecule is an instance
      * of IQueryAtomContainer
      */
     private static boolean testSubgraphHeuristics(IAtomContainer ac1, IAtomContainer ac2)
-            throws EBIException {
+            throws CDKException {
         if (ac1 instanceof IQueryAtomContainer) {
-            throw new EBIException(
+            throw new CDKException(
                     "The first IAtomContainer must not be an IQueryAtomContainer");
         }
 

@@ -17,13 +17,13 @@ import java.util.logging.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibTurboHandler;
-import org.openscience.cdk.smsd.core.tools.EBIException;
 import org.openscience.cdk.smsd.filters.ChemicalFilters;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
@@ -152,7 +152,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
             MCSBuilder();
             setChemFilters();
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -191,7 +191,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     }
 
-    public synchronized void setChemFilters() throws EBIException {
+    public synchronized void setChemFilters() throws CDKException {
         if (firstAtomMCS != null) {
             ChemicalFilters CF = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
@@ -546,7 +546,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
         } catch (IOException ex) {
             Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -576,7 +576,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
         } catch (IOException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EBIException ex) {
+        } catch (CDKException ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

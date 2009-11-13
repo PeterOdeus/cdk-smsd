@@ -7,6 +7,7 @@ package org.openscience.cdk.smsd.core.tools;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond.Order;
 
@@ -46,10 +47,10 @@ public class EBIBondEnergies {
     /**
      * 
      * @return
-     * @throws EBIException 
+     * @throws CDKException 
      */
     public synchronized static EBIBondEnergies getInstance()
-            throws EBIException {
+            throws CDKException {
         if (null == _instance) {
             _instance = new EBIBondEnergies();
         }

@@ -23,7 +23,7 @@
 package org.openscience.cdk.smsd.interfaces;
 
 import java.io.IOException;
-import org.openscience.cdk.smsd.core.tools.EBIException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -57,9 +57,9 @@ public interface IMCSAlgorithm extends IMCSBase {
 //     * @param Product
 //     * @param ReactantFingerprint
 //     * @param ProductFingerprint
-//     * @throws EBIException
+//     * @throws CDKException
 //     */
-//    void init(IMolecule Reactant, IMolecule Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws EBIException;
+//    void init(IMolecule Reactant, IMolecule Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
 //
 //    /**
 //     *
@@ -67,9 +67,9 @@ public interface IMCSAlgorithm extends IMCSBase {
 //     * @param Product
 //     * @param ReactantFingerprint
 //     * @param ProductFingerprint
-//     * @throws EBIException
+//     * @throws CDKException
 //     */
-//    void init(IAtomContainer Reactant, IAtomContainer Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws EBIException;
+//    void init(IAtomContainer Reactant, IAtomContainer Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
 //
 //    /**
 //     *
@@ -77,31 +77,31 @@ public interface IMCSAlgorithm extends IMCSBase {
 //     * @param Product
 //     * @param ReactantFingerprint
 //     * @param ProductFingerprint
-//     * @throws EBIException
+//     * @throws CDKException
 //     */
-//    void init(MolHandler Reactant, MolHandler Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws EBIException;
+//    void init(MolHandler Reactant, MolHandler Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
     /**
      *
      * @param Reactant
      * @param Product
-     * @throws EBIException 
+     * @throws CDKException 
      *
      */
-    void init(MolHandler Reactant, MolHandler Product) throws EBIException;
+    void init(MolHandler Reactant, MolHandler Product) throws CDKException;
 
     /**
      *
      * @param Reactant
      * @param Product
-     * @throws EBIException 
+     * @throws CDKException 
      */
-    void init(IMolecule Reactant, IMolecule Product) throws EBIException;
+    void init(IMolecule Reactant, IMolecule Product) throws CDKException;
 
     /**
      *
      * @param Reactant
      * @param Product
-     * @throws EBIException 
+     * @throws CDKException 
      */
-    void init(IAtomContainer Reactant, IAtomContainer Product) throws EBIException;
+    void init(IAtomContainer Reactant, IAtomContainer Product) throws CDKException;
 }
