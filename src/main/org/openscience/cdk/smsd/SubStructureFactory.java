@@ -322,7 +322,6 @@ public class SubStructureFactory implements IMCSAlgorithm {
      * @return Euclidean Distance between query and target molecule
      * @throws IOException
      */
-
     @Override
     public double getEuclideanDistance() throws IOException {
         return comparison.getEuclideanDistance();
