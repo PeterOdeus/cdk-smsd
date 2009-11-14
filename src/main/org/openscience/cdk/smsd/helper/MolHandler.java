@@ -52,38 +52,38 @@ import org.openscience.cdk.io.MDLReader;
  */
 public class MolHandler {
 
-    private IAtomContainer Mol = null;
-    private IAtomContainerSet FragmentMolSet = null;
+    private IAtomContainer mol = null;
+    private IAtomContainerSet fragmentMolSet = null;
     private boolean removeHydrogen = false;
-    private boolean ConnectedFlag = false;
+    private boolean connectedFlag = false;
 
     private void checkFragmentation() {
 
-        if (Mol.getAtomCount() > 0) {
-            ConnectedFlag = ConnectivityChecker.isConnected(Mol);
+        if (mol.getAtomCount() > 0) {
+            connectedFlag = ConnectivityChecker.isConnected(mol);
         }
-        FragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+        fragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 
 
-        //System.out.println("isConnected : " + ConnectedFlag);
+        //System.out.println("isConnected : " + connectedFlag);
 
-        if (!ConnectedFlag) {
+        if (!connectedFlag) {
 
             /*System.err.println("The molecule is not connected, " +
             "Fragment Matcher Will Handle this _molecule");*/
 
-            FragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Mol));
-            FragmentMolSet.setID(Mol.getID());
+            fragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(mol));
+            fragmentMolSet.setID(mol.getID());
 
         } else {
 
-            FragmentMolSet.addAtomContainer(Mol);
-            FragmentMolSet.setID(Mol.getID());
+            fragmentMolSet.addAtomContainer(mol);
+            fragmentMolSet.setID(mol.getID());
         }
     }
 
     /** Creates a new instance of JMCSHandler
-     * @param MolFile Mol file name
+     * @param MolFile mol file name
      * @param cleanMolecule
      * @param removeHydrogen
      *
@@ -91,41 +91,22 @@ public class MolHandler {
     public MolHandler(String MolFile, boolean cleanMolecule, boolean removeHydrogen) {
 
         MDLReader MolRead;
-
-        //Mol2Reader Mol2Read;
         this.removeHydrogen = removeHydrogen;
-
-
         try {
-
-
             FileInputStream ReadMolecule;
 
             ReadMolecule = new FileInputStream(MolFile);
             MolRead = new MDLReader(new InputStreamReader(ReadMolecule));
-            this.Mol = (IMolecule) MolRead.read(new Molecule());
-
-
+            this.mol = (IMolecule) MolRead.read(new Molecule());
             if (cleanMolecule) {
-                MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
+                MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
             }
-
-
-            BondTools.makeUpDownBonds(Mol);
-
-
-
-//            /*Remove Hydrogen by Asad*/
+            BondTools.makeUpDownBonds(mol);
+            /*Remove Hydrogen by Asad*/
             if (removeHydrogen) {
-//                removeHydrogenAtoms(Mol);
-                Mol = EBIAtomContainerManipulator.removeHydrogens(Mol);
-
+                mol = EBIAtomContainerManipulator.removeHydrogens(mol);
             }
-
             checkFragmentation();
-
-
-
         } catch (IOException ex) {
             Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CDKException e) {
@@ -140,27 +121,18 @@ public class MolHandler {
 
 
         try {
-
-
             FileInputStream ReadMolecule;
 
             ReadMolecule = new FileInputStream(MolFile);
             MolRead = new MDLReader(new InputStreamReader(ReadMolecule));
-            this.Mol = (IMolecule) MolRead.read(new Molecule());
-
-
+            this.mol = (IMolecule) MolRead.read(new Molecule());
             if (cleanMolecule) {
-                MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
+                MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
             }
-
-
-            BondTools.makeUpDownBonds(Mol);
-
-
-//            /*Remove Hydrogen by Asad*/
+            BondTools.makeUpDownBonds(mol);
+            /*Remove Hydrogen by Asad*/
             if (removeHydrogen) {
-//                removeHydrogenAtoms(Mol);
-                Mol = EBIAtomContainerManipulator.removeHydrogens(Mol);
+                mol = EBIAtomContainerManipulator.removeHydrogens(mol);
 
             }
 
@@ -183,74 +155,55 @@ public class MolHandler {
 
         String ID = _molecule.getID();
         this.removeHydrogen = removeHydrogen;
-
-
-        this.Mol = _molecule;
-
-
+        this.mol = _molecule;
         if (cleanMolecule) {
-            MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
-        }
-
-
-        //
-//         /*Hydrogen are always removed for this molecule before mapping*/
+            MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
+        }  /*Hydrogen are always removed for this molecule before mapping*/
 
         if (removeHydrogen) {
             try {
-                this.Mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(Mol);
-                Mol.setID(ID);
+                this.mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
+                mol.setID(ID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {
-            this.Mol = DefaultChemObjectBuilder.getInstance().newMolecule(Mol);
-            Mol.setID(ID);
+            this.mol = DefaultChemObjectBuilder.getInstance().newMolecule(mol);
+            mol.setID(ID);
 
         }
-
         checkFragmentation();
-
-
     }
 
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule) {
 
         String ID = _molecule.getID();
         this.removeHydrogen = false;
-        this.Mol = _molecule;
+        this.mol = _molecule;
         if (cleanMolecule) {
-            MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
-        }
-
-//         /*Hydrogen are always removed for this molecule before mapping*/
+            MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
+        }  /*Hydrogen are always removed for this molecule before mapping*/
 
         if (removeHydrogen) {
             try {
-                this.Mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(Mol);
-                Mol.setID(ID);
+                this.mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
+                mol.setID(ID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            this.Mol = DefaultChemObjectBuilder.getInstance().newMolecule(Mol);
-            Mol.setID(ID);
+            this.mol = DefaultChemObjectBuilder.getInstance().newMolecule(mol);
+            mol.setID(ID);
         }
-
         checkFragmentation();
-
-
     }
 
     public IAtomContainer getMolecule() {
-
-//        System.out.println("MCSMolHandle Mol:" + Mol.getID() + "  " + Mol.getAtomCount());
-        return Mol;
+        return mol;
     }
 
     public boolean getRemoveHydrogenFlag() {
-
         return removeHydrogen;
     }
 
@@ -259,15 +212,14 @@ public class MolHandler {
      * @return
      */
     public IAtomContainerSet getFragmentedMolecule() {
-
-        return this.FragmentMolSet;
+        return this.fragmentMolSet;
     }
 
     /**
      *
-     * @return true is Mol is connected else false
+     * @return true is mol is connected else false
      */
     public boolean getConnectedFlag() {
-        return this.ConnectedFlag;
+        return this.connectedFlag;
     }
 }
