@@ -50,7 +50,7 @@ import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received rAtomCount copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -330,30 +330,30 @@ public class SubGraphFactory implements IMCSAlgorithm {
         int decimalPlaces = 4;
 
 
-        int a = 0;
-        int b = 0;
+        int rAtomCount = 0;
+        int pAtomCount = 0;
         if (!removeHydrogen) {
-            a = RMol.getMolecule().getAtomCount();
-            b = PMol.getMolecule().getAtomCount();
+            rAtomCount = RMol.getMolecule().getAtomCount();
+            pAtomCount = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            rAtomCount = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            pAtomCount = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        double c = getFirstMapping().size();
+        double matchCount = getFirstMapping().size();
 
-        tanimoto = (c) / (a + b - c);
+        tanimoto = (matchCount) / (rAtomCount + pAtomCount - matchCount);
 
 //        System.out.println("c" + c);
-//        System.out.println("a" + a);
-//        System.out.println("b" + b);
-//        System.out.println("a+b-c" + (a + b - c));
+//        System.out.println("rAtomCount" + rAtomCount);
+//        System.out.println("pAtomCount" + pAtomCount);
+//        System.out.println("rAtomCount+pAtomCount-c" + (rAtomCount + pAtomCount - c));
 //
 
 
         BigDecimal tan = new BigDecimal(tanimoto);
 
         tan = tan.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        //System.out.println("Tanimoto Coefficient: " + (c)/(a+b-c));
+        //System.out.println("Tanimoto Coefficient: " + (c)/(rAtomCount+pAtomCount-c));
         tanimoto = tan.doubleValue();
         return tanimoto;
     }
@@ -416,7 +416,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
     }
 
     /**
-     * @return true if ac1 is a subgraph of ac2
+     * @return true if ac1 is rAtomCount subgraph of ac2
      */
     @Override
     @TestMethod("testVFLib")
@@ -513,7 +513,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
         BigDecimal dist = new BigDecimal(euclidean);
 
         dist = dist.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        //System.out.println("euclidean Coefficient: " + (c)/(a+b-c));
+        //System.out.println("euclidean Coefficient: " + (c)/(rAtomCount+pAtomCount-c));
         euclidean = dist.doubleValue();
         return euclidean;
     }
