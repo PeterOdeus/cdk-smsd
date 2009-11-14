@@ -116,13 +116,13 @@ public class ReOrganizeAtomContainer {
                 nAtom.setID(new String(oAtom.getID()));
             }
             if (oAtom.getHydrogenCount() != null) {
-                nAtom.setHydrogenCount(new Integer(oAtom.getHydrogenCount()));
+                nAtom.setHydrogenCount(Integer.valueOf(oAtom.getHydrogenCount()));
             }
             if (oAtom.getCharge() != null) {
                 nAtom.setCharge(new Double(oAtom.getCharge()));
             }
             if (oAtom.getStereoParity() != null) {
-                nAtom.setStereoParity(new Integer(oAtom.getStereoParity()));
+                nAtom.setStereoParity(Integer.valueOf(oAtom.getStereoParity()));
             }
 
             nAtom.setProperties(oAtom.getProperties());
@@ -139,24 +139,14 @@ public class ReOrganizeAtomContainer {
 
 //  Deep copy of the bonds
         for (int iIndex = 0; iIndex < container.getAtomCount(); iIndex++) {
-
             IAtom a = container.getAtom(iIndex);
-
             for (int jIndex = 0; jIndex < container.getAtomCount(); jIndex++) {
-
-
                 IAtom b = container.getAtom(jIndex);
-
                 IBond oBond = null;
                 if (container.getBond(a, b) != null) {
 
                     oBond = container.getBond(a, b);
-
-
                     IBond nBond = new Bond();
-
-
-
                     IAtom atom1 = newAtomContainer.getAtom(noncanonicalSortedAtoms.get(iIndex));
                     IAtom atom2 = newAtomContainer.getAtom(noncanonicalSortedAtoms.get(jIndex));
 

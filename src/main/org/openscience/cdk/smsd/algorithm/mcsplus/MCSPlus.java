@@ -100,7 +100,7 @@ public class MCSPlus {
                 int clique_size = clique_vector.size();
                 if (clique_size < ac1.getAtomCount() && clique_size < ac2.getAtomCount()) {
                     McGregor mgit = new McGregor(ac1, ac2, _mappings);
-                    mgit.McGregor_IterationStart(mgit.getMCSSize(), clique_vector, comp_graph_nodes); //Start McGregorMCSPlus search
+                    mgit.startMcGregorIteration(mgit.getMCSSize(), clique_vector, comp_graph_nodes); //Start McGregorMCSPlus search
 
                     _mappings = mgit.getMappings();
                     mgit = null;

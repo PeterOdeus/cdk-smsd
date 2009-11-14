@@ -23,6 +23,7 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcgregor;
 
+import java.util.List;
 import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -52,7 +53,7 @@ public class QueryProcessor {
      * @param neighbor_bondnum_A
      * @param set_bondnum_A
      */
-    public QueryProcessor(IAtomContainer query, IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_A, int set_bondnum_A) {
+    protected QueryProcessor(IAtomContainer query, IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_A, int set_bondnum_A) {
 
         this.query = query;
         this.target = target;
@@ -75,14 +76,14 @@ public class QueryProcessor {
      * @param mapped_atoms
      * @param SR_count
      */
-    public void process(
+    protected void process(
             Vector<Integer> unmapped_atoms_molA,
             int mappingSize,
             Vector<Integer> i_bond_neighborsA,
             Vector<Integer> i_bond_setA,
             Vector<String> c_bond_neighborsA,
             Vector<String> c_bond_setA,
-            Vector<Integer> mapped_atoms,
+            List<Integer> mapped_atoms,
             int SR_count) {
 
         this.i_bond_neighborsA = i_bond_neighborsA;
@@ -119,7 +120,7 @@ public class QueryProcessor {
 //                        System.out.println("\n*****\nmapped_atoms.elementAt(c * 2): " + mapped_atoms.elementAt(c * 2));
 //                        System.out.println("indexJ: " + indexJ);
 
-                        if (mapped_atoms.elementAt(c * 2).equals(indexJ)) {
+                        if (mapped_atoms.get(c * 2).equals(indexJ)) {
 
 //                            System.out.println("i_bond_neighbor_atoms_A: ");
 //                            System.out.println(indexI +
@@ -172,7 +173,7 @@ public class QueryProcessor {
                     for (int c = 0; c < mappingSize; c++) {
 
 
-                        if (mapped_atoms.elementAt(c * 2 + 0).equals(indexI)) {
+                        if (mapped_atoms.get(c * 2 + 0).equals(indexI)) {
 
 
 
@@ -232,7 +233,7 @@ public class QueryProcessor {
         /*******************************************************************************///        System.out.println("Neighbor A & B");
     }
 
-    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, Vector<Integer> mapped_atoms_org) {
+    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
 
         Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);

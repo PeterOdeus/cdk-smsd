@@ -23,6 +23,7 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcgregor;
 
+import java.util.List;
 import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -53,7 +54,7 @@ public class TargetProcessor {
      * @param i_bond_neighborsA
      * @param c_bond_neighborsA 
      */
-    public TargetProcessor(IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, Vector<Integer> i_bond_neighborsA, Vector<String> c_bond_neighborsA) {
+    protected TargetProcessor(IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, Vector<Integer> i_bond_neighborsA, Vector<String> c_bond_neighborsA) {
 
         this.target = target;
 
@@ -67,14 +68,14 @@ public class TargetProcessor {
         this.neighbor_bondnum_A = neighbor_bondnum_A;
     }
 
-    public void process(
+    protected void process(
             Vector<Integer> unmapped_atoms_molB,
             int mappingSize,
             Vector<Integer> i_bond_neighborsB,
             Vector<Integer> i_bond_setB,
             Vector<String> c_bond_neighborsB,
             Vector<String> c_bond_setB,
-            Vector<Integer> mapped_atoms,
+            List<Integer> mapped_atoms,
             int SR_count) {
 
         int unmapped_numB = unmapped_atoms_molB.size();
@@ -94,7 +95,7 @@ public class TargetProcessor {
             for (int b = 0; b < unmapped_numB; b++) {
                 if (unmapped_atoms_molB.elementAt(b).equals(indexI)) {
                     for (int c = 0; c < mappingSize; c++) {
-                        if (mapped_atoms.elementAt(c * 2 + 1).equals(indexJ)) {
+                        if (mapped_atoms.get(c * 2 + 1).equals(indexJ)) {
                             i_bond_neighborsB.add(indexI);
                             i_bond_neighborsB.add(indexJ);
                             i_bond_neighborsB.add(order);
@@ -134,7 +135,7 @@ public class TargetProcessor {
                 }
                 if (unmapped_atoms_molB.elementAt(b) == indexJ) {
                     for (int c = 0; c < mappingSize; c++) {
-                        if (mapped_atoms.elementAt(c * 2 + 1).equals(indexI)) {
+                        if (mapped_atoms.get(c * 2 + 1).equals(indexI)) {
                             i_bond_neighborsB.add(indexI);
                             i_bond_neighborsB.add(indexJ);
                             i_bond_neighborsB.add(order);
@@ -183,7 +184,7 @@ public class TargetProcessor {
 
     }
 
-    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, Vector<Integer> mapped_atoms_org) {
+    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
 
         Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
@@ -227,7 +228,7 @@ public class TargetProcessor {
         return 0;
     }
 
-     private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
+    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
 
         for (int a = 0; a < neighbor_bondnum; a++) {
             if ((i_bond_neighbors.elementAt(a * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0)) {

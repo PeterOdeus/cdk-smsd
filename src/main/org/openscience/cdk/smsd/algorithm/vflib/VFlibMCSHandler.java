@@ -105,7 +105,7 @@ public class VFlibMCSHandler implements IMCS {
 //                System.out.println("Calling McGregor");
 //                System.out.println("for Start size " + firstPassMappings.size());
                 McGregor mgit = new McGregor(ac1, ac2, _mappings);
-                mgit.McGregor_IterationStart(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
+                mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
 
                 _mappings = mgit.getMappings();
 //                System.out.println("");
@@ -291,8 +291,8 @@ public class VFlibMCSHandler implements IMCS {
                     qAtom = mapping.getValue();
                 }
 
-                Integer qIndex = new Integer(ac1.getAtomNumber(qAtom));
-                Integer tIndex = new Integer(ac2.getAtomNumber(tAtom));
+                Integer qIndex = Integer.valueOf(ac1.getAtomNumber(qAtom));
+                Integer tIndex = Integer.valueOf(ac2.getAtomNumber(tAtom));
 
 //
 //                System.out.println("i:" + qIndex + " j:" + tIndex);

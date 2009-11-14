@@ -46,12 +46,12 @@ public class McGregor {
     private BinaryTree first = null;
     private Stack<Vector<Integer>> BESTARCS = null;
     private Vector<Integer> MARCS = null;
-    private Vector<Integer> i_globalA = null;
-    private Vector<Integer> i_globalB = null;
-    private Vector<String> c_globalA = null;
-    private Vector<String> c_globalB = null;
-    Vector<String> c_tab1_copy = null;
-    Vector<String> c_tab2_copy = null;
+    private List<Integer> i_globalA = null;
+    private List<Integer> i_globalB = null;
+    private List<String> c_globalA = null;
+    private List<String> c_globalB = null;
+    private Vector<String> c_tab1_copy = null;
+    private Vector<String> c_tab2_copy = null;
     private Vector<Integer> i_bond_neighborsA = null;
     private Vector<String> c_bond_neighborsA = null;
     private int nNum_globalA = 0;
@@ -64,7 +64,7 @@ public class McGregor {
     private int neighbor_bondnum_B = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_B = 0; //number of remaining molecule B bonds after the clique search, which aren't neighbors
     /*This should be more or equal to all the atom types*/
-    String[] SignROW = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
+    private String[] SignROW = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
         "$13", "$15", "$16", "$17", "$18", "$19", "$20", "$21", "$22", "$23", "$24",
         "$25", "$26", "$27", "$28", "$29", "$30", "$31", "$32", "$33", "$34", "$35", "$36",
         "$37", "$38", "$39", "$40", "$41", "$42", "$43", "$44", "$45", "$46",
@@ -119,7 +119,7 @@ public class McGregor {
      * @param present_Mapping
      * @throws IOException
      */
-    public void McGregor_IterationStart(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
+    public void startMcGregorIteration(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
 
         this.globalMCSSize = (best_Mapping_size / 2);
         c_tab1_copy.clear();
@@ -131,7 +131,7 @@ public class McGregor {
 
 
         //find mapped atoms of both molecules and store these in mapped_atoms
-        Vector<Integer> mapped_atoms = new Vector<Integer>();
+        List<Integer> mapped_atoms = new Vector<Integer>();
 //        System.out.println("\nMapped Atoms");
         for (Map.Entry<Integer, Integer> map : present_Mapping.entrySet()) {
 //            System.out.println("i:" + map.getKey() + " j:" + map.getValue());
@@ -264,7 +264,7 @@ public class McGregor {
 //        System.out.println("unmapped_atoms_molB: " + unmapped_atoms_molB.size());
 
 
-        Iterator(dummy, present_Mapping.size(), mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
+        iterator(dummy, present_Mapping.size(), mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 
         //System.exit(1); //uncomment to debug
 
@@ -278,7 +278,7 @@ public class McGregor {
      * @param comp_graph_nodes
      * @throws IOException
      */
-    public void McGregor_IterationStart(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
+    public void startMcGregorIteration(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
         this.globalMCSSize = (best_Mapping_size / 2);
         int SR_count = 0;
 
@@ -456,26 +456,26 @@ public class McGregor {
 
         boolean dummy = false;
 
-//        System.out.println("Calling Iterator with mapped atoms number " + mapped_atom_number);
+//        System.out.println("Calling iterator with mapped atoms number " + mapped_atom_number);
 //        System.out.println("Neighbor");
 //        System.out.println(neighbor_bondnum_A + " " + neighbor_bondnum_B);
 
 //        System.out.println("Mapped Atoms before Iterator1: " + mapped_atoms);
 
 
-        Iterator(dummy, mapped_atom_number, mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
+        iterator(dummy, mapped_atom_number, mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 
 
-        // System.out.println("Iterator Over");
+        // System.out.println("iterator Over");
 
         //System.exit(1); //uncomment to debug
 
 
     }
 
-    private int Iterator(boolean MAPPING_check,
+    private int iterator(boolean MAPPING_check,
             int mapped_atom_num,
-            Vector<Integer> mapped_atoms_org,
+            List<Integer> mapped_atoms_org,
             int neighbor_bondnum_A,
             int neighbor_bondnum_B,
             Vector<Integer> i_bond_neighbor_atoms_A,
@@ -488,7 +488,7 @@ public class McGregor {
             Vector<String> c_bond_setA,
             Vector<String> c_bond_setB) throws IOException {
 
-//        System.out.println("Iterator");
+//        System.out.println("iterator");
 //        System.out.println("mapped_atom_num " + mapped_atom_num);
 //        System.out.println("mapped_atoms " + mapped_atoms_org);
 //        System.out.println("neighbor_bondnum_A " + neighbor_bondnum_A);
@@ -506,7 +506,7 @@ public class McGregor {
 
 
 
-        Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
+        List<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
 
         //check possible mappings:
         boolean no_further_mapping_possible = true;
@@ -670,7 +670,7 @@ public class McGregor {
         while (!BESTARCS_copy.empty()) {
 
             Vector<Integer> MARCS_vector = new Vector<Integer>(BESTARCS_copy.peek());
-            Vector<Integer> new_MAPPING = find_mcgregor_MAPPING(MARCS_vector, mapped_atom_num, mapped_atoms, neighbor_bondnum_A, i_bond_neighbor_atoms_A, neighbor_bondnum_B, i_bond_neighbor_atoms_B);
+            Vector<Integer> new_MAPPING = findMcGregorMapping(MARCS_vector, mapped_atom_num, mapped_atoms, neighbor_bondnum_A, i_bond_neighbor_atoms_A, neighbor_bondnum_B, i_bond_neighbor_atoms_B);
 
             int new_MAPPING_size = new_MAPPING.size() / 2;
             boolean no_further_MAPPINGS = false;
@@ -994,17 +994,17 @@ public class McGregor {
 
 
 //             System.out.println("Mapped Atoms before Iterator2: " + mapped_atoms);
-            Iterator(no_further_MAPPINGS, new_MAPPING_size, new_MAPPING, new_neighbor_numA, new_neighbor_numB, new_i_neighborsA, new_i_neighborsB, new_c_neighborsA, new_c_neighborsB,
+            iterator(no_further_MAPPINGS, new_MAPPING_size, new_MAPPING, new_neighbor_numA, new_neighbor_numB, new_i_neighborsA, new_i_neighborsB, new_c_neighborsA, new_c_neighborsB,
                     set_bondnum_A, set_bondnum_B, new_i_bond_setA, new_i_bond_setB, new_c_bond_setA, new_c_bond_setB);
             BESTARCS_copy.pop();
-//            System.out.println("Schleife beendet in Iterator!!!!");
+//            System.out.println("Schleife beendet in iterator!!!!");
         }
 
         //}
-        //System.out.println("In the Iterator Termination");
+        //System.out.println("In the iterator Termination");
         //System.out.println("============+++++++++==============");
 
-        //System.out.println("Mapped Atoms before Iterator Over: " + mapped_atoms);
+        //System.out.println("Mapped Atoms before iterator Over: " + mapped_atoms);
         return 0;
     }
 
@@ -1069,7 +1069,7 @@ public class McGregor {
         return Flag;
     }
 
-    private Vector<Integer> find_mcgregor_MAPPING(Vector<Integer> MARCS_vector_org, int mapped_atoms_num, Vector<Integer> current_MAPPING_org, int bondnum_A, Vector<Integer> i_bonds_A_org, int bondnum_B, Vector<Integer> i_bonds_B_org) {
+    private Vector<Integer> findMcGregorMapping(Vector<Integer> MARCS_vector_org, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, Vector<Integer> i_bonds_A_org, int bondnum_B, Vector<Integer> i_bonds_B_org) {
 
         Vector<Integer> MARCS_vector = new Vector<Integer>(MARCS_vector_org);
         Vector<Integer> current_MAPPING = new Vector<Integer>(current_MAPPING_org);
@@ -1236,13 +1236,7 @@ public class McGregor {
                         x++;
 
                     }
-
-
-
                 } while ((x < nNum_globalA) && (TEMPMARCS.elementAt(x * nNum_globalB + y) != 1)); //Correction by ASAD set value minus 1
-
-
-
                 if (x < nNum_globalA) {
 
                     partsearch(x, y, TEMPMARCS);
