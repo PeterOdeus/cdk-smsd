@@ -543,13 +543,10 @@ public class BKKCKCF {
     }
 
     public int getBestCliqueSize() {
-        //=
-        //System.out.println(" best_clique_size " +  best_clique_size);
         return best_clique_size;
     }
 
     public Stack<List<Integer>> getMaxCliqueSet() {
-        //System.out.println("Max_Cliques_Set: " + Max_Cliques_Set.size());
         Stack<List<Integer>> solution = new Stack<List<Integer>>();
         solution.addAll(Max_Cliques_Set);
         return solution;

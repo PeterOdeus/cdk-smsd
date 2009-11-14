@@ -60,11 +60,6 @@ public class MCSPlus {
         try {
 
             GenerateCompatibilityGraph gcg = new GenerateCompatibilityGraph(ac1, ac2, removeHydrogen);
-
-
-//            System.out.println("Best Clique Size: " + best_clique_size);
-
-
             List<Integer> comp_graph_nodes = gcg.get_comp_graph_nodes();
 
             List<Integer> C_edges = gcg.get_C_egdes();
@@ -74,24 +69,13 @@ public class MCSPlus {
                 System.err.println("D-edges Size " + D_edges.size() + " > : " + 99999);
                 return null;
             }
-//            System.out.println("C-edges: " + C_edges);
-//            System.out.println("D-edges: " + D_edges);
-//            System.out.println("Comp Graph: " + comp_graph_nodes);
-//            System.out.println("C_edges: " + C_edges.size());
-//            System.out.println("D_edges: " + D_edges.size());
             TM = new EBITimeManager();
-
-            // build the CDKRGraph corresponding to this problem
-
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
             BKKCKCF init = new BKKCKCF(comp_graph_nodes, C_edges, D_edges);
-//            BronKerboschKochCliqueFinder init = new BronKerboschKochCliqueFinder(comp_graph_nodes, C_edges, D_edges);
-
-
             Max_Cliques_Set = init.getMaxCliqueSet(); // build the CDKRGraph corresponding to this problem
 
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
@@ -99,18 +83,8 @@ public class MCSPlus {
                 timeoutFlag = true;
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
-
-//            int solution_size_pass1 = Max_Cliques_Set.size();
-//            int max_map_size_allowed = init.getBestCliqueSize();
-//            System.err.println("best_clique_size: vorher " + init.getBestCliqueSize());
-//            System.err.println("Max_Cliques_Set: " + solution_size_pass1);
-//            System.out.println("Maximum Mapping size allowed " + max_map_size_allowed);
-//            System.err.println("Cliques: " + init.getMaxCliqueSet());
-
             //Clear all the compatibility graph content
             gcg.Clear();
-//            System.gc();
-
             int clique_number = 1;
             while (!Max_Cliques_Set.empty()) {
 
@@ -121,48 +95,17 @@ public class MCSPlus {
                     timeoutFlag = true;
                     throw new CDKException("Timeout exceeded in getOverlaps");
                 }
-
-
-//                System.out.println("Clique number: " + clique_number);
                 List<Integer> clique_vector = Max_Cliques_Set.peek();
 
                 int clique_size = clique_vector.size();
-
-                //Uncommented by Asad for Debugging
-                /*System.out.println(" Degug Session in Clique extension ");
-                System.out.println("Test Loop Asad");
-                for (int a = 0; a < clique_size; a++) {
-                System.out.print(clique_vector.get(a) + " ");
-                }
-                System.out.println(" ");*/
-
-                //Is the number of mappings smaller than the number of atomsMCS of molecule A and B?
-                //In this case the clique is given to the McGregorMCSPlus algorithm
                 if (clique_size < ac1.getAtomCount() && clique_size < ac2.getAtomCount()) {
-//
-//                    System.out.println("clique_size: " + clique_size + " atom_number1: " + ac1.getAtomCount() + " atom_number2: " + ac2.getAtomCount());
-//                    System.out.println("McGregorMCSPlus");
-//                    System.out.println("comp_graph_nodes " + comp_graph_nodes);
-//                    System.out.println("clique_vector " + clique_vector);
-
                     McGregor mgit = new McGregor(ac1, ac2, _mappings);
-
-                    //McGregorOptimized mgit = new McGregorOptimized(comp_graph_nodes, _mappings);
                     mgit.McGregor_IterationStart(mgit.getMCSSize(), clique_vector, comp_graph_nodes); //Start McGregorMCSPlus search
 
                     _mappings = mgit.getMappings();
-
                     mgit = null;
 
-//                    System.out.println("_mappings " + _mappings);
-//                    System.out.println("_mappings : " + _mappings.size());
-//                    System.out.println("McGregorMCSPlus Over");
-//                    System.out.println();
-
-
                 } else {
-
-                    //Vector<Integer> clique_mapping = new Vector<Integer>();
                     _mappings = ExactMapping.extract_mapping(_mappings, comp_graph_nodes, clique_vector); //erfolgt KEINE McGregorMCSPlus-Suche->speichere L�ungen in final_MAPPINGS
 
                 }
@@ -171,15 +114,6 @@ public class MCSPlus {
 
 
             }
-//
-//            int best_MAPPING_size = GlobalVariableContainer.getInstance().getMappingSize();
-//            System.out.println("best_clique_size:  " + best_clique_size);
-//            System.out.println("best_MAPPING_size: " + best_MAPPING_size);
-//            System.out.println("**************************************************");
-
-//            System.out.println("Entering INTO PostFilter Stage");
-//            System.out.println("Number of Solutions: " + _mappings.size());
-
         } catch (IOException ex) {
             Logger.getLogger(MCSPlus.class.getName()).log(Level.SEVERE, null, ex);
         }

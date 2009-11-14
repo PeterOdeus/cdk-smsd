@@ -22,10 +22,8 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -34,7 +32,6 @@ import org.openscience.cdk.smsd.filters.PostFilter;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -143,18 +140,11 @@ public class MCSPlusHandler implements IMCS {
             setFirstAtomMapping();
         } catch (CDKException e) {
             _mappings = null;
-//            System.err.println("WARNING: MCSPlus: most probably time out error ");
         }
-
-//        System.out.println("Mappings" + _mappings);
-
         return 0;
     }
 
     public final void setAllMapping() {
-
-//        int count_final_sol = 1;
-        //System.out.println("Output of the final FinalMappings: ");
         try {
 
             List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
@@ -197,15 +187,12 @@ public class MCSPlusHandler implements IMCS {
 
                 Map<IAtom, IAtom> atomMappings = new HashMap<IAtom, IAtom>();
 
-//                System.out.println("Sol size " + solution.size());
-
-
                 for (Map.Entry<Integer, Integer> map : solution.entrySet()) {
 
                     int IIndex = map.getKey();
                     int JIndex = map.getValue();
 
-                    
+
                     IAtom A = null;
                     IAtom B = null;
 
@@ -218,8 +205,6 @@ public class MCSPlusHandler implements IMCS {
                     }
 
                     atomMappings.put(A, B);
-
-//                    System.out.println("I " + A.getSymbol() + " J " + B.getSymbol());
                 }
 
                 allAtomMCS.add(counter++, atomMappings);
@@ -227,9 +212,6 @@ public class MCSPlusHandler implements IMCS {
         } catch (Exception I) {
             I.getCause();
         }
-
-//        System.out.println("Number of Atom MCS solution: " + allAtomMCS.size());
-
 
     }
 
@@ -246,41 +228,6 @@ public class MCSPlusHandler implements IMCS {
 //            System.out.println("In MCS+handle First Atom MCS: " + allAtomMCS.get(0));
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
-
-    }
-
-    private IAtomContainer getSubstructreBasedOnAtomUID(
-            IAtomContainer RefMol, IAtomContainer Substructure) {
-
-        IAtomContainer needle = new AtomContainer();
-
-        Vector<IAtom> idlist = new Vector<IAtom>();
-
-        // get the ID's (corresponding to the serial number of the Bond object in
-        // the AtomContainer for the supplied molecule) of the matching bonds
-        // (there will be repeats)
-
-        for (int i = 0; i < RefMol.getAtomCount(); i++) {
-
-            for (int j = 0; j < Substructure.getAtomCount(); j++) {
-
-                if ((RefMol.getAtom(i).getID()).equals(Substructure.getAtom(j).getID())) {
-
-                    idlist.add(RefMol.getAtom(i));
-
-                }
-
-            }
-
-        }
-
-        // get a unique list of bond ID's and add them to an AtomContainer
-        HashSet<IAtom> hs = new HashSet<IAtom>(idlist);
-        for (IAtom h : hs) {
-            needle.addAtom(h);
-        }
-
-        return needle;
 
     }
 
@@ -302,7 +249,6 @@ public class MCSPlusHandler implements IMCS {
 
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-//        System.out.println("In MCS+handle First Atom MCS: " + atomsMCS);
         return atomsMCS;
     }
 }
