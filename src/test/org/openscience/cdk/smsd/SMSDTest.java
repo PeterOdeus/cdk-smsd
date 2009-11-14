@@ -16,7 +16,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.smsd.core.tools.EBIMCSCalculator;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -56,45 +55,45 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testCDKMCS() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(3, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(3, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(true, ebimcs.isSubgraph());
     }
 
     @Test
     public void testMCSPlus() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(1, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(1, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(true, ebimcs.isSubgraph());
     }
 
     @Test
     public void testSMSD() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(0, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(0, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(6, ebimcs.getFirstMapping().size());
 
-        EBIMCSCalculator ebimcs1 = new EBIMCSCalculator(0, false, true, true, true, true, true);
+        SubStructureFactory ebimcs1 = new SubStructureFactory(0, false, true, true, true, true, true);
         ebimcs1.init(Benzene, Napthalene);
         Assert.assertEquals(6, ebimcs.getFirstAtomMapping().size());
     }
 
     @Test
     public void testSMSDBondSensitive() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(3, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(3, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(true, ebimcs.isSubgraph());
 
-        EBIMCSCalculator ebimcs1 = new EBIMCSCalculator(3, false, true, true, true, true, true);
+        SubStructureFactory ebimcs1 = new SubStructureFactory(3, false, true, true, true, true, true);
         ebimcs1.init(Cyclohexane, Benzene);
         Assert.assertEquals(false, ebimcs1.isSubgraph());
     }
 
     @Test
     public void testSMSDBondInSensitive() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(3, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(3, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
-        EBIMCSCalculator ebimcs1 = new EBIMCSCalculator(3, true, true, true, true, true, true);
+        SubStructureFactory ebimcs1 = new SubStructureFactory(3, true, true, true, true, true, true);
         ebimcs1.init(Benzene, Napthalene);
         Assert.assertEquals(6, ebimcs.getFirstAtomMapping().size());
         Assert.assertEquals(6, ebimcs1.getFirstAtomMapping().size());
@@ -102,7 +101,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDChemicalFilters() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(3, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(3, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(6, ebimcs.getFirstAtomMapping().size());
         Assert.assertEquals(true, ebimcs.isSubgraph());
@@ -110,7 +109,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDScores() throws Exception {
-        EBIMCSCalculator ebimcs = new EBIMCSCalculator(3, false, false, true, true, true, true);
+        SubStructureFactory ebimcs = new SubStructureFactory(3, false, false, true, true, true, true);
         ebimcs.init(Cyclohexane, Benzene);
         Assert.assertEquals(Cyclohexane.getAtomCount(), ebimcs.getFirstMapping().size());
     }
