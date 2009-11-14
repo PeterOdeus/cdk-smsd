@@ -56,7 +56,6 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
  */
 public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
 
-    private String symbol;
     private int maximumNeighbors;
 
     public VFAtomMatcher() {
@@ -112,6 +111,7 @@ public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
         this.maximumNeighbors = maximum;
     }
 
+    @Override
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
