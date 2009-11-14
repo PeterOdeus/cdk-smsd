@@ -47,9 +47,11 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
 
-import java.util.List;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.smsd.algorithm.vflib.builder.EdgeBuilder;
 import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
+
+import java.util.List;
 
 /**
  * @cdk.module smsd
@@ -72,7 +74,7 @@ public interface INode {
      *
      * @return
      */
-    public IAtomMatcher getAtomMatcher();
+    public IQueryAtom getAtomMatcher();
 
     /**
      *

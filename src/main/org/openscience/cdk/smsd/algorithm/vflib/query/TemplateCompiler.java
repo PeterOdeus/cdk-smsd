@@ -47,16 +47,16 @@
 package org.openscience.cdk.smsd.algorithm.vflib.query;
 
 
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.smsd.algorithm.vflib.builder.VFQueryBuilder;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQueryCompiler;
 import org.openscience.cdk.smsd.algorithm.vflib.validator.VFAtomMatcher;
 import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -109,7 +109,7 @@ public class TemplateCompiler implements IQueryCompiler {
 
         for (int i = 0; i < queryMolecule.getAtomCount(); i++) {
             IAtom atom = queryMolecule.getAtom(i);
-            IAtomMatcher matcher = createMatcher(atom);
+            IQueryAtom matcher = createMatcher(atom);
 
             if (matcher != null) {
                 result.addNode(matcher, atom);
@@ -136,11 +136,11 @@ public class TemplateCompiler implements IQueryCompiler {
         return result;
     }
 
-    private IAtomMatcher createMatcher(IAtom atom) {
+    private IQueryAtom createMatcher(IAtom atom) {
         return new VFAtomMatcher(atom);
     }
 
-    private IBondMatcher createBondMatcher(IBond bond) {
+    private IQueryBond createBondMatcher(IBond bond) {
         return new VFBondMatcher(bond);
     }
 }

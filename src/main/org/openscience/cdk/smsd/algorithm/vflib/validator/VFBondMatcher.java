@@ -46,16 +46,17 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
-import org.openscience.cdk.smsd.global.BondType;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.smsd.global.BondType;
 
 /**
  * @cdk.module smsd
  */
-public class VFBondMatcher implements IBondMatcher {
+public class VFBondMatcher extends Bond implements IQueryBond {
 
     private IBond queryBond;
     private int unsaturation = 0;

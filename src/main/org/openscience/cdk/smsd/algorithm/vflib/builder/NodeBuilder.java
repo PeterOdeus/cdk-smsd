@@ -22,11 +22,12 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @cdk.module smsd
@@ -35,9 +36,9 @@ public class NodeBuilder implements INode {
 
     private List<INode> neighbors;
     private List<IEdge> edges;
-    private IAtomMatcher matcher;
+    private IQueryAtom matcher;
 
-    public NodeBuilder(IAtomMatcher matcher) {
+    public NodeBuilder(IQueryAtom matcher) {
         edges = new ArrayList<IEdge>();
         neighbors = new ArrayList<INode>();
         this.matcher = matcher;
@@ -54,7 +55,7 @@ public class NodeBuilder implements INode {
     }
 
     @Override
-    public IAtomMatcher getAtomMatcher() {
+    public IQueryAtom getAtomMatcher() {
         return matcher;
     }
 

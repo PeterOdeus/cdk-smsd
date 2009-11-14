@@ -47,16 +47,17 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.builder;
 
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
-import org.openscience.cdk.interfaces.IAtom;
 
 /**
  * @cdk.module smsd
@@ -159,7 +160,7 @@ public class VFQueryBuilder implements IQuery {
      * @param atom
      * @return
      */
-    public INode addNode(IAtomMatcher matcher, IAtom atom) {
+    public INode addNode(IQueryAtom matcher, IAtom atom) {
         NodeBuilder node = new NodeBuilder(matcher);
         nodes.add(node);
         NodesBonds.put(node, atom);
@@ -198,7 +199,7 @@ public class VFQueryBuilder implements IQuery {
      * @param matcher
      * @return
      */
-    public IEdge connect(INode source, INode target, IBondMatcher matcher) {
+    public IEdge connect(INode source, INode target, IQueryBond matcher) {
         NodeBuilder sourceImpl = (NodeBuilder) source;
         NodeBuilder targetImpl = (NodeBuilder) target;
         EdgeBuilder edge = new EdgeBuilder(sourceImpl, targetImpl, matcher);

@@ -47,13 +47,14 @@
 package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
 
-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 
 /**
  * @cdk.module smsd
  */
-public class VFAtomMatcher implements IAtomMatcher {
+public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
 
     private String symbol;
     private int maximumNeighbors;

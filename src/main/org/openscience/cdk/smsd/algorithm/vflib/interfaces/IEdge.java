@@ -47,6 +47,8 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
 
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+
 /**
  * @cdk.module smsd
  */
@@ -56,5 +58,5 @@ public interface IEdge {
 
     public INode getTarget();
 
-    public IBondMatcher getBondMatcher();
+    public IQueryBond getBondMatcher();
 }
