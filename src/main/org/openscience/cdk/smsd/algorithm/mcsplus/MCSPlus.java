@@ -106,7 +106,7 @@ public class MCSPlus {
                     mgit = null;
 
                 } else {
-                    _mappings = ExactMapping.extract_mapping(_mappings, comp_graph_nodes, clique_vector); //erfolgt KEINE McGregorMCSPlus-Suche->speichere L�ungen in final_MAPPINGS
+                    _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_vector); //erfolgt KEINE McGregorMCSPlus-Suche->speichere L�ungen in final_MAPPINGS
 
                 }
                 Max_Cliques_Set.pop();

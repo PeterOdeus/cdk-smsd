@@ -36,7 +36,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.BondTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -54,40 +53,40 @@ import org.openscience.cdk.io.MDLReader;
 public class MolHandler {
 
     private IAtomContainer Mol = null;
-    private IAtomContainerSet fragmentMolSet = null;
+    private IAtomContainerSet FragmentMolSet = null;
     private boolean removeHydrogen = false;
-    private boolean fragmentFlag = false;
+    private boolean ConnectedFlag = false;
 
     private void checkFragmentation() {
 
         if (Mol.getAtomCount() > 0) {
-            fragmentFlag = ConnectivityChecker.isConnected(Mol);
+            ConnectedFlag = ConnectivityChecker.isConnected(Mol);
         }
-        fragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+        FragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 
 
-        //System.out.println("isConnected : " + fragmentFlag);
+        //System.out.println("isConnected : " + ConnectedFlag);
 
-        if (!fragmentFlag) {
+        if (!ConnectedFlag) {
 
             /*System.err.println("The molecule is not connected, " +
             "Fragment Matcher Will Handle this _molecule");*/
 
-            fragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Mol));
-            fragmentMolSet.setID(Mol.getID());
+            FragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Mol));
+            FragmentMolSet.setID(Mol.getID());
 
         } else {
 
-            fragmentMolSet.addAtomContainer(Mol);
-            fragmentMolSet.setID(Mol.getID());
+            FragmentMolSet.addAtomContainer(Mol);
+            FragmentMolSet.setID(Mol.getID());
         }
     }
 
     /** Creates a new instance of JMCSHandler
      * @param MolFile Mol file name
      * @param cleanMolecule
-     * @param removeHydrogen 
-     *  
+     * @param removeHydrogen
+     *
      */
     public MolHandler(String MolFile, boolean cleanMolecule, boolean removeHydrogen) {
 
@@ -134,11 +133,6 @@ public class MolHandler {
         }
     }
 
-    /**
-     *
-     * @param MolFile
-     * @param cleanMolecule
-     */
     public MolHandler(String MolFile, boolean cleanMolecule) {
 
         MDLReader MolRead;
@@ -180,17 +174,12 @@ public class MolHandler {
     }
 
     /**
-     * 
+     *
      * @param _molecule Molecule AtomContainer
      * @param cleanMolecule
      * @param removeHydrogen
      */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule, boolean removeHydrogen) {
-        try {
-            CDKHueckelAromaticityDetector.detectAromaticity(_molecule);
-        } catch (CDKException ex) {
-            Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         String ID = _molecule.getID();
         this.removeHydrogen = removeHydrogen;
@@ -202,7 +191,10 @@ public class MolHandler {
         if (cleanMolecule) {
             MoleculeSanityCheck.fixAromaticity((IMolecule) Mol);
         }
-        /*Hydrogen are always removed for this molecule before mapping*/
+
+
+        //
+//         /*Hydrogen are always removed for this molecule before mapping*/
 
         if (removeHydrogen) {
             try {
@@ -223,11 +215,6 @@ public class MolHandler {
 
     }
 
-    /**
-     *
-     * @param _molecule
-     * @param cleanMolecule
-     */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule) {
 
         String ID = _molecule.getID();
@@ -273,10 +260,14 @@ public class MolHandler {
      */
     public IAtomContainerSet getFragmentedMolecule() {
 
-        return this.fragmentMolSet;
+        return this.FragmentMolSet;
     }
 
-    public boolean getFragmentFlag() {
-        return this.fragmentFlag;
+    /**
+     *
+     * @return true is Mol is connected else false
+     */
+    public boolean getConnectedFlag() {
+        return this.ConnectedFlag;
     }
 }

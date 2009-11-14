@@ -1,4 +1,3 @@
-
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -26,9 +25,7 @@
 package org.openscience.cdk.smsd.filters;
 
 //~--- non-JDK imports --------------------------------------------------------
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,29 +39,20 @@ import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IFragment;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.smsd.interfaces.IMCSBase;
 
-/**
- *
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
- */
 /**
  * @cdk.module smsd
  */
-public class FragmentMatcher implements IFragment {
+public class FragmentMatcher implements IMCSBase {
 
-    // private boolean[][] localFlagMatrix;
-    private int rowSize = 0;
-    private int colSize = 0;
-    private boolean[][] FlagMatrix = null;
     private MolHandler RMol;
     private MolHandler PMol;
-    //private EBIMatrix SimMatrix = null;
     private IAtomContainerSet ReactantSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
     private IAtomContainerSet ProductSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
@@ -74,10 +62,10 @@ public class FragmentMatcher implements IFragment {
     double tanimoto = 0;
     double euclidean = 0;
     int stereoScore = 0;
-    List<TreeMap<Integer, Integer>> GallMCS;
-    TreeMap<Integer, Integer> GfirstSolution;
-    List<Map<IAtom, IAtom>> GallAtomMCS;
-    Map<IAtom, IAtom> GfirstAtomMCS;
+    private Vector<TreeMap<Integer, Integer>> GallMCS;
+    private TreeMap<Integer, Integer> GfirstSolution;
+    private Vector<Map<IAtom, IAtom>> GallAtomMCS;
+    private Map<IAtom, IAtom> GfirstAtomMCS;
     double Gtanimoto;
     double Geuclidean;
     private boolean removeHydrogen = false;
@@ -85,7 +73,7 @@ public class FragmentMatcher implements IFragment {
     //~--- constructors -------------------------------------------------------
     private void search() {
 
-        //System.out.println("In FragmentMatcher Builder->FragmentMatcher->search");
+//        System.out.println("In FragmentMatcher Builder->FragmentMatcher->search");
 
         //SimMatrix = new JMatrix(rowSize, colSize);
         int SolutionSize = 0;
@@ -99,18 +87,7 @@ public class FragmentMatcher implements IFragment {
                     IAtomContainer B = ProductSet.getAtomContainer(j);
                     PMol = new MolHandler(B, false);
 
-                    //printMolecules(RMol.getMolecule(),PMol.getMolecule());
-
-                    //System.out.println("Mol " + Afp + " Mol" + Bfp);
-                    //System.out.println("R Mol AtomCount: " + RMol.getMolecule().getAtomCount() + " P: Atom Count " + PMol.getMolecule().getAtomCount());
-
-
-
-
                     Builder();
-
-                    //System.out.println("Best Solution size: " + SolutionSize);
-                    //System.out.println("Present Solution size: " + firstSolution.size());
 
                     if (SolutionSize < firstMCS.size()) {
 
@@ -154,28 +131,6 @@ public class FragmentMatcher implements IFragment {
 
     }
 
-    private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
-        ArrayList<String> a = new ArrayList<String>();
-        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
-            if (removeHydrogen && !reactantMolecule.getAtom(i).getSymbol().equals("H")) {
-                a.add(reactantMolecule.getAtom(i).getSymbol());
-            } else {
-                a.add(reactantMolecule.getAtom(i).getSymbol());
-            }
-        }
-
-
-        int common = 0;
-        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
-
-            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
-                a.remove(productMolecule.getAtom(i).getSymbol());
-                common++;
-            }
-        }
-        return common - a.size();
-    }
-
     private synchronized void Builder() {
 
         try {
@@ -192,85 +147,25 @@ public class FragmentMatcher implements IFragment {
 
 //            long startTime = System.currentTimeMillis();
 //
-            if ((rBondCount <= 1 && rAtomCount == 1) || (pBondCount <= 1 && pAtomCount == 1)) {
+            if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
 //                System.out.println("Single Mapping");
                 SingleMapping();
-            } else if (rBondCount >= 6 && pBondCount >= 6) {
-//                System.err.println("MCSPlus");
-                MCSPlus();
-                if (getFirstMapping() == null) {
-                    System.gc();
-//                    System.err.println("Many d-edges, switching to VF-McGregor");
+            } else {
+                if (rBondCount >= 6 && rBondCount >= 6) {
                     VFLibMCS();
-//                    System.out.println("Mapped with VF-McGregor");
+                    if (getFirstMapping() == null) {
+                        System.gc();
+                    }
+//                    System.out.println("Mapped with VFLibMCS");
                 } else {
+                    MCSPlus();
 //                    System.out.println("Mapped with MCSPlus");
                 }
-            } else {
-//                System.out.println("MCSPlus");
-                MCSPlus();
-
             }
-//            else if (commonAtoms == rAtomCount ||
-//                    commonAtoms == pAtomCount) {
-//                System.out.println("VF-McGregor");
-//                VFLibMCS();
-//
-//            }
-
-//            else if (rAtomCount != pAtomCount && rBondCount != pBondCount) {
-//
-//                System.out.println("CDKMCS-MCSPlus-VF-McGregor");
-//                CDKMCS();
-//                if (getFirstMapping() == null) {
-//                    //Reset the mapping
-//                    System.gc();
-//                    System.err.println("Time out, switching to MCSPlus");
-//                    MCSPlus();
-//                    if (getFirstMapping() == null) {
-//                        System.gc();
-//                        System.err.println("Many d-edges, switching to VF-McGregor");
-//                        VFLibMCS();
-//                        System.out.println("Mapped with VF-McGregor");
-//                    } else {
-//                        System.err.println("Mapped with MCSPlus");
-//                    }
-//                } else {
-//                    System.out.println("Mapped with CDKMCS");
-//                }
-//
-//            } else {
-////                System.err.println("MCSPlus");
-//                MCSPlus();
-//                if (getFirstMapping() == null) {
-//                    System.gc();
-//                    System.err.println("Many d-edges, switching to VF-McGregor");
-//                    VFLibMCS();
-//                    System.out.println("Mapped with VF-McGregor");
-//                } else {
-//                    System.out.println("Mapped with MCSPlus");
-//                }
-//
-//
-//            }
-
-//            System.out.println("MCS solution count:" + FragmentMatcher.allMCS.size());
-//            System.out.println("solution Size:" + FragmentMatcher.allMCS.firstElement().size());
-//            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
-//                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
-//                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
-//            }
-//            long endTime = System.currentTimeMillis();
             System.gc();
-//            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
-//            System.out.println("!Done!\n");
-
         } catch (Exception ex) {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
     }
 
     private synchronized void CDKMCS() {
@@ -326,32 +221,23 @@ public class FragmentMatcher implements IFragment {
     }
 
     /**
-     * 
+     *
      * @param A
      * @param B
-     * @param removeHydrogen 
+     * @param removeHydrogen
      */
     public FragmentMatcher(IAtomContainerSet A, IAtomContainerSet B, boolean removeHydrogen) {
 
         this.removeHydrogen = removeHydrogen;
-        // System.out.println("In FragmentMatcher Builder->FragmentMatcher");
         GallMCS = new Vector<TreeMap<Integer, Integer>>();
-        GfirstSolution =
-                new TreeMap<Integer, Integer>();
-        GallAtomMCS =
-                new Vector<Map<IAtom, IAtom>>();
-        GfirstAtomMCS =
-                new HashMap<IAtom, IAtom>();
+        GfirstSolution = new TreeMap<Integer, Integer>();
+        GallAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        GfirstAtomMCS = new HashMap<IAtom, IAtom>();
         Gtanimoto = 0;
-
-        rowSize = A.getAtomContainerCount();
-        colSize = B.getAtomContainerCount();
 
         this.ReactantSet = A;
         this.ProductSet = B;
         search();
-
-
 
     }
 
@@ -377,76 +263,12 @@ public class FragmentMatcher implements IFragment {
         }
     }
 
-//~--- get methods --------------------------------------------------------
-    @Override
-    public boolean getFlag() {
-
-        // int rowSize = EdMap.size();
-        // int colSize = PdMap.size();
-        boolean flag = false;
-
-        for (int i = 0; i <
-                rowSize; i++) {
-            for (int j = 0; j <
-                    colSize; j++) {
-                if (FlagMatrix[i][j]) {
-                    flag = true;
-
-                    break;
-                }
-
-            }
-        }
-
-        return flag;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    @Override
-    public boolean[][] getFlagMatrix() {
-        return FlagMatrix;
-    }
-
-    private void initFlagMatrix() {
-        for (int i = 0; i <
-                rowSize; i++) {
-            for (int j = 0; j <
-                    colSize; j++) {
-                this.FlagMatrix[i][j] = false;
-            }
-
-        }
-    }
-
-//    public void printMolecules(IAtomContainer Molecule1, IAtomContainer Molecule2) {
-//
-//        System.out.println("Molecule 1");
-//        for (int i = 0; i <
-//                Molecule1.getAtomCount(); i++) {
-//
-//            System.out.print(Molecule1.getAtom(i).getSymbol() + " ");
-//        }
-//
-//        System.out.println();
-//        System.out.println("Molecule 2");
-//        for (int i = 0; i <
-//                Molecule2.getAtomCount(); i++) {
-//
-//            System.out.print(Molecule2.getAtom(i).getSymbol() + " ");
-//        }
-//
-//        System.out.println();
-//
-//    }
     /**
      *
      * @return
      */
     @Override
-    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
         return GallAtomMCS;
     }
 
@@ -455,7 +277,7 @@ public class FragmentMatcher implements IFragment {
      * @return
      */
     @Override
-    public List<TreeMap<Integer, Integer>> getAllMapping() {
+    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
         return GallMCS;
     }
 
@@ -477,9 +299,7 @@ public class FragmentMatcher implements IFragment {
      */
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
-        //System.out.println("Solution: "+ GfirstSolution );
         return GfirstSolution;
     }
 }
-//~ Formatted by Jindent --- http://www.jindent.com
 
