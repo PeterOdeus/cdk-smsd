@@ -34,18 +34,18 @@ public interface IFinalMapping {
    
     /**
      * 
-     * @param v List of all MCS mapping between a given
+     * @param mapping List of all MCS mapping between a given
      * reactant and product 
      * @throws java.lang.Exception
      */
-    public void add(TreeMap<Integer, Integer> v) throws Exception;
+    public void add(TreeMap<Integer, Integer> mapping) throws Exception;
 
     /**
      * 
-     * @param v List of all MCS mapping between a given
+     * @param mappings List of all MCS mapping between a given
      * reactant and product 
      */
-    public void set(List<TreeMap<Integer, Integer>> v);
+    public void set(List<TreeMap<Integer, Integer>> mappings);
 
     /**
      * 
@@ -56,7 +56,7 @@ public interface IFinalMapping {
     /**
      * clear the maping
      */
-    public void Clear();
+    public void clear();
 
     /**
      * 

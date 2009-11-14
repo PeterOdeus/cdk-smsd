@@ -41,7 +41,7 @@ public interface IMCS extends IMCSBase {
      * @throws java.io.IOException
      * @throws CDKException
      */
-    int search_MCS(boolean removeHydrogen) throws IOException, CDKException;
+    int searchMCS(boolean removeHydrogen) throws IOException, CDKException;
 
     /**
      * Creates a new instance of SearchCliques

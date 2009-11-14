@@ -32,41 +32,41 @@ import java.util.Map;
  */
 public class LabelContainer {
 
-    private HashMap<String, Integer> _labelMap;
-    private int _LabelCounter = 1;
+    private HashMap<String, Integer> labelMap;
+    private int labelCounter = 1;
     private static LabelContainer INSTANCE = null;
 
     protected LabelContainer() {
 
         // System.err.println("Vector Initialized");
-        _labelMap = new HashMap<String, Integer>();
+        labelMap = new HashMap<String, Integer>();
 
-        _labelMap.put("C", _LabelCounter++);
-        _labelMap.put("O", _LabelCounter++);
-        _labelMap.put("N", _LabelCounter++);
-        _labelMap.put("S", _LabelCounter++);
+        labelMap.put("C", labelCounter++);
+        labelMap.put("O", labelCounter++);
+        labelMap.put("N", labelCounter++);
+        labelMap.put("S", labelCounter++);
 
-        _labelMap.put("P", _LabelCounter++);
-        _labelMap.put("F", _LabelCounter++);
-        _labelMap.put("I", _LabelCounter++);
-        _labelMap.put("R", _LabelCounter++);
+        labelMap.put("P", labelCounter++);
+        labelMap.put("F", labelCounter++);
+        labelMap.put("I", labelCounter++);
+        labelMap.put("R", labelCounter++);
 
-        _labelMap.put("Br", _LabelCounter++);
-        _labelMap.put("Cl", _LabelCounter++);
-        _labelMap.put("Co", _LabelCounter++);
-        _labelMap.put("Fe", _LabelCounter++);
-        _labelMap.put("Na", _LabelCounter++);
-        _labelMap.put("Ca", _LabelCounter++);
+        labelMap.put("Br", labelCounter++);
+        labelMap.put("Cl", labelCounter++);
+        labelMap.put("Co", labelCounter++);
+        labelMap.put("Fe", labelCounter++);
+        labelMap.put("Na", labelCounter++);
+        labelMap.put("Ca", labelCounter++);
 
-        _labelMap.put("K", _LabelCounter++);
-        _labelMap.put("Mg", _LabelCounter++);
-        _labelMap.put("Se", _LabelCounter++);
-        _labelMap.put("Cu", _LabelCounter++);
-        _labelMap.put("Hg", _LabelCounter++);
+        labelMap.put("K", labelCounter++);
+        labelMap.put("Mg", labelCounter++);
+        labelMap.put("Se", labelCounter++);
+        labelMap.put("Cu", labelCounter++);
+        labelMap.put("Hg", labelCounter++);
 
-        _labelMap.put("X", _LabelCounter++);
-        _labelMap.put("R", _LabelCounter++);
-        _labelMap.put("X1", _LabelCounter++);
+        labelMap.put("X", labelCounter++);
+        labelMap.put("R", labelCounter++);
+        labelMap.put("X1", labelCounter++);
         
 
     }
@@ -82,21 +82,21 @@ public class LabelContainer {
 
     synchronized public void addLabel(String label) {
         //System.err.println("Vector added");
-        int lableNo = _labelMap.size() + 1;
-        _labelMap.put(label, lableNo);
+        int lableNo = labelMap.size() + 1;
+        labelMap.put(label, lableNo);
     }
 
     synchronized public Integer getLabelID(String label) {
 
         int id = -1;
 
-        if (!_labelMap.containsKey(label)) {
-            int lableNo = _labelMap.size() + 1;
-            _labelMap.put(label, lableNo);
+        if (!labelMap.containsKey(label)) {
+            int lableNo = labelMap.size() + 1;
+            labelMap.put(label, lableNo);
 
         }
 
-        id = _labelMap.get(label);
+        id = labelMap.get(label);
 
 
         return id;
@@ -107,7 +107,7 @@ public class LabelContainer {
         String id = null;
         boolean flag = false;
 
-        for (Map.Entry map : _labelMap.entrySet()) {
+        for (Map.Entry map : labelMap.entrySet()) {
 
             id = (String) map.getKey();
 
@@ -124,6 +124,6 @@ public class LabelContainer {
     }
 
     synchronized public int getSize() {
-        return _labelMap.size();
+        return labelMap.size();
     }
 }

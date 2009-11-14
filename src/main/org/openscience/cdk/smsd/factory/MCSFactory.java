@@ -451,7 +451,7 @@ public class MCSFactory implements IMCSAlgorithm {
             mcs = new CDKMCSHandler();
 
             mcs.set(RMol, PMol);
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
             allMCS.clear();
@@ -477,7 +477,7 @@ public class MCSFactory implements IMCSAlgorithm {
             mcs = new MCSPlusHandler();
 
             mcs.set(RMol, PMol);
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
             allMCS.clear();
@@ -905,7 +905,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
             mcs.set(RMol, PMol);
 
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
             allMCS.clear();
@@ -932,7 +932,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
             mcs.set(RMol, PMol);
 
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
             allMCS.clear();

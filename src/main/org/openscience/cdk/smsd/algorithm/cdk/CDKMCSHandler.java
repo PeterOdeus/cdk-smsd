@@ -135,7 +135,7 @@ public class CDKMCSHandler implements IMCS {
      * @return
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws CDKException {
+    public int searchMCS(boolean removeHydrogen) throws CDKException {
 
 
         CDKRMapHandler rmap = new CDKRMapHandler();

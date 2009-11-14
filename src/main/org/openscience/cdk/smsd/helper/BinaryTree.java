@@ -36,7 +36,7 @@ public class BinaryTree {
      * @param value
      */
     public BinaryTree(int value) {
-        this.Value = value;
+        this.value = value;
     }
     /**
      * equal is initialized as null
@@ -46,13 +46,13 @@ public class BinaryTree {
      * not equal is initialized as null
      */
     public BinaryTree not_equal = null;
-    private int Value = -1;
+    private int value = -1;
 
     /**
      * 
      * @return get the value of the current node
      */
     public int getValue() {
-        return this.Value;
+        return this.value;
     }
 }

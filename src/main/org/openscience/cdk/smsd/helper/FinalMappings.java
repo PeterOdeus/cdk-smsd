@@ -77,7 +77,7 @@ public class FinalMappings implements IFinalMapping {
     }
 
     @Override
-    synchronized public void Clear() {
+    synchronized public void clear() {
         _mappings.clear();
     }
 

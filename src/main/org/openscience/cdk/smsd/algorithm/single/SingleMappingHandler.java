@@ -121,7 +121,7 @@ public class SingleMappingHandler implements IMCS {
      * @throws java.io.IOException
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws IOException, CDKException {
+    public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
 
 
         SingleMapping SM = new SingleMapping();

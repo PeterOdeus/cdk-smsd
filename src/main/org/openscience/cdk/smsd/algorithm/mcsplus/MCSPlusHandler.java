@@ -122,7 +122,7 @@ public class MCSPlusHandler implements IMCS {
      * @throws java.io.IOException
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws IOException {
+    public int searchMCS(boolean removeHydrogen) throws IOException {
         List<List<Integer>> _mappings = null;
         try {
             if (ac1.getAtomCount() > ac2.getAtomCount()) {

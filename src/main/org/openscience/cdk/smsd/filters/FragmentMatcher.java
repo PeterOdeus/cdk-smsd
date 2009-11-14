@@ -277,7 +277,7 @@ public class FragmentMatcher implements IFragment {
         try {
             CDKMCSHandler mcs = new CDKMCSHandler();
             mcs.set(RMol, PMol);
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
             allAtomMCS = mcs.getAllAtomMapping();
@@ -293,7 +293,7 @@ public class FragmentMatcher implements IFragment {
         try {
             MCSPlusHandler mcs = new MCSPlusHandler();
             mcs.set(RMol, PMol);
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
             allAtomMCS = mcs.getAllAtomMapping();
@@ -309,7 +309,7 @@ public class FragmentMatcher implements IFragment {
         try {
             VFlibMCSHandler mcs = new VFlibMCSHandler();
             mcs.set(RMol, PMol);
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
 
             firstMCS = mcs.getFirstMapping();
@@ -362,7 +362,7 @@ public class FragmentMatcher implements IFragment {
 
             mcs.set(RMol, PMol);
 
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();

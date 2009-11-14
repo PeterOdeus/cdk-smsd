@@ -81,7 +81,7 @@ public class VFlibMCSHandler implements IMCS {
      * @throws CDKException 
      */
     @Override
-    public int search_MCS(boolean removeHydrogen) throws IOException, CDKException {
+    public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
 
 
 //        System.out.println("VF Solution Count: " + vfLibSolutions.size());

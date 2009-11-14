@@ -560,7 +560,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
             mcs.set(RMol, PMol);
 
-            mcs.search_MCS(removeHydrogen);
+            mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
             allMCS.clear();

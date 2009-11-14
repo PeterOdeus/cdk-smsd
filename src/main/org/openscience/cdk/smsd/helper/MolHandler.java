@@ -54,32 +54,32 @@ import org.openscience.cdk.io.MDLReader;
 public class MolHandler {
 
     private IAtomContainer Mol = null;
-    private IAtomContainerSet FragmentMolSet = null;
+    private IAtomContainerSet fragmentMolSet = null;
     private boolean removeHydrogen = false;
-    private boolean FragmentFlag = false;
+    private boolean fragmentFlag = false;
 
     private void checkFragmentation() {
 
         if (Mol.getAtomCount() > 0) {
-            FragmentFlag = ConnectivityChecker.isConnected(Mol);
+            fragmentFlag = ConnectivityChecker.isConnected(Mol);
         }
-        FragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+        fragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 
 
-        //System.out.println("isConnected : " + FragmentFlag);
+        //System.out.println("isConnected : " + fragmentFlag);
 
-        if (!FragmentFlag) {
+        if (!fragmentFlag) {
 
             /*System.err.println("The molecule is not connected, " +
             "Fragment Matcher Will Handle this _molecule");*/
 
-            FragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Mol));
-            FragmentMolSet.setID(Mol.getID());
+            fragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Mol));
+            fragmentMolSet.setID(Mol.getID());
 
         } else {
 
-            FragmentMolSet.addAtomContainer(Mol);
-            FragmentMolSet.setID(Mol.getID());
+            fragmentMolSet.addAtomContainer(Mol);
+            fragmentMolSet.setID(Mol.getID());
         }
     }
 
@@ -273,10 +273,10 @@ public class MolHandler {
      */
     public IAtomContainerSet getFragmentedMolecule() {
 
-        return this.FragmentMolSet;
+        return this.fragmentMolSet;
     }
 
     public boolean getFragmentFlag() {
-        return this.FragmentFlag;
+        return this.fragmentFlag;
     }
 }
