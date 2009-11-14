@@ -83,8 +83,8 @@ public class MCSPlus {
                 timeoutFlag = true;
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
-            //Clear all the compatibility graph content
-            gcg.Clear();
+            //clear all the compatibility graph content
+            gcg.clear();
             int clique_number = 1;
             while (!Max_Cliques_Set.empty()) {
 

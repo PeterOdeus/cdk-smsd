@@ -235,20 +235,6 @@ public class CDKMCSHandler implements IMCS {
         return ConnectivityChecker.partitionIntoMolecules(mol);
     }
 
-    /*public void setStereoScore() {
-    int size = atomsMCS.size();
-    for (int i = 0; i < size - 3; i += 4) {
-    int RBondNumber = Reactant.getBondCount(atomsMCS.get(i), atomsMCS.get(i + 2));
-    int PBondNumber = Product.getBondCount(atomsMCS.get(i + 1), atomsMCS.get(i + 3));
-    if (RBondNumber > -1 && PBondNumber > -1) {
-    IBond RBond = Reactant.getBond(RBondNumber);
-    IBond PBond = Product.getBond(PBondNumber);
-    if (RBond.getStereo() == PBond.getStereo()) {
-    stereoScore++;
-    }
-    }
-    }
-    }*/
     private IAtomContainer getSubstructreBasedOnAtomUID(IAtomContainer RefMol, IAtomContainer Substructure) {
 
         IAtomContainer needle = new AtomContainer();
@@ -287,7 +273,7 @@ public class CDKMCSHandler implements IMCS {
     }
 
     //~--- get methods --------------------------------------------------------
-    public final synchronized void setAllMapping() {
+    private final synchronized void setAllMapping() {
 
         //int count_final_sol = 1;
         //System.out.println("Output of the final FinalMappings: ");
@@ -321,7 +307,7 @@ public class CDKMCSHandler implements IMCS {
 
     }
 
-    public final synchronized void setAllAtomMapping() {
+    private final synchronized void setAllAtomMapping() {
         //int count_final_sol = 1;
         //System.out.println("Output of the final FinalMappings: ");
         List<TreeMap<Integer, Integer>> sol = allMCS;
@@ -338,13 +324,10 @@ public class CDKMCSHandler implements IMCS {
                 int JIndex = Solutions.getValue().intValue();
 
                 IAtom A = null;
-
                 IAtom B = null;
 
                 A = Reactant.getAtom(IIndex);
                 B = Product.getAtom(JIndex);
-//                A.setID(Solutions.getKey().toString());
-//                B.setID(Solutions.getValue().toString());
                 atomMappings.put(A, B);
 
 
@@ -357,7 +340,7 @@ public class CDKMCSHandler implements IMCS {
 
     }
 
-    public final synchronized void setFirstMapping() {
+    private final synchronized void setFirstMapping() {
 
         if (allMCS.size() > 0) {
             firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
@@ -365,7 +348,7 @@ public class CDKMCSHandler implements IMCS {
 
     }
 
-    public final synchronized void setFirstAtomMapping() {
+    private final synchronized void setFirstAtomMapping() {
         if (atomsMCS.size() > 0) {
             atomsMCS = new TreeMap<IAtom, IAtom>(allAtomMCS.get(0));
         }

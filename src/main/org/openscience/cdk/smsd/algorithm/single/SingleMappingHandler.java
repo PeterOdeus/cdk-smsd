@@ -158,7 +158,7 @@ public class SingleMappingHandler implements IMCS {
 
     }
 
-    public final synchronized void setAllAtomMapping() {
+    private final synchronized void setAllAtomMapping() {
 
         try {
 //            int count_final_sol = 1;
@@ -209,7 +209,7 @@ public class SingleMappingHandler implements IMCS {
 
     }
 
-    public final synchronized void setFirstMapping() {
+    private final synchronized void setFirstMapping() {
 
         if (allMCS.size() > 0) {
             firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
@@ -217,7 +217,7 @@ public class SingleMappingHandler implements IMCS {
 
     }
 
-    public final synchronized void setFirstAtomMapping() {
+    private final synchronized void setFirstAtomMapping() {
         if (allAtomMCS.size() > 0) {
 //            System.out.println("In MCS+handle First Atom MCS: " + allAtomMCS.get(0));
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));

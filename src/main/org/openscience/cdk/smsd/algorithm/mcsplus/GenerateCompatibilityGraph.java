@@ -40,10 +40,10 @@ public class GenerateCompatibilityGraph {
 
     private Vector<Integer> comp_graph_nodes = new Vector<Integer>();
     private Vector<Integer> comp_graph_nodes_C_zero = new Vector<Integer>();
-    private Vector<Integer> C_edges = new Vector<Integer>();
-    private Vector<Integer> D_edges = new Vector<Integer>();
-    private int C_edges_size = 0;
-    private int D_edges_size = 0;
+    private Vector<Integer> cEdges = new Vector<Integer>();
+    private Vector<Integer> dEdges = new Vector<Integer>();
+    private int cEdgesSize = 0;
+    private int dEdgesSize = 0;
     private boolean removeHydrogen = false;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
@@ -76,13 +76,13 @@ public class GenerateCompatibilityGraph {
 
         if (get_C_edges_size() == 0) {
 //            System.out.println("C-edges are Zero");
-            Clear_CompGraphNodes();
+            clearCompGraphNodes();
 
-            Clear_C_Egdes();
-            Clear_D_Egdes();
+            clearCEgdes();
+            clearDEgdes();
 
-            Reset_C_EdgesSize();
-            Reset_D_EdgesSize();
+            resetCEdgesSize();
+            resetDEdgesSize();
 
             generate_compatibility_graph_nodes_if_C_edge_number_is_zero();
             if (bondTypeFlag) {
@@ -91,7 +91,7 @@ public class GenerateCompatibilityGraph {
                 generate_compatibility_graph_if_C_edge_number_is_zero_BIS();
             }
 
-            Clear_CompGraphNodes_C_Zero();
+            clearCompGraphNodesCZero();
         }
 
     }
@@ -231,8 +231,8 @@ public class GenerateCompatibilityGraph {
     protected int generate_compatibility_graph_BIS() throws IOException {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
 
@@ -261,21 +261,21 @@ public class GenerateCompatibilityGraph {
 
                     if (ReactantBond != null && ProductBond != null) {
 
-                        C_edges.addElement((a / 3) + 1);
-                        C_edges.addElement((b / 3) + 1);
+                        cEdges.addElement((a / 3) + 1);
+                        cEdges.addElement((b / 3) + 1);
 
 
                     } else if (ReactantBond == null && ProductBond == null) {
 
-                        D_edges.addElement((a / 3) + 1);
-                        D_edges.addElement((b / 3) + 1);
+                        dEdges.addElement((a / 3) + 1);
+                        dEdges.addElement((b / 3) + 1);
                     }
 
                 }
 
                 //print C and D edges of the compatibility graph
-                C_edges_size = C_edges.size();
-                D_edges_size = D_edges.size();
+                cEdgesSize = cEdges.size();
+                dEdgesSize = dEdges.size();
 
             }
         }
@@ -285,9 +285,9 @@ public class GenerateCompatibilityGraph {
     protected int generate_compatibility_graph_BS() throws IOException {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
 
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
 
@@ -319,16 +319,16 @@ public class GenerateCompatibilityGraph {
 
                         if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType.equals(ProductBondType))) {
                             //System.out.println("C-Edges A=B " + a + " " +  ReactantBondType + " = " +  b + " " + ProductBondType);
-                            C_edges.addElement((a / 3) + 1);
-                            C_edges.addElement((b / 3) + 1);
+                            cEdges.addElement((a / 3) + 1);
+                            cEdges.addElement((b / 3) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
 
-                            C_edges.addElement((a / 3) + 1);
-                            C_edges.addElement((b / 3) + 1);
+                            cEdges.addElement((a / 3) + 1);
+                            cEdges.addElement((b / 3) + 1);
                         } else {
 
-                            D_edges.addElement((a / 3) + 1);
-                            D_edges.addElement((b / 3) + 1);
+                            dEdges.addElement((a / 3) + 1);
+                            dEdges.addElement((b / 3) + 1);
                         }
 //
 
@@ -336,8 +336,8 @@ public class GenerateCompatibilityGraph {
                 }
 
                 //print C and D edges of the compatibility graph
-                C_edges_size = C_edges.size();
-                D_edges_size = D_edges.size();
+                cEdgesSize = cEdges.size();
+                dEdgesSize = dEdges.size();
 
 
 
@@ -413,9 +413,9 @@ public class GenerateCompatibilityGraph {
 
         int comp_graph_nodes_C_zero_vector_size = comp_graph_nodes_C_zero.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
 
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_C_zero_vector_size; a = a + 4) {
 
@@ -445,14 +445,14 @@ public class GenerateCompatibilityGraph {
                         ReactantBondType = ReactantBond.getOrder().ordinal();
                         ProductBondType = ProductBond.getOrder().ordinal();
                         if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC) && ReactantBondType == ProductBondType) {
-                            C_edges.addElement((a / 4) + 1);
-                            C_edges.addElement((b / 4) + 1);
+                            cEdges.addElement((a / 4) + 1);
+                            cEdges.addElement((b / 4) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-                            C_edges.addElement((a / 4) + 1);
-                            C_edges.addElement((b / 4) + 1);
+                            cEdges.addElement((a / 4) + 1);
+                            cEdges.addElement((b / 4) + 1);
                         } else {
-                            D_edges.addElement((a / 4) + 1);
-                            D_edges.addElement((b / 4) + 1);
+                            dEdges.addElement((a / 4) + 1);
+                            dEdges.addElement((b / 4) + 1);
                         }
                     }
                 }
@@ -460,8 +460,8 @@ public class GenerateCompatibilityGraph {
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = C_edges.size();
-        D_edges_size = D_edges.size();
+        cEdgesSize = cEdges.size();
+        dEdgesSize = dEdges.size();
 
 
         return 0;
@@ -470,8 +470,8 @@ public class GenerateCompatibilityGraph {
     protected int generate_compatibility_graph_if_C_edge_number_is_zero_BIS() throws IOException {
 
         int comp_graph_nodes_C_zero_vector_size = comp_graph_nodes_C_zero.size();
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a <
                 comp_graph_nodes_C_zero_vector_size; a = a + 4) {
@@ -496,14 +496,14 @@ public class GenerateCompatibilityGraph {
 
                     if (ReactantBond != null && ProductBond != null) {
 
-                        C_edges.addElement((a / 4) + 1);
-                        C_edges.addElement((b / 4) + 1);
+                        cEdges.addElement((a / 4) + 1);
+                        cEdges.addElement((b / 4) + 1);
 
 
                     } else {
 
-                        D_edges.addElement((a / 4) + 1);
-                        D_edges.addElement((b / 4) + 1);
+                        dEdges.addElement((a / 4) + 1);
+                        dEdges.addElement((b / 4) + 1);
                     }
 
 
@@ -512,8 +512,8 @@ public class GenerateCompatibilityGraph {
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = C_edges.size();
-        D_edges_size = D_edges.size();
+        cEdgesSize = cEdges.size();
+        dEdgesSize = dEdges.size();
 
 
         return 0;
@@ -521,20 +521,20 @@ public class GenerateCompatibilityGraph {
 
     protected Vector<Integer> get_C_egdes() {
 
-        return C_edges;
+        return cEdges;
     }
 
     protected Vector<Integer> get_D_egdes() {
 
-        return D_edges;
+        return dEdges;
     }
 
     protected int get_C_edges_size() {
-        return C_edges_size;
+        return cEdgesSize;
     }
 
     protected int get_D_edges_size() {
-        return D_edges_size;
+        return dEdgesSize;
     }
 
     protected Vector<Integer> get_comp_graph_nodes() {
@@ -545,35 +545,35 @@ public class GenerateCompatibilityGraph {
         return comp_graph_nodes_C_zero;
     }
 
-    protected void Clear_C_Egdes() {
+    protected void clearCEgdes() {
 
-        C_edges.clear();
+        cEdges.clear();
     }
 
-    protected void Clear_D_Egdes() {
+    protected void clearDEgdes() {
 
-        D_edges.clear();
+        dEdges.clear();
     }
 
-    protected void Clear_CompGraphNodes() {
+    protected void clearCompGraphNodes() {
         comp_graph_nodes.clear();
     }
 
-    protected void Clear_CompGraphNodes_C_Zero() {
+    protected void clearCompGraphNodesCZero() {
         comp_graph_nodes_C_zero.clear();
     }
 
-    protected void Reset_C_EdgesSize() {
-        C_edges_size = 0;
+    protected void resetCEdgesSize() {
+        cEdgesSize = 0;
     }
 
-    protected void Reset_D_EdgesSize() {
-        D_edges_size = 0;
+    protected void resetDEdgesSize() {
+        dEdgesSize = 0;
     }
 
-    protected void Clear() {
-        C_edges = null;
-        D_edges = null;
+    protected void clear() {
+        cEdges = null;
+        dEdges = null;
         comp_graph_nodes = null;
         comp_graph_nodes_C_zero = null;
     }
