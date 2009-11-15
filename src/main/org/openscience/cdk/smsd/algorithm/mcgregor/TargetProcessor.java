@@ -191,18 +191,12 @@ public class TargetProcessor {
 
         int corresponding_atom = 0;
         for (int a = 0; a < mapped_atoms_size; a++) {
-            if (molecule == 1) {
-                if (mapped_atoms.elementAt(a * 2 + 0).intValue() == atom_from_other_molecule) {
-
-                    corresponding_atom = mapped_atoms.get(a * 2 + 1);
-                }
-
+            if ((molecule == 1) &&
+                    (mapped_atoms.elementAt(a * 2 + 0).intValue() == atom_from_other_molecule)) {
+                corresponding_atom = mapped_atoms.get(a * 2 + 1);
             }
-            if (molecule == 2) {
-                if (mapped_atoms.elementAt(a * 2 + 1).intValue() == atom_from_other_molecule) {
-                    corresponding_atom = mapped_atoms.get(a * 2 + 0);
-                }
-
+            if ((molecule == 2) && (mapped_atoms.elementAt(a * 2 + 1).intValue() == atom_from_other_molecule)) {
+                corresponding_atom = mapped_atoms.get(a * 2 + 0);
             }
         }
         return corresponding_atom;
