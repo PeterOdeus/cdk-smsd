@@ -58,15 +58,10 @@ public class FragmentMatcher implements IMCSBase {
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    double tanimoto = 0;
-    double euclidean = 0;
-    int stereoScore = 0;
     private Vector<TreeMap<Integer, Integer>> GallMCS;
     private TreeMap<Integer, Integer> GfirstSolution;
     private Vector<Map<IAtom, IAtom>> GallAtomMCS;
     private Map<IAtom, IAtom> GfirstAtomMCS;
-    double Gtanimoto;
-    double Geuclidean;
     private boolean removeHydrogen = false;
 
     //~--- constructors -------------------------------------------------------
@@ -101,8 +96,6 @@ public class FragmentMatcher implements IMCSBase {
                         GallMCS.addAll(allMCS);
                         GfirstAtomMCS.putAll(atomsMCS);
                         GallAtomMCS.addAll(allAtomMCS);
-                        Gtanimoto = tanimoto;
-                        Geuclidean = euclidean;
 
                         //setStereoScore();
 
@@ -232,8 +225,6 @@ public class FragmentMatcher implements IMCSBase {
         GfirstSolution = new TreeMap<Integer, Integer>();
         GallAtomMCS = new Vector<Map<IAtom, IAtom>>();
         GfirstAtomMCS = new HashMap<IAtom, IAtom>();
-        Gtanimoto = 0;
-
         this.ReactantSet = A;
         this.ProductSet = B;
         search();

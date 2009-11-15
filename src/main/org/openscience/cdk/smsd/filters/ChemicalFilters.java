@@ -201,9 +201,6 @@ public class ChemicalFilters {
 
                 IBond RBond = matchedBonds.getKey();
                 IBond PBond = matchedBonds.getValue();
-
-
-
                 int RBondType = RBond.getOrder().ordinal();
 
                 int PBondType = PBond.getOrder().ordinal();
