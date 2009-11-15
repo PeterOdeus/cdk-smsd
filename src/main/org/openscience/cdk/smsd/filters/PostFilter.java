@@ -56,7 +56,6 @@ public class PostFilter {
             final_MAPPINGS.set(new Vector<TreeMap<Integer, Integer>>());
         }
 //        System.out.println("Total Number of Solutions " + final_MAPPINGS.getFinalMapping().size());
-        return;
     }
 
     private static boolean hasMap(TreeMap<Integer, Integer> newMap, List<TreeMap<Integer, Integer>> nonRedundantMapping) {

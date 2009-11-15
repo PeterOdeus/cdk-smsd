@@ -96,12 +96,22 @@ public class CDKRMap {
      * @param  o  The object to compare.
      * @return    true=if both ids equal, else false.
      */
+    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object o) {
         if (((CDKRMap) o).id1 == id1 && ((CDKRMap) o).id2 == id2) {
             return (true);
         } else {
             return (false);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + this.id1;
+        hash = 17 * hash + this.id2;
+        return hash;
     }
 }
 

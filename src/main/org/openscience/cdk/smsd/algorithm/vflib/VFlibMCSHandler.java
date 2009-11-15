@@ -144,12 +144,11 @@ public class VFlibMCSHandler implements IMCS {
                     }
                 }
 
-                if (!atomatomMapping.isEmpty()) {
-                    if (!hasMap(indexindexMapping, allMCS)) {
-                        allAtomMCS.add(counter, atomatomMapping);
-                        allMCS.add(counter, indexindexMapping);
-                        counter++;
-                    }
+                if ((!atomatomMapping.isEmpty()) &&
+                        (!hasMap(indexindexMapping, allMCS))) {
+                    allAtomMCS.add(counter, atomatomMapping);
+                    allMCS.add(counter, indexindexMapping);
+                    counter++;
                 }
 
             }

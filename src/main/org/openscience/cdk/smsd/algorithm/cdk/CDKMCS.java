@@ -797,33 +797,14 @@ public class CDKMCS {
                     IQueryAtom atom1 = (IQueryAtom) (bondA2.getAtom(0));
                     IQueryAtom atom2 = (IQueryAtom) (bondA2.getAtom(1));
                     IBond bond = ac1.getBond(i);
-                    if (queryBond.matches(bond)) {
-                        // ok, bonds match
-                        if (atom1.matches(bond.getAtom(0)) && atom2.matches(bond.getAtom(1)) ||
-                                atom1.matches(bond.getAtom(1)) && atom2.matches(bond.getAtom(0))) {
-                            // ok, atoms match in either order
-                            gr.addNode(new CDKRNode(i, j));
-                        }
+                    if ((queryBond.matches(bond)) &&
+                            // ok, bonds match
+                            ((atom1.matches(bond.getAtom(0)) && atom2.matches(bond.getAtom(1)) ||
+                            atom1.matches(bond.getAtom(1)) && atom2.matches(bond.getAtom(0))))) {
+                        // ok, atoms match in either order
+                        gr.addNode(new CDKRNode(i, j));
                     }
                 } else {
-                    // if both bonds are compatible then create an association node
-                    // in the resolution graph
-//                    if (( // bond type conditions
-//                            ( // same bond order and same aromaticity flag (either both on or off)
-//                            ac1.getBond(i).getOrder() == ac2.getBond(j).getOrder() &&
-//                            ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC) ==
-//                            ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC)) ||
-//                            ( // both bond are aromatic
-//                            ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC) &&
-//                            ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))) &&
-//                            ( // atome type conditions
-//                            ( // a1 = a2 && b1 = b2
-//                            ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()) &&
-//                            ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())) ||
-//                            ( // a1 = b2 && b1 = a2
-//                            ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()) &&
-//                            ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol())))) {
-
                     //Bond Insensitive searches
 
                     if (bondTypeFlag) {

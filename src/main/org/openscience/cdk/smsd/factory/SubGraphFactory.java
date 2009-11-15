@@ -394,11 +394,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
                         IAtom P2 = indexJPlus;
                         IBond PBond = Product.getBond(P1, P2);
 
-                        if (PBond != null) {
-
-                            if (RBond.getStereo() != PBond.getStereo()) {
-                                Score++;
-                            }
+                        if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
+                            Score++;
                         }
                     }
 
@@ -484,12 +481,9 @@ public class SubGraphFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
             b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        if (size == a && score / 2 == RMol.getMolecule().getBondCount()) {
-
-            if (b >= size && PMol.getMolecule().getBondCount() >= score / 2) {
-                flag = true;
-            }
-
+        if ((size == a && score / 2 == RMol.getMolecule().getBondCount()) &&
+                (b >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
+            flag = true;
         }
         return flag;
     }

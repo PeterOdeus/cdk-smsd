@@ -33,7 +33,6 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
 import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
 import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;

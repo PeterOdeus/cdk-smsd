@@ -361,11 +361,9 @@ public class EBIAtomContainerManipulator extends AtomContainerManipulator {
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
                                 IAtom caj = (IAtom) ca.get(j);
-                                if (caj.getSymbol().equals("O")) {
-                                    if (m.getConnectedAtomsCount(caj) == 1) {// account for possibility of ONO2
-                                        cao[count] = caj;
-                                        count++;
-                                    }
+                                if ((caj.getSymbol().equals("O")) && (m.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
+                                    cao[count] = caj;
+                                    count++;
                                 }
                             }
 
@@ -429,15 +427,11 @@ public class EBIAtomContainerManipulator extends AtomContainerManipulator {
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
                                 IAtom caj = (IAtom) ca.get(j);
-                                if (caj.getSymbol().equals("O")) {
-                                    if (m.getConnectedAtomsCount(caj) == 1) {// account for possibility of ONO2
-                                        cao[count] = caj;
-                                        count++;
-                                    }
+                                if ((caj.getSymbol().equals("O")) && (m.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
+                                    cao[count] = caj;
+                                    count++;
                                 }
                             }
-
-
                             IBond.Order order1 = m.getBond(a, cao[0]).getOrder();
                             IBond.Order order2 = m.getBond(a, cao[1]).getOrder();
 
@@ -484,8 +478,8 @@ public class EBIAtomContainerManipulator extends AtomContainerManipulator {
             AllRingsFinder arf = new AllRingsFinder();
             rs = arf.findAllRings(m);
 
-        // SSSRFinder s = new SSSRFinder(m);
-        // srs = s.findEssentialRings();
+            // SSSRFinder s = new SSSRFinder(m);
+            // srs = s.findEssentialRings();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -501,8 +495,8 @@ public class EBIAtomContainerManipulator extends AtomContainerManipulator {
             // figure out which rings are aromatic:
             RingSetManipulator.markAromaticRings(rs);
 //            printAtoms(mol);
-        // figure out which simple (non cycles) rings are aromatic:
-        // HueckelAromaticityDetector.detectAromaticity(m, srs);
+            // figure out which simple (non cycles) rings are aromatic:
+            // HueckelAromaticityDetector.detectAromaticity(m, srs);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -981,7 +975,6 @@ public class EBIAtomContainerManipulator extends AtomContainerManipulator {
             }
         }
     }
-
 }
 
 

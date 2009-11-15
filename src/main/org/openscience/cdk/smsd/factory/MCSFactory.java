@@ -13,7 +13,6 @@ import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
 import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -184,7 +183,6 @@ public class MCSFactory implements IMCSAlgorithm {
 //        }
 //        return common - a.size();
 //    }
-
     //IRingSet irs = ringFinder.findAllRings(A);
     /**
      *
@@ -209,7 +207,6 @@ public class MCSFactory implements IMCSAlgorithm {
 //        System.out.println();
 //
 //    }
-
     private synchronized void mcsBuilder() {
 
         try {
@@ -659,12 +656,8 @@ public class MCSFactory implements IMCSAlgorithm {
                         IAtom P2 = indexJPlus;
                         IBond PBond = Product.getBond(P1, P2);
 
-                        if (PBond != null) {
-
-                            if (RBond.getStereo() != PBond.getStereo()) {
-                                Score++;
-                            }
-
+                        if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
+                            Score++;
                         }
                     }
 
@@ -750,12 +743,9 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
             b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        if (size == a && score / 2 == RMol.getMolecule().getBondCount()) {
-
-            if (b >= size && PMol.getMolecule().getBondCount() >= score / 2) {
-                flag = true;
-            }
-
+        if ((size == a && score / 2 == RMol.getMolecule().getBondCount()) &&
+                (b >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
+            flag = true;
         }
         return flag;
     }
@@ -763,7 +753,6 @@ public class MCSFactory implements IMCSAlgorithm {
     @Override
     public double getEuclideanDistance() throws IOException {
         int decimalPlaces = 4;
-
 
         int a = 0;
         int b = 0;

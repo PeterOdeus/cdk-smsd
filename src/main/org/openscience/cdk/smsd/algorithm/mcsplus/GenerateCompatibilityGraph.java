@@ -157,8 +157,6 @@ public class GenerateCompatibilityGraph {
                 }
             }
         }
-        return; //arrays are passed to functions by address; they are not returned
-
     }
 
     private Vector<IAtom> reduce_atomset(IAtomContainer ac) {
@@ -371,18 +369,15 @@ public class GenerateCompatibilityGraph {
 
                 if (atom1.getSymbol().equalsIgnoreCase(atom2.getSymbol())) {
                     if (removeHydrogen) {
-                        if (!atom1.getSymbol().equalsIgnoreCase("H") || !atom2.getSymbol().equalsIgnoreCase("H")) {
-                            if (!map.contains(i + "_" + j)) {
-                                comp_graph_nodes_C_zero.addElement(i);
-                                comp_graph_nodes_C_zero.addElement(j);
-                                comp_graph_nodes_C_zero.addElement(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-                                comp_graph_nodes_C_zero.addElement(count_nodes);
-                                comp_graph_nodes.addElement(i);
-                                comp_graph_nodes.addElement(j);
-                                comp_graph_nodes.addElement(count_nodes++);
-                                map.add(i + "_" + j);
-
-                            }
+                        if ((!atom1.getSymbol().equalsIgnoreCase("H") || !atom2.getSymbol().equalsIgnoreCase("H")) && (!map.contains(i + "_" + j))) {
+                            comp_graph_nodes_C_zero.addElement(i);
+                            comp_graph_nodes_C_zero.addElement(j);
+                            comp_graph_nodes_C_zero.addElement(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
+                            comp_graph_nodes_C_zero.addElement(count_nodes);
+                            comp_graph_nodes.addElement(i);
+                            comp_graph_nodes.addElement(j);
+                            comp_graph_nodes.addElement(count_nodes++);
+                            map.add(i + "_" + j);
 
                         }
                     } else {

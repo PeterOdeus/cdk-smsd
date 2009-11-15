@@ -321,33 +321,31 @@ public class BKKCKCF {
             ut_set.add(I);
         }
 
-        if (P.size() == 1) {
-            //if (P.size() == 0) {
-            if (X.size() == 0) {
+        if ((P.size() == 1) && (X.size() == 0)) {
 
-                //store best solutions in stack maxCliquesSet
-                int clique_size = R.size();
+            //store best solutions in stack maxCliquesSet
+            int clique_size = R.size();
 
 
 
-                if (clique_size >= best_clique_size) {
-                    if (clique_size > best_clique_size) {
+            if (clique_size >= best_clique_size) {
+                if (clique_size > best_clique_size) {
 
-                        maxCliquesSet.clear();
-                        best_clique_size = clique_size;
+                    maxCliquesSet.clear();
+                    best_clique_size = clique_size;
 
-                    }
-                    if (clique_size == best_clique_size) {
-                        //System.out.println("R-Clique " + R);
-                        maxCliquesSet.addElement(R);
+                }
+                if (clique_size == best_clique_size) {
+                    //System.out.println("R-Clique " + R);
+                    maxCliquesSet.addElement(R);
 
 //                       System.out.println("Best Cliques Size: " + best_clique_size + " " + clique_size);
                     }
 
-                }
-
-                return 0;
             }
+
+            return 0;
+
         }
 
 
