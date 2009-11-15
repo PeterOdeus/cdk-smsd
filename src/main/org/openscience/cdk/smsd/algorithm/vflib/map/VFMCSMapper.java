@@ -183,27 +183,27 @@ public class VFMCSMapper implements IMapper {
         return found;
     }
 
-    //Method added by Asad
-    private boolean hasSubGraph(Map<INode, IAtom> map) {
-
-        for (Map<INode, IAtom> storedMappings : maps) {
-            boolean MatchFlag = true;
-            for (Map.Entry<INode, IAtom> mapping : storedMappings.entrySet()) {
-                if (!map.containsKey(mapping.getKey()) && !map.containsValue(mapping.getValue())) {
-                    MatchFlag = false;
-                    break;
-                }
-            }
-
-            if (MatchFlag) {
-
-                return true;
-            }
-
-        }
-
-        return false;
-    }
+//    //Method added by Asad
+//    private boolean hasSubGraph(Map<INode, IAtom> map) {
+//
+//        for (Map<INode, IAtom> storedMappings : maps) {
+//            boolean MatchFlag = true;
+//            for (Map.Entry<INode, IAtom> mapping : storedMappings.entrySet()) {
+//                if (!map.containsKey(mapping.getKey()) && !map.containsValue(mapping.getValue())) {
+//                    MatchFlag = false;
+//                    break;
+//                }
+//            }
+//
+//            if (MatchFlag) {
+//
+//                return true;
+//            }
+//
+//        }
+//
+//        return false;
+//    }
 
     //Method added by Asad
     private boolean isMCS(Map<INode, IAtom> map) {

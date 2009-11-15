@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
-import org.openscience.cdk.smsd.core.tools.EBITimeManager;
+import org.openscience.cdk.smsd.core.tools.TimeManager;
 import org.openscience.cdk.smsd.filters.ExactMapping;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -41,7 +41,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class MCSPlus {
 
     public static double timeout = TimeOut.getInstance().getTimeOut();
-    private static EBITimeManager TM;
+    private static TimeManager TM;
     private static boolean timeoutFlag = false;
 
     /**
@@ -69,7 +69,7 @@ public class MCSPlus {
                 System.err.println("D-edges Size " + D_edges.size() + " > : " + 99999);
                 return null;
             }
-            TM = new EBITimeManager();
+            TM = new TimeManager();
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
@@ -85,7 +85,7 @@ public class MCSPlus {
             }
             //clear all the compatibility graph content
             gcg.clear();
-            int clique_number = 1;
+//            int clique_number = 1;
             while (!Max_Cliques_Set.empty()) {
 
                 // build the CDKRGraph corresponding to this problem
@@ -110,7 +110,7 @@ public class MCSPlus {
 
                 }
                 Max_Cliques_Set.pop();
-                clique_number++;
+//                clique_number++;
 
 
             }

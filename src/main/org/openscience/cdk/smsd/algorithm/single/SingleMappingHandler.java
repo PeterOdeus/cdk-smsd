@@ -24,7 +24,6 @@ package org.openscience.cdk.smsd.algorithm.single;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,7 +31,6 @@ import java.util.Vector;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -137,7 +135,6 @@ public class SingleMappingHandler implements IMCS {
         return 0;
     }
 
-
     public final void setAllMapping() {
 //
 //        int count_final_sol = 1;
@@ -161,8 +158,6 @@ public class SingleMappingHandler implements IMCS {
     private final synchronized void setAllAtomMapping() {
 
         try {
-//            int count_final_sol = 1;
-            //System.out.println("Output of the final FinalMappings: ");
             List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
 
             int counter = 0;
@@ -176,17 +171,8 @@ public class SingleMappingHandler implements IMCS {
 
                 for (Map.Entry<Integer, Integer> map : solution.entrySet()) {
 
-                    //  int IIndex = Solutions.get(i) -1;
-                    //  int JIndex = Solutions.get(i + 1) -1;
-
                     int IIndex = map.getKey();
                     int JIndex = map.getValue();
-
-                    //System.out.println("I " + IIndex + " J " + JIndex);
-
-                    //IAtom A = ac1.getAtom(IIndex);
-                    //IAtom B = ac2.getAtom(JIndex);
-
                     IAtom A = null;
                     IAtom B = null;
 
@@ -196,7 +182,6 @@ public class SingleMappingHandler implements IMCS {
 
                     atomMappings.put(A, B);
 
-//                    System.out.println("I " + A.getSymbol() + " J " + B.getSymbol());
                 }
 
                 allAtomMCS.add(counter++, atomMappings);
@@ -222,41 +207,6 @@ public class SingleMappingHandler implements IMCS {
 //            System.out.println("In MCS+handle First Atom MCS: " + allAtomMCS.get(0));
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
-
-    }
-
-    private IAtomContainer getSubstructreBasedOnAtomUID(
-            IAtomContainer RefMol, IAtomContainer Substructure) {
-
-        IAtomContainer needle = new AtomContainer();
-
-        List<IAtom> idlist = new Vector<IAtom>();
-
-        // get the ID's (corresponding to the serial number of the Bond object in
-        // the AtomContainer for the supplied molecule) of the matching bonds
-        // (there will be repeats)
-
-        for (int i = 0; i < RefMol.getAtomCount(); i++) {
-
-            for (int j = 0; j < Substructure.getAtomCount(); j++) {
-
-                if ((RefMol.getAtom(i).getID()).equals(Substructure.getAtom(j).getID())) {
-
-                    idlist.add(RefMol.getAtom(i));
-
-                }
-
-            }
-
-        }
-
-        // get a unique list of bond ID's and add them to an AtomContainer
-        HashSet<IAtom> hs = new HashSet<IAtom>(idlist);
-        for (IAtom h : hs) {
-            needle.addAtom(h);
-        }
-
-        return needle;
 
     }
 

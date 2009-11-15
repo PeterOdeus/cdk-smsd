@@ -58,7 +58,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.openscience.cdk.smsd.core.tools.EBITimeManager;
+import org.openscience.cdk.smsd.core.tools.TimeManager;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.CDKConstants;
@@ -133,7 +133,7 @@ public class CDKMCS {
     public static double timeout = TimeOut.getInstance().getTimeOut();
     public static boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
     private static boolean timeoutFlag;
-    static EBITimeManager TM;
+    static TimeManager TM;
 
     /**
      * 
@@ -482,7 +482,7 @@ public class CDKMCS {
 
         // reset result
         List<List<CDKRMap>> rMapsList = new ArrayList<List<CDKRMap>>();
-        TM = new EBITimeManager();
+        TM = new TimeManager();
 
         // build the CDKRGraph corresponding to this problem
 
@@ -962,40 +962,40 @@ public class CDKMCS {
 
         return symbol;
     }
-
-    /**
-     *  Determines if 2 bond have 1 atom in common if second is a query AtomContainer
-     *
-     * @param  a1  first bond
-     * @param  b1  second bond
-     * @return    the symbol of the common atom or "" if
-     *            the 2 bonds have no common atom
-     */
-    private static boolean queryAdjacency(IBond a1, IBond b1, IBond a2, IBond b2) {
-
-        IAtom atom1 = null;
-        IAtom atom2 = null;
-
-        if (a1.contains(b1.getAtom(0))) {
-            atom1 = b1.getAtom(0);
-        } else if (a1.contains(b1.getAtom(1))) {
-            atom1 = b1.getAtom(1);
-        }
-
-        if (a2.contains(b2.getAtom(0))) {
-            atom2 = b2.getAtom(0);
-        } else if (a2.contains(b2.getAtom(1))) {
-            atom2 = b2.getAtom(1);
-        }
-
-        if (atom1 != null && atom2 != null) {
-            // well, this looks fishy: the atom2 is not always a IQueryAtom !
-            return ((IQueryAtom) atom2).matches(atom1);
-        } else {
-            return atom1 == null && atom2 == null;
-        }
-
-    }
+//
+//    /**
+//     *  Determines if 2 bond have 1 atom in common if second is a query AtomContainer
+//     *
+//     * @param  a1  first bond
+//     * @param  b1  second bond
+//     * @return    the symbol of the common atom or "" if
+//     *            the 2 bonds have no common atom
+//     */
+//    private static boolean queryAdjacency(IBond a1, IBond b1, IBond a2, IBond b2) {
+//
+//        IAtom atom1 = null;
+//        IAtom atom2 = null;
+//
+//        if (a1.contains(b1.getAtom(0))) {
+//            atom1 = b1.getAtom(0);
+//        } else if (a1.contains(b1.getAtom(1))) {
+//            atom1 = b1.getAtom(1);
+//        }
+//
+//        if (a2.contains(b2.getAtom(0))) {
+//            atom2 = b2.getAtom(0);
+//        } else if (a2.contains(b2.getAtom(1))) {
+//            atom2 = b2.getAtom(1);
+//        }
+//
+//        if (atom1 != null && atom2 != null) {
+//            // well, this looks fishy: the atom2 is not always a IQueryAtom !
+//            return ((IQueryAtom) atom2).matches(atom1);
+//        } else {
+//            return atom1 == null && atom2 == null;
+//        }
+//
+//    }
 
     /**
      *  Determines if 2 bond have 1 atom in common if second is a query AtomContainer

@@ -163,27 +163,27 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
-        ArrayList<String> a = new ArrayList<String>();
-        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
-            if (removeHydrogen && !reactantMolecule.getAtom(i).getSymbol().equals("H")) {
-                a.add(reactantMolecule.getAtom(i).getSymbol());
-            } else {
-                a.add(reactantMolecule.getAtom(i).getSymbol());
-            }
-        }
-
-
-        int common = 0;
-        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
-
-            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
-                a.remove(productMolecule.getAtom(i).getSymbol());
-                common++;
-            }
-        }
-        return common - a.size();
-    }
+//    private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
+//        ArrayList<String> a = new ArrayList<String>();
+//        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
+//            if (removeHydrogen && !reactantMolecule.getAtom(i).getSymbol().equals("H")) {
+//                a.add(reactantMolecule.getAtom(i).getSymbol());
+//            } else {
+//                a.add(reactantMolecule.getAtom(i).getSymbol());
+//            }
+//        }
+//
+//
+//        int common = 0;
+//        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
+//
+//            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
+//                a.remove(productMolecule.getAtom(i).getSymbol());
+//                common++;
+//            }
+//        }
+//        return common - a.size();
+//    }
 
     //IRingSet irs = ringFinder.findAllRings(A);
     /**
@@ -191,24 +191,24 @@ public class MCSFactory implements IMCSAlgorithm {
      * @param Molecule1
      * @param Molecule2
      */
-    private void printMolecules(IAtomContainer Molecule1, IAtomContainer Molecule2) {
-
-        System.out.println("Molecule 1: " + Molecule1.getAtomCount());
-
-        for (int i = 0; i < Molecule1.getAtomCount(); i++) {
-
-            System.out.print(Molecule1.getAtom(i).getSymbol() + " : " + Molecule1.getAtom(i).getID() + ",  ");
-        }
-
-        System.out.println();
-        System.out.println("Molecule 2: " + Molecule2.getAtomCount());
-        for (int i = 0; i < Molecule2.getAtomCount(); i++) {
-
-            System.out.print(Molecule2.getAtom(i).getSymbol() + " : " + Molecule2.getAtom(i).getID() + ",  ");
-        }
-        System.out.println();
-
-    }
+//    private void printMolecules(IAtomContainer Molecule1, IAtomContainer Molecule2) {
+//
+//        System.out.println("Molecule 1: " + Molecule1.getAtomCount());
+//
+//        for (int i = 0; i < Molecule1.getAtomCount(); i++) {
+//
+//            System.out.print(Molecule1.getAtom(i).getSymbol() + " : " + Molecule1.getAtom(i).getID() + ",  ");
+//        }
+//
+//        System.out.println();
+//        System.out.println("Molecule 2: " + Molecule2.getAtomCount());
+//        for (int i = 0; i < Molecule2.getAtomCount(); i++) {
+//
+//            System.out.print(Molecule2.getAtom(i).getSymbol() + " : " + Molecule2.getAtom(i).getID() + ",  ");
+//        }
+//        System.out.println();
+//
+//    }
 
     private synchronized void mcsBuilder() {
 

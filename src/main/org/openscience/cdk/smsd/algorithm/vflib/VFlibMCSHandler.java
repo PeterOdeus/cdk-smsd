@@ -181,38 +181,14 @@ public class VFlibMCSHandler implements IMCS {
 
     }
 
-    private int checkForH(IAtomContainer mol) {
-        int hCount = 0;
-
-
-        for (int i = 0; i <
-                mol.getAtomCount(); i++) {
-
-
-            if (mol.getAtom(i).getSymbol().equals("H")) {
-                hCount++;
-            }
-
-        }
-
-
-        return hCount;
-    }
-
     private boolean mcgregorFlag() {
         int commonAtomCount = checkCommonAtomCount(ac1, ac2);
-//        System.out.println("ra: " + ratomCount);
-//        System.out.println("pa: " + patomCount);
-//        System.out.println("ca: " + commonAtomCount);
-
         if (commonAtomCount > VFMCSSize && commonAtomCount > VFMCSSize) {
             return true;
 
         } else {
             return false;
         }
-//       
-
     }
 
     /**
@@ -230,17 +206,12 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        //System.out.println(atom_number1+" " + atom_num_H_1);
-
-        //best_clique_size = 0;
-
         this.set(Reactant, Product);
-        // System.exit(1);
 
     }
 
     /**
-     * Set the JMCS software
+     * Set the SMSD software
      *
      */
     @Override
@@ -396,8 +367,6 @@ public class VFlibMCSHandler implements IMCS {
                 common++;
 
             }
-
-
         }
         return common;
     }

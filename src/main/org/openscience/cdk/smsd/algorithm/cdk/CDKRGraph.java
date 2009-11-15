@@ -36,7 +36,7 @@ import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.smsd.core.tools.EBITimeManager;
+import org.openscience.cdk.smsd.core.tools.TimeManager;
 import org.openscience.cdk.smsd.global.TimeOut;
 
 /**
@@ -128,7 +128,7 @@ public class CDKRGraph {
     int nbIteration = 0;
     BitSet graphBitSet = null;
     private static double timeout = TimeOut.getInstance().getTimeOut(); // -1 for infinite search and one min is 1
-    private EBITimeManager TM;
+    private TimeManager TM;
 
     /**
      * Constructor for the CDKRGraph object and creates an empty CDKRGraph.
@@ -216,7 +216,7 @@ public class CDKRGraph {
      * @param TM
      * @throws CDKException
      */
-    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws CDKException {
+    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, TimeManager TM) throws CDKException {
         // initialize the list of solution
 
         this.TM = TM;
@@ -617,7 +617,7 @@ public class CDKRGraph {
 //package chemlib.ebi.molecule.mcs.algorithm.cdk;
 //
 //import chemlib.ebi.core.tools.CDKException;
-//import chemlib.ebi.core.tools.EBITimeManager;
+//import chemlib.ebi.core.tools.TimeManager;
 //import chemlib.ebi.molecule.mcs.global.TimeOut;
 //import java.util.ArrayList;
 //import java.util.BitSet;
@@ -711,7 +711,7 @@ public class CDKRGraph {
 //    int nbIteration = 0;
 //    BitSet graphBitSet = null;
 //    private static double timeout = TimeOut.getInstance().getTimeOut(); // -1 for infinite search and one min is 1
-//    private EBITimeManager TM;
+//    private TimeManager TM;
 //
 //    /**
 //     * Constructor for the CDKRGraph object and creates an empty CDKRGraph.
@@ -799,7 +799,7 @@ public class CDKRGraph {
 //     * @param TM
 //     * @throws CDKException
 //     */
-//    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, EBITimeManager TM) throws CDKException {
+//    public void parse(BitSet c1, BitSet c2, boolean findAllStructure, boolean findAllMap, TimeManager TM) throws CDKException {
 //        // initialize the list of solution
 //
 //        this.TM = TM;

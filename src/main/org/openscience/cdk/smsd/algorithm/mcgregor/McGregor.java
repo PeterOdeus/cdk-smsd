@@ -76,8 +76,8 @@ public class McGregor {
     /**
      * Creates a new instance of McGregor
      * @param ac1
-     * @param ac2 
-     * @param mappings
+     * @param ac2
+     * @param _mappings
      */
     public McGregor(IAtomContainer ac1, IAtomContainer ac2, List<List<Integer>> _mappings) {
 
@@ -168,8 +168,6 @@ public class McGregor {
 
 
             if (atomA_is_unmapped) {
-//                System.out.println("UnMapped Atoms: " + a +
-//                        " (" + ac1.getAtom(a).getSymbol() + ")");
                 unmapped_atoms_molA.add(unmapped_numA, a);
                 unmapped_numA++;
             }
@@ -266,9 +264,6 @@ public class McGregor {
 
         iterator(dummy, present_Mapping.size(), mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 
-        //System.exit(1); //uncomment to debug
-
-
     }
 
     /**
@@ -352,11 +347,8 @@ public class McGregor {
                     atomA_is_unmapped = false;
                 }
             }
-
-
             if (atomA_is_unmapped == true) {
-                unmapped_atoms_molA.addElement(a);
-                unmapped_numA++;
+                unmapped_atoms_molA.add(unmapped_numA++,a);
             }
             atomA_is_unmapped = true;
         }
@@ -404,9 +396,7 @@ public class McGregor {
         int unmapped_numB = 0;
         boolean atomB_is_unmapped = true;
 
-
 //        System.out.println("neighbor_bondnum_A After:" + neighbor_bondnum_A);
-
 
         for (int a = 0; a < ac2.getAtomCount(); a++) {
             for (int b = 0; b < clique_siz; b++) {
@@ -415,8 +405,7 @@ public class McGregor {
                 }
             }
             if (atomB_is_unmapped == true) {
-                unmapped_atoms_molB.add(a);
-                unmapped_numB++;
+                unmapped_atoms_molB.add(unmapped_numB++,a);
             }
             atomB_is_unmapped = true;
         }
@@ -465,12 +454,7 @@ public class McGregor {
 
         iterator(dummy, mapped_atom_number, mapped_atoms, neighbor_bondnum_A, neighbor_bondnum_B, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, set_bondnum_A, set_bondnum_B, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 
-
         // System.out.println("iterator Over");
-
-        //System.exit(1); //uncomment to debug
-
-
     }
 
     private int iterator(boolean MAPPING_check,

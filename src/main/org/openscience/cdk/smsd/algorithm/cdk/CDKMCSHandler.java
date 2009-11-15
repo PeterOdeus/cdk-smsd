@@ -66,25 +66,18 @@ public class CDKMCSHandler implements IMCS {
 
     }
 
-    private int checkForH(IAtomContainer mol) {
-        int hCount = 0;
-
-
-        for (int i = 0; i < mol.getAtomCount(); i++) {
-
-
-            if (mol.getAtom(i).getSymbol().equals("H")) {
-                hCount++;
-            }
-
-        }
-
-
-        return hCount;
-    }
+//    private int checkForH(IAtomContainer mol) {
+//        int hCount = 0;
+//        for (int i = 0; i < mol.getAtomCount(); i++) {
+//            if (mol.getAtom(i).getSymbol().equals("H")) {
+//                hCount++;
+//            }
+//        }
+//        return hCount;
+//    }
 
     /**
-     * Set the JMCS software
+     *
      * 
      * @param reactant
      * @param product
@@ -175,32 +168,6 @@ public class CDKMCSHandler implements IMCS {
     }
 
     /**
-     *
-     * @param ac1
-     * @param ac2
-     * 
-     */
-    private IAtomContainer CalculateMCSS(IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
-
-
-
-        IAtomContainer MaxCommonSubgraphContainer = null;
-        int maxac = -999;
-        List overlaps = CDKMCS.getOverlaps(ac1, ac2);
-
-        for (Object aSsList : overlaps) {
-            IAtomContainer ss = (IAtomContainer) aSsList;
-            if (ss.getAtomCount() > maxac) {
-                MaxCommonSubgraphContainer = ss;
-                maxac = ss.getAtomCount();
-            }
-        }
-
-        return MaxCommonSubgraphContainer;
-
-    }
-
-    /**
      * 
      * @param mol
      * @param mcss
@@ -233,43 +200,6 @@ public class CDKMCSHandler implements IMCS {
         // so lets get a set of individual atom containers for
         // corresponding to each component
         return ConnectivityChecker.partitionIntoMolecules(mol);
-    }
-
-    private IAtomContainer getSubstructreBasedOnAtomUID(IAtomContainer RefMol, IAtomContainer Substructure) {
-
-        IAtomContainer needle = new AtomContainer();
-
-        Vector<IAtom> idlist = new Vector<IAtom>();
-
-        // get the ID's (corresponding to the serial number of the Bond object in
-        // the AtomContainer for the supplied molecule) of the matching bonds
-        // (there will be repeats)
-
-        //IAtomContainer IM=DefaultChemObjectBuilder.getInstance().newAtomContainer();
-
-        for (int i = 0; i < RefMol.getAtomCount(); i++) {
-
-            for (int j = 0; j < Substructure.getAtomCount(); j++) {
-
-                if ((RefMol.getAtom(i).getID()).equals(Substructure.getAtom(j).getID())) {
-
-                    idlist.add(RefMol.getAtom(i));
-
-                }
-
-            }
-
-        }
-
-        // get a unique list of bond ID's and add them to an AtomContainer
-        HashSet<IAtom> hs = new HashSet<IAtom>(idlist);
-        for (IAtom h : hs) {
-            needle.addAtom(h);
-        }
-
-
-        return needle;
-
     }
 
     //~--- get methods --------------------------------------------------------
