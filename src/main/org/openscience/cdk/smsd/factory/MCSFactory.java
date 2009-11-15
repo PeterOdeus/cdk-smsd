@@ -85,7 +85,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param algorithmType 0 default, 1 MCSPlus, 2 VFLib, 3 CDKMCS
+     * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 cdkMCS
      * @param bondTypeFlag
      * @param removeHydrogen
      * @param stereoFilter
@@ -210,7 +210,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    private synchronized void MCSBuilder() {
+    private synchronized void mcsBuilder() {
 
         try {
 
@@ -229,60 +229,60 @@ public class MCSFactory implements IMCSAlgorithm {
 //
             if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
 //                System.out.println("Single Mapping");
-                SingleMapping();
+                singleMapping();
             } else if (algorithmType == 0) {
 //                System.err.println("Default");
-//                System.out.println("MCSBuilder");
+//                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
 
-                MCSPlus();
+                mcsPlus();
                 if (getFirstMapping() == null) {
                     mcs = null;
                     System.gc();
-//                    System.err.println("MCSPlus timeout ");
-                    VFLibMCS();
+//                    System.err.println("mcsPlus timeout ");
+                    vfLibMCS();
 //                    System.out.println("Mapped with VF-McGregor");
                 }
             } else if (algorithmType == 1) {
-//                System.err.println("MCSPlus");
-//                System.out.println("MCSBuilder");
+//                System.err.println("mcsPlus");
+//                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
-                MCSPlus();
+                mcsPlus();
                 if (getFirstMapping() == null) {
                     mcs = null;
-//                    System.out.println("Time-out occured MCSPlus");
+//                    System.out.println("Time-out occured mcsPlus");
 //                    System.gc();
                 }
 
             } else if (algorithmType == 2) {
-//                System.err.println("VFLibMCS");
-//                System.out.println("MCSBuilder");
+//                System.err.println("vfLibMCS");
+//                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
 
                 if (rBondCount >= 6 && rBondCount >= 6) {
-                    VFLibMCS();
+                    vfLibMCS();
                     if (getFirstMapping() == null) {
                         mcs = null;
                         System.gc();
                     }
-//                    System.out.println("Mapped with VFLibMCS");
+//                    System.out.println("Mapped with vfLibMCS");
                 } else {
-                    MCSPlus();
-//                    System.out.println("Mapped with MCSPlus");
+                    mcsPlus();
+//                    System.out.println("Mapped with mcsPlus");
                 }
 
 
 
             } else if (algorithmType == 3) {
-//                 System.err.println("CDKMCS");
-                CDKMCS();
+//                 System.err.println("cdkMCS");
+                cdkMCS();
                 if (getFirstMapping() == null) {
-//                    System.out.println("Time-out occured MCSPlus");
+//                    System.out.println("Time-out occured mcsPlus");
                     mcs = null;
                     System.gc();
                 }
 
-//              System.out.println("Mapped with CDKMCS");
+//              System.out.println("Mapped with cdkMCS");
 
             }
 //
@@ -305,10 +305,10 @@ public class MCSFactory implements IMCSAlgorithm {
     }
 
 //
-    private synchronized void FragmentBuilder() {
+    private synchronized void fragmentBuilder() {
 
         //printMolecules(RFrag.getMolecule(0), PFrag.getMolecule(0));
-        //System.out.println("In FragmentMatcher FragmentBuilder");
+        //System.out.println("In FragmentMatcher fragmentBuilder");
         //System.out.println("R Mol Size:" + RFrag.getMoleculeCount() + " P Mol Size: " + PFrag.getMoleculeCount());
 
 
@@ -331,7 +331,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    private synchronized void CDKMCS() {
+    private synchronized void cdkMCS() {
         try {
             mcs = new CDKMCSHandler();
 
@@ -359,7 +359,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    private synchronized void MCSPlus() {
+    private synchronized void mcsPlus() {
         try {
             mcs = new MCSPlusHandler();
 
@@ -400,11 +400,11 @@ public class MCSFactory implements IMCSAlgorithm {
             this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
 
             if (RMol.getConnectedFlag() && PMol.getConnectedFlag()) {
-                MCSBuilder();
+                mcsBuilder();
             } else {
                 this.RFrag = RMol.getFragmentedMolecule();
                 this.PFrag = PMol.getFragmentedMolecule();
-                FragmentBuilder();
+                fragmentBuilder();
             }
             setChemFilters();
         } catch (CDKException ex) {
@@ -608,8 +608,8 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount();
             b = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
         double c = getFirstMapping().size();
 
@@ -747,8 +747,8 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount();
             b = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
         if (size == a && score / 2 == RMol.getMolecule().getBondCount()) {
 
@@ -771,8 +771,8 @@ public class MCSFactory implements IMCSAlgorithm {
             a = RMol.getMolecule().getAtomCount();
             b = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - HCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - HCount(PMol.getMolecule());
+            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
         double c = getFirstMapping().size();
 
@@ -792,7 +792,7 @@ public class MCSFactory implements IMCSAlgorithm {
         return euclidean;
     }
 
-    private void VFLibMCS() {
+    private void vfLibMCS() {
         try {
 
             mcs = new VFlibMCSHandler();
@@ -821,7 +821,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-    private void SingleMapping() {
+    private void singleMapping() {
         try {
 
             mcs = new SingleMappingHandler();
@@ -849,7 +849,7 @@ public class MCSFactory implements IMCSAlgorithm {
         }
     }
 
-    private int HCount(IAtomContainer molecule) {
+    private int getHCount(IAtomContainer molecule) {
         int count = 0;
         for (IAtom atom : molecule.atoms()) {
             if (atom.getSymbol().equalsIgnoreCase("H")) {

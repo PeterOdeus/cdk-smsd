@@ -58,7 +58,7 @@ public class McGregor {
     private int nNum_globalB = 0;
     private int bestarcsleft = 0;
     private int globalMCSSize = 0;
-    private List<List<Integer>> _mappings = null;
+    private List<List<Integer>> mappings = null;
     private int neighbor_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private int neighbor_bondnum_B = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
@@ -77,14 +77,14 @@ public class McGregor {
      * Creates a new instance of McGregor
      * @param ac1
      * @param ac2 
-     * @param _mappings
+     * @param mappings
      */
     public McGregor(IAtomContainer ac1, IAtomContainer ac2, List<List<Integer>> _mappings) {
 
 
         this.ac1 = ac1;
         this.ac2 = ac2;
-        this._mappings = _mappings;
+        this.mappings = _mappings;
         this.nNum_globalA = 0;
         this.nNum_globalB = 0;
         bestarcsleft = 0;
@@ -123,11 +123,11 @@ public class McGregor {
 
         this.globalMCSSize = (best_Mapping_size / 2);
         c_tab1_copy.clear();
-        generate_c_tab1_copy();
+        generateCTab1Copy();
 
 
         c_tab2_copy.clear();
-        generate_c_tab2_copy();
+        generateCTab2Copy();
 
 
         //find mapped atoms of both molecules and store these in mapped_atoms
@@ -284,11 +284,11 @@ public class McGregor {
 
 
         c_tab1_copy.clear();
-        generate_c_tab1_copy();
+        generateCTab1Copy();
 
 
         c_tab2_copy.clear();
-        generate_c_tab2_copy();
+        generateCTab2Copy();
 
 
         //System.out.println("C_Tab1_Copy " + c_tab1_copy);
@@ -576,12 +576,12 @@ public class McGregor {
 //                        System.out.println("Hello-2");
                         this.globalMCSSize = mapped_atom_num;
 //                        System.out.println("best_MAPPING_size: " + globalMCSSize);
-                        _mappings.clear();
-                        //_mappings=new Vector<Vector<Integer>>();
+                        mappings.clear();
+                        //mappings=new Vector<Vector<Integer>>();
                     }
 
-                    _mappings.add(mapped_atoms);
-//                    System.out.println("_mappings " + _mappings);
+                    mappings.add(mapped_atoms);
+//                    System.out.println("mappings " + mappings);
                 }
 
 
@@ -711,8 +711,8 @@ public class McGregor {
             Vector<String> c_setB_copy = new Vector<String>();
             Vector<String> c_setA_copy = new Vector<String>();
 
-            generate_c_setA_copy(set_num_A, c_bond_setA, c_setA_copy);
-            generate_c_setB_copy(set_num_B, c_bond_setB, c_setB_copy);
+            generateCSetACopy(set_num_A, c_bond_setA, c_setA_copy);
+            generateCSetBCopy(set_num_B, c_bond_setB, c_setB_copy);
 
             //find unmapped atoms of molecule A
             Vector<Integer> unmapped_atoms_molA = new Vector<Integer>();
@@ -761,9 +761,9 @@ public class McGregor {
                                     new_c_neighborsA.add(SignROW[SR_count]);
                                     new_c_neighborsA.add("X");
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 1));
-                                    change_char_bonds(i_bond_setA.get(a * 3 + 1), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
-                                    int cor_atom = search_corresponding_atom(new_MAPPING_size, i_bond_setA.get(a * 3 + 1), 1, new_MAPPING);
-                                    change_char_bonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    changeCharBonds(i_bond_setA.get(a * 3 + 1), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
+                                    int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 1), 1, new_MAPPING);
+                                    changeCharBonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
                                     SR_count++;
 
                                 } else {
@@ -809,9 +809,9 @@ public class McGregor {
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 1));
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 0));
                                     new_c_neighborsA.add("X");
-                                    change_char_bonds(i_bond_setA.get(a * 3 + 0), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
-                                    int cor_atom = search_corresponding_atom(new_MAPPING_size, i_bond_setA.get(a * 3 + 0), 1, new_MAPPING);
-                                    change_char_bonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    changeCharBonds(i_bond_setA.get(a * 3 + 0), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
+                                    int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 0), 1, new_MAPPING);
+                                    changeCharBonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
                                     SR_count++;
 
                                 } else {
@@ -896,9 +896,9 @@ public class McGregor {
                                     new_c_neighborsB.add(SignROW[SR_count]);
                                     new_c_neighborsB.add("X");
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 1));
-                                    change_char_bonds(i_bond_setB.get(a * 3 + 1), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
-                                    int cor_atom = search_corresponding_atom(new_MAPPING_size, i_bond_setB.get(a * 3 + 1), 2, new_MAPPING);
-                                    change_char_bonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
+                                    changeCharBonds(i_bond_setB.get(a * 3 + 1), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setB.get(a * 3 + 1), 2, new_MAPPING);
+                                    changeCharBonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
                                     SR_count++;
 
                                 } else {
@@ -945,9 +945,9 @@ public class McGregor {
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 1));
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 0));
                                     new_c_neighborsB.add("X");
-                                    change_char_bonds(i_bond_setB.get(a * 3 + 0), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
-                                    int cor_atom = search_corresponding_atom(new_MAPPING_size, i_bond_setB.get(a * 3 + 0), 2, new_MAPPING);
-                                    change_char_bonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
+                                    changeCharBonds(i_bond_setB.get(a * 3 + 0), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setB.get(a * 3 + 0), 2, new_MAPPING);
+                                    changeCharBonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
                                     SR_count++;
 
                                 } else {
@@ -1008,7 +1008,7 @@ public class McGregor {
         return 0;
     }
 
-    private int generate_c_tab1_copy() throws IOException {
+    private int generateCTab1Copy() throws IOException {
         IAtomContainer reactant = ac1;
         for (int a = 0; a < reactant.getBondCount(); a++) {
             String AtomI = reactant.getBond(a).getAtom(0).getSymbol();
@@ -1021,7 +1021,7 @@ public class McGregor {
         return 0;
     }
 
-    private int generate_c_tab2_copy() throws IOException {
+    private int generateCTab2Copy() throws IOException {
         IAtomContainer product = ac2;
         for (int a = 0; a < product.getBondCount(); a++) {
             String AtomI = product.getBond(a).getAtom(0).getSymbol();
@@ -1036,7 +1036,7 @@ public class McGregor {
 
     }
 
-    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
+    private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
 
         for (int a = 0; a < neighbor_bondnum; a++) {
             if ((i_bond_neighbors.elementAt(a * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
@@ -1165,7 +1165,7 @@ public class McGregor {
         }
         //remove recurring mappings from current_MAPPING
 
-        Vector<Integer> unique_MAPPING = remove_recurring_mappings(current_MAPPING);
+        Vector<Integer> unique_MAPPING = removeRecurringMappings(current_MAPPING);
 
         return unique_MAPPING;
     }
@@ -1173,9 +1173,9 @@ public class McGregor {
     //Function compaires a structure array with itself. Sometimes a mapping occurs several times within the array.
 //The function eliminates these recurring mappings. Function is called in function best_solution.
 //The function is called by itself as long as the last list element is processed.
-    private Vector<Integer> remove_recurring_mappings(Vector<Integer> atom_mapping) {
+    private Vector<Integer> removeRecurringMappings(Vector<Integer> atom_mapping) {
 
-        //System.out.println("Mapped Atoms remove_recurring_mappings: " + atom_mapping);
+        //System.out.println("Mapped Atoms removeRecurringMappings: " + atom_mapping);
 
         //Vector<Integer> atom_mapping = new Vector<Integer>(atom_mapping_org);
 
@@ -1214,7 +1214,7 @@ public class McGregor {
 
         if (TEMPMARCS.elementAt(xstart * nNum_globalB + ystart) == 1) {
 
-            remove_redundant_arcs(xstart, ystart, TEMPMARCS);
+            removeRedundantArcs(xstart, ystart, TEMPMARCS);
             int arcsleft = 0;
 
             for (int a = 0; a < nNum_globalA; a++) {
@@ -1245,7 +1245,7 @@ public class McGregor {
 
                 } else {
                     if (arcsleft > bestarcsleft) {
-                        remove_tree_structure(first);
+                        removeTreeStructure(first);
                         first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
@@ -1257,7 +1257,7 @@ public class McGregor {
                     }
                     bestarcsleft = arcsleft;
 
-                    if (check_MARCS(TEMPMARCS)) {
+                    if (checkMARCS(TEMPMARCS)) {
                         BESTARCS.push(TEMPMARCS);
                     }
 
@@ -1292,7 +1292,7 @@ public class McGregor {
                 }
                 if (arcsleft >= bestarcsleft) {
                     if (arcsleft > bestarcsleft) {
-                        remove_tree_structure(first);
+                        removeTreeStructure(first);
                         first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
@@ -1303,7 +1303,7 @@ public class McGregor {
                     }
                     bestarcsleft = arcsleft;
 
-                    if (check_MARCS(TEMPMARCS)) {
+                    if (checkMARCS(TEMPMARCS)) {
                         BESTARCS.push(TEMPMARCS);
                     }
 
@@ -1317,7 +1317,7 @@ public class McGregor {
 //atom by atom matching. After this the function replaces all entries in the same row and column of the current
 //position by zeros. Only the entry of the current position is set to one.
 //Return value "count_arcsleft" counts the number of arcs, which are still in the matrix.
-    private void remove_redundant_arcs(int row, int column, Vector<Integer> MARCS) {
+    private void removeRedundantArcs(int row, int column, Vector<Integer> MARCS) {
 
         //System.err.print("Betrachte: " + c_globalA.get(row*2+0) + c_globalA.get(row*2+1));
         //System.err.println( " und " + c_globalA.get(column*2+0) + c_globalA.get(column*2+1) );
@@ -1369,7 +1369,7 @@ public class McGregor {
     /* Modified function call by ASAD in Java have to check
      *
      */
-    private int remove_tree_structure(BinaryTree cur_struc) {
+    private int removeTreeStructure(BinaryTree cur_struc) {
 
         BinaryTree equal_struc = cur_struc.equal;
         BinaryTree not_equal_struc = cur_struc.not_equal;
@@ -1377,11 +1377,11 @@ public class McGregor {
 
 
         if (equal_struc != null) {
-            remove_tree_structure(equal_struc);
+            removeTreeStructure(equal_struc);
         }
 
         if (not_equal_struc != null) {
-            remove_tree_structure(not_equal_struc);
+            removeTreeStructure(not_equal_struc);
         }
 
         return 0;
@@ -1389,11 +1389,11 @@ public class McGregor {
 
     //The function is called in function partsearch. The function is given z temporary matrix.
 //The function checks whether the temporary matrix is already found by calling the function
-//"verify_nodes". If the matrix already exists the function returns false which means that
+//"verifyNodes". If the matrix already exists the function returns false which means that
 //the matrix will not be stored. Otherwise the function returns true which means that the
 //matrix will be stored in function partsearch.
-    //private boolean check_MARCS(Vector<Integer> MARCS) {
-    private boolean check_MARCS(Vector<Integer> MARCS_T) {
+    //private boolean checkMARCS(Vector<Integer> MARCS) {
+    private boolean checkMARCS(Vector<Integer> MARCS_T) {
 
 
         Vector<Integer> posnum_list = new Vector<Integer>();
@@ -1413,7 +1413,7 @@ public class McGregor {
         }
         boolean flag = false;
 
-        verify_nodes(posnum_list, first, 0, count_entries);
+        verifyNodes(posnum_list, first, 0, count_entries);
         if (new_matrix) {
             flag = true;
         }
@@ -1425,20 +1425,20 @@ public class McGregor {
     /* Modified function call by ASAD in Java have to check
      *
      */
-    private boolean verify_nodes(Vector<Integer> matrix, BinaryTree cur_struc, int x, int field_length) {
+    private boolean verifyNodes(Vector<Integer> matrix, BinaryTree cur_struc, int x, int field_length) {
 
 //        Vector<Integer> matrix = new Vector<Integer>(matrix_org);
 
         if ((matrix.elementAt(x) == cur_struc.getValue()) && (x < field_length)) {
             if (cur_struc.equal != null) {
                 new_matrix = false;
-                verify_nodes(matrix, cur_struc.equal, x + 1, field_length);
+                verifyNodes(matrix, cur_struc.equal, x + 1, field_length);
             }
 
         }
         if (matrix.elementAt(x) != cur_struc.getValue()) {
             if (cur_struc.not_equal != null) {
-                verify_nodes(matrix, cur_struc.not_equal, x, field_length);
+                verifyNodes(matrix, cur_struc.not_equal, x, field_length);
             }
 
             if (cur_struc.not_equal == null) {
@@ -1466,7 +1466,7 @@ public class McGregor {
         return true;
     }
 
-    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, Vector<Integer> mapped_atoms_org) {
+    private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, Vector<Integer> mapped_atoms_org) {
 
 
         Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
@@ -1490,7 +1490,7 @@ public class McGregor {
         return corresponding_atom;
     }
 
-    private int generate_c_setB_copy(int bond_number, Vector<String> c_setB, Vector<String> c_setB_copy) {
+    private int generateCSetBCopy(int bond_number, Vector<String> c_setB, Vector<String> c_setB_copy) {
 
         for (int a = 0; a < bond_number; a++) {
             c_setB_copy.add(c_setB.get(a * 4 + 0));
@@ -1502,7 +1502,7 @@ public class McGregor {
         return 0;
     }
 
-    private int generate_c_setA_copy(int bond_number, Vector<String> c_setA, Vector<String> c_setA_copy) {
+    private int generateCSetACopy(int bond_number, Vector<String> c_setA, Vector<String> c_setA_copy) {
 
         for (int a = 0; a < bond_number; a++) {
             c_setA_copy.add(c_setA.get(a * 4 + 0));
@@ -1558,7 +1558,7 @@ public class McGregor {
      */
     public List<List<Integer>> getMappings() {
 
-        return this._mappings;
+        return this.mappings;
     }
 
     /**
