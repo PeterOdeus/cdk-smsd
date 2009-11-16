@@ -46,7 +46,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.map;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

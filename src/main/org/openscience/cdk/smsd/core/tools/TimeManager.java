@@ -83,7 +83,7 @@ public class TimeManager {
 
     /**
      *
-     * @return
+     * @return Elapsed Time In Seconds
      */
     public double getElapsedTimeInSeconds() {
 
@@ -95,7 +95,11 @@ public class TimeManager {
 
     }
 
-    public double getElapsedTimeInMillisSeconds() {
+    /**
+     *
+     * @return Elapsed Time In Mill Seconds
+     */
+    public double getElapsedTimeInMilliSeconds() {
         double currentTime = System.currentTimeMillis();
         return (currentTime - startTime);
 

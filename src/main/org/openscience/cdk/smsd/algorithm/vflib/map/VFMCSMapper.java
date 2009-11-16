@@ -22,7 +22,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.map;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -204,7 +203,6 @@ public class VFMCSMapper implements IMapper {
 //
 //        return false;
 //    }
-
     //Method added by Asad
     private boolean isMCS(Map<INode, IAtom> map) {
 

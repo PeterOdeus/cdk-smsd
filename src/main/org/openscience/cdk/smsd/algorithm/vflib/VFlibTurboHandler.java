@@ -65,7 +65,7 @@ public class VFlibTurboHandler implements ISubGraph {
      * else false
      */
     @Override
-    public boolean isSubgraph(){
+    public boolean isSubgraph() {
 
         IQuery query = TemplateCompiler.compile(Reactant);
 
@@ -128,7 +128,7 @@ public class VFlibTurboHandler implements ISubGraph {
     }
 
     /**
-     * Set the JMCS software
+     * Set the VFLib software
      *
      * @param reactant
      * @param product

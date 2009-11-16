@@ -47,7 +47,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
 
-
 import java.util.Map;
 import org.openscience.cdk.smsd.algorithm.vflib.validator.VFMatch;
 import org.openscience.cdk.interfaces.IAtom;

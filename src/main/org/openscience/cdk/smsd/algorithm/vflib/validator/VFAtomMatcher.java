@@ -46,7 +46,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
-
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
@@ -86,7 +85,7 @@ public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
         } else {
             this.maximumNeighbors = template.getFormalNeighbourCount();
         }
-         this.maximumNeighbors -= blockedPositions;
+        this.maximumNeighbors -= blockedPositions;
     }
 
     /**
@@ -275,3 +274,4 @@ public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
 //    }
 //}
 //
+

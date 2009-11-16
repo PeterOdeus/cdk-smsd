@@ -24,7 +24,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.map;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -200,13 +199,13 @@ public class VFMCSState implements IState {
         if (queryPath.isEmpty()) {
             return true;
         }
-        
+
 //       Commented by Asad to get more HITS
         if (!matchBondsToHead(match)) {
             return false;
         }
 
-        
+
 
         for (int i = 0; i < queryPath.size() - 1; i++) {
             IEdge queryBond = query.getEdge(queryPath.get(i), match.getQueryNode());

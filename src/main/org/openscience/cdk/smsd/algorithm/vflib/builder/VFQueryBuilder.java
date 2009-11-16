@@ -153,7 +153,6 @@ public class VFQueryBuilder implements IQuery {
         return null;
     }
 
-   
     /**
      *
      * @param matcher
@@ -167,7 +166,7 @@ public class VFQueryBuilder implements IQuery {
         return node;
     }
 
-     /**
+    /**
      *
      * @param node
      * @return

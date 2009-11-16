@@ -314,8 +314,6 @@ public class CanonicalLabeler {
     }
 
     public synchronized IAtomContainer getCanonicalMolecule() {
-//        System.out.println("B:"+atomContainer.getAtomCount());
-//        return ReOrganizeAtomContainer.makeDeepCopy(atomContainer);
         return atomContainer;
     }
 }

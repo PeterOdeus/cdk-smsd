@@ -46,7 +46,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.query;
 
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -91,17 +90,11 @@ public class TemplateCompiler implements IQueryCompiler {
 
     @Override
     public IQuery compile() {
-//        try {
-//            IAtomContainer copy = (IAtomContainer) queryMolecule.clone();
+//        IAtomContainer copy = (IAtomContainer) queryMolecule.clone();
 //        reductions.clear();
         //Remove Hydrogen if Necesarry Asad
 //            reducer.reduce(copy, reductions);
         return build(molecule);
-//        } catch (CloneNotSupportedException ex) {
-//            Logger.getLogger(TemplateCompiler.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
-//        return null;
     }
 
     private IQuery build(IAtomContainer queryMolecule) {

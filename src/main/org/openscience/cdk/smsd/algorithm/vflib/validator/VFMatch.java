@@ -46,7 +46,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
-
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.interfaces.IAtom;
 

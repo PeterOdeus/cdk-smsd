@@ -47,7 +47,6 @@ public class EdgeBuilder implements IEdge {
         this.matcher = matcher;
     }
 
-    
     /**
      * 
      * @return
@@ -57,7 +56,6 @@ public class EdgeBuilder implements IEdge {
         return source;
     }
 
-    
     /**
      *
      * @return
@@ -67,7 +65,6 @@ public class EdgeBuilder implements IEdge {
         return target;
     }
 
-    
     /**
      *
      * @return

@@ -143,7 +143,6 @@ public class EBIMDLReader {
         return Mol;
     }
 
-    
     public IChemModel getChemModelWithMoleculeWithLayoutCheck() {
         IChemModel chemModel = new ChemModel();
         chemModel.setMoleculeSet(ConnectivityChecker.partitionIntoMolecules(Mol));
