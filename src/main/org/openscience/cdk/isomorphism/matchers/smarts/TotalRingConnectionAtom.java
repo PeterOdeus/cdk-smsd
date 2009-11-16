@@ -40,43 +40,44 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.githash
  * @cdk.keyword SMARTS 
  */
-
 public class TotalRingConnectionAtom extends SMARTSAtom {
-	/**
-	 * Creates a new instance
-	 *
-	 * @param ringConn number of ring connections
-	 */
-	public TotalRingConnectionAtom(int ringConn) {
-		this.setProperty(CDKConstants.RING_CONNECTIONS, ringConn);
-	}
 
-	/**
-	 * Returns the ring connection of an atom
-	 * 
-	 * @param atom
-	 * @return
-	 */
-	private int getRC(IAtom atom) {
-		if (atom.getFlag(CDKConstants.ISINRING))
-			return ((Integer) atom.getProperty(CDKConstants.RING_CONNECTIONS))
-					.intValue();
-		else
-			return 0;
-	}
+    /**
+     * Creates a new instance
+     *
+     * @param ringConn number of ring connections
+     */
+    public TotalRingConnectionAtom(int ringConn) {
+        this.setProperty(CDKConstants.RING_CONNECTIONS, ringConn);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-	 */
-	public boolean matches(IAtom atom) {
-		return getRC(atom) != 0 && getRC(atom) == getRC(this);
-	}
+    /**
+     * Returns the ring connection of an atom
+     *
+     * @param atom
+     * @return
+     */
+    private int getRC(IAtom atom) {
+        if (atom.getFlag(CDKConstants.ISINRING)) {
+            return ((Integer) atom.getProperty(CDKConstants.RING_CONNECTIONS)).intValue();
+        } else {
+            return 0;
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.PseudoAtom#toString()
-	 */
-	public String toString() {
-		return ("TotalRingConnectionAtom(" + getRC(this) + ")");
-	}
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
+    @Override
+    public boolean matches(IAtom atom) {
+        return getRC(atom) != 0 && getRC(atom) == getRC(this);
+    }
 
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.PseudoAtom#toString()
+     */
+    @Override
+    public String toString() {
+        return ("TotalRingConnectionAtom(" + getRC(this) + ")");
+    }
 }

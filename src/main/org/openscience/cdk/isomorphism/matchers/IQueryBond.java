@@ -35,13 +35,12 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public interface IQueryBond {
 
-	/**
-	 * Returns true of the given <code>bond</code> matches this IQueryBond.
-	 * 
-	 * @param bond IBond to match against
-	 * @return     true, if this IQueryBond matches the given IBond
-	 */
-	public boolean matches(IBond bond);
-    
+    /**
+     * Returns true of the given <code>bond</code> matches this IQueryBond.
+     *
+     * @param bond IBond to match against
+     * @return     true, if this IQueryBond matches the given IBond
+     */
+    public boolean matches(IBond bond);
 }
 

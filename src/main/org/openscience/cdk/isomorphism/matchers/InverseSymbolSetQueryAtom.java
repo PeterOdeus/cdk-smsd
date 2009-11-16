@@ -43,15 +43,16 @@ import org.openscience.cdk.interfaces.IAtom;
 public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom implements IQueryAtom {
 
     private static final long serialVersionUID = -6570190504347822438L;
-    
     private HashSet symbols = new HashSet();
-
 
     /**
      *  Constructor for the InverseSymbolSetQueryAtom object
      */
-    public InverseSymbolSetQueryAtom() { }
-    public void setOperator(String str){}
+    public InverseSymbolSetQueryAtom() {
+    }
+
+    public void setOperator(String str) {
+    }
 
     /**
      *  The matches implementation of the QueryAtom interface.
@@ -63,7 +64,6 @@ public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom im
         return !symbols.contains(atom.getSymbol());
     }
 
-
     /**
      *  Add a symbol to this QueryAtom
      *
@@ -73,7 +73,6 @@ public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom im
         symbols.add(symbol);
     }
 
-
     /**
      *  Remove a symbol from this QueryAtom
      *
@@ -82,7 +81,6 @@ public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom im
     public void removeSymbol(String symbol) {
         symbols.remove(symbol);
     }
-
 
     /**
      *  Check whether a symbol is already registered
@@ -94,7 +92,6 @@ public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom im
         return symbols.contains(symbol);
     }
 
-
     /**
      *  Retrieve the Set of symbols
      *
@@ -103,7 +100,6 @@ public class InverseSymbolSetQueryAtom extends org.openscience.cdk.PseudoAtom im
     public HashSet getSymbolSet() {
         return symbols;
     }
-
 
     /**
      *  The toString method

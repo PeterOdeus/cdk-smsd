@@ -32,5 +32,4 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * @see         org.openscience.cdk.isomorphism.UniversalIsomorphismTester
  */
 public interface IQueryAtomContainer extends IAtomContainer {
-
 }

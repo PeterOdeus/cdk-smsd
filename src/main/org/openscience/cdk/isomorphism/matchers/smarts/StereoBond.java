@@ -31,16 +31,17 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class StereoBond extends SMARTSBond {
 
-	private static final long serialVersionUID = 3529688197057645996L;
+    private static final long serialVersionUID = 3529688197057645996L;
 
-	public boolean matches(IBond bond) {
+    @Override
+    public boolean matches(IBond bond) {
         if (this.getOrder() != bond.getOrder()) {
             // bond orders not match
             return false;
-        } 
+        }
         if (this.getStereo() != bond.getStereo()) {
-        	// bond stereo not match
-        	return false;
+            // bond stereo not match
+            return false;
         }
         return true;
     }

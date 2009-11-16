@@ -34,13 +34,11 @@ public class PhysicalConstants {
     /**
      * Mass of a proton.
      */
-    public final static double MASS_PROTON   = 1.6726485E-27;
-
+    public final static double MASS_PROTON = 1.6726485E-27;
     /**
      * Mass of an electron.
      */
     public final static double MASS_ELECTRON = 9.109534E-31;
-
     /**
      * Factor for the conversion of Bohr's to Angstrom's.
      */

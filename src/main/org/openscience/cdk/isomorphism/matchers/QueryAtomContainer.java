@@ -36,8 +36,10 @@ public class QueryAtomContainer extends org.openscience.cdk.AtomContainer implem
     private static final long serialVersionUID = -1876912362585898476L;
 
     public QueryAtomContainer() {
-    };
-    
+    }
+
+    ;
+
     public void add(IAtomContainer container) {
         if (container instanceof QueryAtomContainer) {
             super.add(container);
@@ -45,7 +47,7 @@ public class QueryAtomContainer extends org.openscience.cdk.AtomContainer implem
             throw new IllegalArgumentException("AtomContainer is not of type QueryAtomContainer");
         }
     }
-    
+
     public void addAtom(IAtom atom) {
         if (atom instanceof IQueryAtom) {
             super.addAtom(atom);
@@ -61,28 +63,27 @@ public class QueryAtomContainer extends org.openscience.cdk.AtomContainer implem
             throw new IllegalArgumentException("Bond is not of type QueryBond");
         }
     }
-    
-	public String toString() {
-		StringBuffer s = new StringBuffer();
-		s.append("QueryAtomContainer(");
-		s.append(this.hashCode() + ", ");
-		s.append("#A:" + getAtomCount() + ", ");
-		s.append("#EC:" + getElectronContainerCount() + ", ");
-		for (int i = 0; i < getAtomCount(); i++) {
-			s.append(getAtom(i).toString() + ", ");
-		}
-		for (int i = 0; i < getBondCount(); i++) {
-			s.append(getBond(i).toString() + ", ");
-		}
-		for (int i = 0; i < getLonePairCount(); i++) {
-			s.append(getLonePair(i).toString() + ", ");
-		}
-		for (int i = 0; i < getSingleElectronCount(); i++) {
-			s.append(getSingleElectron(i).toString() + ", ");
-		}
-		s.append(")");
-		return s.toString();
-	}
-    
+
+    public String toString() {
+        StringBuffer s = new StringBuffer();
+        s.append("QueryAtomContainer(");
+        s.append(this.hashCode() + ", ");
+        s.append("#A:" + getAtomCount() + ", ");
+        s.append("#EC:" + getElectronContainerCount() + ", ");
+        for (int i = 0; i < getAtomCount(); i++) {
+            s.append(getAtom(i).toString() + ", ");
+        }
+        for (int i = 0; i < getBondCount(); i++) {
+            s.append(getBond(i).toString() + ", ");
+        }
+        for (int i = 0; i < getLonePairCount(); i++) {
+            s.append(getLonePair(i).toString() + ", ");
+        }
+        for (int i = 0; i < getSingleElectronCount(); i++) {
+            s.append(getSingleElectron(i).toString() + ", ");
+        }
+        s.append(")");
+        return s.toString();
+    }
 }
 

@@ -52,11 +52,10 @@ public class Mapping extends ChemObject implements java.io.Serializable, Cloneab
      * of this class is incompatible with the old version. See Sun docs
      * for <a href=http://java.sun.com/products/jdk/1.1/docs/guide
      * /serialization/spec/version.doc.html>details</a>.
-	 */
-	private static final long serialVersionUID = -6541914644492043503L;
+     */
+    private static final long serialVersionUID = -6541914644492043503L;
+    private IChemObject[] relation;
 
-	private IChemObject[] relation;
-    
     /**
      * Constructs an unconnected lone pair.
      *
@@ -76,13 +75,14 @@ public class Mapping extends ChemObject implements java.io.Serializable, Cloneab
      * @return An Iterable to two IChemObjects that define the mapping
      */
     public Iterable<IChemObject> relatedChemObjects() {
-    	return new Iterable<IChemObject>(){
+        return new Iterable<IChemObject>() {
+
             public Iterator<IChemObject> iterator() {
                 return new ChemObjectIterator();
             }
         };
     }
-    
+
     /**
      * The inner Iterator class.
      *
@@ -90,7 +90,7 @@ public class Mapping extends ChemObject implements java.io.Serializable, Cloneab
     private class ChemObjectIterator implements Iterator<IChemObject> {
 
         private int pointer = 0;
-    	
+
         public boolean hasNext() {
             return pointer < 2;
         }
@@ -99,10 +99,10 @@ public class Mapping extends ChemObject implements java.io.Serializable, Cloneab
             return relation[pointer++];
         }
 
-        public void remove() {}
-    	
+        public void remove() {
+        }
     }
-    
+
     /**
      * Retrieves the first or second of the related IChemObjects.
      * 
@@ -110,27 +110,27 @@ public class Mapping extends ChemObject implements java.io.Serializable, Cloneab
      * @return  The IChemObject to retrieve.
      */
     public IChemObject getChemObject(int pos) {
-    	return relation[pos];
+        return relation[pos];
     }
-    
-	/**
-	 * Clones this <code>Mapping</code> and the mapped <code>IChemObject</code>s.
-	 *
-	 * @return  The cloned object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		Mapping clone = (Mapping)super.clone();
+
+    /**
+     * Clones this <code>Mapping</code> and the mapped <code>IChemObject</code>s.
+     *
+     * @return  The cloned object
+     */
+    public Object clone() throws CloneNotSupportedException {
+        Mapping clone = (Mapping) super.clone();
         // clone the related IChemObject's
         if (relation != null) {
-		    clone.relation = new IChemObject[relation.length];
+            clone.relation = new IChemObject[relation.length];
             for (int f = 0; f < relation.length; f++) {
                 if (relation[f] != null) {
-                    clone.relation[f] = (IChemObject)relation[f].clone();
+                    clone.relation[f] = (IChemObject) relation[f].clone();
                 }
             }
         }
-		return clone;
-	}
+        return clone;
+    }
 }
 
 

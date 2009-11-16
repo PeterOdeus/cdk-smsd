@@ -34,28 +34,28 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.keyword SMARTS 
  */
 public class SmallestRingAtom extends SMARTSAtom {
-	private static final long serialVersionUID = 8201040824866400163L;
-	/**
-	 * The size of the smallest SSSR
-	 */
-	private int smallestRingSize;
 
-	public SmallestRingAtom(int size) {
-		this.smallestRingSize = size;
-	}
+    private static final long serialVersionUID = 8201040824866400163L;
+    /**
+     * The size of the smallest SSSR
+     */
+    private int smallestRingSize;
 
-	public boolean matches(IAtom atom) {
-		if (atom.getFlag(CDKConstants.ISINRING)) {
-			List<Integer> rings = (List<Integer>) atom
-					.getProperty(CDKConstants.RING_SIZES);
-			if (rings == null || rings.size() == 0) {
-				return false;
-			}
-			Collections.sort(rings);
-			if ((rings.get(0)).intValue() == smallestRingSize) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public SmallestRingAtom(int size) {
+        this.smallestRingSize = size;
+    }
+
+    public boolean matches(IAtom atom) {
+        if (atom.getFlag(CDKConstants.ISINRING)) {
+            List<Integer> rings = (List<Integer>) atom.getProperty(CDKConstants.RING_SIZES);
+            if (rings == null || rings.size() == 0) {
+                return false;
+            }
+            Collections.sort(rings);
+            if ((rings.get(0)).intValue() == smallestRingSize) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

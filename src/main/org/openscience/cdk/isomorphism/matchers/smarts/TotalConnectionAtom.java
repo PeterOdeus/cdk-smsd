@@ -27,7 +27,6 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
-
 package org.openscience.cdk.isomorphism.matchers.smarts;
 
 import org.openscience.cdk.CDKConstants;
@@ -41,29 +40,34 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.keyword SMARTS
  */
 public class TotalConnectionAtom extends SMARTSAtom {
-	private static final long serialVersionUID = 2714616726873309671L;
 
-	/**
-	 * Creates a new instance.
-	 */
-	public TotalConnectionAtom(int count) {
-		this.setProperty(CDKConstants.TOTAL_CONNECTIONS, count);
-	}
-	
-	/**
-	 * This returns the total connection of an atom.
-	 */
-	public int getTC(IAtom atom) {
-		if (atom.getProperty(CDKConstants.TOTAL_CONNECTIONS) != null)
-			return (Integer) atom.getProperty(CDKConstants.TOTAL_CONNECTIONS);
-		else
-			return 0;
-	}
+    private static final long serialVersionUID = 2714616726873309671L;
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-	 */
-	public boolean matches(IAtom atom) {
-		return (getTC(atom) != 0 && getTC(atom) == getTC(this));
-	}
+    /**
+     * Creates a new instance.
+     * @param count
+     */
+    public TotalConnectionAtom(int count) {
+        this.setProperty(CDKConstants.TOTAL_CONNECTIONS, count);
+    }
+
+    /**
+     * This returns the total connection of an atom.
+     * @param atom
+     * @return
+     */
+    public int getTC(IAtom atom) {
+        if (atom.getProperty(CDKConstants.TOTAL_CONNECTIONS) != null) {
+            return (Integer) atom.getProperty(CDKConstants.TOTAL_CONNECTIONS);
+        } else {
+            return 0;
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
+    public boolean matches(IAtom atom) {
+        return (getTC(atom) != 0 && getTC(atom) == getTC(this));
+    }
 }

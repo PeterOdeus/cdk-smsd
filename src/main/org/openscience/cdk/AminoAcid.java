@@ -49,10 +49,9 @@ public class AminoAcid extends Monomer implements IAminoAcid, Serializable, Clon
      * of this class is incompatible with the old version. See Sun docs
      * for <a href=http://java.sun.com/products/jdk/1.1/docs/guide
      * /serialization/spec/version.doc.html>details</a>.
-	 */
-	private static final long serialVersionUID = -5032283549467862509L;
-	
-	/** The atom that constitutes the N-terminus. */
+     */
+    private static final long serialVersionUID = -5032283549467862509L;
+    /** The atom that constitutes the N-terminus. */
     private IAtom nTerminus;
     /** The atom that constitutes the C-terminus. */
     private IAtom cTerminus;
@@ -63,7 +62,7 @@ public class AminoAcid extends Monomer implements IAminoAcid, Serializable, Clon
     public AminoAcid() {
         super();
     }
-    
+
     /**
      * Retrieves the N-terminus atom.
      *
@@ -86,7 +85,7 @@ public class AminoAcid extends Monomer implements IAminoAcid, Serializable, Clon
         super.addAtom(atom);
         nTerminus = atom;
     }
-    
+
     /**
      * Marks an Atom as being the N-terminus atom. It assumes that the Atom
      * is already added to the AminoAcid.
@@ -142,26 +141,27 @@ public class AminoAcid extends Monomer implements IAminoAcid, Serializable, Clon
     public Object clone() throws CloneNotSupportedException {
         AminoAcid clone = (AminoAcid) super.clone();
         // copying the new N-terminus and C-terminus pointers
-        if (getNTerminus() != null)
-        	clone.setNTerminus(clone.getAtom(getAtomNumber(getNTerminus())));
-        if (getCTerminus() != null)
-        	clone.setCTerminus(clone.getAtom(getAtomNumber(getCTerminus())));
+        if (getNTerminus() != null) {
+            clone.setNTerminus(clone.getAtom(getAtomNumber(getNTerminus())));
+        }
+        if (getCTerminus() != null) {
+            clone.setCTerminus(clone.getAtom(getAtomNumber(getCTerminus())));
+        }
         return clone;
     }
-    
+
     public String toString() {
         StringBuffer stringContent = new StringBuffer(32);
         stringContent.append("AminoAcid(");
         stringContent.append(this.hashCode());
         if (nTerminus != null) {
-        	stringContent.append(", N:").append(nTerminus.toString());
+            stringContent.append(", N:").append(nTerminus.toString());
         }
         if (cTerminus != null) {
-        	stringContent.append(", C:").append(cTerminus.toString());
+            stringContent.append(", C:").append(cTerminus.toString());
         }
         stringContent.append(", ").append(super.toString());
         stringContent.append(')');
         return stringContent.toString();
     }
-
 }

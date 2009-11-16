@@ -33,7 +33,7 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.keyword SMARTS
  */
 public class AnyAtom extends SMARTSAtom {
-    
+
     private static final long serialVersionUID = -2061241755106011847L;
 
     /**
@@ -41,10 +41,11 @@ public class AnyAtom extends SMARTSAtom {
      */
     public AnyAtom() {
     }
-    
+
     /* (non-Javadoc)
      * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
      */
+    @Override
     public boolean matches(IAtom atom) {
         if (atom.getSymbol().equals("H")) {
             Integer massNumber = atom.getMassNumber();
@@ -56,8 +57,9 @@ public class AnyAtom extends SMARTSAtom {
     /* (non-Javadoc)
      * @see org.openscience.cdk.PseudoAtom#toString()
      */
+    @Override
     public String toString() {
-		return "AnyAtom()";
+        return "AnyAtom()";
     }
 }
 

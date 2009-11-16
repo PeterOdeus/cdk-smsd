@@ -31,26 +31,30 @@ import org.openscience.cdk.interfaces.IRingSet;
  * @cdk.keyword SMARTS 
  */
 public class RingMembershipAtom extends SMARTSAtom {
-	private static final long serialVersionUID = -7963168231557641862L;
-	/**
-	 * Number of SSSR
-	 */
-	private int numSSSR;
 
-	public RingMembershipAtom(int num) {
-		this.numSSSR = num;
-	}
+    private static final long serialVersionUID = -7963168231557641862L;
+    /**
+     * Number of SSSR
+     */
+    private int numSSSR;
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-	 */
-	public boolean matches(IAtom atom) {
-		if (atom.getFlag(CDKConstants.ISINRING)) {
-			IRingSet ringSet = (IRingSet)atom.getProperty(CDKConstants.SMALLEST_RINGS);
-			return ringSet.getAtomContainerCount() == numSSSR;
-		} else {
-            if (numSSSR == 0) return true;
+    public RingMembershipAtom(int num) {
+        this.numSSSR = num;
+    }
+
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
+    @Override
+    public boolean matches(IAtom atom) {
+        if (atom.getFlag(CDKConstants.ISINRING)) {
+            IRingSet ringSet = (IRingSet) atom.getProperty(CDKConstants.SMALLEST_RINGS);
+            return ringSet.getAtomContainerCount() == numSSSR;
+        } else {
+            if (numSSSR == 0) {
+                return true;
+            }
         }
-		return false;
-	}
+        return false;
+    }
 }

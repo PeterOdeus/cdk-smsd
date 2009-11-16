@@ -61,6 +61,7 @@ import java.util.*;
  */
 @TestClass("org.openscience.cdk.ConformerContainer")
 public class ConformerContainer implements List<IAtomContainer> {
+
     private IAtomContainer atomContainer = null;
     private String title = null;
     private List<Point3d[]> coordinates;
@@ -70,12 +71,13 @@ public class ConformerContainer implements List<IAtomContainer> {
         Point3d[] tmp = new Point3d[atomContainer.getAtomCount()];
         for (int i = 0; i < atomContainer.getAtomCount(); i++) {
             IAtom atom = atomContainer.getAtom(i);
-            if (atom.getPoint3d() == null) throw new NullPointerException("Molecule must have 3D coordinates");
+            if (atom.getPoint3d() == null) {
+                throw new NullPointerException("Molecule must have 3D coordinates");
+            }
             tmp[i] = new Point3d(atom.getPoint3d());
         }
         return tmp;
     }
-
 
     public ConformerContainer() {
         coordinates = new ArrayList<Point3d[]>();
@@ -111,15 +113,17 @@ public class ConformerContainer implements List<IAtomContainer> {
      * @param atomContainers The array of conformers
      */
     public ConformerContainer(IAtomContainer[] atomContainers) {
-        if (atomContainers.length == 0)
+        if (atomContainers.length == 0) {
             throw new IllegalArgumentException("Can't use a zero-length molecule array");
+        }
 
         // lets check that the titles match
         title = (String) atomContainers[0].getProperty(CDKConstants.TITLE);
         for (IAtomContainer atomContainer : atomContainers) {
             String nextTitle = (String) atomContainer.getProperty(CDKConstants.TITLE);
-            if (title != null && !nextTitle.equals(title))
+            if (title != null && !nextTitle.equals(title)) {
                 throw new IllegalArgumentException("Titles of all molecules must match");
+            }
         }
 
         this.atomContainer = atomContainers[0];
@@ -242,17 +246,19 @@ public class ConformerContainer implements List<IAtomContainer> {
             this.atomContainer = atomContainer;
             title = (String) atomContainer.getProperty(CDKConstants.TITLE);
         }
-        if (title==null){
+        if (title == null) {
             throw new IllegalArgumentException(
-                                               "At least one of the input molecules does not have a title");
+                    "At least one of the input molecules does not have a title");
         }
-        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE)))
+        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE))) {
             throw new IllegalArgumentException(
-            	"The input molecules does not have the same title ('" + title + 
-            	"') as the other conformers ('" + atomContainer.getProperty(CDKConstants.TITLE) + "')");
+                    "The input molecules does not have the same title ('" + title +
+                    "') as the other conformers ('" + atomContainer.getProperty(CDKConstants.TITLE) + "')");
+        }
 
-        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount())
+        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount()) {
             throw new IllegalArgumentException("Doesn't have the same number of atoms as the rest of the conformers");
+        }
 
         coordinates.add(getCoordinateList(atomContainer));
         return true;
@@ -269,7 +275,9 @@ public class ConformerContainer implements List<IAtomContainer> {
         IAtomContainer atomContainer = (IAtomContainer) o;
 
         // we should never have a null conformer
-        if (atomContainer == null) return false;
+        if (atomContainer == null) {
+            return false;
+        }
 
         int index = indexOf(atomContainer);
         if (index >= 0) {
@@ -330,8 +338,9 @@ public class ConformerContainer implements List<IAtomContainer> {
 
     @TestMethod("testSet_int_IAtomContainer")
     public IAtomContainer set(int i, IAtomContainer atomContainer) {
-        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE)))
+        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE))) {
             throw new IllegalArgumentException("The input molecules does not have the same title as the other conformers");
+        }
         Point3d[] tmp = getCoordinateList(atomContainer);
         IAtomContainer oldAtomContainer = get(i);
         coordinates.set(i, tmp);
@@ -345,11 +354,13 @@ public class ConformerContainer implements List<IAtomContainer> {
             title = (String) atomContainer.getProperty(CDKConstants.TITLE);
         }
 
-        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE)))
+        if (!title.equals(atomContainer.getProperty(CDKConstants.TITLE))) {
             throw new IllegalArgumentException("The input molecules does not have the same title as the other conformers");
+        }
 
-        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount())
+        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount()) {
             throw new IllegalArgumentException("Doesn't have the same number of atoms as the rest of the conformers");
+        }
 
         Point3d[] tmp = getCoordinateList(atomContainer);
         coordinates.add(i, tmp);
@@ -381,9 +392,13 @@ public class ConformerContainer implements List<IAtomContainer> {
     @TestMethod("testIndexOf_Object")
     public int indexOf(Object o) {
         IAtomContainer atomContainer = (IAtomContainer) o;
-        if (!atomContainer.getProperty(CDKConstants.TITLE).equals(title)) return -1;
+        if (!atomContainer.getProperty(CDKConstants.TITLE).equals(title)) {
+            return -1;
+        }
 
-        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount()) return -1;
+        if (atomContainer.getAtomCount() != this.atomContainer.getAtomCount()) {
+            return -1;
+        }
 
         boolean coordsMatch;
         int index = 0;
@@ -396,7 +411,9 @@ public class ConformerContainer implements List<IAtomContainer> {
                     break;
                 }
             }
-            if (coordsMatch) return index;
+            if (coordsMatch) {
+                return index;
+            }
             index++;
         }
         return -1;
@@ -415,9 +432,13 @@ public class ConformerContainer implements List<IAtomContainer> {
     @TestMethod("testLastIndexOf_Object")
     public int lastIndexOf(Object o) {
         IAtomContainer atomContainer = (IAtomContainer) o;
-        if (!atomContainer.getProperty(CDKConstants.TITLE).equals(title)) return -1;
+        if (!atomContainer.getProperty(CDKConstants.TITLE).equals(title)) {
+            return -1;
+        }
 
-        if (atomContainer.getAtomCount() != coordinates.get(0).length) return -1;
+        if (atomContainer.getAtomCount() != coordinates.get(0).length) {
+            return -1;
+        }
 
         boolean coordsMatch;
         for (int j = coordinates.size() - 1; j >= 0; j--) {
@@ -430,7 +451,9 @@ public class ConformerContainer implements List<IAtomContainer> {
                     break;
                 }
             }
-            if (coordsMatch) return j;
+            if (coordsMatch) {
+                return j;
+            }
         }
         return -1;
     }
@@ -450,8 +473,8 @@ public class ConformerContainer implements List<IAtomContainer> {
         throw new UnsupportedOperationException();
     }
 
-
     private class CCIterator implements Iterator<IAtomContainer> {
+
         int current = 0;
         int last = -1;
 

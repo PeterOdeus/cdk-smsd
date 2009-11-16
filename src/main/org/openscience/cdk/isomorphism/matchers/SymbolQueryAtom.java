@@ -30,41 +30,46 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.githash
  */
 public class SymbolQueryAtom extends org.openscience.cdk.Atom implements IQueryAtom {
-    
+
     private static final long serialVersionUID = -5774610415273279451L;
     private String ID;
-    private int HCount=0;
-    public SymbolQueryAtom() {}
-    
+    private int HCount = 0;
+
+    public SymbolQueryAtom() {
+    }
+
     public SymbolQueryAtom(IAtom atom) {
         super(atom.getSymbol());
     }
-    public void setHCount(int m_HCount){
-       HCount = m_HCount;
+
+    public void setHCount(int m_HCount) {
+        HCount = m_HCount;
     }
-    
+
     public boolean matches(IAtom atom) {
-        if(ID!=null && HCount==0)
-           return this.getSymbol()!=(atom.getSymbol());
-        else if(ID==null && HCount!=0){
-            return (this.getHydrogenCount()==HCount);
-        }
-        else 
+        if (ID != null && HCount == 0) {
+            return this.getSymbol() != (atom.getSymbol());
+        } else if (ID == null && HCount != 0) {
+            return (this.getHydrogenCount() == HCount);
+        } else {
             return this.getSymbol().equals(atom.getSymbol());
-    };
-    public void setOperator(String str){
-        ID = str;
-        
+        }
     }
-    
+
+    ;
+
+    public void setOperator(String str) {
+        ID = str;
+
+    }
 
     public String toString() {
-		StringBuffer s = new StringBuffer();
-		s.append("SymbolQueryAtom(");
-		s.append(this.hashCode() + ", ");
-		s.append(getSymbol());
-		s.append(")");
-		return s.toString();
+        StringBuffer s = new StringBuffer();
+        s.append("SymbolQueryAtom(");
+        s.append(this.hashCode() + ", ");
+        s.append(getSymbol());
+        s.append(")");
+        return s.toString();
     }
 }
 

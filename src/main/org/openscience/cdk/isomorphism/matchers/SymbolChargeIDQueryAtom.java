@@ -30,31 +30,37 @@ import org.openscience.cdk.interfaces.IAtom;
  * @cdk.githash
  */
 public class SymbolChargeIDQueryAtom extends org.openscience.cdk.Atom implements IQueryAtom {
-    
+
     private static final long serialVersionUID = 3328313175614956150L;
 
-    public SymbolChargeIDQueryAtom() {}
-    
+    public SymbolChargeIDQueryAtom() {
+    }
+
     public SymbolChargeIDQueryAtom(IAtom atom) {
         super(atom.getSymbol());
         setFormalCharge(atom.getFormalCharge());
         setID(atom.getID());
     }
-    public void setOperator(String str){}
+
+    public void setOperator(String str) {
+    }
+
     public boolean matches(IAtom atom) {
-        return this.getSymbol().equals(atom.getSymbol())&&
-               this.getFormalCharge()==atom.getFormalCharge() &&
-               this.getID().equals(atom.getID());
-    };
+        return this.getSymbol().equals(atom.getSymbol()) &&
+                this.getFormalCharge() == atom.getFormalCharge() &&
+                this.getID().equals(atom.getID());
+    }
+
+    ;
 
     public String toString() {
-		StringBuffer s = new StringBuffer();
-		s.append("SymbolAndChargeQueryAtom(");
-		s.append(this.hashCode() + ", ");
-		s.append(getID() + ", ");
-		s.append(getSymbol() + ", ");
-		s.append(getFormalCharge());
-		s.append(")");
-		return s.toString();
+        StringBuffer s = new StringBuffer();
+        s.append("SymbolAndChargeQueryAtom(");
+        s.append(this.hashCode() + ", ");
+        s.append(getID() + ", ");
+        s.append(getSymbol() + ", ");
+        s.append(getFormalCharge());
+        s.append(")");
+        return s.toString();
     }
 }

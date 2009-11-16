@@ -25,7 +25,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 
 import java.io.Serializable;
 
-
 /**
  * Represents the concept of a chemical molecule, an object composed of 
  * atoms connected by bonds.
@@ -38,50 +37,47 @@ import java.io.Serializable;
  *
  * @cdk.keyword molecule
  */
-public class Molecule extends AtomContainer implements Serializable, IMolecule, Cloneable
-{
+public class Molecule extends AtomContainer implements Serializable, IMolecule, Cloneable {
 
-	/**
+    /**
      * Determines if a de-serialized object is compatible with this class.
      *
      * This value must only be changed if and only if the new version
      * of this class is incompatible with the old version. See Sun docs
      * for <a href=http://java.sun.com/products/jdk/1.1/docs/guide
      * /serialization/spec/version.doc.html>details</a>.
-	 */
-	private static final long serialVersionUID = 6451193093484831136L;
+     */
+    private static final long serialVersionUID = 6451193093484831136L;
 
-	/**
-	 *  Creates an Molecule without Atoms and Bonds.
-	 */
-	public Molecule() {
-		super();
-	}
+    /**
+     *  Creates an Molecule without Atoms and Bonds.
+     */
+    public Molecule() {
+        super();
+    }
 
-	/**
-	 *  Constructor for the Molecule object. The parameters define the
+    /**
+     *  Constructor for the Molecule object. The parameters define the
      *  initial capacity of the arrays.
-	 *
-	 * @param  atomCount  init capacity of Atom array
-	 * @param  bondCount  init capacity of Bond array
+     *
+     * @param  atomCount  init capacity of Atom array
+     * @param  bondCount  init capacity of Bond array
      * @param lonePairCount number of lone pairs
      * @param singleElectronCount number of single electrons
-	 */
-	public Molecule(int atomCount, int bondCount, int lonePairCount, int singleElectronCount)
-	{
-		super(atomCount, bondCount, lonePairCount, singleElectronCount);
-	}
+     */
+    public Molecule(int atomCount, int bondCount, int lonePairCount, int singleElectronCount) {
+        super(atomCount, bondCount, lonePairCount, singleElectronCount);
+    }
 
-	/**
-	 * Constructs a Molecule with
-	 * a shallow copy of the atoms and bonds of an AtomContainer.
-	 *
-	 * @param   container  An Molecule to copy the atoms and bonds from
-	 */
-	public Molecule(IAtomContainer container)
-	{
-		super(container);
-	}
+    /**
+     * Constructs a Molecule with
+     * a shallow copy of the atoms and bonds of an AtomContainer.
+     *
+     * @param   container  An Molecule to copy the atoms and bonds from
+     */
+    public Molecule(IAtomContainer container) {
+        super(container);
+    }
 
     /**
      * Returns a one line string representation of this Atom.
@@ -94,7 +90,7 @@ public class Molecule extends AtomContainer implements Serializable, IMolecule, 
         description.append("Molecule(");
         description.append(hashCode());
         if (getID() != null) {
-        	description.append(", ID=").append(getID());
+            description.append(", ID=").append(getID());
         }
         description.append(", ").append(super.toString());
         description.append(')');

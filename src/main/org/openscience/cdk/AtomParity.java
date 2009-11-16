@@ -43,8 +43,8 @@ import org.openscience.cdk.interfaces.IAtomParity;
  * @cdk.keyword atom parity
  * @cdk.keyword stereochemistry
  */
-public class AtomParity implements IAtomParity, Serializable, Cloneable  {
-    
+public class AtomParity implements IAtomParity, Serializable, Cloneable {
+
     /**
      * Determines if a de-serialized object is compatible with this class.
      *
@@ -52,13 +52,12 @@ public class AtomParity implements IAtomParity, Serializable, Cloneable  {
      * of this class is incompatible with the old version. See Sun docs
      * for <a href=http://java.sun.com/products/jdk/1.1/docs/guide
      * /serialization/spec/version.doc.html>details</a>.
-	 */
-	private static final long serialVersionUID = -2031408037315976637L;
-
-	private IAtom centralAtom;
+     */
+    private static final long serialVersionUID = -2031408037315976637L;
+    private IAtom centralAtom;
     private IAtom[] neighbors;
     private int parity;
-    
+
     /**
      * Constructs an completely unset AtomParity.
      *
@@ -70,12 +69,12 @@ public class AtomParity implements IAtomParity, Serializable, Cloneable  {
      * @param parity      +1 or -1, defining the parity
      */
     public AtomParity(
-    		IAtom centralAtom, 
-    		IAtom first, 
-    		IAtom second, 
-    		IAtom third, 
-    		IAtom fourth,
-    		int parity) {
+            IAtom centralAtom,
+            IAtom first,
+            IAtom second,
+            IAtom third,
+            IAtom fourth,
+            int parity) {
         this.centralAtom = centralAtom;
         this.neighbors = new Atom[4];
         this.neighbors[0] = first;
@@ -84,16 +83,16 @@ public class AtomParity implements IAtomParity, Serializable, Cloneable  {
         this.neighbors[3] = fourth;
         this.parity = parity;
     }
-    
+
     /**
      * Returns the atom for which this parity is defined.
      *
      * @return The atom for which this parity is defined
      */
-    public IAtom getAtom() { 
+    public IAtom getAtom() {
         return centralAtom;
     }
-    
+
     /**
      * Returns the four atoms that define the stereochemistry for
      * this parity.
@@ -104,7 +103,7 @@ public class AtomParity implements IAtomParity, Serializable, Cloneable  {
     public IAtom[] getSurroundingAtoms() {
         return neighbors;
     }
-    
+
     /**
      * Returns the parity value.
      *
@@ -140,17 +139,16 @@ public class AtomParity implements IAtomParity, Serializable, Cloneable  {
      * @return  The cloned object   
      */
     public Object clone() throws CloneNotSupportedException {
-        AtomParity clone = (AtomParity)super.clone();
+        AtomParity clone = (AtomParity) super.clone();
         // clone Atom's
-        clone.centralAtom  = (IAtom)centralAtom.clone();
+        clone.centralAtom = (IAtom) centralAtom.clone();
         clone.neighbors = new IAtom[4];
-        clone.neighbors[0] = (IAtom)(neighbors[0].clone());
-        clone.neighbors[1] = (IAtom)(neighbors[1].clone());
-        clone.neighbors[2] = (IAtom)(neighbors[2].clone());
-        clone.neighbors[3] = (IAtom)(neighbors[3].clone());
+        clone.neighbors[0] = (IAtom) (neighbors[0].clone());
+        clone.neighbors[1] = (IAtom) (neighbors[1].clone());
+        clone.neighbors[2] = (IAtom) (neighbors[2].clone());
+        clone.neighbors[3] = (IAtom) (neighbors[3].clone());
         return clone;
     }
-    
 }
 
 

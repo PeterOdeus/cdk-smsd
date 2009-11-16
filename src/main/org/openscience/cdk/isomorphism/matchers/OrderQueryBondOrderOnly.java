@@ -44,14 +44,16 @@ public class OrderQueryBondOrderOnly extends Bond implements IQueryBond {
     public OrderQueryBondOrderOnly(IQueryAtom atom1, IQueryAtom atom2, IBond.Order order) {
         super(atom1, atom2, order);
     }
-    
-	public boolean matches(IBond bond) {
+
+    public boolean matches(IBond bond) {
         if (this.getOrder() == bond.getOrder()) {
             // bond orders match
             return true;
         } // else
         return false;
-    };
+    }
+
+    ;
 
     public void setAtoms(IAtom[] atoms) {
         if (atoms.length > 0 && atoms[0] instanceof IQueryAtom) {
@@ -59,9 +61,9 @@ public class OrderQueryBondOrderOnly extends Bond implements IQueryBond {
         } else {
             throw new IllegalArgumentException("Array is not of type QueryAtom[]");
         }
-	}
-    
-	public void setAtomAt(IAtom atom, int position) {
+    }
+
+    public void setAtomAt(IAtom atom, int position) {
         if (atom instanceof IQueryAtom) {
             super.setAtom(atom, position);
         } else {

@@ -32,14 +32,14 @@ package org.openscience.cdk;
  */
 public interface IImplementationSpecification {
 
-	/**
-	 * Pointer to a dictionary or ontology describing a unique
-	 * algorithm.
-	 * 
-	 * @return the URN pointing to a (virtual) dictionary or ontology.
-	 */
+    /**
+     * Pointer to a dictionary or ontology describing a unique
+     * algorithm.
+     *
+     * @return the URN pointing to a (virtual) dictionary or ontology.
+     */
     public String getSpecificationReference();
-    
+
     /**
      * Human-readable name for the implementation for the algorithm
      * specified by the reference.
@@ -47,7 +47,7 @@ public interface IImplementationSpecification {
      * @return the name of this implementation
      */
     public String getImplementationTitle();
-    
+
     /**
      * Identifier for this implementation which must include
      * version information. The format is free.
@@ -55,7 +55,7 @@ public interface IImplementationSpecification {
      * @return a free format identifier for this implementation
      */
     public String getImplementationIdentifier();
-    
+
     /**
      * Human-readable name for the vendor that holds copyright for this
      * implementation.
@@ -63,6 +63,5 @@ public interface IImplementationSpecification {
      * @return the copyright holder of the implementation
      */
     public String getImplementationVendor();
-    
 }
 

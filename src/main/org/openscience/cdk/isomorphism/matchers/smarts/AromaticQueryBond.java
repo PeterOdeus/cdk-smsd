@@ -43,31 +43,34 @@ public class AromaticQueryBond extends SMARTSBond {
      *
      */
     public AromaticQueryBond() {
-    	super();
-    	setFlag(CDKConstants.ISAROMATIC, true);
+        super();
+        setFlag(CDKConstants.ISAROMATIC, true);
     }
-    
+
     /**
      * Creates a new instance
      *
+     * @param atom1
+     * @param atom2
+     * @param order
      */
     public AromaticQueryBond(IQueryAtom atom1, IQueryAtom atom2, IBond.Order order) {
-    	super(atom1, atom2, order);
-    	setFlag(CDKConstants.ISAROMATIC, true);
-    }    
-    
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
-	 */
-	public boolean matches(IBond bond) {      
-         return bond.getFlag(CDKConstants.ISAROMATIC);
+        super(atom1, atom2, order);
+        setFlag(CDKConstants.ISAROMATIC, true);
+    }
+
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
+     */
+    public boolean matches(IBond bond) {
+        return bond.getFlag(CDKConstants.ISAROMATIC);
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.Bond#toString()
      */
     public String toString() {
-		return "AromaticQueryBond()";
+        return "AromaticQueryBond()";
     }
 }
 

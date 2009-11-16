@@ -41,17 +41,19 @@ public class OrderQueryBond extends org.openscience.cdk.Bond implements IQueryBo
     public OrderQueryBond(IQueryAtom atom1, IQueryAtom atom2, IBond.Order order) {
         super(atom1, atom2, order);
     }
-    
-	public boolean matches(IBond bond) {
+
+    public boolean matches(IBond bond) {
         if (this.getOrder() == bond.getOrder()) {
             // bond orders match
             return true;
-        } else if (this.getFlag(CDKConstants.ISAROMATIC) && 
-        		   bond.getFlag(CDKConstants.ISAROMATIC)) {
+        } else if (this.getFlag(CDKConstants.ISAROMATIC) &&
+                bond.getFlag(CDKConstants.ISAROMATIC)) {
             // or both are aromatic
         } // else
         return false;
-    };
+    }
+
+    ;
 
     public void setAtoms(IAtom[] atoms) {
         if (atoms.length > 0 && atoms[0] instanceof IQueryAtom) {
@@ -59,9 +61,9 @@ public class OrderQueryBond extends org.openscience.cdk.Bond implements IQueryBo
         } else {
             throw new IllegalArgumentException("Array is not of type QueryAtom[]");
         }
-	}
-    
-	public void setAtomAt(IAtom atom, int position) {
+    }
+
+    public void setAtomAt(IAtom atom, int position) {
         if (atom instanceof IQueryAtom) {
             super.setAtom(atom, position);
         } else {
