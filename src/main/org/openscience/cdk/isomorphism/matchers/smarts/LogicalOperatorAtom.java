@@ -30,18 +30,16 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
  * @cdk.keyword SMARTS 
  */
 public class LogicalOperatorAtom extends SMARTSAtom {
-	private static final long serialVersionUID = -5752396252307536738L;
 
-	/**
-	 * Left child
-	 */
-	private IQueryAtom left;
-
+    private static final long serialVersionUID = -5752396252307536738L;
+    /**
+     * Left child
+     */
+    private IQueryAtom left;
     /**
      * Name of operator
      */
     private String operator;
-
     /**
      * Right child
      */
@@ -70,52 +68,52 @@ public class LogicalOperatorAtom extends SMARTSAtom {
     public void setRight(IQueryAtom right) {
         this.right = right;
     }
-    
+
     /* (non-Javadoc)
      * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
      */
     public boolean matches(IAtom atom) {
-    	boolean val = false;
-    	boolean matchesLeft = left.matches(atom);
-    	if (right != null) {
-    		if ("and".equals(operator) && matchesLeft) {
-        		boolean matchesRight = right.matches(atom);
-    			val = matchesLeft && matchesRight;
-    		} else if ("or".equals(operator)) {
-        		boolean matchesRight = right.matches(atom);
-    			val = matchesLeft || matchesRight;
-    		}
-    	} else {
-    		if ("not".equals(operator)) {
-    			val = (!matchesLeft);
-    		} else {
-    			val = matchesLeft;
-    		}
-    	}
-    	return val;
+        boolean val = false;
+        boolean matchesLeft = left.matches(atom);
+        if (right != null) {
+            if ("and".equals(operator) && matchesLeft) {
+                boolean matchesRight = right.matches(atom);
+                val = matchesLeft && matchesRight;
+            } else if ("or".equals(operator)) {
+                boolean matchesRight = right.matches(atom);
+                val = matchesLeft || matchesRight;
+            }
+        } else {
+            if ("not".equals(operator)) {
+                val = (!matchesLeft);
+            } else {
+                val = matchesLeft;
+            }
+        }
+        return val;
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.ChemObject#getFlag(int)
      */
     public boolean getFlag(int flagType) {
-    	boolean val = false;
-    	boolean leftFlag = left.getFlag(flagType);
-    	if (right != null) {
-    		if ("and".equals(operator) && leftFlag) {
-        		boolean rightFlag = right.getFlag(flagType);
-    			val = leftFlag && rightFlag;
-    		} else if ("or".equals(operator)) {
-        		boolean rightFlag = right.getFlag(flagType);
-    			val = leftFlag || rightFlag;
-    		}
-    	} else {
-    		if ("not".equals(operator)) {
-    			val = (!leftFlag);
-    		} else {
-    			val = leftFlag;
-    		}
-    	}
-    	return val;
+        boolean val = false;
+        boolean leftFlag = left.getFlag(flagType);
+        if (right != null) {
+            if ("and".equals(operator) && leftFlag) {
+                boolean rightFlag = right.getFlag(flagType);
+                val = leftFlag && rightFlag;
+            } else if ("or".equals(operator)) {
+                boolean rightFlag = right.getFlag(flagType);
+                val = leftFlag || rightFlag;
+            }
+        } else {
+            if ("not".equals(operator)) {
+                val = (!leftFlag);
+            } else {
+                val = leftFlag;
+            }
+        }
+        return val;
     }
 }

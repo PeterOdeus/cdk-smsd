@@ -43,8 +43,8 @@ public class AromaticOrSingleQueryBond extends SMARTSBond {
      *
      */
     public AromaticOrSingleQueryBond() {
-    	super();
-    	setFlag(CDKConstants.ISAROMATIC, true);
+        super();
+        setFlag(CDKConstants.ISAROMATIC, true);
     }
 
     /**
@@ -52,21 +52,21 @@ public class AromaticOrSingleQueryBond extends SMARTSBond {
      *
      */
     public AromaticOrSingleQueryBond(IQueryAtom atom1, IQueryAtom atom2, Order order) {
-    	super(atom1, atom2, order);
-    	setFlag(CDKConstants.ISAROMATIC, true);
+        super(atom1, atom2, order);
+        setFlag(CDKConstants.ISAROMATIC, true);
     }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
-	 */
-	public boolean matches(IBond bond) {
-        return bond.getFlag(CDKConstants.ISAROMATIC) || bond.getOrder() == IBond.Order.SINGLE;        
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
+     */
+    public boolean matches(IBond bond) {
+        return bond.getFlag(CDKConstants.ISAROMATIC) || bond.getOrder() == IBond.Order.SINGLE;
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.Bond#toString()
      */
     public String toString() {
-		return "AromaticOrSingleQueryBond()";
+        return "AromaticOrSingleQueryBond()";
     }
 }

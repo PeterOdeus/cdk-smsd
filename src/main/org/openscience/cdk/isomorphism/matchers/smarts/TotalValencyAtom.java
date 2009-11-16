@@ -36,22 +36,22 @@ import org.openscience.cdk.interfaces.IAtom;
 public class TotalValencyAtom extends SMARTSAtom {
 
     private static final long serialVersionUID = -8067867220731999668L;
-    
+
     public TotalValencyAtom(int valency) {
         setValency(valency);
     }
-    
-   public boolean matches(IAtom atom) {
-	   return (atom.getValency()!=0 && atom.getValency() == this.getValency());
+
+    public boolean matches(IAtom atom) {
+        return (atom.getValency() != 0 && atom.getValency() == this.getValency());
     }
 
     public String toString() {
-		StringBuffer s = new StringBuffer();
-		s.append("TotalValency(");
+        StringBuffer s = new StringBuffer();
+        s.append("TotalValency(");
         s.append(this.hashCode() + ", ");
-		s.append("V:" + getValency());
+        s.append("V:" + getValency());
         s.append(")");
-		return s.toString();
+        return s.toString();
     }
 }
 

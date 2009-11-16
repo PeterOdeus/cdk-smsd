@@ -53,120 +53,107 @@ import java.util.Arrays;
  * @see        org.openscience.cdk.isomorphism.UniversalIsomorphismTester
  */
 @TestClass("org.openscience.cdk.isomorphism.IsomorphismTesterTest")
-public class IsomorphismTester implements java.io.Serializable
-{
+public class IsomorphismTester implements java.io.Serializable {
 
-	private static final long serialVersionUID = 2499779110996693974L;
-	long[] baseTable;
-	long[] sortedBaseTable;
-	long[] compareTable;
-	long[] sortedCompareTable;
-	IMolecule base = null;
-	IMolecule compare = null;
+    private static final long serialVersionUID = 2499779110996693974L;
+    long[] baseTable;
+    long[] sortedBaseTable;
+    long[] compareTable;
+    long[] sortedCompareTable;
+    IMolecule base = null;
+    IMolecule compare = null;
 
+    /**
+     *  Constructor for the IsomorphismTester object
+     */
+    public IsomorphismTester() {
+    }
 
-	/**
-	 *  Constructor for the IsomorphismTester object
-	 */
-	public IsomorphismTester() { }
+    /**
+     *  Constructor for the IsomorphismTester object
+     */
+    public IsomorphismTester(IMolecule mol) throws NoSuchAtomException {
+        setBaseTable(mol);
+    }
 
-
-	/**
-	 *  Constructor for the IsomorphismTester object
-	 */
-	public IsomorphismTester(IMolecule mol) throws NoSuchAtomException
-	{
-		setBaseTable(mol);
-	}
-
-
-	/**
-	 *  Checks whether a given molecule is isomorphic with the one
-	 *  that has been assigned to this IsomorphismTester at contruction time
-	 *
-	 * @param  mol1                     A first molecule to check against the second one
-	 * @param  mol2                     A second molecule to check against the first
-	 * @return                          True, if the two molecules are isomorphic
-	 */
+    /**
+     *  Checks whether a given molecule is isomorphic with the one
+     *  that has been assigned to this IsomorphismTester at contruction time
+     *
+     * @param  mol1                     A first molecule to check against the second one
+     * @param  mol2                     A second molecule to check against the first
+     * @return                          True, if the two molecules are isomorphic
+     */
     @TestMethod("testIsIsomorphic_IMolecule_IMolecule")
     public boolean isIsomorphic(IMolecule mol1, IMolecule mol2) {
-		setBaseTable(mol1);
-		return isIsomorphic(mol2);
-	}
+        setBaseTable(mol1);
+        return isIsomorphic(mol2);
+    }
 
-
-	/**
-	 *  Checks whether a given molecule is isomorphic with the one 
-	 *  that has been assigned to this IsomorphismTester at contruction time
-	 *
-	 * @param  mol2                     A molecule to check 
-	 * @return                          True, if the two molecules are isomorphic 
-	 */
+    /**
+     *  Checks whether a given molecule is isomorphic with the one
+     *  that has been assigned to this IsomorphismTester at contruction time
+     *
+     * @param  mol2                     A molecule to check
+     * @return                          True, if the two molecules are isomorphic
+     */
     @TestMethod("testIsIsomorphic_IMolecule")
     public boolean isIsomorphic(IMolecule mol2) {
-		boolean found;
-		IAtom atom1 = null;
-		IAtom atom2 = null;
-		setCompareTable(mol2);
-		for (int f = 0; f < sortedBaseTable.length; f++)
-		{
-			if (sortedBaseTable[f] != sortedCompareTable[f])
-			{
-				return false;
-			}
-		}
+        boolean found;
+        IAtom atom1 = null;
+        IAtom atom2 = null;
+        setCompareTable(mol2);
+        for (int f = 0; f < sortedBaseTable.length; f++) {
+            if (sortedBaseTable[f] != sortedCompareTable[f]) {
+                return false;
+            }
+        }
 
-		for (int f = 0; f < baseTable.length; f++)
-		{
-			found = false;
-			for (int g = 0; g < compareTable.length; g++)
-			{
-				if (baseTable[f] == compareTable[g])
-				{
-					atom1 = base.getAtom(f);
-					atom2 = compare.getAtom(g);
-					if (!(atom1.getSymbol().equals(atom2.getSymbol())) && 
-                          atom1.getHydrogenCount() == atom2.getHydrogenCount())
-					{
-						return false;
-					}
-					found = true;
-				}
-			}
-			if (!found)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+        for (int f = 0; f < baseTable.length; f++) {
+            found = false;
+            for (int g = 0; g < compareTable.length; g++) {
+                if (baseTable[f] == compareTable[g]) {
+                    atom1 = base.getAtom(f);
+                    atom2 = compare.getAtom(g);
+                    if (!(atom1.getSymbol().equals(atom2.getSymbol())) &&
+                            atom1.getHydrogenCount() == atom2.getHydrogenCount()) {
+                        return false;
+                    }
+                    found = true;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	/**
-	 *  Sets the BaseTable attribute of the IsomorphismTester object
-	 *
-	 * @param  mol                      The new BaseTable value
-	 */
-	private void setBaseTable(IMolecule mol) {
-		this.base = mol;
-		this.baseTable = MorganNumbersTools.getMorganNumbers(base);
-		sortedBaseTable = new long[baseTable.length];
-		System.arraycopy(baseTable, 0, sortedBaseTable, 0, baseTable.length);
-		Arrays.sort(sortedBaseTable);
-	}
+    /**
+     *  Sets the BaseTable attribute of the IsomorphismTester object
+     *
+     * @param  mol                      The new BaseTable value
+     */
+    private void setBaseTable(IMolecule mol) {
+        this.base = mol;
+        this.baseTable = MorganNumbersTools.getMorganNumbers(base);
+        sortedBaseTable = new long[baseTable.length];
+        System.arraycopy(baseTable, 0, sortedBaseTable, 0, baseTable.length);
+        Arrays.sort(sortedBaseTable);
+    }
 
+    /**
+     *  Sets the CompareTable attribute of the IsomorphismTester object
+     *
+     * @param  mol                      The new CompareTable value
+     */
+    private void setCompareTable(IMolecule mol) {
+        this.compare = mol;
+        this.compareTable = MorganNumbersTools.getMorganNumbers(compare);
+        sortedCompareTable = new long[compareTable.length];
+        System.arraycopy(compareTable, 0, sortedCompareTable, 0, compareTable.length);
+        Arrays.sort(sortedCompareTable);
 
-	/**
-	 *  Sets the CompareTable attribute of the IsomorphismTester object
-	 *
-	 * @param  mol                      The new CompareTable value
-	 */
-	private void setCompareTable(IMolecule mol) {
-		this.compare = mol;
-		this.compareTable = MorganNumbersTools.getMorganNumbers(compare);
-		sortedCompareTable = new long[compareTable.length];
-		System.arraycopy(compareTable, 0, sortedCompareTable, 0, compareTable.length);
-		Arrays.sort(sortedCompareTable);
-
-	}
+    }
 }
 

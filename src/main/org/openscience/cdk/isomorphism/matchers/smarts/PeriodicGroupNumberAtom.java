@@ -39,35 +39,34 @@ import org.openscience.cdk.tools.periodictable.PeriodicTable;
  * @cdk.githash
  * @cdk.keyword SMARTS
  */
-
 public class PeriodicGroupNumberAtom extends SMARTSAtom {
+
     int groupNumber;
 
     /**
-	 * Creates a new instance
-	 *
-	 * @param groupNumber the periodic group number
-	 */
-	public PeriodicGroupNumberAtom(int groupNumber) {
-		this.groupNumber = groupNumber;
-	}
+     * Creates a new instance
+     *
+     * @param groupNumber the periodic group number
+     */
+    public PeriodicGroupNumberAtom(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
 
-
-
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-	 */
-	public boolean matches(IAtom atom) {
-		String symbol = atom.getSymbol();
-        int group = PeriodicTable.getGroup(symbol);
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
+    @Override
+    public boolean matches(IAtom atom) {
+        String symbol1 = atom.getSymbol();
+        int group = PeriodicTable.getGroup(symbol1);
         return group == this.groupNumber;
     }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.PseudoAtom#toString()
-	 */
-	public String toString() {
-		return ("PeriodicGroupNumberAtom(" + this.groupNumber + ")");
-	}
-
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.PseudoAtom#toString()
+     */
+    @Override
+    public String toString() {
+        return ("PeriodicGroupNumberAtom(" + this.groupNumber + ")");
+    }
 }

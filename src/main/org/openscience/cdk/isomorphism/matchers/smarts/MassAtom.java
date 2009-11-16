@@ -56,6 +56,7 @@ public class MassAtom extends SMARTSAtom{
     /* (non-Javadoc)
      * @see org.openscience.cdk.PseudoAtom#toString()
      */
+    @Override
     public String toString(){
         return ("(MassAtom("+ this.getMassNumber() + ")");
     }

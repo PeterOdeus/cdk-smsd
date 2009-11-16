@@ -36,28 +36,28 @@ import org.openscience.cdk.CDKConstants;
  */
 public class AliphaticAtom extends SMARTSAtom {
 
-	private static final long serialVersionUID = 5145049891214205622L;
+    private static final long serialVersionUID = 5145049891214205622L;
 
-	/**
-	 * Creates a new instance
-	 *
-	 */
-	public AliphaticAtom() {
-		setFlag(CDKConstants.ISALIPHATIC, true);
-	}
+    /**
+     * Creates a new instance
+     *
+     */
+    public AliphaticAtom() {
+        setFlag(CDKConstants.ISALIPHATIC, true);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-	 */
-	public boolean matches(IAtom atom) {
-		return !atom.getFlag(CDKConstants.ISAROMATIC); 
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
+    public boolean matches(IAtom atom) {
+        return !atom.getFlag(CDKConstants.ISAROMATIC);
 
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.PseudoAtom#toString()
-	 */
-	public String toString() {
-		return "AliphaticAtom()";
-	}
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.PseudoAtom#toString()
+     */
+    public String toString() {
+        return "AliphaticAtom()";
+    }
 }

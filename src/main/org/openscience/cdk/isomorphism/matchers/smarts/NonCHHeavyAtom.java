@@ -47,9 +47,10 @@ public class NonCHHeavyAtom extends SMARTSAtom {
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
 	 */
+    @Override
 	public boolean matches(IAtom atom) {
-        String symbol = atom.getSymbol();
-        return !(symbol.equals("C") || symbol.equals("H"));
+        String symbol1 = atom.getSymbol();
+        return !(symbol1.equals("C") || symbol1.equals("H"));
 
     }
 

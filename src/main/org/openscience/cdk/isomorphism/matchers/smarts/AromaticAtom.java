@@ -35,28 +35,29 @@ import org.openscience.cdk.CDKConstants;
  * @cdk.keyword SMARTS
  */
 public class AromaticAtom extends SMARTSAtom {
-    
+
     private static final long serialVersionUID = -3345204886992669829L;
+
     /**
      * Creates a new instance
      *
      */
     public AromaticAtom() {
-    	setFlag(CDKConstants.ISAROMATIC, true);
+        setFlag(CDKConstants.ISAROMATIC, true);
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
      */
     public boolean matches(IAtom atom) {
-    	return atom.getFlag(CDKConstants.ISAROMATIC); 
+        return atom.getFlag(CDKConstants.ISAROMATIC);
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.PseudoAtom#toString()
      */
     public String toString() {
-		return "AromaticAtom()";
+        return "AromaticAtom()";
     }
 }
 

@@ -46,29 +46,33 @@ public class OrderQueryBond extends SMARTSBond {
      * @param order the order of bond
      */
     public OrderQueryBond(IBond.Order order) {
-    	super();
-    	this.setOrder(order);
+        super();
+        this.setOrder(order);
     }
-    
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
-	 */
+
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond#matches(org.openscience.cdk.interfaces.IBond)
+     */
+    @Override
     public boolean matches(IBond bond) {
         if (getOrder() == IBond.Order.SINGLE) {
             return !bond.getFlag(CDKConstants.ISAROMATIC) && getOrder() == bond.getOrder();
-        } else return getOrder() == bond.getOrder();
+        } else {
+            return getOrder() == bond.getOrder();
+        }
     }
 
     /* (non-Javadoc)
      * @see org.openscience.cdk.Bond#toString()
      */
+    @Override
     public String toString() {
-		StringBuffer s = new StringBuffer();
-		s.append("OrderQueryBond(");
+        StringBuffer s = new StringBuffer();
+        s.append("OrderQueryBond(");
         s.append(this.hashCode() + ", ");
-		s.append("#O:" + getOrder());
-		s.append(")");
-		return s.toString();
+        s.append("#O:" + getOrder());
+        s.append(")");
+        return s.toString();
     }
 }
 

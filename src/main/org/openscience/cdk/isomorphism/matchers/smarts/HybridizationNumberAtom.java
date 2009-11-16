@@ -39,9 +39,9 @@ import org.openscience.cdk.interfaces.IAtomType;
  * @cdk.githash
  * @cdk.keyword SMARTS
  */
-
 public class HybridizationNumberAtom extends SMARTSAtom {
-    Hybridization hybridization;
+
+    Hybridization hybridizationLocal;
 
     /**
      * Creates a new instance
@@ -51,45 +51,45 @@ public class HybridizationNumberAtom extends SMARTSAtom {
     public HybridizationNumberAtom(int hybridizationNumber) {
         switch (hybridizationNumber) {
             case 1:
-                hybridization = IAtomType.Hybridization.SP1;
+                hybridizationLocal = IAtomType.Hybridization.SP1;
                 break;
             case 2:
-                hybridization = IAtomType.Hybridization.SP2;
+                hybridizationLocal = IAtomType.Hybridization.SP2;
                 break;
             case 3:
-                hybridization = IAtomType.Hybridization.SP3;
+                hybridizationLocal = IAtomType.Hybridization.SP3;
                 break;
             case 4:
-                hybridization = IAtomType.Hybridization.SP3D1;
+                hybridizationLocal = IAtomType.Hybridization.SP3D1;
                 break;
             case 5:
-                hybridization = IAtomType.Hybridization.SP3D2;
+                hybridizationLocal = IAtomType.Hybridization.SP3D2;
                 break;
             case 6:
-                hybridization = IAtomType.Hybridization.SP3D3;
+                hybridizationLocal = IAtomType.Hybridization.SP3D3;
                 break;
             case 7:
-                hybridization = IAtomType.Hybridization.SP3D4;
+                hybridizationLocal = IAtomType.Hybridization.SP3D4;
                 break;
             case 8:
-                hybridization = IAtomType.Hybridization.SP3D5;
+                hybridizationLocal = IAtomType.Hybridization.SP3D5;
                 break;
         }
     }
 
 
     /* (non-Javadoc)
-      * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
-      */
+     * @see org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom#matches(org.openscience.cdk.interfaces.IAtom)
+     */
     public boolean matches(IAtom atom) {
-        return hybridization == atom.getHybridization();
+        return hybridizationLocal == atom.getHybridization();
     }
 
     /* (non-Javadoc)
-      * @see org.openscience.cdk.PseudoAtom#toString()
-      */
+     * @see org.openscience.cdk.PseudoAtom#toString()
+     */
+    @Override
     public String toString() {
-        return ("HybridizationNumberAtom(" + hybridization.toString() + ")");
+        return ("HybridizationNumberAtom(" + hybridizationLocal.toString() + ")");
     }
-
 }
