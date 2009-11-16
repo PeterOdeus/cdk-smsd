@@ -55,12 +55,9 @@ public class SMSD implements IMCSAlgorithm {
      */
     public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
         if (subStructureMode) {
-
             comparison = new SubGraphFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
-
         } else {
             comparison = new MCSFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
-
         }
 
         System.gc();
@@ -79,7 +76,6 @@ public class SMSD implements IMCSAlgorithm {
      * @throws Exception
      */
     public SMSD(int algorithmType, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
-
         comparison = new MCSFactory(algorithmType, bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
         System.gc();
 
