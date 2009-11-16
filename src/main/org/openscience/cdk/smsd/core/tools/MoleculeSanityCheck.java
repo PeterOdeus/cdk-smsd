@@ -110,7 +110,7 @@ public class MoleculeSanityCheck {
 
         try {
             // figure out which atoms are in aromatic rings:
-            EBIAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
+            ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
             CDKHueckelAromaticityDetector.detectAromaticity(m);
             // figure out which rings are aromatic:
             RingSetManipulator.markAromaticRings(rs);

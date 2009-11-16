@@ -25,7 +25,7 @@
 package org.openscience.cdk.smsd.helper;
 
 //~--- JDK imports ------------------------------------------------------------
-import org.openscience.cdk.smsd.core.tools.EBIAtomContainerManipulator;
+import org.openscience.cdk.smsd.core.tools.ExtAtomContainerManipulator;
 import org.openscience.cdk.smsd.core.tools.MoleculeSanityCheck;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -104,7 +104,7 @@ public class MolHandler {
             BondTools.makeUpDownBonds(mol);
             /*Remove Hydrogen by Asad*/
             if (removeHydrogen) {
-                mol = EBIAtomContainerManipulator.removeHydrogens(mol);
+                mol = ExtAtomContainerManipulator.removeHydrogens(mol);
             }
             checkFragmentation();
         } catch (IOException ex) {
@@ -132,7 +132,7 @@ public class MolHandler {
             BondTools.makeUpDownBonds(mol);
             /*Remove Hydrogen by Asad*/
             if (removeHydrogen) {
-                mol = EBIAtomContainerManipulator.removeHydrogens(mol);
+                mol = ExtAtomContainerManipulator.removeHydrogens(mol);
 
             }
 
@@ -162,7 +162,7 @@ public class MolHandler {
 
         if (removeHydrogen) {
             try {
-                this.mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
+                this.mol = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
                 mol.setID(ID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -187,7 +187,7 @@ public class MolHandler {
 
         if (removeHydrogen) {
             try {
-                this.mol = (IMolecule) EBIAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
+                this.mol = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
                 mol.setID(ID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);

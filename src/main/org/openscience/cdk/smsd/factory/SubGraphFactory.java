@@ -514,7 +514,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     private void vfLibMCS() {
 
-        try {
             VFlibTurboHandler mcs = new VFlibTurboHandler();
             mcs.set(RMol, PMol, removeHydrogen);
             this.subGraphFlag = mcs.isSubgraph();
@@ -536,13 +535,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
 //
 //            System.out.println("First Atom MCS: " + firstSolution);
 //            System.out.println("First Atom AllMCS: " + allMCS);
-
-
-        } catch (IOException ex) {
-            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CDKException ex) {
-            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
 
     }

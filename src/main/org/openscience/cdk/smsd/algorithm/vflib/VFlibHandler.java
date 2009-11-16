@@ -33,7 +33,7 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.map.VFMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
-import org.openscience.cdk.smsd.core.tools.EBIAtomContainerManipulator;
+import org.openscience.cdk.smsd.core.tools.ExtAtomContainerManipulator;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.ISubGraph;
 import org.openscience.cdk.interfaces.IAtom;
@@ -150,10 +150,10 @@ public class VFlibHandler implements ISubGraph {
 
         /*Remove Hydrogen by Asad*/
         if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = EBIAtomContainerManipulator.removeHydrogens(reactant);
+            Reactant = ExtAtomContainerManipulator.removeHydrogens(reactant);
         }
         if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = EBIAtomContainerManipulator.removeHydrogens(product);
+            Product = ExtAtomContainerManipulator.removeHydrogens(product);
         }
 
     }
@@ -174,10 +174,10 @@ public class VFlibHandler implements ISubGraph {
 
         /*Remove Hydrogen by Asad*/
         if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = EBIAtomContainerManipulator.removeHydrogens(reactant.getMolecule());
+            Reactant = ExtAtomContainerManipulator.removeHydrogens(reactant.getMolecule());
         }
         if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = EBIAtomContainerManipulator.removeHydrogens(product.getMolecule());
+            Product = ExtAtomContainerManipulator.removeHydrogens(product.getMolecule());
         }
 
 
@@ -200,10 +200,10 @@ public class VFlibHandler implements ISubGraph {
         this.Product = new MolHandler(mol2, false, removeHydrogen).getMolecule();
 
         if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = EBIAtomContainerManipulator.removeHydrogens(Reactant);
+            Reactant = ExtAtomContainerManipulator.removeHydrogens(Reactant);
         }
         if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = EBIAtomContainerManipulator.removeHydrogens(Product);
+            Product = ExtAtomContainerManipulator.removeHydrogens(Product);
         }
 
     }
