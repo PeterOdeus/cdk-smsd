@@ -22,12 +22,10 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
@@ -65,20 +63,15 @@ public class VFlibTurboHandler implements ISubGraph {
      *
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
-     * @throws java.io.IOException
-     * @throws chemlib.ebi.core.tools.CDKException
      */
     @Override
-    public boolean isSubgraph() throws IOException, CDKException {
+    public boolean isSubgraph(){
 
         IQuery query = TemplateCompiler.compile(Reactant);
 
         IMapper mapper = new VFMapper(query);
 
         Map<INode, IAtom> vfLibSolutions = mapper.getFirstMap(Product);
-
-//        System.out.println("Size of the Mapping: " + vfLibSolutions.size());
-//
 
         Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
         TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
@@ -158,7 +151,7 @@ public class VFlibTurboHandler implements ISubGraph {
     }
 
     /**
-     * Set the JMCS software
+     * Set the VFLib software
      *
      * @param reactant
      * @param product
