@@ -58,10 +58,6 @@ public class GenerateCompatibilityGraph {
      * @throws java.io.IOException
      */
     public GenerateCompatibilityGraph(IAtomContainer ac1, IAtomContainer ac2, boolean HFlag) throws IOException {
-
-
-
-//        System.out.println("\n\nHello I am in generate_compatibility_graph\n");
         this.ac1 = ac1;
         this.ac2 = ac2;
         this.removeHydrogen = HFlag;
@@ -75,7 +71,6 @@ public class GenerateCompatibilityGraph {
         }
 
         if (get_C_edges_size() == 0) {
-//            System.out.println("C-edges are Zero");
             clearCompGraphNodes();
 
             clearCEgdes();
@@ -113,14 +108,9 @@ public class GenerateCompatibilityGraph {
 
             IAtom refAtom = ac.getAtom(i);
             String atom1_type = refAtom.getSymbol();
-
-
-
             label.setElementAt(labelContainer.getLabelID(atom1_type), 0);
 
             int count_neighbors = 1;
-
-
             List<IAtom> connAtoms = ac.getConnectedAtomsList(refAtom);
 
             for (IAtom negAtom : connAtoms) {
@@ -132,9 +122,7 @@ public class GenerateCompatibilityGraph {
             label_list.add(label);
 
         }
-
         return label_list;
-
     }
 
     private void bubble_sort(Vector<Integer> label) {
@@ -178,12 +166,8 @@ public class GenerateCompatibilityGraph {
 
         comp_graph_nodes.clear();
 
-        //System.out.println("Hello I am in generate_compatibility_graph_nodes");
-
         Vector<IAtom> basic_atom_vec_A = null;
         Vector<IAtom> basic_atom_vec_B = null;
-
-        /* ASAD Please check CPP list to Java Iterator*/
 
         IAtomContainer reactant = ac1;
         IAtomContainer product = ac2;
@@ -284,7 +268,6 @@ public class GenerateCompatibilityGraph {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
         cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
-
         dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
@@ -336,10 +319,6 @@ public class GenerateCompatibilityGraph {
                 //print C and D edges of the compatibility graph
                 cEdgesSize = cEdges.size();
                 dEdgesSize = dEdges.size();
-
-
-
-
             }
         }
 
@@ -417,12 +396,7 @@ public class GenerateCompatibilityGraph {
 
             int index_a = comp_graph_nodes_C_zero.elementAt(a);
             int index_aPlus1 = comp_graph_nodes_C_zero.elementAt(a + 1);
-
-
-
             for (int b = 0; b < comp_graph_nodes_C_zero_vector_size; b = b + 4) {
-
-
                 int index_b = comp_graph_nodes_C_zero.elementAt(b);
                 int index_bPlus1 = comp_graph_nodes_C_zero.elementAt(b + 1);
 
