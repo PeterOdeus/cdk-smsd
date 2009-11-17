@@ -39,23 +39,24 @@ import org.openscience.cdk.tools.diff.tree.Point3dDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.AtomDiffTest")
 public class AtomDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
-    	IDifference diff = difference(first, second);
-    	if (diff == null) {
-    		return "";
-    	} else {
-    		return diff.toString();
-    	}
+    public static String diff(IChemObject first, IChemObject second) {
+        IDifference diff = difference(first, second);
+        if (diff == null) {
+            return "";
+        } else {
+            return diff.toString();
+        }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IAtom && second instanceof IAtom)) {
             return null;
         }
-        IAtom firstElem = (IAtom)first;
-        IAtom secondElem = (IAtom)second;
+        IAtom firstElem = (IAtom) first;
+        IAtom secondElem = (IAtom) second;
         ChemObjectDifference totalDiff = new ChemObjectDifference("AtomDiff");
         totalDiff.addChild(IntegerDifference.construct("H", firstElem.getHydrogenCount(), secondElem.getHydrogenCount()));
         totalDiff.addChild(IntegerDifference.construct("SP", firstElem.getStereoParity(), secondElem.getStereoParity()));
@@ -70,5 +71,4 @@ public class AtomDiff {
             return null;
         }
     }
-
 }

@@ -40,9 +40,9 @@ import org.openscience.cdk.tools.diff.tree.StringDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.AtomTypeDiffTest")
 public class AtomTypeDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
+    public static String diff(IChemObject first, IChemObject second) {
         IDifference difference = difference(first, second);
         if (difference == null) {
             return "";
@@ -50,13 +50,14 @@ public class AtomTypeDiff {
             return difference.toString();
         }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IAtomType && second instanceof IAtomType)) {
             return null;
         }
-        IAtomType firstElem = (IAtomType)first;
-        IAtomType secondElem = (IAtomType)second;
+        IAtomType firstElem = (IAtomType) first;
+        IAtomType secondElem = (IAtomType) second;
         ChemObjectDifference totalDiff = new ChemObjectDifference("AtomTypeDiff");
         totalDiff.addChild(StringDifference.construct("N", firstElem.getAtomTypeName(), secondElem.getAtomTypeName()));
         totalDiff.addChild(BondOrderDifference.construct("MBO", firstElem.getMaxBondOrder(), secondElem.getMaxBondOrder()));
@@ -73,5 +74,4 @@ public class AtomTypeDiff {
             return null;
         }
     }
-
 }

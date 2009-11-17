@@ -37,9 +37,9 @@ import org.openscience.cdk.tools.diff.tree.StringDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.ElementDiffTest")
 public class ElementDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
+    public static String diff(IChemObject first, IChemObject second) {
         IDifference difference = difference(first, second);
         if (difference == null) {
             return "";
@@ -47,13 +47,14 @@ public class ElementDiff {
             return difference.toString();
         }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IElement && second instanceof IElement)) {
             return null;
         }
-        IElement firstElem = (IElement)first;
-        IElement secondElem = (IElement)second;
+        IElement firstElem = (IElement) first;
+        IElement secondElem = (IElement) second;
         ChemObjectDifference coDiff = new ChemObjectDifference("ElementDiff");
         coDiff.addChild(StringDifference.construct("S", firstElem.getSymbol(), secondElem.getSymbol()));
         coDiff.addChild(StringDifference.construct("ID", firstElem.getID(), secondElem.getID()));
@@ -65,5 +66,4 @@ public class ElementDiff {
             return null;
         }
     }
-
 }

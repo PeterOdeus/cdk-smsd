@@ -36,23 +36,24 @@ import org.openscience.cdk.tools.diff.tree.IDifferenceList;
  */
 @TestClass("org.openscience.cdk.tools.diff.SingleElectronDiffTest")
 public class SingleElectronDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
-    	IDifference diff = difference(first, second);
-    	if (diff == null) {
-    		return "";
-    	} else {
-    		return diff.toString();
-    	}
+    public static String diff(IChemObject first, IChemObject second) {
+        IDifference diff = difference(first, second);
+        if (diff == null) {
+            return "";
+        } else {
+            return diff.toString();
+        }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof ISingleElectron && second instanceof ISingleElectron)) {
             return null;
         }
-        ISingleElectron firstB = (ISingleElectron)first;
-        ISingleElectron secondB = (ISingleElectron)second;
+        ISingleElectron firstB = (ISingleElectron) first;
+        ISingleElectron secondB = (ISingleElectron) second;
         IDifferenceList totalDiff = new ChemObjectDifference("SingleElectronDiff");
         totalDiff.addChild(AtomDiff.difference(firstB.getAtom(), secondB.getAtom()));
         totalDiff.addChild(ElectronContainerDiff.difference(first, second));
@@ -62,5 +63,4 @@ public class SingleElectronDiff {
             return null;
         }
     }
-
 }

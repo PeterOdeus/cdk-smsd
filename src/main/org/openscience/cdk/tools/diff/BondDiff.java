@@ -38,28 +38,29 @@ import org.openscience.cdk.tools.diff.tree.IntegerDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.BondDiffTest")
 public class BondDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
-    	IDifference diff = difference(first, second);
-    	if (diff == null) {
-    		return "";
-    	} else {
-    		return diff.toString();
-    	}
+    public static String diff(IChemObject first, IChemObject second) {
+        IDifference diff = difference(first, second);
+        if (diff == null) {
+            return "";
+        } else {
+            return diff.toString();
+        }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IBond && second instanceof IBond)) {
             return null;
         }
-        IBond firstB = (IBond)first;
-        IBond secondB = (IBond)second;
+        IBond firstB = (IBond) first;
+        IBond secondB = (IBond) second;
         IDifferenceList totalDiff = new ChemObjectDifference("BondDiff");
         totalDiff.addChild(BondOrderDifference.construct("order", firstB.getOrder(), secondB.getOrder()));
         totalDiff.addChild(IntegerDifference.construct("atomCount", firstB.getAtomCount(), secondB.getAtomCount()));
         if (firstB.getAtomCount() == secondB.getAtomCount()) {
-            for (int i=0; i<firstB.getAtomCount(); i++) {
+            for (int i = 0; i < firstB.getAtomCount(); i++) {
                 totalDiff.addChild(AtomDiff.difference(firstB.getAtom(i), secondB.getAtom(i)));
             }
         }
@@ -70,5 +71,4 @@ public class BondDiff {
             return null;
         }
     }
-
 }

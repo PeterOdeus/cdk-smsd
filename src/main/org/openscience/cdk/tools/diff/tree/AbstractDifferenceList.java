@@ -37,11 +37,11 @@ import java.util.List;
 public abstract class AbstractDifferenceList implements IDifferenceList {
 
     protected List<IDifference> differences;
-    
+
     protected AbstractDifferenceList() {
         differences = new ArrayList<IDifference>();
     }
-    
+
     @TestMethod("testAddChild")
     public void addChild(IDifference childDiff) {
         if (childDiff != null) {
@@ -58,16 +58,16 @@ public abstract class AbstractDifferenceList implements IDifferenceList {
 
     @TestMethod("testChildDiffs")
     public Iterable<IDifference> getChildren() {
-        return new Iterable<IDifference>(){
+        return new Iterable<IDifference>() {
+
             public Iterator<IDifference> iterator() {
                 return differences.iterator();
             }
-        };        
+        };
     }
 
     @TestMethod("testAddChild")
     public int childCount() {
         return differences.size();
     }
-
 }

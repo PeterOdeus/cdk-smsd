@@ -37,23 +37,24 @@ import org.openscience.cdk.tools.diff.tree.IntegerDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.ElectronContainerDiffTest")
 public class ElectronContainerDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
-    public static String diff( IChemObject first, IChemObject second ) {
-    	IDifference diff = difference(first, second);
-    	if (diff == null) {
-    		return "";
-    	} else {
-    		return diff.toString();
-    	}
+    public static String diff(IChemObject first, IChemObject second) {
+        IDifference diff = difference(first, second);
+        if (diff == null) {
+            return "";
+        } else {
+            return diff.toString();
+        }
     }
+
     @TestMethod("testDifference")
-    public static IDifference difference( IChemObject first, IChemObject second ) {
+    public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IElectronContainer && second instanceof IElectronContainer)) {
             return null;
         }
-        IElectronContainer firstEC = (IElectronContainer)first;
-        IElectronContainer secondEC = (IElectronContainer)second;
+        IElectronContainer firstEC = (IElectronContainer) first;
+        IElectronContainer secondEC = (IElectronContainer) second;
         IDifferenceList totalDiff = new ChemObjectDifference("ElectronContainerDiff");
         totalDiff.addChild(IntegerDifference.construct("eCount", firstEC.getElectronCount(), secondEC.getElectronCount()));
         totalDiff.addChild(ChemObjectDiff.difference(first, second));
@@ -63,5 +64,4 @@ public class ElectronContainerDiff {
             return null;
         }
     }
-
 }

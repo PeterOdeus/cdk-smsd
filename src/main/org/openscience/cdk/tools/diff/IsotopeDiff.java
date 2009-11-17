@@ -37,7 +37,7 @@ import org.openscience.cdk.tools.diff.tree.IntegerDifference;
  */
 @TestClass("org.openscience.cdk.tools.diff.IsotopeDiffTest")
 public class IsotopeDiff {
-    
+
     @TestMethod("testMatchAgainstItself,testDiff")
     public static String diff(IChemObject first, IChemObject second) {
         IDifference diff = difference(first, second);
@@ -47,13 +47,14 @@ public class IsotopeDiff {
             return diff.toString();
         }
     }
+
     @TestMethod("testDifference")
     public static IDifference difference(IChemObject first, IChemObject second) {
         if (!(first instanceof IIsotope && second instanceof IIsotope)) {
             return null;
         }
-        IIsotope firstElem = (IIsotope)first;
-        IIsotope secondElem = (IIsotope)second;
+        IIsotope firstElem = (IIsotope) first;
+        IIsotope secondElem = (IIsotope) second;
         ChemObjectDifference totalDiff = new ChemObjectDifference("IsotopeDiff");
         totalDiff.addChild(IntegerDifference.construct("MN", firstElem.getMassNumber(), secondElem.getMassNumber()));
         totalDiff.addChild(DoubleDifference.construct("EM", firstElem.getExactMass(), secondElem.getExactMass()));
@@ -65,5 +66,4 @@ public class IsotopeDiff {
             return null;
         }
     }
-
 }
