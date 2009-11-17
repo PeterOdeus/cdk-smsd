@@ -29,8 +29,6 @@ import org.openscience.cdk.annotations.TestClass;
  * @author      miguelrojasch
  * @cdk.module  reaction
  */
-@TestClass(value="org.openscience.cdk.reaction.type.parameters.SetReactionCenterTest")
-public class SetReactionCenter extends ParameterReact{
-
-	
+@TestClass(value = "org.openscience.cdk.reaction.type.parameters.SetReactionCenterTest")
+public class SetReactionCenter extends ParameterReact {
 }

@@ -50,18 +50,20 @@ public class CDKConvention extends CMLCoreModule {
     public CDKConvention(ICMLModule conv) {
         super(conv);
     }
-    
+
+    @Override
     public void startDocument() {
         super.startDocument();
         isBond = false;
     }
 
+    @Override
     public void startElement(CMLStack xpath, String uri, String local, String raw, Attributes atts) {
         isBond = false;
         if (xpath.toString().endsWith("string/")) {
             for (int i = 0; i < atts.getLength(); i++) {
                 if (atts.getQName(i).equals("buildin") &&
-                    atts.getValue(i).equals("order")) {
+                        atts.getValue(i).equals("order")) {
                     isBond = true;
                 }
             }
@@ -76,13 +78,12 @@ public class CDKConvention extends CMLCoreModule {
             logger.debug("CharData (bond): " + s);
             StringTokenizer st = new StringTokenizer(s);
             while (st.hasMoreElements()) {
-                String border = (String)st.nextElement();
+                String border = (String) st.nextElement();
                 logger.debug("new bond order: " + border);
                 // assume cdk bond object has already started
 //                cdo.setObjectProperty("Bond", "order", border);
                 currentBond.setOrder(
-                	BondManipulator.createBondOrder(Double.parseDouble(border))
-                );
+                        BondManipulator.createBondOrder(Double.parseDouble(border)));
             }
         } else {
             super.characterData(xpath, ch, start, length);

@@ -91,13 +91,10 @@ public class LoggingTool implements ILoggingTool {
 
     private boolean doDebug = false;
     private boolean toSTDOUT = false;
-
     private Logger log4jLogger;
     private static ILoggingTool logger;
     private String classname;
-
     private int stackLength;  // NOPMD
-    
     /** Default number of StackTraceElements to be printed by debug(Exception). */
     public final int DEFAULT_STACK_LENGTH = 5;
 
@@ -118,7 +115,7 @@ public class LoggingTool implements ILoggingTool {
     public LoggingTool(Object object) {
         this(object.getClass());
     }
-    
+
     /**
      * Constructs a LoggingTool which produces log lines indicating them to be
      * for the given Class.
@@ -149,23 +146,23 @@ public class LoggingTool implements ILoggingTool {
         doDebug = false;
         String strJvmVersion = System.getProperty("java.version");
         if (strJvmVersion.compareTo("1.2") >= 0) {
-          // Use a try {} to catch SecurityExceptions when used in applets
-          try {
-            // by default debugging is set off, but it can be turned on
-            // with starting java like "java -Dcdk.debugging=true"
-            if (System.getProperty("cdk.debugging", "false").equals("true")) {
-              doDebug = true;
+            // Use a try {} to catch SecurityExceptions when used in applets
+            try {
+                // by default debugging is set off, but it can be turned on
+                // with starting java like "java -Dcdk.debugging=true"
+                if (System.getProperty("cdk.debugging", "false").equals("true")) {
+                    doDebug = true;
+                }
+                if (System.getProperty("cdk.debug.stdout", "false").equals("true")) {
+                    toSTDOUT = true;
+                }
+            } catch (Exception e) {
+                logger.debug("guessed what happened: security exception thrown by applet runner");
+                logger.debug("  therefore, do not debug");
             }
-            if (System.getProperty("cdk.debug.stdout", "false").equals("true")) {
-              toSTDOUT = true;
-            }
-          } catch (Exception e) {
-            logger.debug("guessed what happened: security exception thrown by applet runner");
-            logger.debug("  therefore, do not debug");
-          }
         }
     }
-    
+
     /**
      * Forces the <code>LoggingTool</code> to configurate the Log4J toolkit.
      * Normally this should be done by the application that uses the CDK library,
@@ -213,7 +210,7 @@ public class LoggingTool implements ILoggingTool {
     public void setStackLength(int length) {
         this.stackLength = length;
     }
-    
+
     /**
      * Outputs the system property for java.class.path.
      */
@@ -233,13 +230,13 @@ public class LoggingTool implements ILoggingTool {
     public void debug(Object object) {
         if (doDebug) {
             if (object instanceof Throwable) {
-                debugThrowable((Throwable)object);
+                debugThrowable((Throwable) object);
             } else {
                 debugString("" + object);
             }
         }
     }
-    
+
     private void debugString(String string) {
         if (toSTDOUT) {
             printToSTDOUT("DEBUG", string);
@@ -247,7 +244,7 @@ public class LoggingTool implements ILoggingTool {
             log4jLogger.debug(string);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -261,7 +258,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + object + object2);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -275,7 +272,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + object + number);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -289,7 +286,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + object + number);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -303,7 +300,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + object + bool);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -318,7 +315,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + obj + obj2 + obj3);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -334,7 +331,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + obj + obj2 + obj3 + obj4);
         }
     }
-    
+
     /**
      * Shows DEBUG output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -351,7 +348,7 @@ public class LoggingTool implements ILoggingTool {
             debugString("" + obj + obj2 + obj3 + obj4 + obj5);
         }
     }
-    
+
     private void debugThrowable(Throwable problem) {
         if (problem != null) {
             if (problem instanceof Error) {
@@ -367,26 +364,26 @@ public class LoggingTool implements ILoggingTool {
                 if (reader.ready()) {
                     String traceLine = reader.readLine();
                     int counter = 0;
-                    while (reader.ready() && traceLine != null && 
-                    		(counter < stackLength)) {
+                    while (reader.ready() && traceLine != null &&
+                            (counter < stackLength)) {
                         debug(traceLine);
                         traceLine = reader.readLine();
                         counter++;
                     }
                 }
             } catch (Exception ioException) {
-                error("Serious error in LoggingTool while printing exception stack trace: " + 
-                      ioException.getMessage());
+                error("Serious error in LoggingTool while printing exception stack trace: " +
+                        ioException.getMessage());
                 logger.debug(ioException);
             }
-            Throwable cause = problem.getCause(); 
+            Throwable cause = problem.getCause();
             if (cause != null) {
-            	debug("Caused by: ");
-            	debugThrowable(cause);
+                debug("Caused by: ");
+                debugThrowable(cause);
             }
         }
     }
-    
+
     /**
      * Shows ERROR output for the Object. It uses the toString() method.
      *
@@ -412,7 +409,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + object + number);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -426,7 +423,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + object + number);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -440,7 +437,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + object + bool);
         }
     }
-    
+
     private void errorString(String string) {
         if (toSTDOUT) {
             printToSTDOUT("ERROR", string);
@@ -448,7 +445,7 @@ public class LoggingTool implements ILoggingTool {
             log4jLogger.error(string);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -462,7 +459,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + object + object2);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -477,7 +474,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + obj + obj2 + obj3);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -493,7 +490,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + obj + obj2 + obj3 + obj4);
         }
     }
-    
+
     /**
      * Shows ERROR output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -510,7 +507,7 @@ public class LoggingTool implements ILoggingTool {
             errorString("" + obj + obj2 + obj3 + obj4 + obj5);
         }
     }
-    
+
     /**
      * Shows FATAL output for the Object. It uses the toString() method.
      *
@@ -552,7 +549,7 @@ public class LoggingTool implements ILoggingTool {
             infoString("" + object + number);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -566,7 +563,7 @@ public class LoggingTool implements ILoggingTool {
             infoString("" + object + number);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -580,7 +577,7 @@ public class LoggingTool implements ILoggingTool {
             infoString("" + object + bool);
         }
     }
-    
+
     private void infoString(String string) {
         if (toSTDOUT) {
             printToSTDOUT("INFO", string);
@@ -588,7 +585,7 @@ public class LoggingTool implements ILoggingTool {
             log4jLogger.info(string);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -602,7 +599,7 @@ public class LoggingTool implements ILoggingTool {
             infoString("" + object + object2);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -617,7 +614,7 @@ public class LoggingTool implements ILoggingTool {
             infoString("" + obj + obj2 + obj3);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -627,13 +624,13 @@ public class LoggingTool implements ILoggingTool {
      * @param obj3 Object to apply toString() too and output
      * @param obj4 Object to apply toString() too and output
      */
-     @TestMethod("testInfo_Object_Object_Object_Object")
+    @TestMethod("testInfo_Object_Object_Object_Object")
     public void info(Object obj, Object obj2, Object obj3, Object obj4) {
         if (doDebug) {
             infoString("" + obj + obj2 + obj3 + obj4);
         }
     }
-    
+
     /**
      * Shows INFO output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -662,7 +659,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + object);
         }
     }
-    
+
     private void warnString(String string) {
         if (toSTDOUT) {
             printToSTDOUT("WARN", string);
@@ -670,7 +667,7 @@ public class LoggingTool implements ILoggingTool {
             log4jLogger.warn(string);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -684,7 +681,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + object + number);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -698,7 +695,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + object + bool);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -712,7 +709,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + object + number);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -726,7 +723,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + object + object2);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -741,7 +738,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + obj + obj2 + obj3);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -757,7 +754,7 @@ public class LoggingTool implements ILoggingTool {
             warnString("" + obj + obj2 + obj3 + obj4);
         }
     }
-    
+
     /**
      * Shows WARN output for the given Object's. It uses the
      * toString() method to concatenate the objects.
@@ -791,7 +788,7 @@ public class LoggingTool implements ILoggingTool {
     public boolean isDebugEnabled() {
         return doDebug;
     }
-    
+
     private void printToSTDOUT(String level, String message) {
         System.out.print(classname);
         System.out.print(" ");
@@ -810,6 +807,5 @@ public class LoggingTool implements ILoggingTool {
     public static ILoggingTool create(Class<?> sourceClass) {
         return new LoggingTool(sourceClass);
     }
-
 }
 

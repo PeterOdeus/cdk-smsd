@@ -51,13 +51,15 @@ import java.util.Map;
  */
 @TestClass("org.openscience.cdk.tools.periodictable.PeriodicTableTest")
 public class PeriodicTable {
-    
+
     private static boolean isInitialized = false;
     private static Map<String, PeriodicTableElement> elements;
     private static Map<Integer, PeriodicTableElement> elementsByNumber;
 
     private static void initialize() {
-        if (isInitialized) return;
+        if (isInitialized) {
+            return;
+        }
 
         ElementPTFactory factory;
         try {
@@ -65,7 +67,7 @@ public class PeriodicTable {
         } catch (IOException e) {
             elements = null;
             return;
-        } 
+        }
 
         elements = new HashMap<String, PeriodicTableElement>();
         elementsByNumber = new HashMap<Integer, PeriodicTableElement>();
@@ -92,7 +94,9 @@ public class PeriodicTable {
         InputStream ins = PeriodicTable.class.getClassLoader().getResourceAsStream(filename);
         BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
 
-        for (int i = 0; i < 6; i++) reader.readLine();
+        for (int i = 0; i < 6; i++) {
+            reader.readLine();
+        }
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -102,19 +106,24 @@ public class PeriodicTable {
             PeriodicTableElement e = elementsByNumber.get(atnum);
             if (e != null) {
                 String symbol = e.getSymbol();
-                if (vdw == 2) elements.get(symbol).setVdwRadius((Double) CDKConstants.UNSET);
-                else elements.get(symbol).setVdwRadius(vdw);
+                if (vdw == 2) {
+                    elements.get(symbol).setVdwRadius((Double) CDKConstants.UNSET);
+                } else {
+                    elements.get(symbol).setVdwRadius(vdw);
+                }
             }
         }
     }
 
-     private static void readCovalent() throws IOException {
+    private static void readCovalent() throws IOException {
         // now read in the covalent radi
         String filename = "org/openscience/cdk/config/data/radii-covalent.txt";
         InputStream ins = PeriodicTable.class.getClassLoader().getResourceAsStream(filename);
         BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
 
-        for (int i = 0; i < 5; i++) reader.readLine();
+        for (int i = 0; i < 5; i++) {
+            reader.readLine();
+        }
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -135,7 +144,9 @@ public class PeriodicTable {
         InputStream ins = PeriodicTable.class.getClassLoader().getResourceAsStream(filename);
         BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
 
-        for (int i = 0; i < 6; i++) reader.readLine();
+        for (int i = 0; i < 6; i++) {
+            reader.readLine();
+        }
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -154,80 +165,110 @@ public class PeriodicTable {
     public static Double getVdwRadius(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getVdwRadius();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getVdwRadius();
+        }
     }
 
     @TestMethod("testTable")
     public static Double getCovalentRadius(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getCovalentRadius();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getCovalentRadius();
+        }
     }
 
     @TestMethod("testTable")
     public static String getCASId(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getCASid();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getCASid();
+        }
     }
 
     @TestMethod("testTable")
     public static String getChemicalSeries(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getChemicalSerie();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getChemicalSerie();
+        }
     }
 
     @TestMethod("testTable")
     public static Integer getGroup(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getGroup();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getGroup();
+        }
     }
 
     @TestMethod("testTable")
     public static String getName(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getName();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getName();
+        }
     }
 
     @TestMethod("testTable")
     public static Integer getPeriod(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getPeriod();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getPeriod();
+        }
     }
 
     @TestMethod("testTable")
     public static String getPhase(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getPhase();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getPhase();
+        }
     }
 
     @TestMethod("testTable")
     public static Integer getAtomicNumber(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getAtomicNumber();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getAtomicNumber();
+        }
     }
 
     @TestMethod("testTable")
     public static Double getPaulingElectronegativity(String symbol) {
         initialize();
         PeriodicTableElement element = elements.get(symbol);
-        if (element == null) return null;
-        else return element.getPaulingEneg();
+        if (element == null) {
+            return null;
+        } else {
+            return element.getPaulingEneg();
+        }
     }
 
     @TestMethod("testTable")
