@@ -76,8 +76,7 @@ public class MCSPlus {
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
             BKKCKCF init = new BKKCKCF(comp_graph_nodes, C_edges, D_edges);
-            Max_Cliques_Set = init.getMaxCliqueSet(); // build the CDKRGraph corresponding to this problem
-
+            Max_Cliques_Set = init.getMaxCliqueSet();
             if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
@@ -87,9 +86,6 @@ public class MCSPlus {
             gcg.clear();
 //            int clique_number = 1;
             while (!Max_Cliques_Set.empty()) {
-
-                // build the CDKRGraph corresponding to this problem
-
                 if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
                     //System.out.println("|Hello|");
                     timeoutFlag = true;
@@ -100,19 +96,15 @@ public class MCSPlus {
                 int clique_size = clique_vector.size();
                 if (clique_size < ac1.getAtomCount() && clique_size < ac2.getAtomCount()) {
                     McGregor mgit = new McGregor(ac1, ac2, _mappings);
-                    mgit.startMcGregorIteration(mgit.getMCSSize(), clique_vector, comp_graph_nodes); //Start McGregorMCSPlus search
-
+                    mgit.startMcGregorIteration(mgit.getMCSSize(), clique_vector, comp_graph_nodes);
                     _mappings = mgit.getMappings();
                     mgit = null;
 
                 } else {
-                    _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_vector); //erfolgt KEINE McGregorMCSPlus-Suche->speichere L�ungen in final_MAPPINGS
-
+                    _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_vector);
                 }
                 Max_Cliques_Set.pop();
 //                clique_number++;
-
-
             }
         } catch (IOException ex) {
             Logger.getLogger(MCSPlus.class.getName()).log(Level.SEVERE, null, ex);
