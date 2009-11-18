@@ -24,10 +24,10 @@
 package org.openscience.cdk.smsd.algorithm.mcgregor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.Vector;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -44,8 +44,8 @@ public class McGregor {
     private IAtomContainer target = null;
     private BinaryTree last = null;
     private BinaryTree first = null;
-    private Stack<List<Integer>> BESTARCS = null;
-    private List<Integer> MARCS = null;
+    private Stack<Vector<Integer>> BESTARCS = null;
+    private Vector<Integer> MARCS = null;
     private List<Integer> i_globalA = null;
     private List<Integer> i_globalB = null;
     private List<String> c_globalA = null;
@@ -94,18 +94,18 @@ public class McGregor {
         } else {
             this.globalMCSSize = _mappings.get(0).size();
         }
-        MARCS = new ArrayList<Integer>();
+        MARCS = new Vector<Integer>();
 
-        BESTARCS = new Stack<List<Integer>>();
+        BESTARCS = new Stack<Vector<Integer>>();
 
-        //Initialization of global ArrayLists
-        i_globalA = new ArrayList<Integer>();
-        i_globalB = new ArrayList<Integer>();
-        c_globalA = new ArrayList<String>();
-        c_globalB = new ArrayList<String>();
+        //Initialization of global vectors
+        i_globalA = new Vector<Integer>();
+        i_globalB = new Vector<Integer>();
+        c_globalA = new Vector<String>();
+        c_globalB = new Vector<String>();
 
-        c_tab1_copy = new ArrayList<String>();
-        c_tab2_copy = new ArrayList<String>();
+        c_tab1_copy = new Vector<String>();
+        c_tab2_copy = new Vector<String>();
 
         new_matrix = false;
 
@@ -115,7 +115,7 @@ public class McGregor {
 
     /**
      *
-     * @param best_Mapping_size 
+     * @param best_Mapping_size
      * @param present_Mapping
      * @throws IOException
      */
@@ -131,7 +131,7 @@ public class McGregor {
 
 
         //find mapped atoms of both molecules and store these in mapped_atoms
-        List<Integer> mapped_atoms = new ArrayList<Integer>();
+        List<Integer> mapped_atoms = new Vector<Integer>();
 //        System.out.println("\nMapped Atoms");
         for (Map.Entry<Integer, Integer> map : present_Mapping.entrySet()) {
 //            System.out.println("i:" + map.getKey() + " j:" + map.getValue());
@@ -141,18 +141,18 @@ public class McGregor {
         int mapping_size = present_Mapping.size();
 
 
-        i_bond_neighborsA = new ArrayList<Integer>();
-        ArrayList<Integer> i_bond_setA = new ArrayList<Integer>();
-        c_bond_neighborsA = new ArrayList<String>();
-        ArrayList<String> c_bond_setA = new ArrayList<String>();
+        i_bond_neighborsA = new Vector<Integer>();
+        Vector<Integer> i_bond_setA = new Vector<Integer>();
+        c_bond_neighborsA = new Vector<String>();
+        Vector<String> c_bond_setA = new Vector<String>();
 
-        ArrayList<Integer> i_bond_neighborsB = new ArrayList<Integer>();
-        ArrayList<Integer> i_bond_setB = new ArrayList<Integer>();
-        ArrayList<String> c_bond_neighborsB = new ArrayList<String>();
-        ArrayList<String> c_bond_setB = new ArrayList<String>();
+        Vector<Integer> i_bond_neighborsB = new Vector<Integer>();
+        Vector<Integer> i_bond_setB = new Vector<Integer>();
+        Vector<String> c_bond_neighborsB = new Vector<String>();
+        Vector<String> c_bond_setB = new Vector<String>();
 
         //find unmapped atoms of molecule A
-        ArrayList<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
+        Vector<Integer> unmapped_atoms_molA = new Vector<Integer>();
 
         int unmapped_numA = 0;
         boolean atomA_is_unmapped = true;
@@ -195,7 +195,7 @@ public class McGregor {
 
 
         //find unmapped atoms of molecule B
-        ArrayList<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
+        Vector<Integer> unmapped_atoms_molB = new Vector<Integer>();
         int unmapped_numB = 0;
         boolean atomB_is_unmapped = true;
 
@@ -222,7 +222,7 @@ public class McGregor {
 
         //Extract bonds which are related with unmapped atoms of molecule B.
         //In case that unmapped atoms are connected with already mapped atoms, the mapped atoms are labelled with
-        //new special signs -> the result are two ArrayLists: c_bond_neighborsA and int_bonds_molB, which contain those
+        //new special signs -> the result are two vectors: c_bond_neighborsA and int_bonds_molB, which contain those
         //bonds of molecule B, which are relevant for the McGregorBondTypeInSensitive algorithm.
         //The special signs must be transfered to the corresponding atoms of molecule A
 
@@ -252,13 +252,13 @@ public class McGregor {
     }
 
     /**
-     * 
-     * @param best_Mapping_size 
-     * @param clique_ArrayList
+     *
+     * @param best_Mapping_size
+     * @param clique_vector
      * @param comp_graph_nodes
      * @throws IOException
      */
-    public void startMcGregorIteration(int best_Mapping_size, List<Integer> clique_ArrayList, List<Integer> comp_graph_nodes) throws IOException {
+    public void startMcGregorIteration(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
         this.globalMCSSize = (best_Mapping_size / 2);
         int SR_count = 0;
 
@@ -275,24 +275,24 @@ public class McGregor {
         //System.out.println("C_Tab2_Copy " + c_tab2_copy);
 
         //find mapped atoms of both molecules and store these in mapped_atoms
-        ArrayList<Integer> mapped_atoms = new ArrayList<Integer>();
+        Vector<Integer> mapped_atoms = new Vector<Integer>();
 
         int mapped_atom_number = 0;
 //
 
-        i_bond_neighborsA = new ArrayList<Integer>();
-        ArrayList<Integer> i_bond_setA = new ArrayList<Integer>();
-        c_bond_neighborsA = new ArrayList<String>();
-        ArrayList<String> c_bond_setA = new ArrayList<String>();
+        i_bond_neighborsA = new Vector<Integer>();
+        Vector<Integer> i_bond_setA = new Vector<Integer>();
+        c_bond_neighborsA = new Vector<String>();
+        Vector<String> c_bond_setA = new Vector<String>();
 
-        ArrayList<Integer> i_bond_neighborsB = new ArrayList<Integer>();
-        ArrayList<Integer> i_bond_setB = new ArrayList<Integer>();
-        ArrayList<String> c_bond_neighborsB = new ArrayList<String>();
-        ArrayList<String> c_bond_setB = new ArrayList<String>();
+        Vector<Integer> i_bond_neighborsB = new Vector<Integer>();
+        Vector<Integer> i_bond_setB = new Vector<Integer>();
+        Vector<String> c_bond_neighborsB = new Vector<String>();
+        Vector<String> c_bond_setB = new Vector<String>();
 
 
 
-        int clique_siz = clique_ArrayList.size();
+        int clique_siz = clique_vector.size();
         int vec_size = comp_graph_nodes.size();
 
 //        System.out.println("clique_siz: " + clique_siz);
@@ -302,7 +302,7 @@ public class McGregor {
 
         for (int a = 0; a < clique_siz; a++) {
             //go through all clique nodes
-            cliqueNumber = clique_ArrayList.get(a);
+            cliqueNumber = clique_vector.get(a);
             for (int b = 0; b < vec_size; b = b + 3) {
                 //go through all nodes in the compatibility graph
                 if (cliqueNumber == comp_graph_nodes.get(b + 2)) {
@@ -315,7 +315,7 @@ public class McGregor {
 
 
         //find unmapped atoms of molecule A
-        ArrayList<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
+        Vector<Integer> unmapped_atoms_molA = new Vector<Integer>();
 
         int unmapped_numA = 0;
         boolean atomA_is_unmapped = true;
@@ -347,7 +347,7 @@ public class McGregor {
 
         //Extract bonds which are related with unmapped atoms of molecule A.
         //In case that unmapped atoms are connected with already mapped atoms, the mapped atoms are labelled with
-        //new special signs -> the result are two ArrayLists: c_bond_neighborsA and int_bonds_molA, which contain those
+        //new special signs -> the result are two vectors: c_bond_neighborsA and int_bonds_molA, which contain those
         //bonds of molecule A, which are relevant for the McGregorBondTypeInSensitive algorithm.
         //The special signs must be transfered to the corresponding atoms of molecule B
 
@@ -377,7 +377,7 @@ public class McGregor {
 
 
         //find unmapped atoms of molecule B
-        ArrayList<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
+        Vector<Integer> unmapped_atoms_molB = new Vector<Integer>();
         int unmapped_numB = 0;
         boolean atomB_is_unmapped = true;
 
@@ -404,7 +404,7 @@ public class McGregor {
 
         //Extract bonds which are related with unmapped atoms of molecule B.
         //In case that unmapped atoms are connected with already mapped atoms, the mapped atoms are labelled with
-        //new special signs -> the result are two ArrayLists: c_bond_neighborsA and int_bonds_molB, which contain those
+        //new special signs -> the result are two vectors: c_bond_neighborsA and int_bonds_molB, which contain those
         //bonds of molecule B, which are relevant for the McGregorBondTypeInSensitive algorithm.
         //The special signs must be transfered to the corresponding atoms of molecule A
 
@@ -452,10 +452,10 @@ public class McGregor {
             List<String> c_bond_neighborsA,
             List<String> c_bond_neighborsB,
             int set_num_A, int set_num_B,
-            ArrayList<Integer> i_bond_setA,
-            ArrayList<Integer> i_bond_setB,
-            ArrayList<String> c_bond_setA,
-            ArrayList<String> c_bond_setB) throws IOException {
+            Vector<Integer> i_bond_setA,
+            Vector<Integer> i_bond_setB,
+            Vector<String> c_bond_setA,
+            Vector<String> c_bond_setB) throws IOException {
 
 //        System.out.println("iterator");
 //        System.out.println("mapped_atom_num " + mapped_atom_num);
@@ -475,7 +475,7 @@ public class McGregor {
 
 
 
-        List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
+        List<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
 
         //check possible mappings:
         boolean no_further_mapping_possible = true;
@@ -513,7 +513,7 @@ public class McGregor {
 
                         no_further_mapping_possible = false;
                     }
-//                      
+//
                 } else if ((!bondTypeFlag) &&
                         (((G1A.compareToIgnoreCase(G1B) == 0) && (G2A.compareToIgnoreCase(G2B) == 0)) || ((G1A.compareToIgnoreCase(G2B) == 0) && (G2A.compareToIgnoreCase(G1B) == 0)))) {
 
@@ -539,7 +539,7 @@ public class McGregor {
                         this.globalMCSSize = mapped_atom_num;
 //                        System.out.println("best_MAPPING_size: " + globalMCSSize);
                         mappings.clear();
-                        //mappings=new ArrayList<ArrayList<Integer>>();
+                        //mappings=new Vector<Vector<Integer>>();
                     }
 
                     mappings.add(mapped_atoms);
@@ -564,7 +564,7 @@ public class McGregor {
         c_globalA.clear();
 
         c_globalB.clear();
-        //redefining of global ArrayLists and variables
+        //redefining of global vectors and variables
         nNum_globalA = neighbor_bondnum_A; //N global variable defined
         nNum_globalB = neighbor_bondnum_B; //N global variable defined
 
@@ -577,13 +577,18 @@ public class McGregor {
         c_globalB.addAll(c_bond_neighborsB);
 
         MARCS.clear();
-//        MARCS.setSize(neighbor_bondnum_A * neighbor_bondnum_B);
-        int size=neighbor_bondnum_A * neighbor_bondnum_B;
-        MARCS=new ArrayList<Integer>(size);
-        for (int i = 0;i < size; i++) {
-            MARCS.add(i,0);
+
+        MARCS.setSize(neighbor_bondnum_A * neighbor_bondnum_B);
+
+
+        for (int i = 0;
+                i < neighbor_bondnum_A * neighbor_bondnum_B; i++) {
+
+            MARCS.setElementAt(0, i);
         }
-        for (int row = 0;row < neighbor_bondnum_A;row++) {
+        for (int row = 0;
+                row < neighbor_bondnum_A;
+                row++) {
             for (int column = 0; column < neighbor_bondnum_B; column++) {
 
                 String G1A = c_bond_neighborsA.get(row * 4 + 0);
@@ -609,10 +614,10 @@ public class McGregor {
                     IAtom P2_B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
                     if (bondTypeFlag && bondMatch(ReactantBond, ProductBond)) {
-                        MARCS.set(row * neighbor_bondnum_B + column,1);
+                        MARCS.setElementAt(1, row * neighbor_bondnum_B + column);
 
                     } else if (!bondTypeFlag) {
-                        MARCS.set(row * neighbor_bondnum_B + column,1);
+                        MARCS.setElementAt(1, row * neighbor_bondnum_B + column);
                     }
                 }
 
@@ -625,7 +630,7 @@ public class McGregor {
         bestarcsleft = 0;
 
         startsearch();
-        Stack<List<Integer>> BESTARCS_copy = new Stack<List<Integer>>();
+        Stack<Vector<Integer>> BESTARCS_copy = new Stack<Vector<Integer>>();
 
         BESTARCS_copy.addAll(BESTARCS);
         while (!BESTARCS.empty()) {
@@ -633,8 +638,8 @@ public class McGregor {
         }
         while (!BESTARCS_copy.empty()) {
 
-            List<Integer> MARCS_ArrayList = new ArrayList<Integer>(BESTARCS_copy.peek());
-            List<Integer> new_MAPPING = findMcGregorMapping(MARCS_ArrayList, mapped_atom_num, mapped_atoms, neighbor_bondnum_A, i_bond_neighbor_atoms_A, neighbor_bondnum_B, i_bond_neighbor_atoms_B);
+            List<Integer> MARCS_vector = new Vector<Integer>(BESTARCS_copy.peek());
+            List<Integer> new_MAPPING = findMcGregorMapping(MARCS_vector, mapped_atom_num, mapped_atoms, neighbor_bondnum_A, i_bond_neighbor_atoms_A, neighbor_bondnum_B, i_bond_neighbor_atoms_B);
 
             int new_MAPPING_size = new_MAPPING.size() / 2;
             boolean no_further_MAPPINGS = false;
@@ -647,13 +652,13 @@ public class McGregor {
 
             int new_neighbor_numB = 0; //instead of neighbor_bondnum_B
 
-            ArrayList<Integer> new_i_neighborsA = new ArrayList<Integer>(); //instead of i_bond_neighbor_atoms_A
+            Vector<Integer> new_i_neighborsA = new Vector<Integer>(); //instead of i_bond_neighbor_atoms_A
 
-            ArrayList<Integer> new_i_neighborsB = new ArrayList<Integer>(); //instead of i_bond_neighbor_atoms_B
+            Vector<Integer> new_i_neighborsB = new Vector<Integer>(); //instead of i_bond_neighbor_atoms_B
 
-            ArrayList<String> new_c_neighborsA = new ArrayList<String>(); //instead of c_bond_neighborsA
+            Vector<String> new_c_neighborsA = new Vector<String>(); //instead of c_bond_neighborsA
 
-            ArrayList<String> new_c_neighborsB = new ArrayList<String>(); //instead of c_bond_neighborsB
+            Vector<String> new_c_neighborsB = new Vector<String>(); //instead of c_bond_neighborsB
 
             new_i_neighborsA.clear();
             new_i_neighborsB.clear();
@@ -668,18 +673,18 @@ public class McGregor {
 
             set_bondnum_B = 0; //instead of set_num_B
 
-            ArrayList<Integer> new_i_bond_setA = new ArrayList<Integer>(); //instead of i_bond_setA
-            ArrayList<Integer> new_i_bond_setB = new ArrayList<Integer>(); //instead of i_bond_setB
-            ArrayList<String> new_c_bond_setA = new ArrayList<String>(); //instead of c_bond_setA
-            ArrayList<String> new_c_bond_setB = new ArrayList<String>(); //instead of c_bond_setB
-            ArrayList<String> c_setB_copy = new ArrayList<String>();
-            ArrayList<String> c_setA_copy = new ArrayList<String>();
+            Vector<Integer> new_i_bond_setA = new Vector<Integer>(); //instead of i_bond_setA
+            Vector<Integer> new_i_bond_setB = new Vector<Integer>(); //instead of i_bond_setB
+            Vector<String> new_c_bond_setA = new Vector<String>(); //instead of c_bond_setA
+            Vector<String> new_c_bond_setB = new Vector<String>(); //instead of c_bond_setB
+            Vector<String> c_setB_copy = new Vector<String>();
+            Vector<String> c_setA_copy = new Vector<String>();
 
             generateCSetACopy(set_num_A, c_bond_setA, c_setA_copy);
             generateCSetBCopy(set_num_B, c_bond_setB, c_setB_copy);
 
             //find unmapped atoms of molecule A
-            ArrayList<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
+            Vector<Integer> unmapped_atoms_molA = new Vector<Integer>();
             int unmapped_numA = 0;
             boolean atomA_is_unmapped = true;
 
@@ -822,7 +827,7 @@ public class McGregor {
 
             //find unmapped atoms of molecule B
 
-            ArrayList<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
+            Vector<Integer> unmapped_atoms_molB = new Vector<Integer>();
             int unmapped_numB = 0;
             boolean atomB_is_unmapped = true;
 
@@ -1001,7 +1006,7 @@ public class McGregor {
 
     }
 
-    private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, ArrayList<Integer> i_bond_neighbors, ArrayList<String> c_bond_neighbors) {
+    private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
 
         for (int a = 0; a <
                 neighbor_bondnum; a++) {
@@ -1037,20 +1042,26 @@ public class McGregor {
         return Flag;
     }
 
-    private List<Integer> findMcGregorMapping(List<Integer> MARCS_ArrayList_org, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
+    private List<Integer> findMcGregorMapping(List<Integer> MARCS_vector_org, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
 
-        List<Integer> MARCS_ArrayList = new ArrayList<Integer>(MARCS_ArrayList_org);
-        List<Integer> current_MAPPING = new ArrayList<Integer>(current_MAPPING_org);
-        List<Integer> i_bonds_A = new ArrayList<Integer>(i_bonds_A_org);
-        List<Integer> i_bonds_B = new ArrayList<Integer>(i_bonds_B_org);
+        Vector<Integer> MARCS_vector = new Vector<Integer>(MARCS_vector_org);
+        Vector<Integer> current_MAPPING = new Vector<Integer>(current_MAPPING_org);
+        Vector<Integer> i_bonds_A = new Vector<Integer>(i_bonds_A_org);
+        Vector<Integer> i_bonds_B = new Vector<Integer>(i_bonds_B_org);
 
-        List<Integer> additional_mapping = new ArrayList<Integer>();
+        Vector<Integer> additional_mapping = new Vector<Integer>();
 
 
 
-        for (int x = 0; x < bondnum_A; x++) {
-            for (int y = 0; y < bondnum_B; y++) {
-                if (MARCS_ArrayList.get(x * bondnum_B + y) == 1) {
+        for (int x = 0; x <
+                bondnum_A; x++) {
+            for (int y = 0; y <
+                    bondnum_B; y++) {
+
+
+                if (MARCS_vector.get(x * bondnum_B + y) == 1) {
+
+
                     int Atom1_moleculeA = i_bonds_A.get(x * 3 + 0);
                     int Atom2_moleculeA = i_bonds_A.get(x * 3 + 1);
                     int Atom1_moleculeB = i_bonds_B.get(y * 3 + 0);
@@ -1069,7 +1080,8 @@ public class McGregor {
 
                     boolean bMatch = bondMatch(ReactantBond, ProductBond);
 
-                    for (int z = 0; z < mapped_atoms_num; z++) {
+                    for (int z = 0; z <
+                            mapped_atoms_num; z++) {
 
                         int Mapped_Atom_1 = current_MAPPING.get(z * 2 + 0);
                         int Mapped_Atom_2 = current_MAPPING.get(z * 2 + 1);
@@ -1135,7 +1147,7 @@ public class McGregor {
         }
 //remove recurring mappings from current_MAPPING
 
-        List<Integer> unique_MAPPING = removeRecurringMappings(current_MAPPING);
+        Vector<Integer> unique_MAPPING = removeRecurringMappings(current_MAPPING);
 
         return unique_MAPPING;
     }
@@ -1143,14 +1155,14 @@ public class McGregor {
 //Function compaires a structure array with itself. Sometimes a mapping occurs several times within the array.
 //The function eliminates these recurring mappings. Function is called in function best_solution.
 //The function is called by itself as long as the last list element is processed.
-    private List<Integer> removeRecurringMappings(List<Integer> atom_mapping) {
+    private Vector<Integer> removeRecurringMappings(Vector<Integer> atom_mapping) {
 
         //System.out.println("Mapped Atoms removeRecurringMappings: " + atom_mapping);
 
-        //ArrayList<Integer> atom_mapping = new ArrayList<Integer>(atom_mapping_org);
+        //Vector<Integer> atom_mapping = new Vector<Integer>(atom_mapping_org);
 
         boolean exist = true;
-        ArrayList<Integer> temp_map = new ArrayList<Integer>();
+        Vector<Integer> temp_map = new Vector<Integer>();
         int temp_counter = 0;
         int atom_mapping_size = atom_mapping.size();
         for (int x = 0; x <
@@ -1178,21 +1190,23 @@ public class McGregor {
         return temp_map;
     }
 
-    private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG) {
+    private void partsearch(int xstart, int ystart, Vector<Integer> TEMPMARCS_ORG) {
 
 
         int x = xstart;
         int y = ystart;
 
-        List<Integer> TEMPMARCS = new ArrayList<Integer>(TEMPMARCS_ORG);
+        Vector<Integer> TEMPMARCS = new Vector<Integer>(TEMPMARCS_ORG);
 
         if (TEMPMARCS.get(xstart * nNum_globalB + ystart) == 1) {
 
             removeRedundantArcs(xstart, ystart, TEMPMARCS);
             int arcsleft = 0;
 
-            for (int a = 0; a <nNum_globalA; a++) {
-                for (int b = 0; b <nNum_globalB; b++) {
+            for (int a = 0; a <
+                    nNum_globalA; a++) {
+                for (int b = 0; b <
+                        nNum_globalB; b++) {
 
                     if (TEMPMARCS.get(a * nNum_globalB + b) == (1)) {
                         arcsleft++;
@@ -1218,13 +1232,14 @@ public class McGregor {
                 if (x < nNum_globalA) {
 
                     partsearch(x, y, TEMPMARCS);
-                    TEMPMARCS.set(x * nNum_globalB + y, 0);
+                    TEMPMARCS.setElementAt(0, x * nNum_globalB + y);
                     partsearch(x, y, TEMPMARCS);
 
                 } else {
                     if (arcsleft > bestarcsleft) {
                         removeTreeStructure(first);
-                        first =last = new BinaryTree(-1);
+                        first =
+                                last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
 
@@ -1260,12 +1275,14 @@ public class McGregor {
             if (x < nNum_globalA) {
 
                 partsearch(x, y, TEMPMARCS);
-                TEMPMARCS.set(x * nNum_globalB + y, 0);
+                TEMPMARCS.setElementAt(0, x * nNum_globalB + y);
                 partsearch(x, y, TEMPMARCS);
             } else {
                 int arcsleft = 0;
-                for (int a = 0; a <nNum_globalA; a++) {
-                    for (int b = 0; b <nNum_globalB; b++) {
+                for (int a = 0; a <
+                        nNum_globalA; a++) {
+                    for (int b = 0; b <
+                            nNum_globalB; b++) {
                         if (TEMPMARCS.get(a * nNum_globalB + b) == 1) {
                             arcsleft++;
                         }
@@ -1300,7 +1317,7 @@ public class McGregor {
 //atom by atom matching. After this the function replaces all entries in the same row and column of the current
 //position by zeros. Only the entry of the current position is set to one.
 //Return value "count_arcsleft" counts the number of arcs, which are still in the matrix.
-    private void removeRedundantArcs(int row, int column, List<Integer> MARCS) {
+    private void removeRedundantArcs(int row, int column, Vector<Integer> MARCS) {
 
         //System.err.print("Betrachte: " + c_globalA.get(row*2+0) + c_globalA.get(row*2+1));
         //System.err.println( " und " + c_globalA.get(column*2+0) + c_globalA.get(column*2+1) );
@@ -1314,35 +1331,38 @@ public class McGregor {
             int row_atom1 = i_globalA.get(x * 3 + 0);
             int row_atom2 = i_globalA.get(x * 3 + 1);
 
-            for (int y = 0; y < nNum_globalB; y++) {
+            for (int y = 0; y <
+                    nNum_globalB; y++) {
                 int column_atom3 = i_globalB.get(y * 3 + 0);
                 int column_atom4 = i_globalB.get(y * 3 + 1);
 
                 if (((G1_atom == row_atom1) || (G1_atom == row_atom2)) && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
 
-                    MARCS.set(x * nNum_globalB + y, 0);
+                    MARCS.setElementAt(0, x * nNum_globalB + y);
                 }
 
                 if (((G2_atom == row_atom1) || (G2_atom == row_atom2)) && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
-                    MARCS.set(x * nNum_globalB + y, 0);
+                    MARCS.setElementAt(0, x * nNum_globalB + y);
                 }
 
                 if (((G3_atom == column_atom3) || (G3_atom == column_atom4)) && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
-                    MARCS.set(x * nNum_globalB + y, 0);
+                    MARCS.setElementAt(0, x * nNum_globalB + y);
                 }
 
                 if (((G4_atom == column_atom3) || (G4_atom == column_atom4)) && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
-                    MARCS.set(x * nNum_globalB + y, 0);
+                    MARCS.setElementAt(0, x * nNum_globalB + y);
                 }
 
             }
         }
 
-        for (int v = 0; v <nNum_globalA; v++) {
+        for (int v = 0; v <
+                nNum_globalA; v++) {
             MARCS.set(v * nNum_globalB + column, 0);
         }
 
-        for (int w = 0; w <nNum_globalB; w++) {
+        for (int w = 0; w <
+                nNum_globalB; w++) {
             MARCS.set(row * nNum_globalB + w, 0);
         }
 
@@ -1375,24 +1395,26 @@ public class McGregor {
 //"verifyNodes". If the matrix already exists the function returns false which means that
 //the matrix will not be stored. Otherwise the function returns true which means that the
 //matrix will be stored in function partsearch.
+//private boolean checkMARCS(Vector<Integer> MARCS) {
+    private boolean checkMARCS(Vector<Integer> MARCS_T) {
 
-    private boolean checkMARCS(List<Integer> MARCS_T) {
 
-        int size = nNum_globalA * nNum_globalA;
-        List<Integer> posnum_list = new ArrayList<Integer>(size);
-//        posnum_list.setSize(nNum_globalA * nNum_globalA); /*TO DO ASAD Initi by 0;*/
+        Vector<Integer> posnum_list = new Vector<Integer>();
+        posnum_list.setSize(nNum_globalA * nNum_globalA); /*TO DO ASAD Initi by 0;*/
 
-        for (int i = 0; i <= size; i++) {
-            posnum_list.add(i, 0);
+        for (int i = 0; i <
+                posnum_list.size(); i++) {
+            posnum_list.set(i, 0);
         }
 
         int y = 0;
         int count_entries = 0;
-        for (int x = 0; x < posnum_list.size(); x++) {
+        for (int x = 0; x <
+                (nNum_globalA * nNum_globalB); x++) {
             if (MARCS_T.get(x) == 1) {
-                posnum_list.set(y, x);
+                posnum_list.setElementAt(x, y++);
                 count_entries++;
-                y++;
+
             }
 
 
@@ -1413,7 +1435,7 @@ public class McGregor {
     /* Modified function call by ASAD in Java have to check
      *
      */
-    private boolean verifyNodes(List<Integer> matrix, BinaryTree cur_struc, int x, int field_length) {
+    private boolean verifyNodes(Vector<Integer> matrix, BinaryTree cur_struc, int x, int field_length) {
 
         if (((matrix.get(x) == cur_struc.getValue()) && (x < field_length)) && (cur_struc.equal != null)) {
             new_matrix = false;
@@ -1440,6 +1462,12 @@ public class McGregor {
                     y++;
 
                 }
+
+
+
+
+
+
                 last_one.equal = null;
                 new_matrix =
                         true;
@@ -1452,7 +1480,7 @@ public class McGregor {
     private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
 
-        ArrayList<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
+        Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
 
         int corresponding_atom = 0;
         for (int a = 0; a <
@@ -1467,7 +1495,7 @@ public class McGregor {
         return corresponding_atom;
     }
 
-    private int generateCSetBCopy(int bond_number, ArrayList<String> c_setB, ArrayList<String> c_setB_copy) {
+    private int generateCSetBCopy(int bond_number, Vector<String> c_setB, Vector<String> c_setB_copy) {
 
         for (int a = 0; a <
                 bond_number; a++) {
@@ -1480,7 +1508,7 @@ public class McGregor {
         return 0;
     }
 
-    private int generateCSetACopy(int bond_number, ArrayList<String> c_setA, ArrayList<String> c_setA_copy) {
+    private int generateCSetACopy(int bond_number, Vector<String> c_setA, Vector<String> c_setA_copy) {
 
         for (int a = 0; a <
                 bond_number; a++) {
@@ -1494,11 +1522,14 @@ public class McGregor {
     }
 
     private void startsearch() {
-        int size=nNum_globalA * nNum_globalB;
-        ArrayList<Integer> FIXARCS = new ArrayList<Integer>(nNum_globalA * nNum_globalB);//  Initialize FIXARCS with 0
-//        FIXARCS.setSize(nNum_globalA * nNum_globalB);
-        for (int i = 0; i < size; i++) {
-            FIXARCS.add(i, 0);
+        Vector<Integer> FIXARCS = new Vector<Integer>(nNum_globalA * nNum_globalB);//  Initialize FIXARCS with 0
+
+        FIXARCS.setSize(nNum_globalA * nNum_globalB);
+
+        for (int i = 0; i <
+                nNum_globalA * nNum_globalB; i++) {
+
+            FIXARCS.set(i, 0);
         }
 
         int x = 0;
@@ -1511,6 +1542,11 @@ public class McGregor {
                 x++;
 
             }
+
+
+
+
+
         }
 
         if (x == nNum_globalA) {
@@ -1545,6 +1581,7 @@ public class McGregor {
      * @return
      */
     public int getMCSSize() {
+
         return this.globalMCSSize;
     }
 }
