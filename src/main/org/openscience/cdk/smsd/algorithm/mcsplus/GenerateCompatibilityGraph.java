@@ -1,4 +1,3 @@
-
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -73,7 +72,6 @@ public class GenerateCompatibilityGraph {
         }
 
         if (getCEdgesSize() == 0) {
-//            System.out.println("C-edges are Zero");
             clearCompGraphNodes();
 
             clearCEgdes();
