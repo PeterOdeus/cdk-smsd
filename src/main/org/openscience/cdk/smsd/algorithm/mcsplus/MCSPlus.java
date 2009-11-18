@@ -23,9 +23,9 @@
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
@@ -54,7 +54,7 @@ public class MCSPlus {
      */
     public List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
         Stack<List<Integer>> Max_Cliques_Set = null;
-        List<List<Integer>> _mappings = new Vector<List<Integer>>();
+        List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
 
         try {
@@ -91,17 +91,17 @@ public class MCSPlus {
                     timeoutFlag = true;
                     throw new CDKException("Timeout exceeded in getOverlaps");
                 }
-                List<Integer> clique_vector = Max_Cliques_Set.peek();
+                List<Integer> clique_List = Max_Cliques_Set.peek();
 
-                int clique_size = clique_vector.size();
+                int clique_size = clique_List.size();
                 if (clique_size < ac1.getAtomCount() && clique_size < ac2.getAtomCount()) {
                     McGregor mgit = new McGregor(ac1, ac2, _mappings);
-                    mgit.startMcGregorIteration(mgit.getMCSSize(), clique_vector, comp_graph_nodes);
+                    mgit.startMcGregorIteration(mgit.getMCSSize(), clique_List, comp_graph_nodes);
                     _mappings = mgit.getMappings();
                     mgit = null;
 
                 } else {
-                    _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_vector);
+                    _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_List);
                 }
                 Max_Cliques_Set.pop();
 //                clique_number++;

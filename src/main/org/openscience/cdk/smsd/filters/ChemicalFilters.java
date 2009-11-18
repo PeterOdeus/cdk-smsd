@@ -4,6 +4,7 @@
  */
 package org.openscience.cdk.smsd.filters;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.smsd.core.tools.BondEnergies;
@@ -91,9 +91,9 @@ public class ChemicalFilters {
         this.PMol = PMol;
         this.RMol = RMol;
 
-        StereoScore = new Vector<Integer>();
-        fragmentSize = new Vector<Integer>();
-        bEnergies = new Vector<Double>();
+        StereoScore = new ArrayList<Integer>();
+        fragmentSize = new ArrayList<Integer>();
+        bEnergies = new ArrayList<Double>();
 
     }
 

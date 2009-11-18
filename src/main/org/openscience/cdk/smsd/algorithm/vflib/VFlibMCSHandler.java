@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
@@ -62,12 +61,12 @@ public class VFlibMCSHandler implements IMCS {
     public VFlibMCSHandler() {
 
 
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
-        allAtomMCS_copy = new Vector<Map<IAtom, IAtom>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
+        allAtomMCS_copy = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
-        allMCS_copy = new Vector<TreeMap<Integer, Integer>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        allMCS_copy = new ArrayList<TreeMap<Integer, Integer>>();
 
 
     }
@@ -87,7 +86,7 @@ public class VFlibMCSHandler implements IMCS {
 
 
         if (flag) {
-            List<List<Integer>> _mappings = new Vector<List<Integer>>();
+            List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
             for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
 //

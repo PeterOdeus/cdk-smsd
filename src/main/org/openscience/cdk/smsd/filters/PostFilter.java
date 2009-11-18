@@ -24,12 +24,11 @@
  */
 package org.openscience.cdk.smsd.filters;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.helper.FinalMappings;
-
 
 /**
  * @cdk.module smsd
@@ -44,18 +43,12 @@ public class PostFilter {
      */
     public static void filter(List<List<Integer>> _mappings) {
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
-
-//        System.out.println("Total Number of Solutions " + _mappings.size());
-
         if (_mappings != null && !_mappings.isEmpty()) {
-
             final_MAPPINGS.set(removeRedundantMapping(_mappings));
             _mappings.clear();
         } else {
-
-            final_MAPPINGS.set(new Vector<TreeMap<Integer, Integer>>());
+            final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>());
         }
-//        System.out.println("Total Number of Solutions " + final_MAPPINGS.getFinalMapping().size());
     }
 
     private static boolean hasMap(TreeMap<Integer, Integer> newMap, List<TreeMap<Integer, Integer>> nonRedundantMapping) {
@@ -77,17 +70,14 @@ public class PostFilter {
 
     private static List<TreeMap<Integer, Integer>> removeRedundantMapping(List<List<Integer>> mapping_org) {
 
-//        System.out.println("Total Number of Solutions " + mapping_org.size());
-        List<TreeMap<Integer, Integer>> nonRedundantMapping = new Vector<TreeMap<Integer, Integer>>();
+        List<TreeMap<Integer, Integer>> nonRedundantMapping = new ArrayList<TreeMap<Integer, Integer>>();
         for (List<Integer> M : mapping_org) {
-//            System.out.println("Solutions " + M);
             TreeMap<Integer, Integer> newMap = new TreeMap<Integer, Integer>();
             for (int index = 0; index < M.size(); index += 2) {
                 newMap.put(M.get(index), M.get(index + 1));
             }
 
             if (!hasMap(newMap, nonRedundantMapping)) {
-
                 nonRedundantMapping.add(new TreeMap<Integer, Integer>(newMap));
             }
 

@@ -23,11 +23,11 @@
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.filters.PostFilter;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
@@ -52,10 +52,10 @@ public class MCSPlusHandler implements IMCS {
     public MCSPlusHandler() {
 
 
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
     }
 
@@ -177,8 +177,6 @@ public class MCSPlusHandler implements IMCS {
     private final synchronized void setAllAtomMapping() {
 
         try {
-//            int count_final_sol = 1;
-            //System.out.println("Output of the final FinalMappings: ");
             List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
 
             int counter = 0;

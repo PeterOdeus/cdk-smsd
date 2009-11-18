@@ -69,11 +69,5 @@ public interface ISubGraph extends IMCSBase {
      * @throws java.io.IOException
      */
     void set(IAtomContainer ReactantMol, IAtomContainer ProductMol, boolean removeHydrogen) throws IOException;
-//    void setAllAtomMapping();
-//
-//    void setAllMapping();
-//
-//    void setFirstAtomMapping();
-//
-//    void setFirstMapping();
+
 }

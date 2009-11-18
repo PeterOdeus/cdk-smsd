@@ -46,10 +46,10 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
@@ -73,7 +73,7 @@ public class VFMapper implements IMapper {
      */
     public VFMapper(IQuery query) {
         this.query = query;
-        this.maps = new Vector<Map<INode, IAtom>>();
+        this.maps = new ArrayList<Map<INode, IAtom>>();
     }
 
     /**
@@ -83,7 +83,7 @@ public class VFMapper implements IMapper {
     public VFMapper(IAtomContainer molecule) {
 //        this.query = new VFQuery(molecule);
         this.query = TemplateCompiler.compile(molecule);
-        this.maps = new Vector<Map<INode, IAtom>>();
+        this.maps = new ArrayList<Map<INode, IAtom>>();
     }
 
     /**
@@ -107,7 +107,7 @@ public class VFMapper implements IMapper {
 
         mapAll(state);
 
-        return new Vector<Map<INode, IAtom>>(maps);
+        return new ArrayList<Map<INode, IAtom>>(maps);
     }
 
     /**

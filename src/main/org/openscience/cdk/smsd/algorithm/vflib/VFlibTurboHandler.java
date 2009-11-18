@@ -22,11 +22,11 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
@@ -53,10 +53,10 @@ public class VFlibTurboHandler implements ISubGraph {
     public VFlibTurboHandler() {
 
 
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
     }
 
@@ -77,7 +77,7 @@ public class VFlibTurboHandler implements ISubGraph {
         Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
         TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
-        int counter=0;
+        int counter = 0;
 
         for (Map.Entry<INode, IAtom> mapping : vfLibSolutions.entrySet()) {
 
@@ -93,8 +93,8 @@ public class VFlibTurboHandler implements ISubGraph {
 
         }
         if (atomatomMapping.size() > 0) {
-            allAtomMCS.add(counter,atomatomMapping);
-            allMCS.add(counter,indexindexMapping);
+            allAtomMCS.add(counter, atomatomMapping);
+            allMCS.add(counter, indexindexMapping);
             counter++;
         }
 
@@ -115,7 +115,7 @@ public class VFlibTurboHandler implements ISubGraph {
         int hCount = 0;
 
 
-        for (int i = 0; i <mol.getAtomCount(); i++) {
+        for (int i = 0; i < mol.getAtomCount(); i++) {
 
             if (mol.getAtom(i).getSymbol().equals("H")) {
                 hCount++;

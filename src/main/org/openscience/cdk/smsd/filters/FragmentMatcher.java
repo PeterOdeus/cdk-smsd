@@ -26,11 +26,11 @@ package org.openscience.cdk.smsd.filters;
 
 //~--- non-JDK imports --------------------------------------------------------
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
@@ -58,9 +58,9 @@ public class FragmentMatcher implements IMCSBase {
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private Vector<TreeMap<Integer, Integer>> GallMCS;
+    private List<TreeMap<Integer, Integer>> GallMCS;
     private TreeMap<Integer, Integer> GfirstSolution;
-    private Vector<Map<IAtom, IAtom>> GallAtomMCS;
+    private List<Map<IAtom, IAtom>> GallAtomMCS;
     private Map<IAtom, IAtom> GfirstAtomMCS;
     private boolean removeHydrogen = false;
 
@@ -175,7 +175,6 @@ public class FragmentMatcher implements IMCSBase {
 //        }
 //
 //    }
-
     private synchronized void MCSPlus() {
         try {
             MCSPlusHandler mcs = new MCSPlusHandler();
@@ -221,9 +220,9 @@ public class FragmentMatcher implements IMCSBase {
     public FragmentMatcher(IAtomContainerSet A, IAtomContainerSet B, boolean removeHydrogen) {
 
         this.removeHydrogen = removeHydrogen;
-        GallMCS = new Vector<TreeMap<Integer, Integer>>();
+        GallMCS = new ArrayList<TreeMap<Integer, Integer>>();
         GfirstSolution = new TreeMap<Integer, Integer>();
-        GallAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        GallAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         GfirstAtomMCS = new HashMap<IAtom, IAtom>();
         this.ReactantSet = A;
         this.ProductSet = B;
@@ -258,7 +257,7 @@ public class FragmentMatcher implements IMCSBase {
      * @return
      */
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return GallAtomMCS;
     }
 
@@ -267,7 +266,7 @@ public class FragmentMatcher implements IMCSBase {
      * @return
      */
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return GallMCS;
     }
 

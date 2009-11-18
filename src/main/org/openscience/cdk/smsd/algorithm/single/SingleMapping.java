@@ -22,10 +22,10 @@
  */
 package org.openscience.cdk.smsd.algorithm.single;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -50,9 +50,9 @@ public class SingleMapping {
 
         this.ac1 = source;
         this.ac2 = target;
-        List<TreeMap<Integer, Integer>> _mappings = new Vector<TreeMap<Integer, Integer>>();
+        List<TreeMap<Integer, Integer>> _mappings = new ArrayList<TreeMap<Integer, Integer>>();
         Map<Integer, Integer> connectedBondOrder = new TreeMap<Integer, Integer>();
-      
+
         int minOrder = 9999;
 
         if (removeHydrogen) {
@@ -210,7 +210,7 @@ public class SingleMapping {
         }
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
 
-        final_MAPPINGS.set(new Vector<TreeMap<Integer, Integer>>(_mapping));
+        final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>(_mapping));
     }
 
     private boolean removedMap(List<TreeMap<Integer, Integer>> maps, Integer Key) {

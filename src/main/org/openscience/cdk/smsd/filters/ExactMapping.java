@@ -4,8 +4,8 @@
  */
 package org.openscience.cdk.smsd.filters;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  *
@@ -36,23 +36,23 @@ import java.util.Vector;
  */
 public class ExactMapping {
 
-    //extract atom mapping from the clique vector and store it in vector clique_MAPPING
+    //extract atom mapping from the clique List and store it in List clique_MAPPING
     /**
      * 
      * @param comp_graph_nodes
-     * @param clique_vector_org
+     * @param clique_List_org
      * @return 
      */
-    private static List<Integer> extractCliqueMapping(List<Integer> comp_graph_nodes, List<Integer> clique_vector_org) {
+    private static List<Integer> extractCliqueMapping(List<Integer> comp_graph_nodes, List<Integer> clique_List_org) {
 
-        List<Integer> clique_mapping = new Vector<Integer>();
-        List<Integer> clique_vector = new Vector<Integer>(clique_vector_org);
-        int clique_siz = clique_vector.size();
+        List<Integer> clique_mapping = new ArrayList<Integer>();
+        List<Integer> clique_List = new ArrayList<Integer>(clique_List_org);
+        int clique_siz = clique_List.size();
         int vec_size = comp_graph_nodes.size();
         //System.out.println("VEC  SIZE " + vec_size);
         for (int a = 0; a < clique_siz; a++) {
             for (int b = 0; b < vec_size; b = b + 3) {
-                if (clique_vector.get(a) == comp_graph_nodes.get(b + 2)) {
+                if (clique_List.get(a) == comp_graph_nodes.get(b + 2)) {
                     clique_mapping.add(comp_graph_nodes.get(b));
                     clique_mapping.add(comp_graph_nodes.get(b + 1));
                 }
@@ -62,30 +62,23 @@ public class ExactMapping {
         return clique_mapping;
     }
 
-    //extract atom mapping from the clique vector and print it on the screen
+    //extract atom mapping from the clique List and print it on the screen
     /**
      * 
      * @param _mappings
      * @param comp_graph_nodes
-     * @param clique_vector_org
+     * @param clique_List_org
      * @return
      */
-    public static List<List<Integer>> extractMapping(List<List<Integer>> _mappings, List<Integer> comp_graph_nodes, List<Integer> clique_vector_org) {
+    public static List<List<Integer>> extractMapping(List<List<Integer>> _mappings, List<Integer> comp_graph_nodes, List<Integer> clique_List_org) {
 
         try {
 
-            //System.out.println("clique_vector_org Size: " + clique_vector_org);
-            //System.out.println("FinalMapping Size in extractMapping: " + FinalMapping.getInstance().getSize());
-
-            //int size=clique_vector_org.size();
-            //GlobalVariableContainer.getInstance().setBestCliqueSize(size);
-
-
-            List<Integer> clique_vector = extractCliqueMapping(comp_graph_nodes, clique_vector_org);
-            _mappings.add(clique_vector);
+            List<Integer> clique_List = extractCliqueMapping(comp_graph_nodes, clique_List_org);
+            _mappings.add(clique_List);
             
         } catch (Exception e) {
-            System.err.println("Error in FinalMapping Vector: " + e.getCause());
+            System.err.println("Error in FinalMapping List: " + e.getCause());
             e.printStackTrace();
             System.exit(1);
         }

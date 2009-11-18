@@ -111,18 +111,8 @@ public class TemplateCompiler implements IQueryCompiler {
 
         for (int i = 0; i < queryMolecule.getBondCount(); i++) {
             IBond bond = queryMolecule.getBond(i);
-
             IAtom s = bond.getAtom(0);
             IAtom t = bond.getAtom(1);
-
-//            int IndexI = queryMolecule.getAtomNumber(s);
-//            int IndexJ = queryMolecule.getAtomNumber(t);
-//
-//            System.out.println("\nIndexI " + IndexI);
-//            System.out.println("IndexJ " + IndexJ);
-
-//            result.connect(result.getNode(IndexI), result.getNode(IndexJ), createBondMatcher(bond));
-
             result.connect(result.getNode(s), result.getNode(t), createBondMatcher(bond));
         }
 

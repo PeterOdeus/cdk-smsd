@@ -23,11 +23,11 @@
 package org.openscience.cdk.smsd.algorithm.vflib;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
@@ -55,10 +55,10 @@ public class VFlibHandler implements ISubGraph {
     public VFlibHandler() {
 
 
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
     }
 

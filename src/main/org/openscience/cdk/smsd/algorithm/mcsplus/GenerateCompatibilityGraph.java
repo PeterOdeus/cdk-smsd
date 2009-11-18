@@ -25,8 +25,8 @@
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -40,10 +40,10 @@ import org.openscience.cdk.smsd.helper.LabelContainer;
  */
 public class GenerateCompatibilityGraph {
 
-    private List<Integer> compGraphNodes = new Vector<Integer>();
-    private List<Integer> compGraphNodesCZero = new Vector<Integer>();
-    private List<Integer> cEdges = new Vector<Integer>();
-    private List<Integer> dEdges = new Vector<Integer>();
+    private List<Integer> compGraphNodes = new ArrayList<Integer>();
+    private List<Integer> compGraphNodesCZero = new ArrayList<Integer>();
+    private List<Integer> cEdges = new ArrayList<Integer>();
+    private List<Integer> dEdges = new ArrayList<Integer>();
     private int C_edges_size = 0;
     private int D_edges_size = 0;
     private boolean removeHydrogen = false;
@@ -92,29 +92,29 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private List<Vector<Integer>> labelAtoms(IAtomContainer ac) {
-        List<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
+    private List<List<Integer>> labelAtoms(IAtomContainer ac) {
+        List<List<Integer>> label_list = new ArrayList<List<Integer>>();
 
         for (int i = 0; i < ac.getAtomCount(); i++) {
             LabelContainer labelContainer = LabelContainer.getInstance();
-            Vector<Integer> label = new Vector<Integer>(7);
-            label.setSize(7);
+            ArrayList<Integer> label = new ArrayList<Integer>(7);
+//            label.setSize(7);
 
-            for (int a = 0; a < label.size(); a++) {
-                label.set(a, 0);
+            for (int a = 0; a < 7; a++) {
+                label.add(a, 0);
             }
 
             IAtom refAtom = ac.getAtom(i);
             String atom1_type = refAtom.getSymbol();
 
-            label.setElementAt(labelContainer.getLabelID(atom1_type), 0);
+            label.set(0, labelContainer.getLabelID(atom1_type));
 
             int count_neighbors = 1;
             List<IAtom> connAtoms = ac.getConnectedAtomsList(refAtom);
 
             for (IAtom negAtom : connAtoms) {
                 String atom2_type = negAtom.getSymbol();
-                label.setElementAt(labelContainer.getLabelID(atom2_type), count_neighbors++);
+                label.set(count_neighbors++, labelContainer.getLabelID(atom2_type));
             }
 
             bubbleSort(label);
@@ -152,7 +152,7 @@ public class GenerateCompatibilityGraph {
 
     private List<IAtom> reduceAtomSet(IAtomContainer ac) {
 
-        List<IAtom> basic_atoms = new Vector<IAtom>();
+        List<IAtom> basic_atoms = new ArrayList<IAtom>();
         for (IAtom atom : ac.atoms()) {
             if (removeHydrogen) {
                 if (!atom.getSymbol().equalsIgnoreCase("H")) {
@@ -182,19 +182,19 @@ public class GenerateCompatibilityGraph {
         basic_atom_vec_A = reduceAtomSet(reactant);
         basic_atom_vec_B = reduceAtomSet(product);
 
-        List<Vector<Integer>> label_list_molA = labelAtoms(reactant);
-        List<Vector<Integer>> label_list_molB = labelAtoms(product);
+        List<List<Integer>> label_list_molA = labelAtoms(reactant);
+        List<List<Integer>> label_list_molB = labelAtoms(product);
 
 
 
         int molA_nodes = 0;
         int count_nodes = 1;
 
-        for (Vector<Integer> labelA : label_list_molA) {
+        for (List<Integer> labelA : label_list_molA) {
 
             int molB_nodes = 0;
 
-            for (Vector<Integer> labelB : label_list_molB) {
+            for (List<Integer> labelB : label_list_molB) {
                 if (labelA.equals(labelB)) {
                     compGraphNodes.add(reactant.getAtomNumber(basic_atom_vec_A.get(molA_nodes)));
                     compGraphNodes.add(product.getAtomNumber(basic_atom_vec_B.get(molB_nodes)));
@@ -215,16 +215,16 @@ public class GenerateCompatibilityGraph {
      * @throws IOException
      */
     protected int CompatibilityGraphBIS() throws IOException {
-        int comp_graph_nodes_vector_size = compGraphNodes.size();
+        int comp_graph_nodes_List_size = compGraphNodes.size();
 
-        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
-        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
+        cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
+        dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
+        for (int a = 0; a < comp_graph_nodes_List_size; a = a + 3) {
             int index_a = compGraphNodes.get(a);
             int index_aPlus1 = compGraphNodes.get(a + 1);
 
-            for (int b = a + 3; b < comp_graph_nodes_vector_size; b = b + 3) {
+            for (int b = a + 3; b < comp_graph_nodes_List_size; b = b + 3) {
                 int index_b = compGraphNodes.get(b);
                 int index_bPlus1 = compGraphNodes.get(b + 1);
 
@@ -265,18 +265,18 @@ public class GenerateCompatibilityGraph {
      * @throws IOException
      */
     protected int compatibilityGraphBS() throws IOException {
-        int comp_graph_nodes_vector_size = compGraphNodes.size();
+        int comp_graph_nodes_List_size = compGraphNodes.size();
 
-        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
-        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
+        cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
+        dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
+        for (int a = 0; a < comp_graph_nodes_List_size; a = a + 3) {
 
 
             int index_a = compGraphNodes.get(a);
             int index_aPlus1 = compGraphNodes.get(a + 1);
 
-            for (int b = a + 3; b < comp_graph_nodes_vector_size; b = b + 3) {
+            for (int b = a + 3; b < comp_graph_nodes_List_size; b = b + 3) {
 
                 int index_b = compGraphNodes.get(b);
                 int index_bPlus1 = compGraphNodes.get(b + 1);
@@ -330,8 +330,8 @@ public class GenerateCompatibilityGraph {
     protected Integer compatibilityGraphNodesIfCEdgeIsZero() throws IOException {
 
         int count_nodes = 1;
-        Vector<String> map = new Vector<String>();
-        compGraphNodesCZero = new Vector<Integer>(); //Initialize the compGraphNodesCZero Vector
+        List<String> map = new ArrayList<String>();
+        compGraphNodesCZero = new ArrayList<Integer>(); //Initialize the compGraphNodesCZero List
         LabelContainer labelContainer = LabelContainer.getInstance();
 // resets the target graph.
         compGraphNodes.clear();
@@ -385,15 +385,15 @@ public class GenerateCompatibilityGraph {
     protected int compatibilityGraphIfCEdgeIsZeroBS() throws IOException {
 
 
-        int comp_graph_nodes_C_zero_vector_size = compGraphNodesCZero.size();
+        int comp_graph_nodes_C_zero_List_size = compGraphNodesCZero.size();
 
-        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
-        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
+        cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
+        dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a < comp_graph_nodes_C_zero_vector_size; a = a + 4) {
+        for (int a = 0; a < comp_graph_nodes_C_zero_List_size; a = a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);
-            for (int b = 0; b < comp_graph_nodes_C_zero_vector_size; b = b + 4) {
+            for (int b = 0; b < comp_graph_nodes_C_zero_List_size; b = b + 4) {
                 int index_b = compGraphNodesCZero.get(b);
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);
 
@@ -451,18 +451,18 @@ public class GenerateCompatibilityGraph {
      */
     protected int compatibilityGraphCEdgeZeroBIS() throws IOException {
 
-        int comp_graph_nodes_C_zero_vector_size = compGraphNodesCZero.size();
+        int comp_graph_nodes_C_zero_List_size = compGraphNodesCZero.size();
 
-        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
 
-        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
+        dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
         for (int a = 0; a <
-                comp_graph_nodes_C_zero_vector_size; a =
+                comp_graph_nodes_C_zero_List_size; a =
                         a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);
-            for (int b = a + 4; b < comp_graph_nodes_C_zero_vector_size; b =
+            for (int b = a + 4; b < comp_graph_nodes_C_zero_List_size; b =
                             b + 4) {
                 int index_b = compGraphNodesCZero.get(b);
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);

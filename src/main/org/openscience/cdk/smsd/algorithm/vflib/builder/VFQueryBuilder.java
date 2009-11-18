@@ -47,6 +47,7 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.builder;
 
+import java.util.ArrayList;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
@@ -57,7 +58,6 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * @cdk.module smsd
@@ -69,8 +69,8 @@ public class VFQueryBuilder implements IQuery {
     private Map<INode, IAtom> NodesBonds;
 
     public VFQueryBuilder() {
-        nodes = new Vector<INode>();
-        edges = new Vector<IEdge>();
+        nodes = new ArrayList<INode>();
+        edges = new ArrayList<IEdge>();
         NodesBonds = new HashMap<INode, IAtom>();
     }
 

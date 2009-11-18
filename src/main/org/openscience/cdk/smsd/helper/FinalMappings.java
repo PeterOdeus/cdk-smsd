@@ -24,11 +24,11 @@
  */
 package org.openscience.cdk.smsd.helper;
 
+import java.util.ArrayList;
 import org.openscience.cdk.smsd.interfaces.IFinalMapping;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.Vector;
 
 /**
  * @cdk.module smsd
@@ -39,7 +39,7 @@ public class FinalMappings implements IFinalMapping {
     private static FinalMappings INSTANCE = null;
 
     protected FinalMappings() {
-        _mappings = new Vector<TreeMap<Integer, Integer>>();
+        _mappings = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
     synchronized public static FinalMappings getInstance() {
@@ -53,7 +53,6 @@ public class FinalMappings implements IFinalMapping {
 
     @Override
     synchronized public void add(TreeMap<Integer, Integer> v) {
-        //System.err.println("Vector added");
         _mappings.add(v);
     }
 

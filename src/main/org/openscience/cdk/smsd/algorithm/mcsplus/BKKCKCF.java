@@ -28,9 +28,9 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Vector;
 
 /**
  * This class implements Bron-Kerbosch clique detection algorithm as it is
@@ -65,10 +65,10 @@ public class BKKCKCF {
         best_clique_size = 0;
         //Orignal assignment as per paper
         dEdgeIterationSize = dEdges.size() / 2;
-        
+
         //Orignal assignment as per paper
         cEdgeIterationSize = cEdges.size() / 2;
-        
+
 
         boolean d_edgeFlag = false;
 
@@ -110,7 +110,7 @@ public class BKKCKCF {
 
         //Initialization maxCliquesSet
 
-        maxCliquesSet = new Vector<List<Integer>>();
+        maxCliquesSet = new ArrayList<List<Integer>>();
 
         init();
 
@@ -128,7 +128,7 @@ public class BKKCKCF {
          *T: is a set of vertices which have already been used for the
          * initialization of ENUMERATE_CLIQUES
          */
-        Vector<Integer> T = new Vector<Integer>(); //Initialize the T Vector;
+        List<Integer> T = new ArrayList<Integer>(); //Initialize the T Vector;
 
         /*
          *V: stored all the vertices for the Graph G
@@ -136,7 +136,7 @@ public class BKKCKCF {
          *nodes of vector comp_graph_nodes are stored in V
          */
 
-        Vector<Integer> V = new Vector<Integer>(); //Initialization of Vector V
+        List<Integer> V = new ArrayList<Integer>(); //Initialization of Vector V
 
         int V_set_size = comp_graph_nodes.size() / 3;
 
@@ -150,11 +150,10 @@ public class BKKCKCF {
         V.add(0);
         // System.out.println("Vector V :" + V);
 
-
         /*
          * R: set of vertices belonging to the current clique
          */
-        List<Integer> R = new Vector<Integer>();
+        List<Integer> R = new ArrayList<Integer>();
         /*
          *P: is a set of vertices which <b>can</b> be added to R, because they are
          * neighbours of vertex u via <i>c-edges</i>
@@ -165,12 +164,12 @@ public class BKKCKCF {
          * neighbours of vertex u via <i>d-edges</i>
          */
 
-        List<Integer> Q = new Vector<Integer>();
+        List<Integer> Q = new ArrayList<Integer>();
         /*
          *X: set of vertices which are not allowed to be added
          * to R
          */
-        List<Integer> X = new Vector<Integer>();
+        List<Integer> X = new ArrayList<Integer>();
 
 
         /*
@@ -178,16 +177,14 @@ public class BKKCKCF {
          * to C
          */
 
-        List<Integer> Y = new Vector<Integer>();
-
-
+        List<Integer> Y = new ArrayList<Integer>();
 
         /*
          * N[u]: set of neighbours of vertex u in Graph G
          *
          */
 
-        List<Integer> N = new Vector<Integer>();
+        List<Integer> N = new ArrayList<Integer>();
 
         int b = 0;
 
@@ -199,14 +196,6 @@ public class BKKCKCF {
         T.clear();
 
         while (V.get(b) != 0) {
-
-
-            // V[b] is node u, v belogs to V[G]
-
-
-            //System.out.println();
-            //System.out.println("#########################################");
-            //System.out.println("Central node " + V.get(b));
 
 
             int central_node = V.get(b);
@@ -225,7 +214,7 @@ public class BKKCKCF {
                 /*
                  * u and v are adjacent via a R-edge
                  */
-                int N_at_c = N.get(c);
+                Integer N_at_c = N.get(c);
 
 
                 //find respective neighbor position in P, which is needed for the deletion from V
@@ -256,7 +245,7 @@ public class BKKCKCF {
                     --b;
 
                 }
-                V.removeElement(N_at_c);
+                V.remove(N_at_c);
                 //System.out.println("Elements Removed from V:" + N_at_c);
             }
 
@@ -274,7 +263,7 @@ public class BKKCKCF {
     }
 
     private int enumerateCliques(List<Integer> R, Stack<Integer> P, List<Integer> Q, List<Integer> X, List<Integer> Y) {
-        List<Integer> N = new Vector<Integer>(); ////Initialization Vector N
+        List<Integer> N = new ArrayList<Integer>(); ////Initialization Vector N
         Stack<Integer> ut_set = new Stack<Integer>();//Defined as P' in the paper
 
 
@@ -316,12 +305,11 @@ public class BKKCKCF {
 
             P.removeElement(ui);
 
-            List<Integer> R_copy = new Vector<Integer>(R);
+            List<Integer> R_copy = new ArrayList<Integer>(R);
             Stack<Integer> P_copy = new Stack<Integer>();
             Stack<Integer> Q_copy = new Stack<Integer>();
-            List<Integer> X_copy = new Vector<Integer>(X);
-            List<Integer> Y_copy = new Vector<Integer>(Y);
-            //Vector<Integer> Y_copy = new Vector<Integer>();
+            List<Integer> X_copy = new ArrayList<Integer>(X);
+            List<Integer> Y_copy = new ArrayList<Integer>(Y);
 
             N.clear();
 
@@ -342,15 +330,7 @@ public class BKKCKCF {
             N = findNeighbors(ui);
 
             int N_size = N.size();
-            /*
-            System.out.println("FIND NEIGHBORS!!!!!!!!!!!!!!");
-            for(int gh=0; gh<N_size; gh++){
-            System.out.print(N.get(gh) + " ");
-            }
-            //            System.out.println();
-            //            System.out.println();
-             */
-
+            
             //System.out.println("Neighbors: ");
 
             for (int b = 0; b < N_size; b = b + 2) {
@@ -388,9 +368,9 @@ public class BKKCKCF {
 
             }
             Stack<Integer> P_copy_N_intersec = new Stack<Integer>();
-            Vector<Integer> Q_copy_N_intersec = new Vector<Integer>();
-            Vector<Integer> X_copy_N_intersec = new Vector<Integer>();
-            Vector<Integer> Y_copy_N_intersec = new Vector<Integer>();
+            List<Integer> Q_copy_N_intersec = new ArrayList<Integer>();
+            List<Integer> X_copy_N_intersec = new ArrayList<Integer>();
+            List<Integer> Y_copy_N_intersec = new ArrayList<Integer>();
 
             int nElement = -1;
 
@@ -425,7 +405,7 @@ public class BKKCKCF {
 
     private List<Integer> findNeighbors(int central_node) {
 
-        List<Integer> neighbor_vec = new Vector<Integer>();
+        List<Integer> neighbor_vec = new ArrayList<Integer>();
 
         for (int a = 0; a < cEdgeIterationSize; a++) {
             if (cEdges.get(a * 2 + 0) == central_node) {

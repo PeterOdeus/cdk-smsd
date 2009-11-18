@@ -51,35 +51,6 @@ public interface IMCSAlgorithm extends IMCSBase {
 
     double getEuclideanDistance() throws IOException;
 
-//    /**
-//     *
-//     * @param Reactant
-//     * @param Product
-//     * @param ReactantFingerprint
-//     * @param ProductFingerprint
-//     * @throws CDKException
-//     */
-//    void init(IMolecule Reactant, IMolecule Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
-//
-//    /**
-//     *
-//     * @param Reactant
-//     * @param Product
-//     * @param ReactantFingerprint
-//     * @param ProductFingerprint
-//     * @throws CDKException
-//     */
-//    void init(IAtomContainer Reactant, IAtomContainer Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
-//
-//    /**
-//     *
-//     * @param Reactant
-//     * @param Product
-//     * @param ReactantFingerprint
-//     * @param ProductFingerprint
-//     * @throws CDKException
-//     */
-//    void init(MolHandler Reactant, MolHandler Product, BitSet ReactantFingerprint, BitSet ProductFingerprint)throws CDKException;
     /**
      *
      * @param Reactant
