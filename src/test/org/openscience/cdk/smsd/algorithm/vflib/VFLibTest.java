@@ -28,8 +28,9 @@ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFMatch;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
+ * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
- * @author sar
+ * @cdk.module test-smsd
  */
 public class VFLibTest extends CDKTestCase {
 
@@ -264,9 +265,6 @@ public class VFLibTest extends CDKTestCase {
 
 
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(result);
-
-
-
         return result;
     }
 }
