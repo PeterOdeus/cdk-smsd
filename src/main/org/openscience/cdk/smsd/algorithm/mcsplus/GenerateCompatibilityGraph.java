@@ -253,11 +253,8 @@ public class GenerateCompatibilityGraph {
                     }
 
                 }
-
-                //print C and D edges of the compatibility graph
                 C_edges_size = C_edges.size();
                 D_edges_size = D_edges.size();
-
             }
         }
         return 0;
@@ -314,8 +311,6 @@ public class GenerateCompatibilityGraph {
                             D_edges.add((a / 3) + 1);
                             D_edges.add((b / 3) + 1);
                         }
-//
-
                     }
                 }
 
