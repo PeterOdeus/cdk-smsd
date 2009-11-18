@@ -51,20 +51,20 @@ public class GenerateCompatibilityGraph {
     private int C_edges_size = 0;
     private int D_edges_size = 0;
     private boolean removeHydrogen = false;
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
     private boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
      * 
-     * @param ac1
-     * @param ac2
+     * @param source
+     * @param target
      * @param HFlag 
      * @throws java.io.IOException
      */
-    public GenerateCompatibilityGraph(IAtomContainer ac1, IAtomContainer ac2, boolean HFlag) throws IOException {
-        this.ac1 = ac1;
-        this.ac2 = ac2;
+    public GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target, boolean HFlag) throws IOException {
+        this.source = source;
+        this.target = target;
         this.removeHydrogen = HFlag;
 
         compatibilityGraphNodes();
@@ -183,8 +183,8 @@ public class GenerateCompatibilityGraph {
         comp_graph_nodes.clear();
         Vector<IAtom> basic_atom_vec_A = null;
         Vector<IAtom> basic_atom_vec_B = null;
-        IAtomContainer reactant = ac1;
-        IAtomContainer product = ac2;
+        IAtomContainer reactant = source;
+        IAtomContainer product = target;
 
         basic_atom_vec_A = reduce_atomset(reactant);
         basic_atom_vec_B = reduce_atomset(product);
@@ -244,8 +244,8 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
@@ -301,8 +301,8 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
@@ -346,10 +346,10 @@ public class GenerateCompatibilityGraph {
 // resets the target graph.
         comp_graph_nodes.clear();
 
-        for (int i = 0; i < ac1.getAtomCount(); i++) {
-            for (int j = 0; j < ac2.getAtomCount(); j++) {
-                IAtom atom1 = ac1.getAtom(i);
-                IAtom atom2 = ac2.getAtom(j);
+        for (int i = 0; i < source.getAtomCount(); i++) {
+            for (int j = 0; j < target.getAtomCount(); j++) {
+                IAtom atom1 = source.getAtom(i);
+                IAtom atom2 = target.getAtom(j);
 
                 //You can also check object equal or charge, hydrogen count etc
 
@@ -415,8 +415,8 @@ public class GenerateCompatibilityGraph {
                     int ReactantBondType = 0;
                     int ProductBondType = 0;
 
-                    IBond ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    IBond ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    IBond ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    IBond ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
 
 
@@ -482,8 +482,8 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
