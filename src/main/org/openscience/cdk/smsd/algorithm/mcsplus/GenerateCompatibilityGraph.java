@@ -84,7 +84,7 @@ public class GenerateCompatibilityGraph {
             if (bondTypeFlag) {
                 compatibilityGraphIfCEdgeIsZeroBS();
             } else {
-                generate_compatibility_graph_if_C_edge_number_is_zero_BIS();
+                compatibilityGraphCEdgeZeroBIS();
             }
 
             clearCompGraphNodesCZero();
@@ -96,14 +96,12 @@ public class GenerateCompatibilityGraph {
         List<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
 
         for (int i = 0; i < ac.getAtomCount(); i++) {
-            Vector<Integer> label = new Vector<Integer>();
-
             LabelContainer labelContainer = LabelContainer.getInstance();
-
+            Vector<Integer> label = new Vector<Integer>(7);
             label.setSize(7);
 
-            for (int a = 0; a < 7; a++) {
-                label.setElementAt(0, a);
+            for (int a = 0; a < label.size(); a++) {
+                label.set(a, 0);
             }
 
             IAtom refAtom = ac.getAtom(i);
@@ -444,7 +442,14 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    protected int generate_compatibility_graph_if_C_edge_number_is_zero_BIS() throws IOException {
+    /**
+     * compatibilityGraphCEdgeZeroBIS is used to
+     * build up of the edges of the
+     * compatibility graph BIS
+     * @return
+     * @throws IOException
+     */
+    protected int compatibilityGraphCEdgeZeroBIS() throws IOException {
 
         int comp_graph_nodes_C_zero_vector_size = compGraphNodesCZero.size();
 
