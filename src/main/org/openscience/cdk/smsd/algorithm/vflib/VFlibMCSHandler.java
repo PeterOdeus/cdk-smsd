@@ -89,23 +89,13 @@ public class VFlibMCSHandler implements IMCS {
             List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
             for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
-//
-//                System.out.println("\n\n---------------\n");
-//                System.out.println("Calling McGregor");
-//                System.out.println("for Start size " + firstPassMappings.size());
+
                 McGregor mgit = new McGregor(source, target, _mappings);
-                mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
-
+                mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings);
+                //Start McGregor search
                 _mappings = mgit.getMappings();
-//                System.out.println("");
                 mgit = null;
-//                System.out.println("After Calling McGregor, solution Size" + _mappings.firstElement().size() / 2);
-//
-
             }
-//            System.out.println("Solution Count After McGregor " + _mappings.size());
-//            System.out.println("Solution Size After Calling McGregor" + _mappings.firstElement().size() / 2);
-
             int counter = 0;
             for (List<Integer> mapping : _mappings) {
 

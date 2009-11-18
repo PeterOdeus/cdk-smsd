@@ -322,10 +322,6 @@ public class MCSFactory implements IMCSAlgorithm {
         firstAtomMCS.putAll(FM.getFirstAtomMapping());
         allAtomMCS.addAll(FM.getAllAtomMapping());
 
-
-
-
-
     }
 
     private synchronized void cdkMCS() {
