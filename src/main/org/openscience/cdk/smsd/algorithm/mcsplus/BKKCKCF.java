@@ -42,7 +42,7 @@ import java.util.Vector;
  */
 public class BKKCKCF {
 
-    private Vector<Vector<Integer>> maxCliquesSet;
+    private List<List<Integer>> maxCliquesSet;
     /***********************************************************************/
     private List<Integer> cEdges;
     private List<Integer> dEdges;
@@ -63,12 +63,6 @@ public class BKKCKCF {
         this.cEdges = C_edges_org;
         this.dEdges = D_edges_org;
         best_clique_size = 0;
-
-//        System.out.println("C Edges Size: " + cEdges.size());
-//        System.out.println("D Edges Size:" + dEdges.size());
-
-
-
         //Orignal assignment as per paper
         dEdgeIterationSize = dEdges.size() / 2;
         //Heuristic introduced by Asad
@@ -116,18 +110,11 @@ public class BKKCKCF {
             dEdgeIterationSize = 1;
         }
 
-//        System.out.println("Optimised D-edges: " + (dEdgeIterationSize));
-
         //Initialization maxCliquesSet
 
-        maxCliquesSet = new Vector<Vector<Integer>>();
+        maxCliquesSet = new Vector<List<Integer>>();
 
         init();
-
-        /*System.out.println();
-        System.out.println("Clique Search Over");
-        System.out.println("_______________________________");
-         */
 
     }
 
@@ -169,7 +156,7 @@ public class BKKCKCF {
         /*
          * R: set of vertices belonging to the current clique
          */
-        Vector<Integer> R = new Vector<Integer>();
+        List<Integer> R = new Vector<Integer>();
         /*
          *P: is a set of vertices which <b>can</b> be added to R, because they are
          * neighbours of vertex u via <i>c-edges</i>
@@ -180,12 +167,12 @@ public class BKKCKCF {
          * neighbours of vertex u via <i>d-edges</i>
          */
 
-        Vector<Integer> Q = new Vector<Integer>();
+        List<Integer> Q = new Vector<Integer>();
         /*
          *X: set of vertices which are not allowed to be added
          * to R
          */
-        Vector<Integer> X = new Vector<Integer>();
+        List<Integer> X = new Vector<Integer>();
 
 
         /*
@@ -193,7 +180,7 @@ public class BKKCKCF {
          * to C
          */
 
-        Vector<Integer> Y = new Vector<Integer>();
+        List<Integer> Y = new Vector<Integer>();
 
 
 
@@ -202,7 +189,7 @@ public class BKKCKCF {
          *
          */
 
-        Vector<Integer> N = new Vector<Integer>();
+        List<Integer> N = new Vector<Integer>();
 
         int b = 0;
 
@@ -235,16 +222,7 @@ public class BKKCKCF {
             //find the neighbors of the central node from V
             N = findNeighbors(central_node);
 
-            //System.out.println("N-Neigh: " + N.size());
-
-
-
-            //gehe Nachbarn durch und ordne sie zu X, P oder Q
-
             for (int c = 0; c < N.size(); c = c + 2) {
-                // N[c] is node v
-                // System.out.println("N[" + c  +  "]= " + N.get(c) + " ");
-                //Grouping of the neighbors in X,P and Q
 
                 /*
                  * u and v are adjacent via a R-edge
@@ -256,7 +234,7 @@ public class BKKCKCF {
                 //delete neighbor from set V
 
 
-                if (N.elementAt(c + 1) == 1) {
+                if (N.get(c + 1) == 1) {
 
 
                     if (T.contains(N_at_c)) {
@@ -265,7 +243,7 @@ public class BKKCKCF {
                         P.push(N_at_c);
                     }
 
-                } else if (N.elementAt(c + 1) == 2) {
+                } else if (N.get(c + 1) == 2) {
                     // u and v are adjacent via a Q-edge
                     //System.out.println("u and v are adjacent via a Q-edge: " + N.elementAt(c));
 
@@ -282,37 +260,22 @@ public class BKKCKCF {
                 }
                 V.removeElement(N_at_c);
                 //System.out.println("Elements Removed from V:" + N_at_c);
-
-
-
             }
 
             P.add(0);
             R.add(central_node);
-
-            /*if (checkRepeatFlag) {
-            checkRepeatFlag = false;
-            break;
-            }*///Added by asad for huristic check
-
-            //System.out.println(" Calling enumerateCliques, Vector Size in CliquesGenerator: ");
-
-            //System.out.println("C: " + R.size() + ", P: " + P.size() + ", D: " + Q.size() + ", S: " + X.size());
 
             enumerateCliques(R, P, Q, X, Y);
             //enumerateCliques(R, P, Q, X);
             T.add(central_node);
 
             b++;
-
-            //System.out.println("HELLO, B: " + b + " V Size: " + V.size());
-            //checkRepeatFlag = false;
         }
         //System.out.println("maxCliquesSet: " + maxCliquesSet);
 
     }
 
-    private int enumerateCliques(Vector<Integer> R, Stack<Integer> P, Vector<Integer> Q, Vector<Integer> X, Vector<Integer> Y) {
+    private int enumerateCliques(List<Integer> R, Stack<Integer> P, List<Integer> Q, List<Integer> X, List<Integer> Y) {
         Vector<Integer> N = new Vector<Integer>(); ////Initialization Vector N
         Stack<Integer> ut_set = new Stack<Integer>();//Defined as P' in the paper
 
@@ -337,10 +300,8 @@ public class BKKCKCF {
                 }
                 if (clique_size == best_clique_size) {
                     //System.out.println("R-Clique " + R);
-                    maxCliquesSet.addElement(R);
-
-//                       System.out.println("Best Cliques Size: " + best_clique_size + " " + clique_size);
-                    }
+                    maxCliquesSet.add(R);
+                }
 
             }
 
@@ -353,23 +314,15 @@ public class BKKCKCF {
 
         while (ut_set.elementAt(a) != 0) {
 
-            // P[a] is node ut
-            //  System.out.println("Central recursion node " + ut_set.elementAt(a));
             int ui = ut_set.get(a);
-            //remove ut_set[a] from P
-            //find position of ut_set node in P
-
-            //int ui = ut_set.peek();
 
             P.removeElement(ui);
 
-
-
-            Vector<Integer> R_copy = new Vector<Integer>(R);
+            List<Integer> R_copy = new Vector<Integer>(R);
             Stack<Integer> P_copy = new Stack<Integer>();
             Stack<Integer> Q_copy = new Stack<Integer>();
-            Vector<Integer> X_copy = new Vector<Integer>(X);
-            Vector<Integer> Y_copy = new Vector<Integer>(Y);
+            List<Integer> X_copy = new Vector<Integer>(X);
+            List<Integer> Y_copy = new Vector<Integer>(Y);
             //Vector<Integer> Y_copy = new Vector<Integer>();
 
             N.clear();
@@ -404,19 +357,14 @@ public class BKKCKCF {
 
             for (int b = 0; b < N_size; b = b + 2) {
                 // N[b] is node v
-                // System.out.print( N.get(b) + " ");
                 //Grouping of the neighbors:
 
 
                 int Nelement_at_b = N.get(b);
 
-                //   System.out.println("N["+ b + "]: " + N.elementAt(b) + " " + "Q[" + c + "]: " + Q.elementAt(c));
                 if (N.elementAt(b + 1) == 1) {
                     //u and v are adjacent via a C-edge
 
-                    /*if (X.contains(Nelement_at_b)) {
-                    X_copy.addElement(Nelement_at_b);
-                    }else*/
                     if (Q.contains(Nelement_at_b)) {
 
                         P_copy.push(Nelement_at_b);
@@ -426,13 +374,11 @@ public class BKKCKCF {
                     }
                     if (Y.contains(Nelement_at_b)) {
                         if (X.contains(Nelement_at_b)) {
-                            X_copy.addElement(Nelement_at_b);
+                            X_copy.add(Nelement_at_b);
                         }
-                        Y_copy.removeElement(Nelement_at_b);
+                        Y_copy.remove(Nelement_at_b);
                     }
                 }
-
-
 
                 //find respective neighbor position in ut_set, which is needed for the deletion from ut_set
 
@@ -447,8 +393,6 @@ public class BKKCKCF {
             Vector<Integer> Q_copy_N_intersec = new Vector<Integer>();
             Vector<Integer> X_copy_N_intersec = new Vector<Integer>();
             Vector<Integer> Y_copy_N_intersec = new Vector<Integer>();
-            // System.out.println();
-            // System.out.println("P_Copy, N: " + P_copy + " " + N);
 
             int nElement = -1;
 
@@ -485,12 +429,6 @@ public class BKKCKCF {
 
         Vector<Integer> neighbor_vec = new Vector<Integer>();
 
-        //  System.out.println("C_edge Size: " + cEdges.size());
-//        int C_edge_number = cEdges.size() / 2;
-
-        //    System.out.println("C_edge.size/2: " + C_edge_number);
-        //    System.out.println("");
-        //    System.out.println("cEdges: ");
         for (int a = 0; a < cEdgeIterationSize; a++) {
             if (cEdges.get(a * 2 + 0) == central_node) {
                 //          System.out.println( cEdges.get(a*2+0) + " " + cEdges.get(a*2+1));
@@ -505,12 +443,6 @@ public class BKKCKCF {
             }
 
         }
-
-
-
-        //System.out.println("");
-//        System.out.println("dEdges Size: " + dEdges.size());
-//        System.out.println("Reduced dEdges Size: " + D_edge_number);
         for (int a = 0; a < dEdgeIterationSize; a++) {
             if (dEdges.get(a * 2 + 0) == central_node) {
                 //       System.out.println( dEdges.get(a*2+0) + " " + dEdges.get(a*2+1));
@@ -525,8 +457,6 @@ public class BKKCKCF {
             }
 
         }
-
-        //System.out.println("Neighbor Edges: " + neighbor_vec);
 
         return neighbor_vec;
     }
