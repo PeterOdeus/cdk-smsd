@@ -277,7 +277,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    public List<String> getCtab1() {
+    protected List<String> getCtab1() {
         return this.c_tab1_copy;
     }
 
@@ -285,7 +285,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    public List<String> getCtab2() {
+    protected List<String> getCtab2() {
         return this.c_tab2_copy;
     }
 
@@ -295,7 +295,7 @@ public class QueryProcessor {
      * which are neighbors of the MCS
      *   
      */
-    public int getNeighbor_bondnum_A() {
+    protected int getNeighbor_bondnum_A() {
         return this.neighbor_bondnum_A;
     }
 
@@ -304,11 +304,11 @@ public class QueryProcessor {
      * @return number of remaining molecule A bonds after the clique search, 
      * which aren't neighbors
      */
-    public int geBondnum_A() {
+    protected int geBondnum_A() {
         return this.set_bondnum_A;
     }
 
-    public String[] getSigns() {
+    protected String[] getSigns() {
         return this.SignROW;
     }
 

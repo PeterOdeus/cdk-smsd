@@ -242,7 +242,7 @@ public class TargetProcessor {
      *
      * @return
      */
-    public List<String> getCtab1() {
+    protected List<String> getCtab1() {
         return this.c_tab1_copy;
     }
 
@@ -250,7 +250,7 @@ public class TargetProcessor {
      *
      * @return
      */
-    public List<String> getCtab2() {
+    protected List<String> getCtab2() {
         return this.c_tab2_copy;
     }
 
@@ -260,7 +260,7 @@ public class TargetProcessor {
      * which are neighbors of the MCS
      *
      */
-    public int getNeighbor_bondnum_B() {
+    protected int getNeighbor_bondnum_B() {
         return this.neighbor_bondnum_B;
     }
 
@@ -269,11 +269,11 @@ public class TargetProcessor {
      * @return number of remaining molecule A bonds after the clique search,
      * which aren't neighbors
      */
-    public int geBondnum_B() {
+    protected int geBondnum_B() {
         return this.set_bondnum_B;
     }
 
-    public String[] getSigns() {
+    protected String[] getSigns() {
         return this.SignROW;
     }
 }

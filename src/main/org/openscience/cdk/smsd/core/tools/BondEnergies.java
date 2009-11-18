@@ -4,7 +4,6 @@
  */
 package org.openscience.cdk.smsd.core.tools;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.ArrayList;

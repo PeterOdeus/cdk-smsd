@@ -49,7 +49,7 @@ public class MCSPlusHandler implements IMCS {
     private IAtomContainer ac2 = null;
     private boolean flagExchange = false;
 
-    public MCSPlusHandler() {
+    protected MCSPlusHandler() {
 
 
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();

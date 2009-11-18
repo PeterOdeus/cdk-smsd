@@ -46,7 +46,7 @@ public class SingleMapping {
      * @param target
      * @param removeHydrogen
      */
-    public void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
+    protected void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
         this.ac1 = source;
         this.ac2 = target;

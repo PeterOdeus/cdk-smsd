@@ -52,7 +52,7 @@ public class MCSPlus {
      * @return
      * @throws CDKException
      */
-    public List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
+    protected List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
         Stack<List<Integer>> Max_Cliques_Set = null;
         List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
@@ -117,7 +117,7 @@ public class MCSPlus {
      *
      * @return
      */
-    public static boolean getTimeOutFlag() {
+    protected static boolean getTimeOutFlag() {
 
         boolean flag = false;
 

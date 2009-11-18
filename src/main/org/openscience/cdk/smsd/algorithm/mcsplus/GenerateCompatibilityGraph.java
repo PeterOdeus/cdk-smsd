@@ -55,10 +55,10 @@ public class GenerateCompatibilityGraph {
      * 
      * @param source
      * @param target
-     * @param HFlag 
+     * @param HFlag Hydrogen removal flag
      * @throws java.io.IOException
      */
-    public GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target, boolean HFlag) throws IOException {
+    protected GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target, boolean HFlag) throws IOException {
         this.source = source;
         this.target = target;
         this.removeHydrogen = HFlag;
@@ -146,8 +146,7 @@ public class GenerateCompatibilityGraph {
                 }
             }
         }
-        return; //arrays are passed to functions by address; they are not returned
-
+       
     }
 
     private List<IAtom> reduceAtomSet(IAtomContainer ac) {
@@ -457,8 +456,7 @@ public class GenerateCompatibilityGraph {
 
         dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a <
-                comp_graph_nodes_C_zero_List_size; a =
+        for (int a = 0; a <comp_graph_nodes_C_zero_List_size; a =
                         a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);

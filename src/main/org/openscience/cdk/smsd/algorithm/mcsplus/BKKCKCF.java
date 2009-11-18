@@ -57,7 +57,7 @@ public class BKKCKCF {
      * @param C_edges_org C-Edges set of allowed edges
      * @param D_edges_org D-Edges set of prohibited edges
      */
-    public BKKCKCF(List<Integer> comp_graph_nodes_org, List<Integer> C_edges_org, List<Integer> D_edges_org) {
+    protected BKKCKCF(List<Integer> comp_graph_nodes_org, List<Integer> C_edges_org, List<Integer> D_edges_org) {
 
         this.comp_graph_nodes = comp_graph_nodes_org;
         this.cEdges = C_edges_org;
@@ -439,11 +439,11 @@ public class BKKCKCF {
         return neighbor_vec;
     }
 
-    public int getBestCliqueSize() {
+    protected int getBestCliqueSize() {
         return best_clique_size;
     }
 
-    public Stack<List<Integer>> getMaxCliqueSet() {
+    protected Stack<List<Integer>> getMaxCliqueSet() {
         Stack<List<Integer>> solution = new Stack<List<Integer>>();
         solution.addAll(maxCliquesSet);
         return solution;
