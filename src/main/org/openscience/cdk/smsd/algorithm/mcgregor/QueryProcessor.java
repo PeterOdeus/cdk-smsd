@@ -23,8 +23,8 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcgregor;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
@@ -236,7 +236,7 @@ public class QueryProcessor {
     private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
 
-        Vector<Integer> mapped_atoms = new Vector<Integer>(mapped_atoms_org);
+        List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
 
         int corresponding_atom = 0;
         for (int a = 0; a < mapped_atoms_size; a++) {
