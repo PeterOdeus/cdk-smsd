@@ -33,15 +33,15 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class TargetProcessor {
 
-    private Vector<String> c_tab1_copy;
-    private Vector<String> c_tab2_copy;
+    private List<String> c_tab1_copy;
+    private List<String> c_tab2_copy;
     private String[] SignROW;
     private int neighbor_bondnum_B = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_B = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private IAtomContainer target;
     private int neighbor_bondnum_A;
-    private Vector<Integer> i_bond_neighborsA;
-    private Vector<String> c_bond_neighborsA;
+    private List<Integer> i_bond_neighborsA;
+    private List<String> c_bond_neighborsA;
 
     /**
      * @param target
@@ -54,7 +54,7 @@ public class TargetProcessor {
      * @param i_bond_neighborsA
      * @param c_bond_neighborsA 
      */
-    protected TargetProcessor(IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, Vector<Integer> i_bond_neighborsA, Vector<String> c_bond_neighborsA) {
+    protected TargetProcessor(IAtomContainer target, List<String> c_tab1_copy, List<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_B, int set_bondnum_B, int neighbor_bondnum_A, List<Integer> i_bond_neighborsA, List<String> c_bond_neighborsA) {
 
         this.target = target;
 
@@ -69,12 +69,12 @@ public class TargetProcessor {
     }
 
     protected void process(
-            Vector<Integer> unmapped_atoms_molB,
+            List<Integer> unmapped_atoms_molB,
             int mappingSize,
-            Vector<Integer> i_bond_neighborsB,
-            Vector<Integer> i_bond_setB,
-            Vector<String> c_bond_neighborsB,
-            Vector<String> c_bond_setB,
+            List<Integer> i_bond_neighborsB,
+            List<Integer> i_bond_setB,
+            List<String> c_bond_neighborsB,
+            List<String> c_bond_setB,
             List<Integer> mapped_atoms,
             int SR_count) {
 
@@ -93,13 +93,13 @@ public class TargetProcessor {
             Integer order = target.getBond(a).getOrder().ordinal() + 1;
 
             for (int b = 0; b < unmapped_numB; b++) {
-                if (unmapped_atoms_molB.elementAt(b).equals(indexI)) {
+                if (unmapped_atoms_molB.get(b).equals(indexI)) {
                     for (int c = 0; c < mappingSize; c++) {
                         if (mapped_atoms.get(c * 2 + 1).equals(indexJ)) {
                             i_bond_neighborsB.add(indexI);
                             i_bond_neighborsB.add(indexJ);
                             i_bond_neighborsB.add(order);
-                            if (c_tab2_copy.elementAt(a * 4 + 3).compareToIgnoreCase("X") == 0) {
+                            if (c_tab2_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
                                 c_bond_neighborsB.add(c_tab2_copy.get(a * 4 + 0));
                                 c_bond_neighborsB.add(SignROW[SR_count]);
                                 c_bond_neighborsB.add("X");
@@ -133,13 +133,13 @@ public class TargetProcessor {
                     normal_bond = true;
                     bond_considered = true;
                 }
-                if (unmapped_atoms_molB.elementAt(b) == indexJ) {
+                if (unmapped_atoms_molB.get(b) == indexJ) {
                     for (int c = 0; c < mappingSize; c++) {
                         if (mapped_atoms.get(c * 2 + 1).equals(indexI)) {
                             i_bond_neighborsB.add(indexI);
                             i_bond_neighborsB.add(indexJ);
                             i_bond_neighborsB.add(order);
-                            if (c_tab2_copy.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0) {
+                            if (c_tab2_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
                                 c_bond_neighborsB.add(SignROW[SR_count]);
                                 c_bond_neighborsB.add(c_tab2_copy.get(a * 4 + 1));
                                 c_bond_neighborsB.add(c_tab2_copy.get(a * 4 + 0));
@@ -192,27 +192,27 @@ public class TargetProcessor {
         int corresponding_atom = 0;
         for (int a = 0; a < mapped_atoms_size; a++) {
             if ((molecule == 1) &&
-                    (mapped_atoms.elementAt(a * 2 + 0).intValue() == atom_from_other_molecule)) {
+                    (mapped_atoms.get(a * 2 + 0).intValue() == atom_from_other_molecule)) {
                 corresponding_atom = mapped_atoms.get(a * 2 + 1);
             }
-            if ((molecule == 2) && (mapped_atoms.elementAt(a * 2 + 1).intValue() == atom_from_other_molecule)) {
+            if ((molecule == 2) && (mapped_atoms.get(a * 2 + 1).intValue() == atom_from_other_molecule)) {
                 corresponding_atom = mapped_atoms.get(a * 2 + 0);
             }
         }
         return corresponding_atom;
     }
 
-    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, Vector<String> c_bond_neighbors) {
+    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, List<String> c_bond_neighbors) {
         //private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
 
         for (int a = 0; a < neighbor_bondnum; a++) {
             IBond bond = ac.getBond(a);
-            if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 2, c_bond_neighbors.get(a * 4 + 0));
                 c_bond_neighbors.set(a * 4 + 0, new_symbol);
             }
 
-            if ((ac.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.elementAt(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((ac.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
                 c_bond_neighbors.set(a * 4 + 1, new_symbol);
             }
@@ -222,15 +222,15 @@ public class TargetProcessor {
         return 0;
     }
 
-    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
+    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
 
         for (int a = 0; a < neighbor_bondnum; a++) {
-            if ((i_bond_neighbors.elementAt(a * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            if ((i_bond_neighbors.get(a * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 2, c_bond_neighbors.get(a * 4 + 0));
                 c_bond_neighbors.set(a * 4 + 0, new_symbol);
             }
 
-            if ((i_bond_neighbors.elementAt(a * 3 + 1) == (corresponding_atom)) && (c_bond_neighbors.elementAt(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((i_bond_neighbors.get(a * 3 + 1) == (corresponding_atom)) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
                 c_bond_neighbors.set(a * 4 + 1, new_symbol);
             }
@@ -244,7 +244,7 @@ public class TargetProcessor {
      *
      * @return
      */
-    public Vector<String> getCtab1() {
+    public List<String> getCtab1() {
         return this.c_tab1_copy;
     }
 
@@ -252,7 +252,7 @@ public class TargetProcessor {
      *
      * @return
      */
-    public Vector<String> getCtab2() {
+    public List<String> getCtab2() {
         return this.c_tab2_copy;
     }
 

@@ -33,15 +33,15 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class QueryProcessor {
 
-    private Vector<String> c_tab1_copy;
-    private Vector<String> c_tab2_copy;
+    private List<String> c_tab1_copy;
+    private List<String> c_tab2_copy;
     private String[] SignROW;
     private int neighbor_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int set_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private IAtomContainer query;
     private IAtomContainer target;
-    private Vector<Integer> i_bond_neighborsA;
-    private Vector<String> c_bond_neighborsA;
+    private List<Integer> i_bond_neighborsA;
+    private List<String> c_bond_neighborsA;
 
     /**
      * 
@@ -53,7 +53,7 @@ public class QueryProcessor {
      * @param neighbor_bondnum_A
      * @param set_bondnum_A
      */
-    protected QueryProcessor(IAtomContainer query, IAtomContainer target, Vector<String> c_tab1_copy, Vector<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_A, int set_bondnum_A) {
+    protected QueryProcessor(IAtomContainer query, IAtomContainer target, List<String> c_tab1_copy, List<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_A, int set_bondnum_A) {
 
         this.query = query;
         this.target = target;
@@ -77,12 +77,12 @@ public class QueryProcessor {
      * @param SR_count
      */
     protected void process(
-            Vector<Integer> unmapped_atoms_molA,
+            List<Integer> unmapped_atoms_molA,
             int mappingSize,
-            Vector<Integer> i_bond_neighborsA,
-            Vector<Integer> i_bond_setA,
-            Vector<String> c_bond_neighborsA,
-            Vector<String> c_bond_setA,
+            List<Integer> i_bond_neighborsA,
+            List<Integer> i_bond_setA,
+            List<String> c_bond_neighborsA,
+            List<String> c_bond_setA,
             List<Integer> mapped_atoms,
             int SR_count) {
 
@@ -117,7 +117,7 @@ public class QueryProcessor {
 //                    System.out.println("unMappedAtomIndex=IndexI " + query.getAtom(unMappedAtomIndex).getSymbol());
                     for (int c = 0; c < mappingSize; c++) {
 
-//                        System.out.println("\n*****\nmapped_atoms.elementAt(c * 2): " + mapped_atoms.elementAt(c * 2));
+//                        System.out.println("\n*****\nmapped_atoms.get(c * 2): " + mapped_atoms.get(c * 2));
 //                        System.out.println("indexJ: " + indexJ);
 
                         if (mapped_atoms.get(c * 2).equals(indexJ)) {
@@ -132,7 +132,7 @@ public class QueryProcessor {
                             i_bond_neighborsA.add(indexJ);
                             i_bond_neighborsA.add(order);
 
-                            if (c_tab1_copy.elementAt(a * 4 + 3).compareToIgnoreCase("X") == 0) {
+                            if (c_tab1_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
 
 
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
@@ -181,7 +181,7 @@ public class QueryProcessor {
                             i_bond_neighborsA.add(indexJ);
                             i_bond_neighborsA.add(order);
 
-                            if (c_tab1_copy.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0) {
+                            if (c_tab1_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
 
 
                                 c_bond_neighborsA.add(SignROW[SR_count]);
@@ -241,31 +241,31 @@ public class QueryProcessor {
         int corresponding_atom = 0;
         for (int a = 0; a < mapped_atoms_size; a++) {
             if ((molecule == 1) &&
-                    (mapped_atoms.elementAt(a * 2 + 0).intValue() == atom_from_other_molecule)) {
+                    (mapped_atoms.get(a * 2 + 0).intValue() == atom_from_other_molecule)) {
 
                 corresponding_atom = mapped_atoms.get(a * 2 + 1);
 
 
             }
             if ((molecule == 2) &&
-                    (mapped_atoms.elementAt(a * 2 + 1).intValue() == atom_from_other_molecule)) {
+                    (mapped_atoms.get(a * 2 + 1).intValue() == atom_from_other_molecule)) {
                 corresponding_atom = mapped_atoms.get(a * 2 + 0);
             }
         }
         return corresponding_atom;
     }
 
-    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, Vector<String> c_bond_neighbors) {
+    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, List<String> c_bond_neighbors) {
         //private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
 
         for (int a = 0; a < neighbor_bondnum; a++) {
             IBond bond = ac.getBond(a);
-            if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.elementAt(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 2, c_bond_neighbors.get(a * 4 + 0));
                 c_bond_neighbors.set(a * 4 + 0, new_symbol);
             }
 
-            if ((ac.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.elementAt(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((ac.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
                 c_bond_neighbors.set(a * 4 + 1, new_symbol);
             }
@@ -279,7 +279,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    public Vector<String> getCtab1() {
+    public List<String> getCtab1() {
         return this.c_tab1_copy;
     }
 
@@ -287,7 +287,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    public Vector<String> getCtab2() {
+    public List<String> getCtab2() {
         return this.c_tab2_copy;
     }
 
@@ -314,11 +314,11 @@ public class QueryProcessor {
         return this.SignROW;
     }
 
-    Vector<Integer> getIBondNeighboursA() {
+    List<Integer> getIBondNeighboursA() {
         return this.i_bond_neighborsA;
     }
 
-    Vector<String> getCBondNeighborsA() {
+    List<String> getCBondNeighborsA() {
         return this.c_bond_neighborsA;
     }
 }
