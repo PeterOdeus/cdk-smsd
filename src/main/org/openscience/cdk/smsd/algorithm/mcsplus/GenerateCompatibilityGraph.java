@@ -97,8 +97,8 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private Vector<Vector<Integer>> label_atoms(IAtomContainer ac) {
-        Vector<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
+    private List<Vector<Integer>> labelAtoms(IAtomContainer ac) {
+        List<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
 
         for (int i = 0; i < ac.getAtomCount(); i++) {
             Vector<Integer> label = new Vector<Integer>();
@@ -189,8 +189,8 @@ public class GenerateCompatibilityGraph {
         basic_atom_vec_A = reduce_atomset(reactant);
         basic_atom_vec_B = reduce_atomset(product);
 
-        Vector<Vector<Integer>> label_list_molA = label_atoms(reactant);
-        Vector<Vector<Integer>> label_list_molB = label_atoms(product);
+        List<Vector<Integer>> label_list_molA = labelAtoms(reactant);
+        List<Vector<Integer>> label_list_molB = labelAtoms(product);
 
 
 
@@ -208,9 +208,7 @@ public class GenerateCompatibilityGraph {
                     comp_graph_nodes.add(count_nodes++);
 
                 }
-
                 molB_nodes++;
-
             }
             molA_nodes++;
         }
