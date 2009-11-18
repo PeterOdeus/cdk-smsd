@@ -60,10 +60,10 @@ public class MCSPlus {
         try {
 
             GenerateCompatibilityGraph gcg = new GenerateCompatibilityGraph(ac1, ac2, removeHydrogen);
-            List<Integer> comp_graph_nodes = gcg.get_comp_graph_nodes();
+            List<Integer> comp_graph_nodes = gcg.getCompGraphNodes();
 
-            List<Integer> C_edges = gcg.get_C_egdes();
-            List<Integer> D_edges = gcg.get_D_egdes();
+            List<Integer> C_edges = gcg.getCEgdes();
+            List<Integer> D_edges = gcg.getDEgdes();
 
             if (D_edges.size() > 99999 && C_edges.size() > 2000) {
                 System.err.println("D-edges Size " + D_edges.size() + " > : " + 99999);

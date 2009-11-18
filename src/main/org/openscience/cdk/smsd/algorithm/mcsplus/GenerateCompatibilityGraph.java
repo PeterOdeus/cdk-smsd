@@ -38,39 +38,38 @@ import org.openscience.cdk.interfaces.IBond.Order;
  */
 public class GenerateCompatibilityGraph {
 
-    private Vector<Integer> comp_graph_nodes = new Vector<Integer>();
-    private Vector<Integer> comp_graph_nodes_C_zero = new Vector<Integer>();
-    private Vector<Integer> cEdges = new Vector<Integer>();
-    private Vector<Integer> dEdges = new Vector<Integer>();
+    private List<Integer> comp_graph_nodes = new Vector<Integer>();
+    private List<Integer> comp_graph_nodes_C_zero = new Vector<Integer>();
+    private List<Integer> cEdges = new Vector<Integer>();
+    private List<Integer> dEdges = new Vector<Integer>();
     private int cEdgesSize = 0;
     private int dEdgesSize = 0;
     private boolean removeHydrogen = false;
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
-//    private static int min_atoms_size = 0;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
     private boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
      * 
-     * @param ac1
-     * @param ac2
+     * @param source
+     * @param target
      * @param HFlag 
      * @throws java.io.IOException
      */
-    public GenerateCompatibilityGraph(IAtomContainer ac1, IAtomContainer ac2, boolean HFlag) throws IOException {
-        this.ac1 = ac1;
-        this.ac2 = ac2;
+    public GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target, boolean HFlag) throws IOException {
+        this.source = source;
+        this.target = target;
         this.removeHydrogen = HFlag;
 
-        generate_compatibility_graph_nodes();
+        generateCompatibilityGraphNodes();
 
         if (bondTypeFlag) {
-            generate_compatibility_graph_BS();
+            generateCompatibilityGraphBS();
         } else {
-            generate_compatibility_graph_BIS();
+            generateCompatibilityGraphBIS();
         }
 
-        if (get_C_edges_size() == 0) {
+        if (getCEdgesSize() == 0) {
             clearCompGraphNodes();
 
             clearCEgdes();
@@ -79,11 +78,11 @@ public class GenerateCompatibilityGraph {
             resetCEdgesSize();
             resetDEdgesSize();
 
-            generate_compatibility_graph_nodes_if_C_edge_number_is_zero();
+            generateCompatibilityGraphNodesIfCEdgeNumberIsZero();
             if (bondTypeFlag) {
-                generate_compatibility_graph_if_C_edge_number_is_zero_BS();
+                generateCompatibilityGraphIfCEdgeNumberIsZeroBS();
             } else {
-                generate_compatibility_graph_if_C_edge_number_is_zero_BIS();
+                generateCompatibilityGraphIfCEdgeNumberIsZeroBIS();
             }
 
             clearCompGraphNodesCZero();
@@ -91,41 +90,39 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private Vector<Vector<Integer>> label_atoms(IAtomContainer ac) {
-        Vector<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
+    private List<List<Integer>> labelAtoms(IAtomContainer ac) {
+        List<List<Integer>> label_list = new Vector<List<Integer>>();
 
 
         for (int i = 0; i < ac.getAtomCount(); i++) {
-            Vector<Integer> label = new Vector<Integer>();
+            List<Integer> label = new Vector<Integer>(7);
 
             LabelContainer labelContainer = LabelContainer.getInstance();
 
-            label.setSize(7);
-
             for (int a = 0; a < 7; a++) {
-                label.setElementAt(0, a);
+                label.set(a, 0);
             }
 
             IAtom refAtom = ac.getAtom(i);
             String atom1_type = refAtom.getSymbol();
-            label.setElementAt(labelContainer.getLabelID(atom1_type), 0);
+            label.set(0, labelContainer.getLabelID(atom1_type));
 
             int count_neighbors = 1;
             List<IAtom> connAtoms = ac.getConnectedAtomsList(refAtom);
 
             for (IAtom negAtom : connAtoms) {
                 String atom2_type = negAtom.getSymbol();
-                label.setElementAt(labelContainer.getLabelID(atom2_type), count_neighbors++);
+                label.set(count_neighbors++, labelContainer.getLabelID(atom2_type));
             }
 
-            bubble_sort(label);
+            bubbleSort(label);
             label_list.add(label);
 
         }
         return label_list;
     }
 
-    private void bubble_sort(Vector<Integer> label) {
+    private void bubbleSort(List<Integer> label) {
 
         boolean flag = true; // set flag to 1 to begin initial pass
 
@@ -138,8 +135,8 @@ public class GenerateCompatibilityGraph {
                     // descending order simply changes to >
                     temp = label.get(i); // swap elements
 
-                    label.setElementAt(label.get(j + 1), i);
-                    label.setElementAt(temp, j + 1);
+                    label.set(i, label.get(j + 1));
+                    label.set(j + 1, temp);
                     flag = true; // indicates that a swap occurred.
 
                 }
@@ -147,39 +144,39 @@ public class GenerateCompatibilityGraph {
         }
     }
 
-    private Vector<IAtom> reduce_atomset(IAtomContainer ac) {
+    private List<IAtom> reduceAtomSet(IAtomContainer ac) {
 
-        Vector<IAtom> basic_atoms = new Vector<IAtom>();
+        List<IAtom> basic_atoms = new Vector<IAtom>();
         for (IAtom atom : ac.atoms()) {
             if (removeHydrogen) {
                 if (!atom.getSymbol().equalsIgnoreCase("H")) {
-                    basic_atoms.addElement(atom);
+                    basic_atoms.add(atom);
                 }
             } else {
-                basic_atoms.addElement(atom);
+                basic_atoms.add(atom);
             }
         }
         return basic_atoms;
     }
 
-    protected int generate_compatibility_graph_nodes() throws IOException {
+    protected int generateCompatibilityGraphNodes() throws IOException {
 
         comp_graph_nodes.clear();
 
-        Vector<IAtom> basic_atom_vec_A = null;
-        Vector<IAtom> basic_atom_vec_B = null;
+        List<IAtom> basic_atom_vec_A = null;
+        List<IAtom> basic_atom_vec_B = null;
 
-        IAtomContainer reactant = ac1;
-        IAtomContainer product = ac2;
+        IAtomContainer reactant = source;
+        IAtomContainer product = target;
 
-//        System.out.println("ac1: " + ac1.getAtomCount());
-//        System.out.println("ac2: " + ac2.getAtomCount());
+//        System.out.println("source: " + source.getAtomCount());
+//        System.out.println("target: " + target.getAtomCount());
 
-        basic_atom_vec_A = reduce_atomset(reactant);
-        basic_atom_vec_B = reduce_atomset(product);
+        basic_atom_vec_A = reduceAtomSet(reactant);
+        basic_atom_vec_B = reduceAtomSet(product);
 
-        Vector<Vector<Integer>> label_list_molA = label_atoms(reactant);
-        Vector<Vector<Integer>> label_list_molB = label_atoms(product);
+        List<List<Integer>> label_list_molA = labelAtoms(reactant);
+        List<List<Integer>> label_list_molB = labelAtoms(product);
 
 
 
@@ -188,7 +185,7 @@ public class GenerateCompatibilityGraph {
 
 //        System.out.println("basic_atom_vec_A " + basic_atom_vec_A);
 
-        for (Vector<Integer> labelA : label_list_molA) {
+        for (List<Integer> labelA : label_list_molA) {
 //
 //            System.out.println("labelA Vector: " + labelA.size());
 //            System.out.println("Size of the Label A: ");
@@ -196,11 +193,11 @@ public class GenerateCompatibilityGraph {
 
             int molB_nodes = 0;
 
-            for (Vector<Integer> labelB : label_list_molB) {
+            for (List<Integer> labelB : label_list_molB) {
                 if (labelA.equals(labelB)) {
-                    comp_graph_nodes.addElement(reactant.getAtomNumber(basic_atom_vec_A.get(molA_nodes)));
-                    comp_graph_nodes.addElement(product.getAtomNumber(basic_atom_vec_B.get(molB_nodes)));
-                    comp_graph_nodes.addElement(count_nodes++);
+                    comp_graph_nodes.add(reactant.getAtomNumber(basic_atom_vec_A.get(molA_nodes)));
+                    comp_graph_nodes.add(product.getAtomNumber(basic_atom_vec_B.get(molB_nodes)));
+                    comp_graph_nodes.add(count_nodes++);
 
                 }
                 molB_nodes++;
@@ -210,7 +207,7 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    protected int generate_compatibility_graph_BIS() throws IOException {
+    protected int generateCompatibilityGraphBIS() throws IOException {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
         cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
@@ -219,14 +216,14 @@ public class GenerateCompatibilityGraph {
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
 
 
-            int index_a = comp_graph_nodes.elementAt(a);
-            int index_aPlus1 = comp_graph_nodes.elementAt(a + 1);
+            int index_a = comp_graph_nodes.get(a);
+            int index_aPlus1 = comp_graph_nodes.get(a + 1);
 
             for (int b = a + 3; b < comp_graph_nodes_vector_size; b = b + 3) {
 
 
-                int index_b = comp_graph_nodes.elementAt(b);
-                int index_bPlus1 = comp_graph_nodes.elementAt(b + 1);
+                int index_b = comp_graph_nodes.get(b);
+                int index_bPlus1 = comp_graph_nodes.get(b + 1);
 
                 // if element ac !=b and atoms on the adjacent sides of the bonds are not equal
                 if (a != b && index_a != index_b &&
@@ -238,19 +235,19 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
-                        cEdges.addElement((a / 3) + 1);
-                        cEdges.addElement((b / 3) + 1);
+                        cEdges.add((a / 3) + 1);
+                        cEdges.add((b / 3) + 1);
 
 
                     } else if (ReactantBond == null && ProductBond == null) {
 
-                        dEdges.addElement((a / 3) + 1);
-                        dEdges.addElement((b / 3) + 1);
+                        dEdges.add((a / 3) + 1);
+                        dEdges.add((b / 3) + 1);
                     }
 
                 }
@@ -264,7 +261,7 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    protected int generate_compatibility_graph_BS() throws IOException {
+    protected int generateCompatibilityGraphBS() throws IOException {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
         cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
@@ -273,13 +270,13 @@ public class GenerateCompatibilityGraph {
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
 
 
-            int index_a = comp_graph_nodes.elementAt(a);
-            int index_aPlus1 = comp_graph_nodes.elementAt(a + 1);
+            int index_a = comp_graph_nodes.get(a);
+            int index_aPlus1 = comp_graph_nodes.get(a + 1);
 
             for (int b = a + 3; b < comp_graph_nodes_vector_size; b = b + 3) {
 
-                int index_b = comp_graph_nodes.elementAt(b);
-                int index_bPlus1 = comp_graph_nodes.elementAt(b + 1);
+                int index_b = comp_graph_nodes.get(b);
+                int index_bPlus1 = comp_graph_nodes.get(b + 1);
 
                 // if element a !=b and atoms on the adjacent sides of the bonds are not equal
                 if (a != b &&
@@ -289,8 +286,8 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
@@ -300,16 +297,16 @@ public class GenerateCompatibilityGraph {
 
                         if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType.equals(ProductBondType))) {
                             //System.out.println("C-Edges A=B " + a + " " +  ReactantBondType + " = " +  b + " " + ProductBondType);
-                            cEdges.addElement((a / 3) + 1);
-                            cEdges.addElement((b / 3) + 1);
+                            cEdges.add((a / 3) + 1);
+                            cEdges.add((b / 3) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
 
-                            cEdges.addElement((a / 3) + 1);
-                            cEdges.addElement((b / 3) + 1);
+                            cEdges.add((a / 3) + 1);
+                            cEdges.add((b / 3) + 1);
                         } else {
 
-                            dEdges.addElement((a / 3) + 1);
-                            dEdges.addElement((b / 3) + 1);
+                            dEdges.add((a / 3) + 1);
+                            dEdges.add((b / 3) + 1);
                         }
 //
 
@@ -326,7 +323,7 @@ public class GenerateCompatibilityGraph {
     }
 
     //comp_graph_nodes_C_zero is used to build up of the edges of the compatibility graph
-    protected Integer generate_compatibility_graph_nodes_if_C_edge_number_is_zero() throws IOException {
+    protected Integer generateCompatibilityGraphNodesIfCEdgeNumberIsZero() throws IOException {
 
         int count_nodes = 1;
         Vector<String> map = new Vector<String>();
@@ -339,36 +336,36 @@ public class GenerateCompatibilityGraph {
         // resets the target graph.
         comp_graph_nodes.clear();
 
-        for (int i = 0; i < ac1.getAtomCount(); i++) {
-            for (int j = 0; j < ac2.getAtomCount(); j++) {
-                IAtom atom1 = ac1.getAtom(i);
-                IAtom atom2 = ac2.getAtom(j);
+        for (int i = 0; i < source.getAtomCount(); i++) {
+            for (int j = 0; j < target.getAtomCount(); j++) {
+                IAtom atom1 = source.getAtom(i);
+                IAtom atom2 = target.getAtom(j);
 
                 //You can also check object equal or charge, hydrogen count etc
 
                 if (atom1.getSymbol().equalsIgnoreCase(atom2.getSymbol())) {
                     if (removeHydrogen) {
                         if ((!atom1.getSymbol().equalsIgnoreCase("H") || !atom2.getSymbol().equalsIgnoreCase("H")) && (!map.contains(i + "_" + j))) {
-                            comp_graph_nodes_C_zero.addElement(i);
-                            comp_graph_nodes_C_zero.addElement(j);
-                            comp_graph_nodes_C_zero.addElement(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-                            comp_graph_nodes_C_zero.addElement(count_nodes);
-                            comp_graph_nodes.addElement(i);
-                            comp_graph_nodes.addElement(j);
-                            comp_graph_nodes.addElement(count_nodes++);
+                            comp_graph_nodes_C_zero.add(i);
+                            comp_graph_nodes_C_zero.add(j);
+                            comp_graph_nodes_C_zero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
+                            comp_graph_nodes_C_zero.add(count_nodes);
+                            comp_graph_nodes.add(i);
+                            comp_graph_nodes.add(j);
+                            comp_graph_nodes.add(count_nodes++);
                             map.add(i + "_" + j);
 
                         }
                     } else {
                         if (!map.contains(i + "_" + j)) {
-                            comp_graph_nodes_C_zero.addElement(i);
-                            comp_graph_nodes_C_zero.addElement(j);
-                            comp_graph_nodes_C_zero.addElement(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
+                            comp_graph_nodes_C_zero.add(i);
+                            comp_graph_nodes_C_zero.add(j);
+                            comp_graph_nodes_C_zero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
 
-                            comp_graph_nodes_C_zero.addElement(count_nodes);
-                            comp_graph_nodes.addElement(i);
-                            comp_graph_nodes.addElement(j);
-                            comp_graph_nodes.addElement(count_nodes++);
+                            comp_graph_nodes_C_zero.add(count_nodes);
+                            comp_graph_nodes.add(i);
+                            comp_graph_nodes.add(j);
+                            comp_graph_nodes.add(count_nodes++);
                             map.add(i + "_" + j);
 
                         }
@@ -382,7 +379,7 @@ public class GenerateCompatibilityGraph {
         return count_nodes;
     }
 
-    protected int generate_compatibility_graph_if_C_edge_number_is_zero_BS() throws IOException {
+    protected int generateCompatibilityGraphIfCEdgeNumberIsZeroBS() throws IOException {
 
 
         int comp_graph_nodes_C_zero_vector_size = comp_graph_nodes_C_zero.size();
@@ -394,11 +391,11 @@ public class GenerateCompatibilityGraph {
         for (int a = 0; a < comp_graph_nodes_C_zero_vector_size; a = a + 4) {
 
 
-            int index_a = comp_graph_nodes_C_zero.elementAt(a);
-            int index_aPlus1 = comp_graph_nodes_C_zero.elementAt(a + 1);
+            int index_a = comp_graph_nodes_C_zero.get(a);
+            int index_aPlus1 = comp_graph_nodes_C_zero.get(a + 1);
             for (int b = 0; b < comp_graph_nodes_C_zero_vector_size; b = b + 4) {
-                int index_b = comp_graph_nodes_C_zero.elementAt(b);
-                int index_bPlus1 = comp_graph_nodes_C_zero.elementAt(b + 1);
+                int index_b = comp_graph_nodes_C_zero.get(b);
+                int index_bPlus1 = comp_graph_nodes_C_zero.get(b + 1);
 
                 // if element a !=b and atoms on the adjacent sides of the bonds are not equal
                 if ((a != b) &&
@@ -407,21 +404,21 @@ public class GenerateCompatibilityGraph {
                     int ReactantBondType = 0;
                     int ProductBondType = 0;
 
-                    IBond ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    IBond ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    IBond ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    IBond ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
                         ReactantBondType = ReactantBond.getOrder().ordinal();
                         ProductBondType = ProductBond.getOrder().ordinal();
                         if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC) && ReactantBondType == ProductBondType) {
-                            cEdges.addElement((a / 4) + 1);
-                            cEdges.addElement((b / 4) + 1);
+                            cEdges.add((a / 4) + 1);
+                            cEdges.add((b / 4) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-                            cEdges.addElement((a / 4) + 1);
-                            cEdges.addElement((b / 4) + 1);
+                            cEdges.add((a / 4) + 1);
+                            cEdges.add((b / 4) + 1);
                         } else {
-                            dEdges.addElement((a / 4) + 1);
-                            dEdges.addElement((b / 4) + 1);
+                            dEdges.add((a / 4) + 1);
+                            dEdges.add((b / 4) + 1);
                         }
                     }
                 }
@@ -436,7 +433,7 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    protected int generate_compatibility_graph_if_C_edge_number_is_zero_BIS() throws IOException {
+    protected int generateCompatibilityGraphIfCEdgeNumberIsZeroBIS() throws IOException {
 
         int comp_graph_nodes_C_zero_vector_size = comp_graph_nodes_C_zero.size();
         cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
@@ -444,12 +441,12 @@ public class GenerateCompatibilityGraph {
 
         for (int a = 0; a <
                 comp_graph_nodes_C_zero_vector_size; a = a + 4) {
-            int index_a = comp_graph_nodes_C_zero.elementAt(a);
-            int index_aPlus1 = comp_graph_nodes_C_zero.elementAt(a + 1);
+            int index_a = comp_graph_nodes_C_zero.get(a);
+            int index_aPlus1 = comp_graph_nodes_C_zero.get(a + 1);
             for (int b = a + 4; b < comp_graph_nodes_C_zero_vector_size; b =
                             b + 4) {
-                int index_b = comp_graph_nodes_C_zero.elementAt(b);
-                int index_bPlus1 = comp_graph_nodes_C_zero.elementAt(b + 1);
+                int index_b = comp_graph_nodes_C_zero.get(b);
+                int index_bPlus1 = comp_graph_nodes_C_zero.get(b + 1);
 
                 // if element ac !=b and atoms on the adjacent sides of the bonds are not equal
                 if ((a != b) &&
@@ -460,19 +457,19 @@ public class GenerateCompatibilityGraph {
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
 
-                    ReactantBond = ac1.getBond(ac1.getAtom(index_a), ac1.getAtom(index_b));
-                    ProductBond = ac2.getBond(ac2.getAtom(index_aPlus1), ac2.getAtom(index_bPlus1));
+                    ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
+                    ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
 
-                        cEdges.addElement((a / 4) + 1);
-                        cEdges.addElement((b / 4) + 1);
+                        cEdges.add((a / 4) + 1);
+                        cEdges.add((b / 4) + 1);
 
 
                     } else {
 
-                        dEdges.addElement((a / 4) + 1);
-                        dEdges.addElement((b / 4) + 1);
+                        dEdges.add((a / 4) + 1);
+                        dEdges.add((b / 4) + 1);
                     }
 
 
@@ -488,29 +485,29 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    protected Vector<Integer> get_C_egdes() {
+    protected List<Integer> getCEgdes() {
 
         return cEdges;
     }
 
-    protected Vector<Integer> get_D_egdes() {
+    protected List<Integer> getDEgdes() {
 
         return dEdges;
     }
 
-    protected int get_C_edges_size() {
+    protected int getCEdgesSize() {
         return cEdgesSize;
     }
 
-    protected int get_D_edges_size() {
+    protected int getDEdgesSize() {
         return dEdgesSize;
     }
 
-    protected Vector<Integer> get_comp_graph_nodes() {
+    protected List<Integer> getCompGraphNodes() {
         return comp_graph_nodes;
     }
 
-    protected Vector<Integer> get_comp_graph_nodes_C_zero() {
+    protected List<Integer> getCompGraphNodesCZero() {
         return comp_graph_nodes_C_zero;
     }
 
