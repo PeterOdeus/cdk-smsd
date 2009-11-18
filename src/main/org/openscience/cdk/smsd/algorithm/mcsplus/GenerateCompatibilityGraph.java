@@ -474,18 +474,12 @@ public class GenerateCompatibilityGraph {
                     ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
-
                         C_edges.add((a / 4) + 1);
                         C_edges.add((b / 4) + 1);
-
-
                     } else {
-
                         D_edges.add((a / 4) + 1);
                         D_edges.add((b / 4) + 1);
                     }
-
-
                 }
             }
         }
