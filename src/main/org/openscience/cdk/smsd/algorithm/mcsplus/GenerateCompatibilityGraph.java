@@ -44,16 +44,15 @@ import org.openscience.cdk.smsd.helper.LabelContainer;
  */
 public class GenerateCompatibilityGraph {
 
-    private Vector<Integer> comp_graph_nodes = new Vector<Integer>();
-    private Vector<Integer> comp_graph_nodes_C_zero = new Vector<Integer>();
-    private Vector<Integer> C_edges = new Vector<Integer>();
-    private Vector<Integer> D_edges = new Vector<Integer>();
+    private List<Integer> comp_graph_nodes = new Vector<Integer>();
+    private List<Integer> comp_graph_nodes_C_zero = new Vector<Integer>();
+    private List<Integer> C_edges = new Vector<Integer>();
+    private List<Integer> D_edges = new Vector<Integer>();
     private int C_edges_size = 0;
     private int D_edges_size = 0;
     private boolean removeHydrogen = false;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
-//    private static int min_atoms_size = 0;
     private boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
