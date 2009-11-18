@@ -78,11 +78,8 @@ public class VFMCSMapper implements IMapper {
     @Override
     public List<Map<INode, IAtom>> getMaps(IAtomContainer target) {
         VFMCSState state = new VFMCSState(query, target);
-
         maps.clear();
-
         mapAll(state);
-
         return new Vector<Map<INode, IAtom>>(maps);
     }
 
@@ -94,11 +91,8 @@ public class VFMCSMapper implements IMapper {
     @Override
     public Map<INode, IAtom> getFirstMap(IAtomContainer target) {
         VFMCSState state = new VFMCSState(query, target);
-
         maps.clear();
-
         mapFirst(state);
-
         return maps.isEmpty() ? new HashMap<INode, IAtom>() : maps.get(0);
     }
 
@@ -110,11 +104,8 @@ public class VFMCSMapper implements IMapper {
     @Override
     public int countMaps(IAtomContainer target) {
         VFMCSState state = new VFMCSState(query, target);
-
         maps.clear();
-
         mapAll(state);
-
         return maps.size();
     }
 
