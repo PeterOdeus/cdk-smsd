@@ -54,8 +54,8 @@ public class VFlibMCSHandler implements IMCS {
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS_copy = null;
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
     private List<Map<INode, IAtom>> vfLibSolutions = null;
     private int VFMCSSize = 0;
 
@@ -67,7 +67,6 @@ public class VFlibMCSHandler implements IMCS {
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new Vector<TreeMap<Integer, Integer>>();
-
         allMCS_copy = new Vector<TreeMap<Integer, Integer>>();
 
 
@@ -83,15 +82,6 @@ public class VFlibMCSHandler implements IMCS {
     @Override
     public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
 
-
-//        System.out.println("VF Solution Count: " + vfLibSolutions.size());
-
-
-//
-//        System.out.println("count of the VFLib Mapping Stored: " + allAtomMCS_copy.size());
-//        System.out.println(
-//                "Mapping Size of the VFLib Mapping Stored: " + allAtomMCS_copy.firstElement().size());
-
         boolean flag = mcgregorFlag();
 
 
@@ -104,7 +94,7 @@ public class VFlibMCSHandler implements IMCS {
 //                System.out.println("\n\n---------------\n");
 //                System.out.println("Calling McGregor");
 //                System.out.println("for Start size " + firstPassMappings.size());
-                McGregor mgit = new McGregor(ac1, ac2, _mappings);
+                McGregor mgit = new McGregor(source, target, _mappings);
                 mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
 
                 _mappings = mgit.getMappings();
@@ -127,8 +117,8 @@ public class VFlibMCSHandler implements IMCS {
                     IAtom qAtom = null;
                     IAtom tAtom = null;
 
-                    qAtom = ac1.getAtom(mapping.get(index));
-                    tAtom = ac2.getAtom(mapping.get(index + 1));
+                    qAtom = source.getAtom(mapping.get(index));
+                    tAtom = target.getAtom(mapping.get(index + 1));
 
 
                     Integer qIndex = mapping.get(index);
@@ -169,19 +159,12 @@ public class VFlibMCSHandler implements IMCS {
 
 
         }
-
-//        System.out.println("Size of the Atom Mapping Stored: " + allAtomMCS.firstElement().size());
-//        System.out.println("Size of the Atom Index Mapping Stored: " + allMCS.firstElement().size());
-
-
-
-
         return 0;
 
     }
 
     private boolean mcgregorFlag() {
-        int commonAtomCount = checkCommonAtomCount(ac1, ac2);
+        int commonAtomCount = checkCommonAtomCount(source, target);
         if (commonAtomCount > VFMCSSize && commonAtomCount > VFMCSSize) {
             return true;
 
@@ -191,7 +174,7 @@ public class VFlibMCSHandler implements IMCS {
     }
 
     /**
-     * Set the JMCS software
+     * Set the VFLib software
      *
      * @param reactant
      * @param product
@@ -219,28 +202,28 @@ public class VFlibMCSHandler implements IMCS {
         IQuery query = null;
         IMapper mapper = null;
         boolean RONP = false;
-        ac1 = Reactant.getMolecule();
-        ac2 = Product.getMolecule();
+        source = Reactant.getMolecule();
+        target = Product.getMolecule();
 
 
 
-//        System.out.println("R Atom count " + ac1.getAtomCount());
-//        System.out.println("P Atom count " + ac2.getAtomCount());
+//        System.out.println("R Atom count " + source.getAtomCount());
+//        System.out.println("P Atom count " + target.getAtomCount());
 
-        if (ac1.getAtomCount() <= ac2.getAtomCount()) {
+        if (source.getAtomCount() <= target.getAtomCount()) {
 
 //            System.out.println("Query is Reactant");
 
-            query = TemplateCompiler.compile(ac1);
+            query = TemplateCompiler.compile(source);
             mapper = new VFMCSMapper(query);
-            vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(ac2));
+            vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(target));
             RONP = true;
 
         } else {
 //            System.out.println("Query is Prouct");
-            query = TemplateCompiler.compile(ac2);
+            query = TemplateCompiler.compile(target);
             mapper = new VFMCSMapper(query);
-            vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(ac1));
+            vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(source));
             RONP = false;
         }
 
@@ -261,8 +244,8 @@ public class VFlibMCSHandler implements IMCS {
                     qAtom = mapping.getValue();
                 }
 
-                Integer qIndex = Integer.valueOf(ac1.getAtomNumber(qAtom));
-                Integer tIndex = Integer.valueOf(ac2.getAtomNumber(tAtom));
+                Integer qIndex = Integer.valueOf(source.getAtomNumber(qAtom));
+                Integer tIndex = Integer.valueOf(target.getAtomNumber(tAtom));
 
 //
 //                System.out.println("i:" + qIndex + " j:" + tIndex);

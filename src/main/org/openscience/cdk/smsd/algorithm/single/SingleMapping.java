@@ -40,11 +40,17 @@ public class SingleMapping {
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
 
-    public void getOverLaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) {
+    /**
+     *
+     * @param source
+     * @param target
+     * @param removeHydrogen
+     */
+    public void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
-        this.ac1 = ac1;
-        this.ac2 = ac2;
-        Vector<TreeMap<Integer, Integer>> _mappings = new Vector<TreeMap<Integer, Integer>>();
+        this.ac1 = source;
+        this.ac2 = target;
+        List<TreeMap<Integer, Integer>> _mappings = new Vector<TreeMap<Integer, Integer>>();
         Map<Integer, Integer> connectedBondOrder = new TreeMap<Integer, Integer>();
       
         int minOrder = 9999;
@@ -61,7 +67,7 @@ public class SingleMapping {
         _mappings.clear();
     }
 
-    private void mapWithoutH(Vector<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private void mapWithoutH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
         if ((ac1.getAtomCount() == 1) && (!ac1.getAtom(0).getSymbol().equals("H"))) {
@@ -127,7 +133,7 @@ public class SingleMapping {
         }
     }
 
-    private void mapWithH(Vector<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private void mapWithH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
         if (ac1.getAtomCount() == 1) {
@@ -193,7 +199,7 @@ public class SingleMapping {
         }
     }
 
-    private void postFilter(Vector<TreeMap<Integer, Integer>> _mapping, Map<Integer, Integer> BondOrder, int minOrder) {
+    private void postFilter(List<TreeMap<Integer, Integer>> _mapping, Map<Integer, Integer> BondOrder, int minOrder) {
 
         for (Map.Entry<Integer, Integer> map : BondOrder.entrySet()) {
 
@@ -207,7 +213,7 @@ public class SingleMapping {
         final_MAPPINGS.set(new Vector<TreeMap<Integer, Integer>>(_mapping));
     }
 
-    private boolean removedMap(Vector<TreeMap<Integer, Integer>> maps, Integer Key) {
+    private boolean removedMap(List<TreeMap<Integer, Integer>> maps, Integer Key) {
         boolean flag = false;
         for (TreeMap<Integer, Integer> map : maps) {
 

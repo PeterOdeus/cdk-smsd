@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package org.openscience.cdk.smsd.algorithm.vflib;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,12 +45,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class VFlibHandler implements ISubGraph {
 
-    private IAtomContainer Reactant;
-    private IAtomContainer Product;
-    private static Vector<Map<IAtom, IAtom>> allAtomMCS = null;
+    private IAtomContainer source;
+    private IAtomContainer target;
+    private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
-    private static Vector<TreeMap<Integer, Integer>> allMCS = null;
+    private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     public VFlibHandler() {
 
@@ -63,7 +64,7 @@ public class VFlibHandler implements ISubGraph {
 
     /**
      *
-     * @return true if Query/Reactant is a subgraph of Target/Product
+     * @return true if Query/source is a subgraph of Target/target
      * else false
      * @throws java.io.IOException
      * @throws CDKException
@@ -71,14 +72,15 @@ public class VFlibHandler implements ISubGraph {
     @Override
     public boolean isSubgraph() throws IOException, CDKException {
 
-        IQuery query = TemplateCompiler.compile(Reactant);
+        IQuery query = TemplateCompiler.compile(source);
 
         IMapper mapper = new VFMapper(query);
 
-        List<Map<INode, IAtom>> vfLibSolutions = mapper.getMaps(Product);
+        List<Map<INode, IAtom>> vfLibSolutions = mapper.getMaps(target);
 
 //        System.out.println("Size of the Mapping: " + vfLibSolutions.size());
 
+        int counter = 0;
         for (Map<INode, IAtom> solution : vfLibSolutions) {
 
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
@@ -89,8 +91,8 @@ public class VFlibHandler implements ISubGraph {
                 IAtom qAtom = query.getAtom(mapping.getKey());
                 IAtom tAtom = mapping.getValue();
 
-                Integer qIndex = Reactant.getAtomNumber(qAtom);
-                Integer tIndex = Product.getAtomNumber(tAtom);
+                Integer qIndex = source.getAtomNumber(qAtom);
+                Integer tIndex = target.getAtomNumber(tAtom);
 
                 atomatomMapping.put(qAtom, tAtom);
                 indexindexMapping.put(qIndex, tIndex);
@@ -98,18 +100,19 @@ public class VFlibHandler implements ISubGraph {
 
             }
             if (atomatomMapping.size() > 0) {
-                allAtomMCS.add(atomatomMapping);
-                allMCS.add(indexindexMapping);
+                allAtomMCS.add(counter, atomatomMapping);
+                allMCS.add(counter, indexindexMapping);
+                counter++;
             }
 
 
         }
         if (allAtomMCS.size() > 0) {
-            atomsMCS.putAll(allAtomMCS.firstElement());
-            firstMCS.putAll(allMCS.firstElement());
+            atomsMCS.putAll(allAtomMCS.get(0));
+            firstMCS.putAll(allMCS.get(0));
         }
 
-        if (firstMCS.size() == Reactant.getAtomCount()) {
+        if (firstMCS.size() == source.getAtomCount()) {
             return true;
         } else {
             return false;
@@ -119,11 +122,7 @@ public class VFlibHandler implements ISubGraph {
 
     private int checkForH(IAtomContainer mol) {
         int hCount = 0;
-
-
-        for (int i = 0; i <
-                mol.getAtomCount(); i++) {
-
+        for (int i = 0; i < mol.getAtomCount(); i++) {
 
             if (mol.getAtom(i).getSymbol().equals("H")) {
                 hCount++;
@@ -145,15 +144,15 @@ public class VFlibHandler implements ISubGraph {
     @Override
     public void set(IAtomContainer reactant, IAtomContainer product, boolean removeHydrogen) {
 
-        this.Reactant = reactant;
-        this.Product = product;
+        this.source = reactant;
+        this.target = product;
 
         /*Remove Hydrogen by Asad*/
-        if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = ExtAtomContainerManipulator.removeHydrogens(reactant);
+        if (checkForH(source) > 0 && removeHydrogen) {
+            source = ExtAtomContainerManipulator.removeHydrogens(reactant);
         }
-        if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = ExtAtomContainerManipulator.removeHydrogens(product);
+        if (checkForH(target) > 0 && removeHydrogen) {
+            target = ExtAtomContainerManipulator.removeHydrogens(product);
         }
 
     }
@@ -169,15 +168,15 @@ public class VFlibHandler implements ISubGraph {
     public void set(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
 
 
-        this.Reactant = reactant.getMolecule();
-        this.Product = product.getMolecule();
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
 
         /*Remove Hydrogen by Asad*/
-        if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = ExtAtomContainerManipulator.removeHydrogens(reactant.getMolecule());
+        if (checkForH(source) > 0 && removeHydrogen) {
+            source = ExtAtomContainerManipulator.removeHydrogens(reactant.getMolecule());
         }
-        if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = ExtAtomContainerManipulator.removeHydrogens(product.getMolecule());
+        if (checkForH(target) > 0 && removeHydrogen) {
+            target = ExtAtomContainerManipulator.removeHydrogens(product.getMolecule());
         }
 
 
@@ -196,14 +195,14 @@ public class VFlibHandler implements ISubGraph {
         String mol1 = ReactantMolFileName;
         String mol2 = ProductMolFileName;
 
-        this.Reactant = new MolHandler(mol1, false, removeHydrogen).getMolecule();
-        this.Product = new MolHandler(mol2, false, removeHydrogen).getMolecule();
+        this.source = new MolHandler(mol1, false, removeHydrogen).getMolecule();
+        this.target = new MolHandler(mol2, false, removeHydrogen).getMolecule();
 
-        if (checkForH(Reactant) > 0 && removeHydrogen) {
-            Reactant = ExtAtomContainerManipulator.removeHydrogens(Reactant);
+        if (checkForH(source) > 0 && removeHydrogen) {
+            source = ExtAtomContainerManipulator.removeHydrogens(source);
         }
-        if (checkForH(Product) > 0 && removeHydrogen) {
-            Product = ExtAtomContainerManipulator.removeHydrogens(Product);
+        if (checkForH(target) > 0 && removeHydrogen) {
+            target = ExtAtomContainerManipulator.removeHydrogens(target);
         }
 
     }
@@ -213,12 +212,12 @@ public class VFlibHandler implements ISubGraph {
      * @return
      */
     @Override
-    public Vector<Map<IAtom, IAtom>> getAllAtomMapping() {
+    public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
     }
 
     @Override
-    public Vector<TreeMap<Integer, Integer>> getAllMapping() {
+    public List<TreeMap<Integer, Integer>> getAllMapping() {
         return allMCS;
     }
 

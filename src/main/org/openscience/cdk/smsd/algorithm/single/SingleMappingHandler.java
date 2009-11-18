@@ -228,7 +228,6 @@ public class SingleMappingHandler implements IMCS {
 
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-//        System.out.println("In MCS+handle First Atom MCS: " + atomsMCS);
         return atomsMCS;
     }
 }

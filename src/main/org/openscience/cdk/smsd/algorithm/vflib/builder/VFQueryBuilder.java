@@ -54,10 +54,10 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * @cdk.module smsd
@@ -69,8 +69,8 @@ public class VFQueryBuilder implements IQuery {
     private Map<INode, IAtom> NodesBonds;
 
     public VFQueryBuilder() {
-        nodes = new ArrayList<INode>();
-        edges = new ArrayList<IEdge>();
+        nodes = new Vector<INode>();
+        edges = new Vector<IEdge>();
         NodesBonds = new HashMap<INode, IAtom>();
     }
 

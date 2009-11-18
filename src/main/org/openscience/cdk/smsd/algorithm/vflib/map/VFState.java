@@ -25,10 +25,10 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.map;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
@@ -55,20 +55,20 @@ public class VFState implements IState {
 
     public VFState(IQuery query, IAtomContainer target) {
         this.map = new HashMap<INode, IAtom>();
-        this.queryPath = new ArrayList<INode>();
-        this.targetPath = new ArrayList<IAtom>();
+        this.queryPath = new Vector<INode>();
+        this.targetPath = new Vector<IAtom>();
 
         this.query = query;
         this.target = target;
-        candidates = new ArrayList<VFMatch>();
+        candidates = new Vector<VFMatch>();
 
         loadRootCandidates();
     }
 
     private VFState(VFState state, VFMatch match) {
-        candidates = new ArrayList<VFMatch>();
-        this.queryPath = new ArrayList<INode>(state.queryPath);
-        this.targetPath = new ArrayList<IAtom>(state.targetPath);
+        candidates = new Vector<VFMatch>();
+        this.queryPath = new Vector<INode>(state.queryPath);
+        this.targetPath = new Vector<IAtom>(state.targetPath);
         this.map = state.map;
         this.query = state.query;
         this.target = state.target;
