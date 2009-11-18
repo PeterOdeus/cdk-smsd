@@ -276,7 +276,7 @@ public class BKKCKCF {
     }
 
     private int enumerateCliques(List<Integer> R, Stack<Integer> P, List<Integer> Q, List<Integer> X, List<Integer> Y) {
-        Vector<Integer> N = new Vector<Integer>(); ////Initialization Vector N
+        List<Integer> N = new Vector<Integer>(); ////Initialization Vector N
         Stack<Integer> ut_set = new Stack<Integer>();//Defined as P' in the paper
 
 
@@ -362,7 +362,7 @@ public class BKKCKCF {
 
                 int Nelement_at_b = N.get(b);
 
-                if (N.elementAt(b + 1) == 1) {
+                if (N.get(b + 1) == 1) {
                     //u and v are adjacent via a C-edge
 
                     if (Q.contains(Nelement_at_b)) {
@@ -425,9 +425,9 @@ public class BKKCKCF {
         return 0;
     }
 
-    private Vector<Integer> findNeighbors(int central_node) {
+    private List<Integer> findNeighbors(int central_node) {
 
-        Vector<Integer> neighbor_vec = new Vector<Integer>();
+        List<Integer> neighbor_vec = new Vector<Integer>();
 
         for (int a = 0; a < cEdgeIterationSize; a++) {
             if (cEdges.get(a * 2 + 0) == central_node) {
