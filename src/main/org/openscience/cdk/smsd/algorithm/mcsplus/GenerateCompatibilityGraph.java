@@ -345,12 +345,8 @@ public class GenerateCompatibilityGraph {
         int count_nodes = 1;
         Vector<String> map = new Vector<String>();
         comp_graph_nodes_C_zero = new Vector<Integer>(); //Initialize the comp_graph_nodes_C_zero Vector
-
-
         LabelContainer labelContainer = LabelContainer.getInstance();
-
-
-        // resets the target graph.
+// resets the target graph.
         comp_graph_nodes.clear();
 
         for (int i = 0; i < ac1.getAtomCount(); i++) {
@@ -443,12 +439,9 @@ public class GenerateCompatibilityGraph {
                             C_edges.addElement((a / 4) + 1);
                             C_edges.addElement((b / 4) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-
-
                             C_edges.addElement((a / 4) + 1);
                             C_edges.addElement((b / 4) + 1);
                         } else {
-
                             D_edges.addElement((a / 4) + 1);
                             D_edges.addElement((b / 4) + 1);
                         }
@@ -521,12 +514,10 @@ public class GenerateCompatibilityGraph {
     }
 
     protected Vector<Integer> getCEgdes() {
-
         return C_edges;
     }
 
     protected Vector<Integer> getDEgdes() {
-
         return D_edges;
     }
 
