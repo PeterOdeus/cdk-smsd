@@ -69,13 +69,12 @@ import org.w3c.dom.NodeList;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-/**
- * @cdk.module smsd
- */
+
 
 /**
  * <p>This is an extension of CDK AtomContainer.
  * Some part of this code was taken from CDK source code and modified.</p>
+ * @cdk.module smsd
  */
 public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
