@@ -80,7 +80,7 @@ public class GenerateCompatibilityGraph {
             resetCEdgesSize();
             resetDEdgesSize();
 
-            generate_compatibility_graph_nodes_if_C_edge_number_is_zero();
+            compatibilityGraphNodesIfCEdgeIsZero();
             if (bondTypeFlag) {
                 generate_compatibility_graph_if_C_edge_number_is_zero_BS();
             } else {
@@ -324,8 +324,12 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    //comp_graph_nodes_C_zero is used to build up of the edges of the compatibility graph
-    protected Integer generate_compatibility_graph_nodes_if_C_edge_number_is_zero() throws IOException {
+    /**
+     * comp_graph_nodes_C_zero is used to build up of the edges of the compatibility graph
+     * @return
+     * @throws IOException
+     */
+    protected Integer compatibilityGraphNodesIfCEdgeIsZero() throws IOException {
 
         int count_nodes = 1;
         Vector<String> map = new Vector<String>();
@@ -353,29 +357,23 @@ public class GenerateCompatibilityGraph {
                                 comp_graph_nodes.add(j);
                                 comp_graph_nodes.add(count_nodes++);
                                 map.add(i + "_" + j);
-
                             }
-
                         }
                     } else {
                         if (!map.contains(i + "_" + j)) {
                             comp_graph_nodes_C_zero.add(i);
                             comp_graph_nodes_C_zero.add(j);
                             comp_graph_nodes_C_zero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-
                             comp_graph_nodes_C_zero.add(count_nodes);
                             comp_graph_nodes.add(i);
                             comp_graph_nodes.add(j);
                             comp_graph_nodes.add(count_nodes++);
                             map.add(i + "_" + j);
-
                         }
-
                     }
                 }
             }
         }
-
         map.clear();
         return count_nodes;
     }
