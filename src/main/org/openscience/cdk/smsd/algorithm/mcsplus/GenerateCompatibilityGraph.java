@@ -119,7 +119,7 @@ public class GenerateCompatibilityGraph {
                 label.setElementAt(labelContainer.getLabelID(atom2_type), count_neighbors++);
             }
 
-            bubble_sort(label);
+            bubbleSort(label);
             label_list.add(label);
 
         }
@@ -128,7 +128,7 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private void bubble_sort(Vector<Integer> label) {
+    private void bubbleSort(List<Integer> label) {
 
         boolean flag = true; // set flag to 1 to begin initial pass
 
@@ -141,8 +141,8 @@ public class GenerateCompatibilityGraph {
                     // descending order simply changes to >
                     temp = label.get(i); // swap elements
 
-                    label.setElementAt(label.get(j + 1), i);
-                    label.setElementAt(temp, j + 1);
+                    label.set(i, label.get(j + 1));
+                    label.set(j + 1, temp);
                     flag = true; // indicates that a swap occurred.
 
                 }
