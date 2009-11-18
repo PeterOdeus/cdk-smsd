@@ -65,12 +65,10 @@ public class BKKCKCF {
         best_clique_size = 0;
         //Orignal assignment as per paper
         dEdgeIterationSize = dEdges.size() / 2;
-        //Heuristic introduced by Asad
-
+        
         //Orignal assignment as per paper
         cEdgeIterationSize = cEdges.size() / 2;
-        //Heuristic introduced by Asad
-
+        
 
         boolean d_edgeFlag = false;
 
