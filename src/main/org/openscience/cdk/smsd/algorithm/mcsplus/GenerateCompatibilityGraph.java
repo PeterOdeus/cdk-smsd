@@ -42,8 +42,8 @@ public class GenerateCompatibilityGraph {
 
     private List<Integer> compGraphNodes = new Vector<Integer>();
     private List<Integer> compGraphNodesCZero = new Vector<Integer>();
-    private List<Integer> C_edges = new Vector<Integer>();
-    private List<Integer> D_edges = new Vector<Integer>();
+    private List<Integer> cEdges = new Vector<Integer>();
+    private List<Integer> dEdges = new Vector<Integer>();
     private int C_edges_size = 0;
     private int D_edges_size = 0;
     private boolean removeHydrogen = false;
@@ -219,8 +219,8 @@ public class GenerateCompatibilityGraph {
     protected int CompatibilityGraphBIS() throws IOException {
         int comp_graph_nodes_vector_size = compGraphNodes.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
             int index_a = compGraphNodes.get(a);
@@ -242,19 +242,19 @@ public class GenerateCompatibilityGraph {
 
                     if (ReactantBond != null && ProductBond != null) {
 
-                        C_edges.add((a / 3) + 1);
-                        C_edges.add((b / 3) + 1);
+                        cEdges.add((a / 3) + 1);
+                        cEdges.add((b / 3) + 1);
 
 
                     } else if (ReactantBond == null && ProductBond == null) {
 
-                        D_edges.add((a / 3) + 1);
-                        D_edges.add((b / 3) + 1);
+                        dEdges.add((a / 3) + 1);
+                        dEdges.add((b / 3) + 1);
                     }
 
                 }
-                C_edges_size = C_edges.size();
-                D_edges_size = D_edges.size();
+                C_edges_size = cEdges.size();
+                D_edges_size = dEdges.size();
             }
         }
         return 0;
@@ -269,8 +269,8 @@ public class GenerateCompatibilityGraph {
     protected int compatibilityGraphBS() throws IOException {
         int comp_graph_nodes_vector_size = compGraphNodes.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
 
@@ -301,22 +301,22 @@ public class GenerateCompatibilityGraph {
                         Order ProductBondType = ProductBond.getOrder();//.ordinal();
 
                         if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType.equals(ProductBondType))) {
-                            C_edges.add((a / 3) + 1);
-                            C_edges.add((b / 3) + 1);
+                            cEdges.add((a / 3) + 1);
+                            cEdges.add((b / 3) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-                            C_edges.add((a / 3) + 1);
-                            C_edges.add((b / 3) + 1);
+                            cEdges.add((a / 3) + 1);
+                            cEdges.add((b / 3) + 1);
                         } else {
 
-                            D_edges.add((a / 3) + 1);
-                            D_edges.add((b / 3) + 1);
+                            dEdges.add((a / 3) + 1);
+                            dEdges.add((b / 3) + 1);
                         }
                     }
                 }
 
                 //print C and D edges of the compatibility graph
-                C_edges_size = C_edges.size();
-                D_edges_size = D_edges.size();
+                C_edges_size = cEdges.size();
+                D_edges_size = dEdges.size();
 
             }
         }
@@ -389,8 +389,8 @@ public class GenerateCompatibilityGraph {
 
         int comp_graph_nodes_C_zero_vector_size = compGraphNodesCZero.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a < comp_graph_nodes_C_zero_vector_size; a = a + 4) {
             int index_a = compGraphNodesCZero.get(a);
@@ -422,14 +422,14 @@ public class GenerateCompatibilityGraph {
 
 
                         if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC) && ReactantBondType == ProductBondType) {
-                            C_edges.add((a / 4) + 1);
-                            C_edges.add((b / 4) + 1);
+                            cEdges.add((a / 4) + 1);
+                            cEdges.add((b / 4) + 1);
                         } else if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-                            C_edges.add((a / 4) + 1);
-                            C_edges.add((b / 4) + 1);
+                            cEdges.add((a / 4) + 1);
+                            cEdges.add((b / 4) + 1);
                         } else {
-                            D_edges.add((a / 4) + 1);
-                            D_edges.add((b / 4) + 1);
+                            dEdges.add((a / 4) + 1);
+                            dEdges.add((b / 4) + 1);
                         }
                     }
                 }
@@ -437,8 +437,8 @@ public class GenerateCompatibilityGraph {
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = C_edges.size();
-        D_edges_size = D_edges.size();
+        C_edges_size = cEdges.size();
+        D_edges_size = dEdges.size();
 
 
         return 0;
@@ -448,9 +448,9 @@ public class GenerateCompatibilityGraph {
 
         int comp_graph_nodes_C_zero_vector_size = compGraphNodesCZero.size();
 
-        C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
+        cEdges = new Vector<Integer>(); //Initialize the cEdges Vector
 
-        D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
+        dEdges = new Vector<Integer>(); //Initialize the dEdges Vector
 
         for (int a = 0; a <
                 comp_graph_nodes_C_zero_vector_size; a =
@@ -475,30 +475,30 @@ public class GenerateCompatibilityGraph {
                     ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
-                        C_edges.add((a / 4) + 1);
-                        C_edges.add((b / 4) + 1);
+                        cEdges.add((a / 4) + 1);
+                        cEdges.add((b / 4) + 1);
                     } else {
-                        D_edges.add((a / 4) + 1);
-                        D_edges.add((b / 4) + 1);
+                        dEdges.add((a / 4) + 1);
+                        dEdges.add((b / 4) + 1);
                     }
                 }
             }
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = C_edges.size();
-        D_edges_size = D_edges.size();
+        C_edges_size = cEdges.size();
+        D_edges_size = dEdges.size();
 
 
         return 0;
     }
 
     protected List<Integer> getCEgdes() {
-        return C_edges;
+        return cEdges;
     }
 
     protected List<Integer> getDEgdes() {
-        return D_edges;
+        return dEdges;
     }
 
     protected int getCEdgesSize() {
@@ -519,12 +519,12 @@ public class GenerateCompatibilityGraph {
 
     protected void clearCEgdes() {
 
-        C_edges.clear();
+        cEdges.clear();
     }
 
     protected void clearDEgdes() {
 
-        D_edges.clear();
+        dEdges.clear();
     }
 
     protected void clearCompGraphNodes() {
@@ -544,8 +544,8 @@ public class GenerateCompatibilityGraph {
     }
 
     protected void clear() {
-        C_edges = null;
-        D_edges = null;
+        cEdges = null;
+        dEdges = null;
         compGraphNodes = null;
         compGraphNodesCZero = null;
     }
