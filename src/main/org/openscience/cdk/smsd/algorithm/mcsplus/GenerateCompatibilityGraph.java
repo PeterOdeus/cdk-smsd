@@ -282,7 +282,6 @@ public class GenerateCompatibilityGraph {
         int comp_graph_nodes_vector_size = comp_graph_nodes.size();
 
         C_edges = new Vector<Integer>(); //Initialize the C_edges Vector
-
         D_edges = new Vector<Integer>(); //Initialize the D_edges Vector
 
         for (int a = 0; a < comp_graph_nodes_vector_size; a = a + 3) {
