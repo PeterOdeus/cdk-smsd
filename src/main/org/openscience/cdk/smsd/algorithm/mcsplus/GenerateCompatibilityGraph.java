@@ -152,9 +152,9 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private Vector<IAtom> reduce_atomset(IAtomContainer ac) {
+    private List<IAtom> reduceAtomSet(IAtomContainer ac) {
 
-        Vector<IAtom> basic_atoms = new Vector<IAtom>();
+        List<IAtom> basic_atoms = new Vector<IAtom>();
         for (IAtom atom : ac.atoms()) {
             if (removeHydrogen) {
                 if (!atom.getSymbol().equalsIgnoreCase("H")) {
@@ -176,13 +176,13 @@ public class GenerateCompatibilityGraph {
     protected int compatibilityGraphNodes() throws IOException {
 
         comp_graph_nodes.clear();
-        Vector<IAtom> basic_atom_vec_A = null;
-        Vector<IAtom> basic_atom_vec_B = null;
+        List<IAtom> basic_atom_vec_A = null;
+        List<IAtom> basic_atom_vec_B = null;
         IAtomContainer reactant = source;
         IAtomContainer product = target;
 
-        basic_atom_vec_A = reduce_atomset(reactant);
-        basic_atom_vec_B = reduce_atomset(product);
+        basic_atom_vec_A = reduceAtomSet(reactant);
+        basic_atom_vec_B = reduceAtomSet(product);
 
         List<Vector<Integer>> label_list_molA = labelAtoms(reactant);
         List<Vector<Integer>> label_list_molB = labelAtoms(product);
