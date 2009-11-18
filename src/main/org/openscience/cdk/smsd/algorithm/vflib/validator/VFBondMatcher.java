@@ -80,22 +80,6 @@ public class VFBondMatcher extends Bond implements IQueryBond {
     @Override
     public boolean matches(IBond targetBond) {
 
-
-//        if (bondTypeFlag && (queryBond.getFlag(CDKConstants.ISAROMATIC) == targetBond.getFlag(CDKConstants.ISAROMATIC)) && (queryBond.getOrder().equals(targetBond.getOrder()))) {
-//            return true;
-//        }
-//
-//        if (bondTypeFlag && queryBond.getFlag(CDKConstants.ISAROMATIC) && targetBond.getFlag(CDKConstants.ISAROMATIC)) {
-//            return true;
-//
-//        }
-// //       Asad commented it as CDK does not support it
-////        if (this.unsaturation == getUnsaturation(targetBond)) {
-////            return true;
-////        }
-//
-//        return false;
-
         if (bondTypeFlag && (queryBond.getFlag(CDKConstants.ISAROMATIC) == targetBond.getFlag(CDKConstants.ISAROMATIC)) && (queryBond.getOrder().equals(targetBond.getOrder()))) {
             return true;
         }
