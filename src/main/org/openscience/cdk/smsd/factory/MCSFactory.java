@@ -13,11 +13,11 @@ import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
 import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.smsd.filters.ChemicalFilters;
@@ -108,8 +108,8 @@ public class MCSFactory implements IMCSAlgorithm {
 
 
         firstSolution = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         firstAtomMCS = new HashMap<IAtom, IAtom>();
 
         if (bondTypeFlag) {
@@ -142,8 +142,8 @@ public class MCSFactory implements IMCSAlgorithm {
 
 
         firstSolution = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         firstAtomMCS = new HashMap<IAtom, IAtom>();
 
         if (bondTypeFlag) {

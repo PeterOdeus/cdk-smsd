@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCS;
@@ -56,23 +55,14 @@ public class CDKMCSHandler implements IMCS {
      */
     public CDKMCSHandler() {
 
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
 
     }
 
-//    private int checkForH(IAtomContainer mol) {
-//        int hCount = 0;
-//        for (int i = 0; i < mol.getAtomCount(); i++) {
-//            if (mol.getAtom(i).getSymbol().equals("H")) {
-//                hCount++;
-//            }
-//        }
-//        return hCount;
-//    }
 
     /**
      *
@@ -89,7 +79,7 @@ public class CDKMCSHandler implements IMCS {
     }
 
     /**
-     * Set the JMCS software
+     * Set the CDKMCS software
      * 
      * @param reactant
      * @param product

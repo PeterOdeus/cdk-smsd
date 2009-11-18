@@ -128,7 +128,7 @@ public class BKKCKCF {
          *T: is a set of vertices which have already been used for the
          * initialization of ENUMERATE_CLIQUES
          */
-        List<Integer> T = new ArrayList<Integer>(); //Initialize the T Vector;
+        List<Integer> T = new ArrayList<Integer>(); //Initialize the T ArrayList;
 
         /*
          *V: stored all the vertices for the Graph G
@@ -136,11 +136,11 @@ public class BKKCKCF {
          *nodes of vector comp_graph_nodes are stored in V
          */
 
-        List<Integer> V = new ArrayList<Integer>(); //Initialization of Vector V
+        List<Integer> V = new ArrayList<Integer>(); //Initialization of ArrayList V
 
         int V_set_size = comp_graph_nodes.size() / 3;
 
-        //System.out.println("Vector V is initialized");
+        //System.out.println("ArrayList V is initialized");
         for (int a = 0; a < V_set_size; a++) {
             V.add(comp_graph_nodes.get(a * 3 + 2));
             //System.out.print("V[" + a + "]: " + comp_graph_nodes.get(a * 3 + 2) + " ");
@@ -148,7 +148,7 @@ public class BKKCKCF {
         //System.out.println();
 
         V.add(0);
-        // System.out.println("Vector V :" + V);
+        // System.out.println("ArrayList V :" + V);
 
         /*
          * R: set of vertices belonging to the current clique
@@ -263,7 +263,7 @@ public class BKKCKCF {
     }
 
     private int enumerateCliques(List<Integer> R, Stack<Integer> P, List<Integer> Q, List<Integer> X, List<Integer> Y) {
-        List<Integer> N = new ArrayList<Integer>(); ////Initialization Vector N
+        List<Integer> N = new ArrayList<Integer>(); ////Initialization ArrayList N
         Stack<Integer> ut_set = new Stack<Integer>();//Defined as P' in the paper
 
 

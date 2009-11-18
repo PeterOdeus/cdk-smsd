@@ -490,7 +490,6 @@ public class McGregor {
                         this.globalMCSSize = mapped_atom_num;
 //                        System.out.println("best_MAPPING_size: " + globalMCSSize);
                         mappings.clear();
-                        //mappings=new Vector<Vector<Integer>>();
                     }
 
                     mappings.add(mapped_atoms);
@@ -1100,9 +1099,6 @@ public class McGregor {
 //The function is called by itself as long as the last list element is processed.
     private List<Integer> removeRecurringMappings(List<Integer> atom_mapping) {
 
-        //System.out.println("Mapped Atoms removeRecurringMappings: " + atom_mapping);
-
-        //Vector<Integer> atom_mapping = new Vector<Integer>(atom_mapping_org);
 
         boolean exist = true;
         List<Integer> temp_map = new ArrayList<Integer>();
@@ -1323,7 +1319,6 @@ public class McGregor {
 //"verifyNodes". If the matrix already exists the function returns false which means that
 //the matrix will not be stored. Otherwise the function returns true which means that the
 //matrix will be stored in function partsearch.
-//private boolean checkMARCS(Vector<Integer> MARCS) {
     private boolean checkMARCS(List<Integer> MARCS_T) {
 
         int size = nNum_globalA * nNum_globalA;

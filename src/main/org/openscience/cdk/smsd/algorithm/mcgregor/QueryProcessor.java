@@ -256,8 +256,6 @@ public class QueryProcessor {
     }
 
     private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, List<String> c_bond_neighbors) {
-        //private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, Vector<Integer> i_bond_neighbors, Vector<String> c_bond_neighbors) {
-
         for (int a = 0; a < neighbor_bondnum; a++) {
             IBond bond = ac.getBond(a);
             if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {

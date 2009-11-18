@@ -27,7 +27,6 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
-import java.util.Vector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.interfaces.IAtom;
@@ -64,7 +63,7 @@ public class CDKRMapHandler {
         ac1 = Molecule1;
         ac2 = Molecule2;
 
-        _mapping = new Vector<TreeMap<Integer, Integer>>();
+        _mapping = new ArrayList<TreeMap<Integer, Integer>>();
 
         //System.out.println("Searching: ");
         //List overlaps = UniversalIsomorphismTesterBondTypeInSensitive.getSubgraphAtomsMap(ac1, ac2);
@@ -143,7 +142,7 @@ public class CDKRMapHandler {
         ac1 = Molecule1;
         ac2 = Molecule2;
 
-        _mapping = new Vector<TreeMap<Integer, Integer>>();
+        _mapping = new ArrayList<TreeMap<Integer, Integer>>();
 
         //System.out.println("Searching: ");
         //List overlaps = UniversalIsomorphismTesterBondTypeInSensitive.getSubgraphAtomsMap(ac1, ac2);
@@ -213,7 +212,7 @@ public class CDKRMapHandler {
      */
     protected List removeSubGraph(List overlaps) {
         @SuppressWarnings("unchecked")
-        List reducedList = new Vector(overlaps);
+        List reducedList = new ArrayList(overlaps);
 
         for (int i = 0; i < overlaps.size(); i++) {
             //System.out.println("i: " + i + ", overlaps.size(): " + overlaps.size());
@@ -251,7 +250,7 @@ public class CDKRMapHandler {
     protected List removeRedundantMappingsForSingleAtomCase(List overlaps) {
         @SuppressWarnings("unchecked")
 
-        List reducedList = new Vector();
+        List reducedList = new ArrayList();
 
         reducedList.add(overlaps.get(0));
         //reducedList.add(overlaps.get(1));
@@ -421,7 +420,7 @@ public class CDKRMapHandler {
 
             if (a.size() > count) {
                 @SuppressWarnings("unchecked")
-                List list = new Vector(a);
+                List list = new ArrayList(a);
                 count = a.size();
 
                 //System.out.println("List size" + list.size());
@@ -432,7 +431,7 @@ public class CDKRMapHandler {
                 allMaximumMappings.push(list);
             } else if (a.size() == count) {
                 @SuppressWarnings("unchecked")
-                List list = new Vector(a);
+                List list = new ArrayList(a);
                 count = a.size();
                 allMaximumMappings.push(list);
             }

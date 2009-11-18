@@ -38,7 +38,7 @@ public class LabelContainer {
 
     protected LabelContainer() {
 
-        // System.err.println("Vector Initialized");
+        // System.err.println("List Initialized");
         labelMap = new HashMap<String, Integer>();
 
         labelMap.put("C", labelCounter++);
@@ -81,7 +81,7 @@ public class LabelContainer {
     }
 
     synchronized public void addLabel(String label) {
-        //System.err.println("Vector added");
+        //System.err.println("List added");
         int lableNo = labelMap.size() + 1;
         labelMap.put(label, lableNo);
     }

@@ -6,11 +6,11 @@ package org.openscience.cdk.smsd.factory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,8 +95,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
         this.energyFilter = energyFilter;
 
         firstSolution = new TreeMap<Integer, Integer>();
-        allMCS = new Vector<TreeMap<Integer, Integer>>();
-        allAtomMCS = new Vector<Map<IAtom, IAtom>>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         firstAtomMCS = new HashMap<IAtom, IAtom>();
 
         TimeOut tmo = TimeOut.getInstance();

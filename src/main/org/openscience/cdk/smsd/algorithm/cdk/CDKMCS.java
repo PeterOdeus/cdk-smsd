@@ -692,7 +692,7 @@ public class CDKMCS {
      * @param  l   The list produced by the getMap method.
      * @param  g1  The first atom container. Must not be a IQueryAtomContainer.
      * @param  g2  The second one (first and second as in getMap). May be an QueryAtomContaienr.
-     * @return     A Vector of Vectors of CDKRMap objects of matching Atoms.
+     * @return A List of Vectors of CDKRMap objects of matching Atoms.
      */
     public static List<List<CDKRMap>> makeAtomsMapsOfBondsMaps(List<List<CDKRMap>> l, IAtomContainer g1, IAtomContainer g2) {
         if (l == null) {

@@ -64,7 +64,7 @@ import org.openscience.cdk.interfaces.IMolecule;
             boolean fragmentMinimization = true;
             boolean energyMinimization = true;
 
-            EBIMCSCalculator comparison = new EBIMCSCalculator(substructure, bondSensitive,
+            SMSD comparison = new SMSD(substructure, bondSensitive,
                     removeHydrogen, stereoMatch, fragmentMinimization, energyMinimization);
 
             comparison.init(A1, A2);
