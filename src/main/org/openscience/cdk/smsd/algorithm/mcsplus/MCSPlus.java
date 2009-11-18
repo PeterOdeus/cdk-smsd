@@ -22,7 +22,6 @@
  */
 package org.openscience.cdk.smsd.algorithm.mcsplus;
 
-import org.openscience.cdk.smsd.GenerateCompatibilityGraph;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
