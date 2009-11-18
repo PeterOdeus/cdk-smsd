@@ -100,7 +100,6 @@ public class GenerateCompatibilityGraph {
     private Vector<Vector<Integer>> label_atoms(IAtomContainer ac) {
         Vector<Vector<Integer>> label_list = new Vector<Vector<Integer>>();
 
-
         for (int i = 0; i < ac.getAtomCount(); i++) {
             Vector<Integer> label = new Vector<Integer>();
 
