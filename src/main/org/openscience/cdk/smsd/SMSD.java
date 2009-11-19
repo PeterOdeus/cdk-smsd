@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;

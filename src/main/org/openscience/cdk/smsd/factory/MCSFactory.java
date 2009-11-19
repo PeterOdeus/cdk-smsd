@@ -91,7 +91,7 @@ public class MCSFactory implements IMCSAlgorithm {
             boolean removeHydrogen,
             boolean stereoFilter,
             boolean fragmentFilter,
-            boolean energyFilter){
+            boolean energyFilter) {
 
         this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;
@@ -157,73 +157,73 @@ public class MCSFactory implements IMCSAlgorithm {
 
     private synchronized void mcsBuilder() {
 
-            int rBondCount = RMol.getMolecule().getBondCount();
-            int pBondCount = PMol.getMolecule().getBondCount();
+        int rBondCount = RMol.getMolecule().getBondCount();
+        int pBondCount = PMol.getMolecule().getBondCount();
 
-            int rAtomCount = RMol.getMolecule().getAtomCount();
-            int pAtomCount = PMol.getMolecule().getAtomCount();
+        int rAtomCount = RMol.getMolecule().getAtomCount();
+        int pAtomCount = PMol.getMolecule().getAtomCount();
 
 //            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
 
-            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
+        /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
 
 //            long startTime = System.currentTimeMillis();
 //
-            if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
+        if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
 //                System.out.println("Single Mapping");
-                singleMapping();
-            } else if (algorithmType == 0) {
+            singleMapping();
+        } else if (algorithmType == 0) {
 //                System.err.println("Default");
 //                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
 
-                mcsPlus();
-                if (getFirstMapping() == null) {
-                    mcs = null;
-                    System.gc();
+            mcsPlus();
+            if (getFirstMapping() == null) {
+                mcs = null;
+                System.gc();
 //                    System.err.println("mcsPlus timeout ");
-                    vfLibMCS();
+                vfLibMCS();
 //                    System.out.println("Mapped with VF-McGregor");
                 }
-            } else if (algorithmType == 1) {
+        } else if (algorithmType == 1) {
 //                System.err.println("mcsPlus");
 //                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
-                mcsPlus();
-                if (getFirstMapping() == null) {
-                    mcs = null;
+            mcsPlus();
+            if (getFirstMapping() == null) {
+                mcs = null;
 //                    System.out.println("Time-out occured mcsPlus");
 //                    System.gc();
                 }
 
-            } else if (algorithmType == 2) {
+        } else if (algorithmType == 2) {
 //                System.err.println("vfLibMCS");
 //                System.out.println("mcsBuilder");
 //                printMolecules(RMol.getMolecule(), PMol.getMolecule());
 
-                if (rBondCount >= 6 && rBondCount >= 6) {
-                    vfLibMCS();
-                    if (getFirstMapping() == null) {
-                        mcs = null;
-                        System.gc();
-                    }
-//                    System.out.println("Mapped with vfLibMCS");
-                } else {
-                    mcsPlus();
-//                    System.out.println("Mapped with mcsPlus");
-                }
-            } else if (algorithmType == 3) {
-//                 System.err.println("cdkMCS");
-                cdkMCS();
+            if (rBondCount >= 6 && rBondCount >= 6) {
+                vfLibMCS();
                 if (getFirstMapping() == null) {
-//                    System.out.println("Time-out occured mcsPlus");
                     mcs = null;
                     System.gc();
                 }
+//                    System.out.println("Mapped with vfLibMCS");
+                } else {
+                mcsPlus();
+//                    System.out.println("Mapped with mcsPlus");
+                }
+        } else if (algorithmType == 3) {
+//                 System.err.println("cdkMCS");
+            cdkMCS();
+            if (getFirstMapping() == null) {
+//                    System.out.println("Time-out occured mcsPlus");
+                mcs = null;
+                System.gc();
+            }
 
 //              System.out.println("Mapped with cdkMCS");
 
-            }
+        }
 //
 ////
 //            System.out.println("MCS solution count:" + this.allMCS.size());
@@ -233,7 +233,7 @@ public class MCSFactory implements IMCSAlgorithm {
 //                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
 //            }
 //            long endTime = System.currentTimeMillis();
-            System.gc();
+        System.gc();
 //            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
 //            System.out.println("!Done!\n");
 
