@@ -46,7 +46,7 @@ public class BKKCKCF {
     /***********************************************************************/
     private List<Integer> cEdges;
     private List<Integer> dEdges;
-    private int best_clique_size;
+    private int bestCliqueSize;
     private List<Integer> comp_graph_nodes;
     private double dEdgeIterationSize = 0;
     private double cEdgeIterationSize = 0;
@@ -62,7 +62,7 @@ public class BKKCKCF {
         this.comp_graph_nodes = comp_graph_nodes_org;
         this.cEdges = C_edges_org;
         this.dEdges = D_edges_org;
-        best_clique_size = 0;
+        bestCliqueSize = 0;
         //Orignal assignment as per paper
         dEdgeIterationSize = dEdges.size() / 2;
 
@@ -278,14 +278,14 @@ public class BKKCKCF {
 
 
 
-            if (clique_size >= best_clique_size) {
-                if (clique_size > best_clique_size) {
+            if (clique_size >= bestCliqueSize) {
+                if (clique_size > bestCliqueSize) {
 
                     maxCliquesSet.clear();
-                    best_clique_size = clique_size;
+                    bestCliqueSize = clique_size;
 
                 }
-                if (clique_size == best_clique_size) {
+                if (clique_size == bestCliqueSize) {
                     //System.out.println("R-Clique " + R);
                     maxCliquesSet.add(R);
                 }
@@ -440,7 +440,7 @@ public class BKKCKCF {
     }
 
     protected int getBestCliqueSize() {
-        return best_clique_size;
+        return bestCliqueSize;
     }
 
     protected Stack<List<Integer>> getMaxCliqueSet() {

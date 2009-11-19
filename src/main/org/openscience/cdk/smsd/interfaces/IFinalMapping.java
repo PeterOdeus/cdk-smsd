@@ -36,9 +36,8 @@ public interface IFinalMapping {
      * 
      * @param mapping List of all MCS mapping between a given
      * reactant and product 
-     * @throws java.lang.Exception
      */
-    public void add(TreeMap<Integer, Integer> mapping) throws Exception;
+    public void add(TreeMap<Integer, Integer> mapping);
 
     /**
      * 

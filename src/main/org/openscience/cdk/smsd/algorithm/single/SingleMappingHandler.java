@@ -13,7 +13,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR sourceAtom PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -44,8 +44,8 @@ public class SingleMappingHandler implements IMCS {
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
 
     public SingleMappingHandler() {
 
@@ -67,8 +67,8 @@ public class SingleMappingHandler implements IMCS {
     @Override
     public void set(MolHandler Reactant, MolHandler Product) throws IOException {
 
-        this.ac1 = Reactant.getMolecule();
-        this.ac2 = Product.getMolecule();
+        this.source = Reactant.getMolecule();
+        this.target = Product.getMolecule();
 
 
     }
@@ -122,8 +122,8 @@ public class SingleMappingHandler implements IMCS {
     public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
 
 
-        SingleMapping SM = new SingleMapping();
-        SM.getOverLaps(ac1, ac2, removeHydrogen);
+        SingleMapping singleMapping = new SingleMapping();
+        singleMapping.getOverLaps(source, target, removeHydrogen);
 
 
         setAllMapping();
@@ -136,15 +136,11 @@ public class SingleMappingHandler implements IMCS {
     }
 
     public final void setAllMapping() {
-//
-//        int count_final_sol = 1;
-        //System.out.println("Output of the final FinalMappings: ");
         try {
 
             List<TreeMap<Integer, Integer>> final_solution = FinalMappings.getInstance().getFinalMapping();
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
-//                System.out.println("Numner of MCS solution: " + count_final_sol++);
                 allMCS.add(counter++, solution);
             }
 
@@ -162,25 +158,19 @@ public class SingleMappingHandler implements IMCS {
 
             int counter = 0;
             for (TreeMap<Integer, Integer> solution : final_solution) {
-
-
                 Map<IAtom, IAtom> atomMappings = new HashMap<IAtom, IAtom>();
-
-//                System.out.println("Sol size " + solution.size());
-
-
                 for (Map.Entry<Integer, Integer> map : solution.entrySet()) {
 
                     int IIndex = map.getKey();
                     int JIndex = map.getValue();
-                    IAtom A = null;
-                    IAtom B = null;
+                    IAtom sourceAtom = null;
+                    IAtom targetAtom = null;
 
 
-                    A = ac1.getAtom(IIndex);
-                    B = ac2.getAtom(JIndex);
+                    sourceAtom = source.getAtom(IIndex);
+                    targetAtom = target.getAtom(JIndex);
 
-                    atomMappings.put(A, B);
+                    atomMappings.put(sourceAtom, targetAtom);
 
                 }
 
@@ -189,9 +179,6 @@ public class SingleMappingHandler implements IMCS {
         } catch (Exception I) {
             I.getCause();
         }
-
-
-
     }
 
     private final synchronized void setFirstMapping() {
@@ -204,7 +191,6 @@ public class SingleMappingHandler implements IMCS {
 
     private final synchronized void setFirstAtomMapping() {
         if (allAtomMCS.size() > 0) {
-//            System.out.println("In MCS+handle First Atom MCS: " + allAtomMCS.get(0));
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 

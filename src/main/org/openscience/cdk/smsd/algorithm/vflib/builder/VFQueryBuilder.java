@@ -64,13 +64,13 @@ import java.util.Map;
  */
 public class VFQueryBuilder implements IQuery {
 
-    private List<INode> nodes;
-    private List<IEdge> edges;
+    private List<INode> nodesList;
+    private List<IEdge> edgesList;
     private Map<INode, IAtom> NodesBonds;
 
     public VFQueryBuilder() {
-        nodes = new ArrayList<INode>();
-        edges = new ArrayList<IEdge>();
+        nodesList = new ArrayList<INode>();
+        edgesList = new ArrayList<IEdge>();
         NodesBonds = new HashMap<INode, IAtom>();
     }
 
@@ -80,7 +80,7 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public Iterable<IEdge> edges() {
-        return edges;
+        return edgesList;
     }
 
     /**
@@ -89,7 +89,7 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public Iterable<INode> nodes() {
-        return nodes;
+        return nodesList;
     }
 
     /**
@@ -99,7 +99,7 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public INode getNode(int index) {
-        return nodes.get(index);
+        return nodesList.get(index);
     }
 
     /**
@@ -127,7 +127,7 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public IEdge getEdge(int index) {
-        return edges.get(index);
+        return edgesList.get(index);
     }
 
     /**
@@ -161,7 +161,7 @@ public class VFQueryBuilder implements IQuery {
      */
     public INode addNode(IQueryAtom matcher, IAtom atom) {
         NodeBuilder node = new NodeBuilder(matcher);
-        nodes.add(node);
+        nodesList.add(node);
         NodesBonds.put(node, atom);
         return node;
     }
@@ -173,13 +173,12 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public IAtom getAtom(INode node) {
-
         return NodesBonds.get(node);
     }
 
     @Override
     public int countNodes() {
-        return nodes.size();
+        return nodesList.size();
     }
 
     /**
@@ -188,7 +187,7 @@ public class VFQueryBuilder implements IQuery {
      */
     @Override
     public int countEdges() {
-        return edges.size();
+        return edgesList.size();
     }
 
     /**
@@ -209,7 +208,7 @@ public class VFQueryBuilder implements IQuery {
         sourceImpl.addEdge(edge);
         targetImpl.addEdge(edge);
 
-        edges.add(edge);
+        edgesList.add(edge);
         return edge;
     }
 }

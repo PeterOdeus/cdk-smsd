@@ -96,22 +96,20 @@ public class SubGraphFactory implements IMCSAlgorithm {
         TimeOut tmo = TimeOut.getInstance();
         tmo.setTimeOut(0.30);
 
-        BondType BT = BondType.getInstance();
-        BT.setBondSensitiveFlag(BondTypeFlag);
+        BondType bondType = BondType.getInstance();
+        bondType.setBondSensitiveFlag(BondTypeFlag);
 
 
     }
 
     private synchronized void mcsBuilder() {
 
-        try {
-
-
             int rBondCount = RMol.getMolecule().getBondCount();
             int pBondCount = PMol.getMolecule().getBondCount();
 
-
-            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
+//
+//            This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap
+//             if bonds are less than 2
 
             if (rBondCount > 1 && pBondCount > 1) {
                 //System.out.println("\nVF-MCS\n");
@@ -122,11 +120,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
             }
 
             System.gc();
-
-        } catch (Exception ex) {
-            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
 
     }
 
@@ -142,8 +135,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
             this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
             this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
-
-
             mcsBuilder();
             setChemFilters();
         } catch (CDKException ex) {
@@ -221,13 +212,13 @@ public class SubGraphFactory implements IMCSAlgorithm {
     @Override
     public Integer getStereoScore(int Key) {
 
-        Integer Value = null;
+        Integer value = null;
 //        System.out.println(StereoScore.size() + " :Key " + Key);
         if (StereoScore.size() > Key && Key >= 0) {
-            Value = StereoScore.get(Key);
-//             System.out.println("\nScore " + Value);
+            value = StereoScore.get(Key);
+//             System.out.println("\nScore " + value);
         }
-        return Value;
+        return value;
     }
 
     @Override

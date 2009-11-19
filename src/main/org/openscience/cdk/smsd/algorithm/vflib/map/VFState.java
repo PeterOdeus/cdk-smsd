@@ -5,7 +5,7 @@
  *
  * http://metamolecular.com
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining atom copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -159,20 +159,18 @@ public class VFState implements IState {
     }
 
     private void loadCandidates(VFMatch lastMatch) {
-        IAtom a = lastMatch.getTargetAtom();
-        List<IAtom> targetNeighbors = target.getConnectedAtomsList(a);
+        IAtom atom = lastMatch.getTargetAtom();
+        List<IAtom> targetNeighbors = target.getConnectedAtomsList(atom);
 
-        for (INode q : lastMatch.getQueryNode().neighbors()) {
-            for (IAtom t : targetNeighbors) {
-                VFMatch match = new VFMatch(q, t);
+        for (INode node : lastMatch.getQueryNode().neighbors()) {
+            for (IAtom targetAtom : targetNeighbors) {
+                VFMatch match = new VFMatch(node, targetAtom);
 
                 if (candidateFeasible(match)) {
                     candidates.add(match);
                 }
             }
         }
-
-
     }
 
     private boolean candidateFeasible(VFMatch candidate) {
@@ -187,13 +185,11 @@ public class VFState implements IState {
     }
 
     private boolean matchAtoms(VFMatch match) {
-        IAtom a = match.getTargetAtom();
-        if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(a)) {
+        IAtom atom = match.getTargetAtom();
+        if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(atom)) {
             return false;
         }
-
-
-        return match.getQueryNode().getAtomMatcher().matches(a);
+        return match.getQueryNode().getAtomMatcher().matches(atom);
     }
 
     private boolean matchBonds(VFMatch match) {

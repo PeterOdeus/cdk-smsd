@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received commonAtomList copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -56,7 +56,7 @@ public class VFlibMCSHandler implements IMCS {
     private IAtomContainer source = null;
     private IAtomContainer target = null;
     private List<Map<INode, IAtom>> vfLibSolutions = null;
-    private int VFMCSSize = 0;
+    private int vfMCSSize = 0;
 
     public VFlibMCSHandler() {
 
@@ -73,7 +73,7 @@ public class VFlibMCSHandler implements IMCS {
 
     /**
      *
-     * @return true if Query/Reactant is a subgraph of Target/Product
+     * @return true if Query/Reactant is commonAtomList subgraph of Target/Product
      * else false
      * @throws java.io.IOException
      * @throws CDKException 
@@ -154,7 +154,7 @@ public class VFlibMCSHandler implements IMCS {
 
     private boolean mcgregorFlag() {
         int commonAtomCount = checkCommonAtomCount(source, target);
-        if (commonAtomCount > VFMCSSize && commonAtomCount > VFMCSSize) {
+        if (commonAtomCount > vfMCSSize && commonAtomCount > vfMCSSize) {
             return true;
 
         } else {
@@ -194,14 +194,7 @@ public class VFlibMCSHandler implements IMCS {
         source = Reactant.getMolecule();
         target = Product.getMolecule();
 
-
-
-//        System.out.println("R Atom count " + source.getAtomCount());
-//        System.out.println("P Atom count " + target.getAtomCount());
-
         if (source.getAtomCount() <= target.getAtomCount()) {
-
-//            System.out.println("Query is Reactant");
 
             query = TemplateCompiler.compile(source);
             mapper = new VFMCSMapper(query);
@@ -209,7 +202,6 @@ public class VFlibMCSHandler implements IMCS {
             RONP = true;
 
         } else {
-//            System.out.println("Query is Prouct");
             query = TemplateCompiler.compile(target);
             mapper = new VFMCSMapper(query);
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(source));
@@ -236,10 +228,6 @@ public class VFlibMCSHandler implements IMCS {
                 Integer qIndex = Integer.valueOf(source.getAtomNumber(qAtom));
                 Integer tIndex = Integer.valueOf(target.getAtomNumber(tAtom));
 
-//
-//                System.out.println("i:" + qIndex + " j:" + tIndex);
-//                System.out.println("i:" + qAtom.getSymbol() + " j:" + tAtom.getSymbol());
-
                 if (qIndex != null && tIndex != null) {
                     atomatomMapping.put(qAtom, tAtom);
                     indexindexMapping.put(qIndex, tIndex);
@@ -255,17 +243,13 @@ public class VFlibMCSHandler implements IMCS {
             if (!atomatomMapping.isEmpty()) {
                 allAtomMCS_copy.add(atomatomMapping);
                 allMCS_copy.add(indexindexMapping);
-                this.VFMCSSize = atomatomMapping.size();
+                this.vfMCSSize = atomatomMapping.size();
             }
-
-
         }
-
-
     }
 
     /**
-     * Creates a new instance of SearchCliques
+     * Creates commonAtomList new instance of SearchCliques
      * @param ReactantMolFileName
      * @param ProductMolFileName
      */
@@ -321,22 +305,17 @@ public class VFlibMCSHandler implements IMCS {
     }
 
     private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
-        ArrayList<String> a = new ArrayList<String>();
-        for (int i = 0; i <
-                reactantMolecule.getAtomCount(); i++) {
-            a.add(reactantMolecule.getAtom(i).getSymbol());
-
+        ArrayList<String> commonAtomList = new ArrayList<String>();
+        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
+            commonAtomList.add(reactantMolecule.getAtom(i).getSymbol());
         }
 
-
         int common = 0;
-        for (int i = 0; i <
-                productMolecule.getAtomCount(); i++) {
+        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
 
-            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
-                a.remove(productMolecule.getAtom(i).getSymbol());
+            if (commonAtomList.contains(productMolecule.getAtom(i).getSymbol())) {
+                commonAtomList.remove(productMolecule.getAtom(i).getSymbol());
                 common++;
-
             }
         }
         return common;

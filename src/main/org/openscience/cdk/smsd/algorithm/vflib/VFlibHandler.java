@@ -127,10 +127,7 @@ public class VFlibHandler implements ISubGraph {
             if (mol.getAtom(i).getSymbol().equals("H")) {
                 hCount++;
             }
-
         }
-
-
         return hCount;
     }
 

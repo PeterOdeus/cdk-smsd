@@ -1,5 +1,5 @@
 /* Copyright (C) 2005-2006 Markus Leber
- *               2006-2009 Syed Asad Rahman {asad@ebi.ac.uk}
+ *               2006-2009 Syed Asad Rahman {asad@ebi.atomContainer.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -36,8 +36,8 @@ public class QueryProcessor {
     private List<String> c_tab1_copy;
     private List<String> c_tab2_copy;
     private String[] SignROW;
-    private int neighbor_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
-    private int set_bondnum_A = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
+    private int neighborBondNumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
+    private int setBondNumA = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private IAtomContainer query;
     private IAtomContainer target;
     private List<Integer> i_bond_neighborsA;
@@ -61,8 +61,8 @@ public class QueryProcessor {
         this.c_tab1_copy = c_tab1_copy;
         this.c_tab2_copy = c_tab2_copy;
         this.SignROW = SignROW;
-        this.neighbor_bondnum_A = neighbor_bondnum_A;
-        this.set_bondnum_A = set_bondnum_A;
+        this.neighborBondNumA = neighbor_bondnum_A;
+        this.setBondNumA = set_bondnum_A;
     }
 
     /**
@@ -117,16 +117,7 @@ public class QueryProcessor {
 //                    System.out.println("unMappedAtomIndex=IndexI " + query.getAtom(unMappedAtomIndex).getSymbol());
                     for (int c = 0; c < mappingSize; c++) {
 
-//                        System.out.println("\n*****\nmapped_atoms.get(c * 2): " + mapped_atoms.get(c * 2));
-//                        System.out.println("indexJ: " + indexJ);
-
                         if (mapped_atoms.get(c * 2).equals(indexJ)) {
-
-//                            System.out.println("i_bond_neighbor_atoms_A: ");
-//                            System.out.println(indexI +
-//                                    " " + indexJ +
-//                                    " " + order);
-//
 
                             i_bond_neighborsA.add(indexI);
                             i_bond_neighborsA.add(indexJ);
@@ -140,10 +131,10 @@ public class QueryProcessor {
                                 c_bond_neighborsA.add("X");
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
 
-                                change_char_bonds(indexJ, SignROW[SR_count], query.getBondCount(), query, c_tab1_copy);
+                                changeCharBonds(indexJ, SignROW[SR_count], query.getBondCount(), query, c_tab1_copy);
 
-                                int cor_atom = search_corresponding_atom(mappingSize, indexJ, 1, mapped_atoms);
-                                change_char_bonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
+                                int cor_atom = searchCorrespondingAtom(mappingSize, indexJ, 1, mapped_atoms);
+                                changeCharBonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
                                 SR_count++;
                             } else {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
@@ -152,7 +143,7 @@ public class QueryProcessor {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 3));
                             }
                             normal_bond = false;
-                            neighbor_bondnum_A++;
+                            neighborBondNumA++;
                         }
                     }
                     if (normal_bond) {
@@ -163,7 +154,7 @@ public class QueryProcessor {
                         c_bond_setA.add(c_tab1_copy.get(a * 4 + 1));
                         c_bond_setA.add("X");
                         c_bond_setA.add("X");
-                        set_bondnum_A++;
+                        setBondNumA++;
                     }
                     normal_bond = true;
                     bond_considered = true;
@@ -188,11 +179,11 @@ public class QueryProcessor {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
                                 c_bond_neighborsA.add("X");
-                                change_char_bonds(indexI, SignROW[SR_count],
+                                changeCharBonds(indexI, SignROW[SR_count],
                                         query.getBondCount(), query, c_tab1_copy);
 
-                                int cor_atom = search_corresponding_atom(mappingSize, indexI, 1, mapped_atoms);
-                                change_char_bonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
+                                int cor_atom = searchCorrespondingAtom(mappingSize, indexI, 1, mapped_atoms);
+                                changeCharBonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
                                 SR_count++;
                             } else {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
@@ -201,16 +192,12 @@ public class QueryProcessor {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 3));
                             }
                             normal_bond = false;
-                            neighbor_bondnum_A++;
+                            neighborBondNumA++;
                             //System.out.println("Neighbor");
-                            //System.out.println(neighbor_bondnum_A);
+                            //System.out.println(neighborBondNumA);
                         }
                     }
                     if (normal_bond) {
-
-//                        System.out.println("\n\n normal_bond:" + normal_bond);
-
-
                         i_bond_setA.add(indexI);
                         i_bond_setA.add(indexJ);
                         i_bond_setA.add(order);
@@ -218,7 +205,7 @@ public class QueryProcessor {
                         c_bond_setA.add(AtomJ);
                         c_bond_setA.add("X");
                         c_bond_setA.add("X");
-                        set_bondnum_A++;
+                        setBondNumA++;
                     }
                     normal_bond = true;
                     bond_considered = true;
@@ -233,7 +220,7 @@ public class QueryProcessor {
         /*******************************************************************************///        System.out.println("Neighbor A & B");
     }
 
-    private int search_corresponding_atom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
+    private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
 
         List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
@@ -255,15 +242,15 @@ public class QueryProcessor {
         return corresponding_atom;
     }
 
-    private int change_char_bonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer ac, List<String> c_bond_neighbors) {
+    private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer atomContainer, List<String> c_bond_neighbors) {
         for (int a = 0; a < neighbor_bondnum; a++) {
-            IBond bond = ac.getBond(a);
-            if ((ac.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            IBond bond = atomContainer.getBond(a);
+            if ((atomContainer.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 2, c_bond_neighbors.get(a * 4 + 0));
                 c_bond_neighbors.set(a * 4 + 0, new_symbol);
             }
 
-            if ((ac.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((atomContainer.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
                 c_bond_neighbors.set(a * 4 + 1, new_symbol);
             }
@@ -277,7 +264,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    protected List<String> getCtab1() {
+    protected List<String> getCTab1() {
         return this.c_tab1_copy;
     }
 
@@ -285,7 +272,7 @@ public class QueryProcessor {
      * 
      * @return
      */
-    protected List<String> getCtab2() {
+    protected List<String> getCTab2() {
         return this.c_tab2_copy;
     }
 
@@ -295,8 +282,8 @@ public class QueryProcessor {
      * which are neighbors of the MCS
      *   
      */
-    protected int getNeighbor_bondnum_A() {
-        return this.neighbor_bondnum_A;
+    protected int getNeighborBondNumA() {
+        return this.neighborBondNumA;
     }
 
     /**
@@ -304,12 +291,8 @@ public class QueryProcessor {
      * @return number of remaining molecule A bonds after the clique search, 
      * which aren't neighbors
      */
-    protected int geBondnum_A() {
-        return this.set_bondnum_A;
-    }
-
-    protected String[] getSigns() {
-        return this.SignROW;
+    protected int getBondNumA() {
+        return this.setBondNumA;
     }
 
     List<Integer> getIBondNeighboursA() {

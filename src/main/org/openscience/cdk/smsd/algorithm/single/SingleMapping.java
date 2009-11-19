@@ -37,8 +37,8 @@ import org.openscience.cdk.interfaces.IBond.Order;
  */
 public class SingleMapping {
 
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
 
     /**
      *
@@ -48,8 +48,8 @@ public class SingleMapping {
      */
     protected void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
-        this.ac1 = source;
-        this.ac2 = target;
+        this.source = source;
+        this.target = target;
         List<TreeMap<Integer, Integer>> _mappings = new ArrayList<TreeMap<Integer, Integer>>();
         Map<Integer, Integer> connectedBondOrder = new TreeMap<Integer, Integer>();
 
@@ -70,22 +70,20 @@ public class SingleMapping {
     private void mapWithoutH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
-        if ((ac1.getAtomCount() == 1) && (!ac1.getAtom(0).getSymbol().equals("H"))) {
-            for (int i = 0; i < ac2.getAtomCount(); i++) {
-
-
+        if ((source.getAtomCount() == 1) && (!source.getAtom(0).getSymbol().equals("H"))) {
+            for (int i = 0; i < target.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
-                if (ac1.getAtom(0).getSymbol().equalsIgnoreCase(ac2.getAtom(i).getSymbol())) {
+                if (source.getAtom(0).getSymbol().equalsIgnoreCase(target.getAtom(i).getSymbol())) {
                     mapAtoms.put(0, i);
-                    IAtom atom = ac2.getAtom(i);
-                    List<IBond> Bonds = ac2.getConnectedBondsList(atom);
+                    IAtom atom = target.getAtom(i);
+                    List<IBond> Bonds = target.getConnectedBondsList(atom);
 
                     int totalOrder = 0;
-                    for (IBond B : Bonds) {
+                    for (IBond bond : Bonds) {
 
-                        Order BO = B.getOrder();
-                        totalOrder += BO.ordinal();
+                        Order bondOrder = bond.getOrder();
+                        totalOrder += bondOrder.ordinal();
                     }
 
                     if (totalOrder < minOrder) {
@@ -98,24 +96,24 @@ public class SingleMapping {
 
                 //System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
-        } else if ((ac2.getAtomCount() == 1) && (!ac2.getAtom(0).getSymbol().equals("H"))) {
+        } else if ((target.getAtomCount() == 1) && (!target.getAtom(0).getSymbol().equals("H"))) {
             //System.out.println("Hello in Single getOverlaps-> Cond2");
 
 
-            for (int i = 0; i < ac1.getAtomCount(); i++) {
+            for (int i = 0; i < source.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
-                if (ac2.getAtom(0).getSymbol().equalsIgnoreCase(ac1.getAtom(i).getSymbol())) {
+                if (target.getAtom(0).getSymbol().equalsIgnoreCase(source.getAtom(i).getSymbol())) {
                     mapAtoms.put(i, 0);
 
-                    IAtom atom = ac1.getAtom(i);
-                    List<IBond> Bonds = ac1.getConnectedBondsList(atom);
+                    IAtom atom = source.getAtom(i);
+                    List<IBond> Bonds = source.getConnectedBondsList(atom);
 
                     int totalOrder = 0;
-                    for (IBond B : Bonds) {
+                    for (IBond bond : Bonds) {
 
-                        Order BO = B.getOrder();
-                        totalOrder += BO.ordinal();
+                        Order bondOrder = bond.getOrder();
+                        totalOrder += bondOrder.ordinal();
                     }
                     if (totalOrder < minOrder) {
                         minOrder = totalOrder;
@@ -124,8 +122,6 @@ public class SingleMapping {
                     BondOrder.put(counter, totalOrder);
                     _mappings.add(counter++, mapAtoms);
                 }
-
-//                System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
 
         } else {
@@ -136,22 +132,22 @@ public class SingleMapping {
     private void mapWithH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
-        if (ac1.getAtomCount() == 1) {
-            for (int i = 0; i < ac2.getAtomCount(); i++) {
+        if (source.getAtomCount() == 1) {
+            for (int i = 0; i < target.getAtomCount(); i++) {
 
 
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
-                if (ac1.getAtom(0).getSymbol().equalsIgnoreCase(ac2.getAtom(i).getSymbol())) {
+                if (source.getAtom(0).getSymbol().equalsIgnoreCase(target.getAtom(i).getSymbol())) {
                     mapAtoms.put(0, i);
-                    IAtom atom = ac2.getAtom(i);
-                    List<IBond> Bonds = ac2.getConnectedBondsList(atom);
+                    IAtom atom = target.getAtom(i);
+                    List<IBond> Bonds = target.getConnectedBondsList(atom);
 
                     int totalOrder = 0;
-                    for (IBond B : Bonds) {
+                    for (IBond bond : Bonds) {
 
-                        Order BO = B.getOrder();
-                        totalOrder += BO.ordinal();
+                        Order bondOrder = bond.getOrder();
+                        totalOrder += bondOrder.ordinal();
                     }
 
                     if (totalOrder < minOrder) {
@@ -165,22 +161,22 @@ public class SingleMapping {
 
 //                System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
-        } else if (ac2.getAtomCount() == 1) {
+        } else if (target.getAtomCount() == 1) {
 
-            for (int i = 0; i < ac1.getAtomCount(); i++) {
+            for (int i = 0; i < source.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
-                if (ac2.getAtom(0).getSymbol().equalsIgnoreCase(ac1.getAtom(i).getSymbol())) {
+                if (target.getAtom(0).getSymbol().equalsIgnoreCase(source.getAtom(i).getSymbol())) {
                     mapAtoms.put(i, 0);
 
-                    IAtom atom = ac1.getAtom(i);
-                    List<IBond> Bonds = ac1.getConnectedBondsList(atom);
+                    IAtom atom = source.getAtom(i);
+                    List<IBond> Bonds = source.getConnectedBondsList(atom);
 
                     int totalOrder = 0;
-                    for (IBond B : Bonds) {
+                    for (IBond bond : Bonds) {
 
-                        Order BO = B.getOrder();
-                        totalOrder += BO.ordinal();
+                        Order bondOrder = bond.getOrder();
+                        totalOrder += bondOrder.ordinal();
                     }
                     if (totalOrder < minOrder) {
                         minOrder = totalOrder;

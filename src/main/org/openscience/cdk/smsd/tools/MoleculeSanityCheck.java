@@ -82,26 +82,18 @@ public class MoleculeSanityCheck {
             }
         }
         fixAromaticity(molecule);
-//
-//        // do a aromaticity check
-//        try {
-//            CDKHueckelAromaticityDetector.detectAromaticity(molecule);
-//        } catch (CDKException e) {
-//            throw new CDKException("Error in aromaticity detection");
-//        }
-
         return molecule;
     }
 
-    public static void fixAromaticity(IAtomContainer m) {
+    public static void fixAromaticity(IAtomContainer mol) {
         // need to find rings and aromaticity again since added H's
 
-        IRingSet rs = null;
+        IRingSet ringSet = null;
         try {
             AllRingsFinder arf = new AllRingsFinder();
-            rs = arf.findAllRings(m);
+            ringSet = arf.findAllRings(mol);
 
-            // SSSRFinder s = new SSSRFinder(m);
+            // SSSRFinder s = new SSSRFinder(mol);
             // srs = s.findEssentialRings();
 
         } catch (Exception e) {
@@ -110,12 +102,12 @@ public class MoleculeSanityCheck {
 
         try {
             // figure out which atoms are in aromatic rings:
-            ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
-            CDKHueckelAromaticityDetector.detectAromaticity(m);
+            ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+            CDKHueckelAromaticityDetector.detectAromaticity(mol);
             // figure out which rings are aromatic:
-            RingSetManipulator.markAromaticRings(rs);
+            RingSetManipulator.markAromaticRings(ringSet);
             // figure out which simple (non cycles) rings are aromatic:
-            // HueckelAromaticityDetector.detectAromaticity(m, srs);
+            // HueckelAromaticityDetector.detectAromaticity(mol, srs);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,24 +116,24 @@ public class MoleculeSanityCheck {
         // only atoms in 6 membered rings are aromatic
         // determine largest ring that each atom is a part of
 
-        for (int i = 0; i <= m.getAtomCount() - 1; i++) {
+        for (int i = 0; i <= mol.getAtomCount() - 1; i++) {
 
-            m.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
+            mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
 
             jloop:
-            for (int j = 0; j <= rs.getAtomContainerCount() - 1; j++) {
+            for (int j = 0; j <= ringSet.getAtomContainerCount() - 1; j++) {
                 //logger.debug(i+"\t"+j);
-                IRing r = (IRing) rs.getAtomContainer(j);
-                if (!r.getFlag(CDKConstants.ISAROMATIC)) {
+                IRing ring = (IRing) ringSet.getAtomContainer(j);
+                if (!ring.getFlag(CDKConstants.ISAROMATIC)) {
                     continue jloop;
                 }
 
-                boolean haveatom = r.contains(m.getAtom(i));
+                boolean haveatom = ring.contains(mol.getAtom(i));
 
                 //logger.debug("haveatom="+haveatom);
 
-                if (haveatom && r.getAtomCount() == 6) {
-                    m.getAtom(i).setFlag(CDKConstants.ISAROMATIC, true);
+                if (haveatom && ring.getAtomCount() == 6) {
+                    mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC, true);
                 }
 
             }

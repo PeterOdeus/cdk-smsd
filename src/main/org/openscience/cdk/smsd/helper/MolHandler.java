@@ -64,19 +64,11 @@ public class MolHandler {
         }
         fragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 
-
-        //System.out.println("isConnected : " + connectedFlag);
-
         if (!connectedFlag) {
-
-            /*System.err.println("The molecule is not connected, " +
-            "Fragment Matcher Will Handle this _molecule");*/
-
             fragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(mol));
             fragmentMolSet.setID(mol.getID());
 
         } else {
-
             fragmentMolSet.addAtomContainer(mol);
             fragmentMolSet.setID(mol.getID());
         }
@@ -90,14 +82,14 @@ public class MolHandler {
      */
     public MolHandler(String MolFile, boolean cleanMolecule, boolean removeHydrogen) {
 
-        MDLReader MolRead;
+        MDLReader molRead;
         this.removeHydrogen = removeHydrogen;
         try {
-            FileInputStream ReadMolecule;
+            FileInputStream readMolecule;
 
-            ReadMolecule = new FileInputStream(MolFile);
-            MolRead = new MDLReader(new InputStreamReader(ReadMolecule));
-            this.mol = (IMolecule) MolRead.read(new Molecule());
+            readMolecule = new FileInputStream(MolFile);
+            molRead = new MDLReader(new InputStreamReader(readMolecule));
+            this.mol = (IMolecule) molRead.read(new Molecule());
             if (cleanMolecule) {
                 MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
             }
@@ -116,7 +108,7 @@ public class MolHandler {
 
     public MolHandler(String MolFile, boolean cleanMolecule) {
 
-        MDLReader MolRead;
+        MDLReader molRead;
         this.removeHydrogen = false;
 
 
@@ -124,8 +116,8 @@ public class MolHandler {
             FileInputStream ReadMolecule;
 
             ReadMolecule = new FileInputStream(MolFile);
-            MolRead = new MDLReader(new InputStreamReader(ReadMolecule));
-            this.mol = (IMolecule) MolRead.read(new Molecule());
+            molRead = new MDLReader(new InputStreamReader(ReadMolecule));
+            this.mol = (IMolecule) molRead.read(new Molecule());
             if (cleanMolecule) {
                 MoleculeSanityCheck.fixAromaticity((IMolecule) mol);
             }
@@ -178,7 +170,7 @@ public class MolHandler {
 
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule) {
 
-        String ID = _molecule.getID();
+        String molID = _molecule.getID();
         this.removeHydrogen = false;
         this.mol = _molecule;
         if (cleanMolecule) {
@@ -188,13 +180,13 @@ public class MolHandler {
         if (removeHydrogen) {
             try {
                 this.mol = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
-                mol.setID(ID);
+                mol.setID(molID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             this.mol = DefaultChemObjectBuilder.getInstance().newMolecule(mol);
-            mol.setID(ID);
+            mol.setID(molID);
         }
         checkFragmentation();
     }

@@ -74,9 +74,7 @@ public class TemplateCompiler implements IQueryCompiler {
 
     public static IQuery compile(IAtomContainer molecule) {
         TemplateCompiler compiler = new TemplateCompiler();
-
         compiler.setMolecule(molecule);
-
         return compiler.compile();
     }
 
@@ -111,9 +109,9 @@ public class TemplateCompiler implements IQueryCompiler {
 
         for (int i = 0; i < queryMolecule.getBondCount(); i++) {
             IBond bond = queryMolecule.getBond(i);
-            IAtom s = bond.getAtom(0);
-            IAtom t = bond.getAtom(1);
-            result.connect(result.getNode(s), result.getNode(t), createBondMatcher(bond));
+            IAtom sourceAtom = bond.getAtom(0);
+            IAtom targetAtom = bond.getAtom(1);
+            result.connect(result.getNode(sourceAtom), result.getNode(targetAtom), createBondMatcher(bond));
         }
 
         return result;

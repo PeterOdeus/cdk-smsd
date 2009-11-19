@@ -42,7 +42,7 @@ public class VFMCSMapper implements IMapper {
 
     private IQuery query;
     private List<Map<INode, IAtom>> maps;
-    private int StoredMCSSize = -1;
+    private int currentMCSSize = -1;
 
     /**
      *
@@ -200,14 +200,14 @@ public class VFMCSMapper implements IMapper {
         boolean flag = true;
         int mapSize = map.size();
 
-        if (!maps.isEmpty() && StoredMCSSize > mapSize) {
+        if (!maps.isEmpty() && currentMCSSize > mapSize) {
 
             flag = false;
         }
         //Comment this if to get all the subgraphs
-        if (mapSize > StoredMCSSize) {
+        if (mapSize > currentMCSSize) {
 
-            StoredMCSSize = mapSize;
+            currentMCSSize = mapSize;
             maps.clear();
         }
 

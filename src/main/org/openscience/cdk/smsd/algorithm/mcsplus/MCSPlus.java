@@ -41,7 +41,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class MCSPlus {
 
     public static double timeout = TimeOut.getInstance().getTimeOut();
-    private static TimeManager TM;
+    private static TimeManager timeManager;
     private static boolean timeoutFlag = false;
 
     /**
@@ -53,7 +53,7 @@ public class MCSPlus {
      * @throws CDKException
      */
     protected List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
-        Stack<List<Integer>> Max_Cliques_Set = null;
+        Stack<List<Integer>> maxCliqueSet = null;
         List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
 
@@ -69,15 +69,15 @@ public class MCSPlus {
                 System.err.println("D-edges Size " + D_edges.size() + " > : " + 99999);
                 return null;
             }
-            TM = new TimeManager();
-            if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
+            timeManager = new TimeManager();
+            if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
             BKKCKCF init = new BKKCKCF(comp_graph_nodes, C_edges, D_edges);
-            Max_Cliques_Set = init.getMaxCliqueSet();
-            if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
+            maxCliqueSet = init.getMaxCliqueSet();
+            if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 timeoutFlag = true;
                 throw new CDKException("Timeout exceeded in getOverlaps");
@@ -85,13 +85,13 @@ public class MCSPlus {
             //clear all the compatibility graph content
             gcg.clear();
 //            int clique_number = 1;
-            while (!Max_Cliques_Set.empty()) {
-                if (timeout > -1 && TM.getElapsedTimeInMinutes() > timeout) {
+            while (!maxCliqueSet.empty()) {
+                if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
                     //System.out.println("|Hello|");
                     timeoutFlag = true;
                     throw new CDKException("Timeout exceeded in getOverlaps");
                 }
-                List<Integer> clique_List = Max_Cliques_Set.peek();
+                List<Integer> clique_List = maxCliqueSet.peek();
 
                 int clique_size = clique_List.size();
                 if (clique_size < ac1.getAtomCount() && clique_size < ac2.getAtomCount()) {
@@ -103,7 +103,7 @@ public class MCSPlus {
                 } else {
                     _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_List);
                 }
-                Max_Cliques_Set.pop();
+                maxCliqueSet.pop();
 //                clique_number++;
             }
         } catch (IOException ex) {

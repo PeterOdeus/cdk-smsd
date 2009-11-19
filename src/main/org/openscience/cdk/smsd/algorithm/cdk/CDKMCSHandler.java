@@ -13,7 +13,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR sourceAtom PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -42,8 +42,8 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 public class CDKMCSHandler implements IMCS {
 
 //    //~--- fields -------------------------------------------------------------
-    private IAtomContainer Reactant;
-    private IAtomContainer Product;
+    private IAtomContainer source;
+    private IAtomContainer target;
     private boolean RonPFlag = false;
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
@@ -73,8 +73,8 @@ public class CDKMCSHandler implements IMCS {
     @Override
     public void set(IAtomContainer reactant, IAtomContainer product) {
 
-        this.Reactant = reactant;
-        this.Product = product;
+        this.source = reactant;
+        this.target = product;
 
     }
 
@@ -88,8 +88,8 @@ public class CDKMCSHandler implements IMCS {
     public void set(MolHandler reactant, MolHandler product) {
 
 
-        this.Reactant = reactant.getMolecule();
-        this.Product = product.getMolecule();
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
 
     }
 
@@ -105,8 +105,8 @@ public class CDKMCSHandler implements IMCS {
         String mol1 = ReactantMolFileName;
         String mol2 = ProductMolFileName;
 
-        this.Reactant = new MolHandler(mol1, false).getMolecule();
-        this.Product = new MolHandler(mol2, false).getMolecule();
+        this.source = new MolHandler(mol1, false).getMolecule();
+        this.target = new MolHandler(mol2, false).getMolecule();
 
 
     }
@@ -123,21 +123,21 @@ public class CDKMCSHandler implements IMCS {
 
         try {
 
-            if ((Reactant.getAtomCount() == Product.getAtomCount()) && Reactant.getBondCount() == Product.getBondCount()) {
+            if ((source.getAtomCount() == target.getAtomCount()) && source.getBondCount() == target.getBondCount()) {
                 RonPFlag = true;
                 //System.err.print("True");
 
-                rmap.calculateOverlapsAndReduceExactMatch(Reactant, Product);
+                rmap.calculateOverlapsAndReduceExactMatch(source, target);
 
-            } else if (Reactant.getAtomCount() > Product.getAtomCount() && Reactant.getBondCount() != Product.getBondCount()) {
+            } else if (source.getAtomCount() > target.getAtomCount() && source.getBondCount() != target.getBondCount()) {
                 RonPFlag = true;
                 //System.err.print("True");
 
-                rmap.calculateOverlapsAndReduce(Reactant, Product);
+                rmap.calculateOverlapsAndReduce(source, target);
 
             } else {
                 RonPFlag = false;
-                rmap.calculateOverlapsAndReduce(Product, Reactant);
+                rmap.calculateOverlapsAndReduce(target, source);
 
 
             }
@@ -226,8 +226,6 @@ public class CDKMCSHandler implements IMCS {
     }
 
     private final synchronized void setAllAtomMapping() {
-        //int count_final_sol = 1;
-        //System.out.println("Output of the final FinalMappings: ");
         List<TreeMap<Integer, Integer>> sol = allMCS;
 
         int counter = 0;
@@ -241,12 +239,12 @@ public class CDKMCSHandler implements IMCS {
                 int IIndex = Solutions.getKey().intValue();
                 int JIndex = Solutions.getValue().intValue();
 
-                IAtom A = null;
-                IAtom B = null;
+                IAtom sourceAtom = null;
+                IAtom targetAtom = null;
 
-                A = Reactant.getAtom(IIndex);
-                B = Product.getAtom(JIndex);
-                atomMappings.put(A, B);
+                sourceAtom = source.getAtom(IIndex);
+                targetAtom = target.getAtom(JIndex);
+                atomMappings.put(sourceAtom, targetAtom);
 
 
             }

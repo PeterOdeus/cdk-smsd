@@ -36,19 +36,19 @@ import java.util.TreeMap;
 public class FinalMappings implements IFinalMapping {
 
     private List<TreeMap<Integer, Integer>> _mappings;
-    private static FinalMappings INSTANCE = null;
+    private static FinalMappings _instance = null;
 
     protected FinalMappings() {
         _mappings = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
     synchronized public static FinalMappings getInstance() {
-        if (INSTANCE == null) {
+        if (_instance == null) {
 
-            INSTANCE = new FinalMappings();
+            _instance = new FinalMappings();
 
         }
-        return INSTANCE;
+        return _instance;
     }
 
     @Override

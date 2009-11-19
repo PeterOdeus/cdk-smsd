@@ -102,11 +102,8 @@ public class VFMapper implements IMapper {
     @Override
     public List<Map<INode, IAtom>> getMaps(IAtomContainer target) {
         VFState state = new VFState(query, target);
-
         maps.clear();
-
         mapAll(state);
-
         return new ArrayList<Map<INode, IAtom>>(maps);
     }
 
@@ -118,11 +115,8 @@ public class VFMapper implements IMapper {
     @Override
     public Map<INode, IAtom> getFirstMap(IAtomContainer target) {
         VFState state = new VFState(query, target);
-
         maps.clear();
-
         mapFirst(state);
-
         return maps.isEmpty() ? new HashMap<INode, IAtom>() : maps.get(0);
     }
 
@@ -134,11 +128,8 @@ public class VFMapper implements IMapper {
     @Override
     public int countMaps(IAtomContainer target) {
         VFState state = new VFState(query, target);
-
         maps.clear();
-
         mapAll(state);
-
         return maps.size();
     }
 
@@ -161,11 +152,8 @@ public class VFMapper implements IMapper {
             VFMatch candidate = state.nextCandidate();
             if (state.isMatchFeasible(candidate)) {
                 IState nextState = state.nextState(candidate);
-
                 mapAll(nextState);
-
                 nextState.backTrack();
-
             }
         }
     }

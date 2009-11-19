@@ -34,24 +34,24 @@ import java.util.List;
  */
 public class NodeBuilder implements INode {
 
-    private List<INode> neighbors;
-    private List<IEdge> edges;
+    private List<INode> neighborsList;
+    private List<IEdge> edgesList;
     private IQueryAtom matcher;
 
     public NodeBuilder(IQueryAtom matcher) {
-        edges = new ArrayList<IEdge>();
-        neighbors = new ArrayList<INode>();
+        edgesList = new ArrayList<IEdge>();
+        neighborsList = new ArrayList<INode>();
         this.matcher = matcher;
     }
 
     @Override
     public int countNeighbors() {
-        return neighbors.size();
+        return neighborsList.size();
     }
 
     @Override
     public Iterable<INode> neighbors() {
-        return neighbors;
+        return neighborsList;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class NodeBuilder implements INode {
      */
     @Override
     public List<IEdge> getEdges() {
-        return edges;
+        return edgesList;
     }
 
     /**
@@ -74,7 +74,7 @@ public class NodeBuilder implements INode {
      */
     @Override
     public void addEdge(EdgeBuilder edge) {
-        edges.add(edge);
+        edgesList.add(edge);
     }
 
     /**
@@ -83,7 +83,7 @@ public class NodeBuilder implements INode {
      */
     @Override
     public void addneighbor(NodeBuilder node) {
-        neighbors.add(node);
+        neighborsList.add(node);
     }
 }
 

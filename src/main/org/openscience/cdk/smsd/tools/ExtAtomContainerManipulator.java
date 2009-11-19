@@ -47,7 +47,7 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+ * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.atomContainer.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -65,7 +65,7 @@ import org.w3c.dom.NodeList;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received atom copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -107,7 +107,6 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 lonePairs[f] = DefaultChemObjectBuilder.getInstance().newLonePair(container.getAtom(f));
             }
             newAtomContainer.addLonePair(lonePairs[f]);
-
         }
 
         for (int f = 0; f < container.getSingleElectronCount(); f++) {
@@ -131,18 +130,18 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      *  &lt;replace&gt;O=N=O&lt;/replace&gt;<br>
      *  &lt;replacement&gt;[O-][N+]=O&lt;/replacement&gt;<br>
      *  &lt;/replace-set&gt;<br>
-     *  All parts in ac which are the same as replace will be changed according to replacement.
+     *  All parts in atomContainer which are the same as replace will be changed according to replacement.
      *  Currently the following changes are done: BondOrder, FormalCharge.
      *  For detection of fragments like replace, we rely on UniversalIsomorphismTester.
-     *  doc may contain several replace-sets and a replace-set may contain several replace fragments, which will all be normalized according to replacement.
+     *  doc may contain several replace-sets and atom replace-set may contain several replace fragments, which will all be normalized according to replacement.
      *
-     * @param  ac                          The atomcontainer to normalize.
+     * @param  atomContainer                          The atomcontainer to normalize.
      * @param  doc                         The configuration file.
-     * @return                             Did a replacement take place?
+     * @return                             Did atom replacement take place?
      * @exception  InvalidSmilesException  doc contains an invalid smiles.
      * @throws CDKException 
      */
-    public static boolean normalize(IAtomContainer ac, Document doc) throws InvalidSmilesException, CDKException {
+    public static boolean normalize(IAtomContainer atomContainer, Document doc) throws InvalidSmilesException, CDKException {
         NodeList nl = doc.getElementsByTagName("replace-set");
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         boolean change = false;
@@ -163,13 +162,13 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 }
                 IAtomContainer replaceStructure = sp.parseSmiles(replacestring);
                 List l = null;
-                while ((l = UniversalIsomorphismTester.getSubgraphMap(ac, replaceStructure)) != null) {
+                while ((l = UniversalIsomorphismTester.getSubgraphMap(atomContainer, replaceStructure)) != null) {
                     @SuppressWarnings("unchecked")
-                    List<RMap> l2 = UniversalIsomorphismTester.makeAtomsMapOfBondsMap(l, ac, replaceStructure);
+                    List<RMap> l2 = UniversalIsomorphismTester.makeAtomsMapOfBondsMap(l, atomContainer, replaceStructure);
                     Iterator bondit = l.iterator();
                     while (bondit.hasNext()) {
                         RMap rmap = (RMap) bondit.next();
-                        org.openscience.cdk.interfaces.IBond acbond = ac.getBond(rmap.getId1());
+                        org.openscience.cdk.interfaces.IBond acbond = atomContainer.getBond(rmap.getId1());
                         org.openscience.cdk.interfaces.IBond replacebond = replacementStructure.getBond(rmap.getId2());
                         acbond.setOrder(replacebond.getOrder());
                         change = true;
@@ -177,7 +176,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                     Iterator atomit = l2.iterator();
                     while (atomit.hasNext()) {
                         RMap rmap = (RMap) atomit.next();
-                        org.openscience.cdk.interfaces.IAtom acatom = ac.getAtom(rmap.getId1());
+                        org.openscience.cdk.interfaces.IAtom acatom = atomContainer.getAtom(rmap.getId1());
                         org.openscience.cdk.interfaces.IAtom replaceatom = replacementStructure.getAtom(rmap.getId2());
                         acatom.setFormalCharge(replaceatom.getFormalCharge());
                         change = true;
@@ -199,23 +198,21 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
-    private static boolean fixNitroGroups(IMolecule m) {
+    private static boolean fixNitroGroups(IMolecule mol) {
         // changes nitros given by N(=O)(=O) to [N+](=O)[O-]
         boolean changed = false;
         try {
-            for (int i = 0; i <= m.getAtomCount() - 1; i++) {
-                IAtom a = m.getAtom(i);
+            for (int i = 0; i <= mol.getAtomCount() - 1; i++) {
+                IAtom atom = mol.getAtom(i);
 //                boolean nitro = false;
 
-                if (a.getSymbol().equals("N")) {
-                    List ca = m.getConnectedAtomsList(a);
+                if (atom.getSymbol().equals("N")) {
+                    List ca = mol.getConnectedAtomsList(atom);
 
                     if (ca.size() == 3) {
-
                         IAtom[] cao = new IAtom[2];
 
                         int count = 0;
-
                         for (int j = 0; j <= 2; j++) {
                             if (((IAtom) ca.get(j)).getSymbol().equals("O")) {
                                 count++;
@@ -223,27 +220,26 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                         }
 
                         if (count > 1) {
-
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
                                 IAtom caj = (IAtom) ca.get(j);
-                                if ((caj.getSymbol().equals("O")) && (m.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
+                                if ((caj.getSymbol().equals("O")) && (mol.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
                                     cao[count] = caj;
                                     count++;
                                 }
                             }
 
 
-                            IBond.Order order1 = m.getBond(a, cao[0]).getOrder();
-                            IBond.Order order2 = m.getBond(a, cao[1]).getOrder();
+                            IBond.Order order1 = mol.getBond(atom, cao[0]).getOrder();
+                            IBond.Order order2 = mol.getBond(atom, cao[1]).getOrder();
 
 
                             //if (totalobonds==4) { // need to fix (FIXME)
                             if (order1 == IBond.Order.SINGLE &&
                                     order2 == IBond.Order.DOUBLE) {
-                                a.setFormalCharge(1);
+                                atom.setFormalCharge(1);
                                 cao[0].setFormalCharge(-1); // pick first O arbitrarily
-                                m.getBond(a, cao[0]).setOrder(IBond.Order.SINGLE);
+                                mol.getBond(atom, cao[0]).setOrder(IBond.Order.SINGLE);
                                 changed = true;
                             }
                         } //else if (count==1) {// end if count>1
@@ -254,33 +250,28 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
 
             }
-
             return changed;
-
-
         } catch (Exception e) {
             return changed;
         }
 
     }
 
-    public static boolean fixNitroGroups2(IMolecule m) {
+    public static boolean fixNitroGroups2(IMolecule mol) {
         // changes nitros given by [N+](=O)[O-] to N(=O)(=O) 
         boolean changed = false;
         try {
-            for (int i = 0; i <= m.getAtomCount() - 1; i++) {
-                IAtom a = m.getAtom(i);
+            for (int i = 0; i <= mol.getAtomCount() - 1; i++) {
+                IAtom atom = mol.getAtom(i);
 //                boolean nitro = false;
 
-                if (a.getSymbol().equals("N")) {
-                    List ca = m.getConnectedAtomsList(a);
+                if (atom.getSymbol().equals("N")) {
+                    List ca = mol.getConnectedAtomsList(atom);
 
                     if (ca.size() == 3) {
-
                         IAtom[] cao = new IAtom[2];
 
                         int count = 0;
-
                         for (int j = 0; j <= 2; j++) {
                             IAtom caj = (IAtom) ca.get(j);
                             if (caj.getSymbol().equals("O")) {
@@ -289,30 +280,29 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                         }
 
                         if (count > 1) {
-
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
                                 IAtom caj = (IAtom) ca.get(j);
-                                if ((caj.getSymbol().equals("O")) && (m.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
+                                if ((caj.getSymbol().equals("O")) && (mol.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
                                     cao[count] = caj;
                                     count++;
                                 }
                             }
-                            IBond.Order order1 = m.getBond(a, cao[0]).getOrder();
-                            IBond.Order order2 = m.getBond(a, cao[1]).getOrder();
+                            IBond.Order order1 = mol.getBond(atom, cao[0]).getOrder();
+                            IBond.Order order2 = mol.getBond(atom, cao[1]).getOrder();
 
                             //int totalobonds=0;						
-                            //totalobonds+=m.getBond(a,cao[0]).getOrder();
-//						totalobonds+=m.getBond(a,cao[1]).getOrder();
+                            //totalobonds+=mol.getBond(atom,cao[0]).getOrder();
+//						totalobonds+=mol.getBond(atom,cao[1]).getOrder();
 
                             //if (totalobonds==4) { // need to fix
                             if ((order1 == IBond.Order.SINGLE && order2 == IBond.Order.DOUBLE) ||
                                     (order1 == IBond.Order.DOUBLE && order2 == IBond.Order.SINGLE)) {
-                                a.setFormalCharge(0);
+                                atom.setFormalCharge(0);
                                 cao[0].setFormalCharge(0); // pick first O arbitrarily
                                 cao[1].setFormalCharge(0); // pick first O arbitrarily
-                                m.getBond(a, cao[0]).setOrder(IBond.Order.DOUBLE);
-                                m.getBond(a, cao[1]).setOrder(IBond.Order.DOUBLE);
+                                mol.getBond(atom, cao[0]).setOrder(IBond.Order.DOUBLE);
+                                mol.getBond(atom, cao[1]).setOrder(IBond.Order.DOUBLE);
                                 changed = true;
                             }
                         } // end if count>1
@@ -333,18 +323,18 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     /**
      * 
-     * @param m Molecule to be aromatized
+     * @param mol Molecule to be aromatized
      */
-    public static void aromatizeMolecule(IAtomContainer m) {
+    public static void aromatizeMolecule(IAtomContainer mol) {
 
         // need to find rings and aromaticity again since added H's
 
-        IRingSet rs = null;
+        IRingSet ringSet = null;
         try {
             AllRingsFinder arf = new AllRingsFinder();
-            rs = arf.findAllRings(m);
+            ringSet = arf.findAllRings(mol);
 
-            // SSSRFinder s = new SSSRFinder(m);
+            // SSSRFinder s = new SSSRFinder(mol);
             // srs = s.findEssentialRings();
 
         } catch (Exception e) {
@@ -353,42 +343,42 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
         try {
             // figure out which atoms are in aromatic rings:
-//            printAtoms(m);
-            ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
-//            printAtoms(m);
-            CDKHueckelAromaticityDetector.detectAromaticity(m);
+//            printAtoms(mol);
+            ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+//            printAtoms(mol);
+            CDKHueckelAromaticityDetector.detectAromaticity(mol);
 //            printAtoms(mol);
             // figure out which rings are aromatic:
-            RingSetManipulator.markAromaticRings(rs);
+            RingSetManipulator.markAromaticRings(ringSet);
 //            printAtoms(mol);
             // figure out which simple (non cycles) rings are aromatic:
-            // HueckelAromaticityDetector.detectAromaticity(m, srs);
+            // HueckelAromaticityDetector.detectAromaticity(mol, srs);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
         // only atoms in 6 membered rings are aromatic
-        // determine largest ring that each atom is a part of
+        // determine largest ring that each atom is atom part of
 
-        for (int i = 0; i <= m.getAtomCount() - 1; i++) {
+        for (int i = 0; i <= mol.getAtomCount() - 1; i++) {
 
-            m.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
+            mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
 
             jloop:
-            for (int j = 0; j <= rs.getAtomContainerCount() - 1; j++) {
+            for (int j = 0; j <= ringSet.getAtomContainerCount() - 1; j++) {
                 //logger.debug(i+"\t"+j);
-                IRing r = (IRing) rs.getAtomContainer(j);
-                if (!r.getFlag(CDKConstants.ISAROMATIC)) {
+                IRing ring = (IRing) ringSet.getAtomContainer(j);
+                if (!ring.getFlag(CDKConstants.ISAROMATIC)) {
                     continue jloop;
                 }
 
-                boolean haveatom = r.contains(m.getAtom(i));
+                boolean haveatom = ring.contains(mol.getAtom(i));
 
                 //logger.debug("haveatom="+haveatom);
 
-                if (haveatom && r.getAtomCount() == 6) {
-                    m.getAtom(i).setFlag(CDKConstants.ISAROMATIC, true);
+                if (haveatom && ring.getAtomCount() == 6) {
+                    mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC, true);
                 }
 
             }
@@ -398,25 +388,21 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
-    public static void fixSulphurH(IMolecule m) {
+    public static void fixSulphurH(IMolecule mol) {
         // removes extra H's attached to sulphurs
         //logger.debug("EnterFixSulphur");
 
-        for (int i = 0; i <= m.getAtomCount() - 1; i++) {
-            IAtom a = m.getAtom(i);
+        for (int i = 0; i <= mol.getAtomCount() - 1; i++) {
+            IAtom atom = mol.getAtom(i);
 
-            if (a.getSymbol().equals("S")) {
-                List connectedAtoms = m.getConnectedAtomsList(a);
-
-
+            if (atom.getSymbol().equals("S")) {
+                List connectedAtoms = mol.getConnectedAtomsList(atom);
                 int bondOrderSum = 0;
-
-//                double oldBondOrderSum = m.getBondOrderSum(a); // includes H's
 
                 for (int j = 0; j < connectedAtoms.size(); j++) {
                     IAtom conAtom = (IAtom) connectedAtoms.get(j);
                     if (!conAtom.getSymbol().equals("H")) {
-                        IBond bond = m.getBond(a, conAtom);
+                        IBond bond = mol.getBond(atom, conAtom);
                         if (bond.getOrder() == IBond.Order.SINGLE) {
                             bondOrderSum += 1;
                         } else if (bond.getOrder() == IBond.Order.DOUBLE) {
@@ -433,7 +419,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                     for (int j = 0; j < connectedAtoms.size(); j++) {
                         IAtom conAtom = (IAtom) connectedAtoms.get(j);
                         if (conAtom.getSymbol().equals("H")) {
-                            m.removeAtomAndConnectedElectronContainers(conAtom);
+                            mol.removeAtomAndConnectedElectronContainers(conAtom);
                         }
                     }
                 }
@@ -474,8 +460,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      *
      * @param atomContainer
      * @note function added by Asad
-     * @return IAtomContainer without Hydrogen. If an AtomContainer has a single atom which
-     * is a Hydrogen then its not removed.
+     * @return IAtomContainer without Hydrogen. If an AtomContainer has atom single atom which
+     * is atom Hydrogen then its not removed.
      * @throws Exception
      */
     public static IAtomContainer removeHydrogensAndPreserveAtomID(IAtomContainer atomContainer) throws Exception {
@@ -486,9 +472,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             // Clone atoms except those to be removed.
             mol = atomContainer.getBuilder().newMolecule();
             int count = atomContainer.getAtomCount();
-            for (int i = 0;
-                    i < count;
-                    i++) {
+            for (int i = 0; i < count; i++) {
                 // Clone/remove this atom?
                 IAtom atom = atomContainer.getAtom(i);
                 if (!atom.getSymbol().equals("H")) {
@@ -517,16 +501,12 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
             // Clone bonds except those involving removed atoms.
             count = atomContainer.getBondCount();
-            for (int i = 0;
-                    i < count;
-                    i++) {
+            for (int i = 0; i < count; i++) {
                 // Check bond.
                 final IBond bond = atomContainer.getBond(i);
                 boolean removedBond = false;
                 final int length = bond.getAtomCount();
-                for (int k = 0;
-                        k < length;
-                        k++) {
+                for (int k = 0; k < length; k++) {
                     if (remove.contains(bond.getAtom(k))) {
                         removedBond = true;
                         break;
@@ -557,7 +537,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 for (IAtom iAtom : atomContainer.getConnectedAtomsList(aRemove)) {
                     final IAtom neighb = map.get(iAtom);
                     if (neighb == null) {
-                        continue; // since for the case of H2, neight H has a heavy atom neighbor
+                        continue; // since for the case of H2, neight H has atom heavy atom neighbor
                     }
                     //Added by Asad
                     if (!(neighb instanceof PseudoAtom)) {
@@ -594,8 +574,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      *
      * @param atomContainer
      * @note function added by Asad
-     * @return IAtomContainer without Hydrogen. If an AtomContainer has a single atom which
-     * is a Hydrogen then its not removed.
+     * @return IAtomContainer without Hydrogen. If an AtomContainer has atom single atom which
+     * is atom Hydrogen then its not removed.
      * @throws Exception
      */
     public static IAtomContainer convertExplicitToImplicitHydrogens(IAtomContainer atomContainer) throws Exception {
@@ -606,9 +586,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             // Clone atoms except those to be removed.
             mol = atomContainer.getBuilder().newMolecule();
             int count = atomContainer.getAtomCount();
-            for (int i = 0;
-                    i < count;
-                    i++) {
+            for (int i = 0; i < count; i++) {
                 // Clone/remove this atom?
                 IAtom atom = atomContainer.getAtom(i);
                 if (!atom.getSymbol().equals("H")) {
@@ -633,16 +611,12 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
             // Clone bonds except those involving removed atoms.
             count = atomContainer.getBondCount();
-            for (int i = 0;
-                    i < count;
-                    i++) {
+            for (int i = 0; i < count; i++) {
                 // Check bond.
                 final IBond bond = atomContainer.getBond(i);
                 boolean removedBond = false;
                 final int length = bond.getAtomCount();
-                for (int k = 0;
-                        k < length;
-                        k++) {
+                for (int k = 0; k < length; k++) {
                     if (remove.contains(bond.getAtom(k))) {
                         removedBond = true;
                         break;
@@ -665,15 +639,13 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 }
             }
 
-
-
             // Recompute hydrogen counts of neighbours of removed Hydrogens.
             for (IAtom aRemove : remove) {
                 // Process neighbours.
                 for (IAtom iAtom : atomContainer.getConnectedAtomsList(aRemove)) {
                     final IAtom neighb = map.get(iAtom);
                     if (neighb == null) {
-                        continue; // since for the case of H2, neight H has a heavy atom neighbor
+                        continue; // since for the case of H2, neight H has atom heavy atom neighbor
                     }
                     //Added by Asad
                     if (!(neighb instanceof PseudoAtom)) {
@@ -709,7 +681,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
     /**
      * Convenience method to perceive atom types for all <code>IAtom</code>s in the
      * <code>IAtomContainer</code>, using the <code>CDKAtomTypeMatcher</code>. If the
-     * matcher finds a matching atom type, the <code>IAtom</code> will be configured
+     * matcher finds atom matching atom type, the <code>IAtom</code> will be configured
      * to have the same properties as the <code>IAtomType</code>. If no matching atom
      * type is found, no configuration is performed.
      * @see function added by Asad to fix the PseudoAtom configration
@@ -755,13 +727,13 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 atoms[f].setID(new String(container.getAtom(f).getID()));
             }
             if (container.getAtom(f).getHydrogenCount() != null) {
-                atoms[f].setHydrogenCount(new Integer(container.getAtom(f).getHydrogenCount()));
+                atoms[f].setHydrogenCount(Integer.valueOf(container.getAtom(f).getHydrogenCount()));
             }
             if (container.getAtom(f).getCharge() != null) {
                 atoms[f].setCharge(new Double(container.getAtom(f).getCharge()));
             }
             if (container.getAtom(f).getStereoParity() != null) {
-                atoms[f].setStereoParity(new Integer(container.getAtom(f).getStereoParity()));
+                atoms[f].setStereoParity(Integer.valueOf(container.getAtom(f).getStereoParity()));
             }
 
             newAtomContainer.addAtom(atoms[f]);

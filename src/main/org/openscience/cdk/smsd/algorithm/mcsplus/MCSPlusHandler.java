@@ -13,7 +13,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR sourceAtom PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -45,18 +45,15 @@ public class MCSPlusHandler implements IMCS {
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private IAtomContainer ac1 = null;
-    private IAtomContainer ac2 = null;
+    private IAtomContainer source = null;
+    private IAtomContainer target = null;
     private boolean flagExchange = false;
 
     public MCSPlusHandler() {
-
-
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-
     }
 
     /** Creates a new instance of SearchCliques
@@ -69,8 +66,8 @@ public class MCSPlusHandler implements IMCS {
     @Override
     public void set(MolHandler Reactant, MolHandler Product) throws IOException {
 
-        this.ac1 = Reactant.getMolecule();
-        this.ac2 = Product.getMolecule();
+        this.source = Reactant.getMolecule();
+        this.target = Product.getMolecule();
 
 
     }
@@ -125,11 +122,11 @@ public class MCSPlusHandler implements IMCS {
     public int searchMCS(boolean removeHydrogen) throws IOException {
         List<List<Integer>> _mappings = null;
         try {
-            if (ac1.getAtomCount() > ac2.getAtomCount()) {
-                _mappings = new MCSPlus().getOverlaps(ac1, ac2, removeHydrogen);
+            if (source.getAtomCount() > target.getAtomCount()) {
+                _mappings = new MCSPlus().getOverlaps(source, target, removeHydrogen);
             } else {
                 flagExchange = true;
-                _mappings = new MCSPlus().getOverlaps(ac2, ac1, removeHydrogen);
+                _mappings = new MCSPlus().getOverlaps(target, source, removeHydrogen);
 
             }
 
@@ -191,18 +188,18 @@ public class MCSPlusHandler implements IMCS {
                     int JIndex = map.getValue();
 
 
-                    IAtom A = null;
-                    IAtom B = null;
+                    IAtom sourceAtom = null;
+                    IAtom targetAtom = null;
 
                     if (!flagExchange) {
-                        A = ac1.getAtom(IIndex);
-                        B = ac2.getAtom(JIndex);
+                        sourceAtom = source.getAtom(IIndex);
+                        targetAtom = target.getAtom(JIndex);
                     } else {
-                        A = ac1.getAtom(JIndex);
-                        B = ac2.getAtom(IIndex);
+                        sourceAtom = source.getAtom(JIndex);
+                        targetAtom = target.getAtom(IIndex);
                     }
 
-                    atomMappings.put(A, B);
+                    atomMappings.put(sourceAtom, targetAtom);
                 }
 
                 allAtomMCS.add(counter++, atomMappings);
@@ -214,16 +211,13 @@ public class MCSPlusHandler implements IMCS {
     }
 
     private final synchronized void setFirstMapping() {
-
         if (allMCS.size() > 0) {
             firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
         }
-
     }
 
     private final synchronized void setFirstAtomMapping() {
         if (allAtomMCS.size() > 0) {
-//            System.out.println("In MCS+handle First Atom MCS: " + allAtomMCS.get(0));
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 
@@ -236,7 +230,6 @@ public class MCSPlusHandler implements IMCS {
 
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
-
         return firstMCS;
     }
 

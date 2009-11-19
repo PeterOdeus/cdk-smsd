@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received atom copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -157,8 +157,8 @@ public class VFMCSState implements IState {
 
 //@TODO Asad Check the Neighbour count
     private void loadCandidates(VFMatch lastMatch) {
-        IAtom a = lastMatch.getTargetAtom();
-        List<IAtom> targetNeighbors = target.getConnectedAtomsList(a);
+        IAtom atom = lastMatch.getTargetAtom();
+        List<IAtom> targetNeighbors = target.getConnectedAtomsList(atom);
 
         for (INode q : lastMatch.getQueryNode().neighbors()) {
             for (IAtom t : targetNeighbors) {
@@ -185,13 +185,11 @@ public class VFMCSState implements IState {
     }
 
     private boolean matchAtoms(VFMatch match) {
-        IAtom a = match.getTargetAtom();
-//        List<IAtom> targetNeighbors = target.getConnectedAtomsList(a);
-        if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(a)) {
+        IAtom atom = match.getTargetAtom();
+//        List<IAtom> targetNeighbors = target.getConnectedAtomsList(atom);
+        if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(atom)) {
             return false;
         }
-
-
         return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
     }
 
@@ -204,9 +202,6 @@ public class VFMCSState implements IState {
         if (!matchBondsToHead(match)) {
             return false;
         }
-
-
-
         for (int i = 0; i < queryPath.size() - 1; i++) {
             IEdge queryBond = query.getEdge(queryPath.get(i), match.getQueryNode());
             IBond targetBond = target.getBond(targetPath.get(i), match.getTargetAtom());
@@ -228,11 +223,7 @@ public class VFMCSState implements IState {
     }
 
     private boolean matchBond(IEdge edge, IBond targetBond) {
-
-
         return edge.getBondMatcher().matches(targetBond);
-
-
     }
 
     private boolean isHeadMapped() {

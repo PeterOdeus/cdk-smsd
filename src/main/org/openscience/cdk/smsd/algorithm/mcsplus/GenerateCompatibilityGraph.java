@@ -44,8 +44,8 @@ public class GenerateCompatibilityGraph {
     private List<Integer> compGraphNodesCZero = new ArrayList<Integer>();
     private List<Integer> cEdges = new ArrayList<Integer>();
     private List<Integer> dEdges = new ArrayList<Integer>();
-    private int C_edges_size = 0;
-    private int D_edges_size = 0;
+    private int cEdgesSize = 0;
+    private int dEdgesSize = 0;
     private boolean removeHydrogen = false;
     private IAtomContainer source = null;
     private IAtomContainer target = null;
@@ -68,7 +68,7 @@ public class GenerateCompatibilityGraph {
         if (bondTypeFlag) {
             compatibilityGraphBS();
         } else {
-            CompatibilityGraphBIS();
+            compatibilityGraphBIS();
         }
 
         if (getCEdgesSize() == 0) {
@@ -146,7 +146,7 @@ public class GenerateCompatibilityGraph {
                 }
             }
         }
-       
+
     }
 
     private List<IAtom> reduceAtomSet(IAtomContainer ac) {
@@ -213,7 +213,7 @@ public class GenerateCompatibilityGraph {
      * @return
      * @throws IOException
      */
-    protected int CompatibilityGraphBIS() throws IOException {
+    protected int compatibilityGraphBIS() throws IOException {
         int comp_graph_nodes_List_size = compGraphNodes.size();
 
         cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
@@ -238,20 +238,15 @@ public class GenerateCompatibilityGraph {
                     ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
-
                         cEdges.add((a / 3) + 1);
                         cEdges.add((b / 3) + 1);
-
-
                     } else if (ReactantBond == null && ProductBond == null) {
-
                         dEdges.add((a / 3) + 1);
                         dEdges.add((b / 3) + 1);
                     }
-
                 }
-                C_edges_size = cEdges.size();
-                D_edges_size = dEdges.size();
+                cEdgesSize = cEdges.size();
+                dEdgesSize = dEdges.size();
             }
         }
         return 0;
@@ -270,13 +265,10 @@ public class GenerateCompatibilityGraph {
         dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
         for (int a = 0; a < comp_graph_nodes_List_size; a = a + 3) {
-
-
             int index_a = compGraphNodes.get(a);
             int index_aPlus1 = compGraphNodes.get(a + 1);
 
             for (int b = a + 3; b < comp_graph_nodes_List_size; b = b + 3) {
-
                 int index_b = compGraphNodes.get(b);
                 int index_bPlus1 = compGraphNodes.get(b + 1);
 
@@ -304,17 +296,14 @@ public class GenerateCompatibilityGraph {
                             cEdges.add((a / 3) + 1);
                             cEdges.add((b / 3) + 1);
                         } else {
-
                             dEdges.add((a / 3) + 1);
                             dEdges.add((b / 3) + 1);
                         }
                     }
                 }
-
                 //print C and D edges of the compatibility graph
-                C_edges_size = cEdges.size();
-                D_edges_size = dEdges.size();
-
+                cEdgesSize = cEdges.size();
+                dEdgesSize = dEdges.size();
             }
         }
 
@@ -332,7 +321,6 @@ public class GenerateCompatibilityGraph {
         List<String> map = new ArrayList<String>();
         compGraphNodesCZero = new ArrayList<Integer>(); //Initialize the compGraphNodesCZero List
         LabelContainer labelContainer = LabelContainer.getInstance();
-// resets the target graph.
         compGraphNodes.clear();
 
         for (int i = 0; i < source.getAtomCount(); i++) {
@@ -411,12 +399,8 @@ public class GenerateCompatibilityGraph {
                     //The bond type check introduced by Asad
 
                     if (ReactantBond != null && ProductBond != null) {
-
                         ReactantBondType = ReactantBond.getOrder().ordinal();
-
                         ProductBondType = ProductBond.getOrder().ordinal();
-
-
 
                         if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC) && ReactantBondType == ProductBondType) {
                             cEdges.add((a / 4) + 1);
@@ -434,8 +418,8 @@ public class GenerateCompatibilityGraph {
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = cEdges.size();
-        D_edges_size = dEdges.size();
+        cEdgesSize = cEdges.size();
+        dEdgesSize = dEdges.size();
 
 
         return 0;
@@ -451,13 +435,10 @@ public class GenerateCompatibilityGraph {
     protected int compatibilityGraphCEdgeZeroBIS() throws IOException {
 
         int comp_graph_nodes_C_zero_List_size = compGraphNodesCZero.size();
-
         cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
-
         dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a <comp_graph_nodes_C_zero_List_size; a =
-                        a + 4) {
+        for (int a = 0; a < comp_graph_nodes_C_zero_List_size; a = a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);
             for (int b = a + 4; b < comp_graph_nodes_C_zero_List_size; b =
@@ -489,8 +470,8 @@ public class GenerateCompatibilityGraph {
         }
 
         //Size of C and D edges of the compatibility graph
-        C_edges_size = cEdges.size();
-        D_edges_size = dEdges.size();
+        cEdgesSize = cEdges.size();
+        dEdgesSize = dEdges.size();
 
 
         return 0;
@@ -505,11 +486,11 @@ public class GenerateCompatibilityGraph {
     }
 
     protected int getCEdgesSize() {
-        return C_edges_size;
+        return cEdgesSize;
     }
 
     protected int getDEdgesSize() {
-        return D_edges_size;
+        return dEdgesSize;
     }
 
     protected List<Integer> getCompGraphNodes() {
@@ -539,11 +520,11 @@ public class GenerateCompatibilityGraph {
     }
 
     protected void resetCEdgesSize() {
-        C_edges_size = 0;
+        cEdgesSize = 0;
     }
 
     protected void resetDEdgesSize() {
-        D_edges_size = 0;
+        dEdgesSize = 0;
     }
 
     protected void clear() {
