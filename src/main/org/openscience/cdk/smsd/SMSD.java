@@ -37,8 +37,8 @@ import org.openscience.cdk.interfaces.IMolecule;
 
 /**
  * @cdk.module smsd
- * <p>SMSD algorithm is described in {@cdk.cite SMSD2009}. Please cite {@cdk.cite SMSD2009}
- * if you are using SMSD module
+ * <p>SMSD algorithm is described in {@cdk.cite SMSD2009}. 
+ * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
  * </p>
  *
  */
