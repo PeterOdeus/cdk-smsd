@@ -66,8 +66,6 @@ public class MCSFactory implements IMCSAlgorithm {
     private TreeMap<Integer, Integer> firstSolution = null;
     private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
-    private static double tanimoto = -1.0;
-    private static double euclidean = -1.0;
     private MolHandler RMol = null;
     private MolHandler PMol = null;
     private IAtomContainerSet RFrag = null;
@@ -593,21 +591,17 @@ public class MCSFactory implements IMCSAlgorithm {
     @Override
     public double getTanimotoSimilarity() throws IOException {
         int decimalPlaces = 4;
-
-
-        int a = 0;
-        int b = 0;
+        int rAtomCount = 0;
+        int pAtomCount = 0;
         if (!removeHydrogen) {
-            a = RMol.getMolecule().getAtomCount();
-            b = PMol.getMolecule().getAtomCount();
+            rAtomCount = RMol.getMolecule().getAtomCount();
+            pAtomCount = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            rAtomCount = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            pAtomCount = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        double c = getFirstMapping().size();
-
-        tanimoto = (c) / (a + b - c);
-
+        double matchCount = getFirstMapping().size();
+        double tanimoto = (matchCount) / (rAtomCount + pAtomCount - matchCount);
 
         BigDecimal tan = new BigDecimal(tanimoto);
 
@@ -749,26 +743,18 @@ public class MCSFactory implements IMCSAlgorithm {
     @Override
     public double getEuclideanDistance() throws IOException {
         int decimalPlaces = 4;
-
-        int a = 0;
-        int b = 0;
+        double source = 0;
+        double target = 0;
         if (!removeHydrogen) {
-            a = RMol.getMolecule().getAtomCount();
-            b = PMol.getMolecule().getAtomCount();
+            source = RMol.getMolecule().getAtomCount();
+            target = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        double c = getFirstMapping().size();
+        double common = getFirstMapping().size();
 
-        euclidean = Math.sqrt(a + b - 2 * c);
-
-//        System.out.println("c" + c);
-//        System.out.println("a" + a);
-//        System.out.println("b" + b);
-//        System.out.println("Distance: (a+b-2*c)^2 " + euclidean);
-
-
+        double euclidean = Math.sqrt(source + target - 2 * common);
 
         BigDecimal dist = new BigDecimal(euclidean);
 

@@ -64,13 +64,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private TreeMap<Integer, Integer> firstSolution = null;
     private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
-    private double tanimoto = -1;
-    private double euclidean = -1;
     private MolHandler RMol = null;
     private MolHandler PMol = null;
-    private List<Integer> StereoScore;
-    private List<Integer> fragmentSize;
-    private List<Double> bEnergies;
+    private List<Integer> StereoScore = null;
+    private List<Integer> fragmentSize = null;
+    private List<Double> bEnergies = null;
     private boolean removeHydrogen = false;
     private boolean stereoFilter = false;
     private boolean fragmentFilter = false;
@@ -193,22 +191,22 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     public synchronized void setChemFilters() throws CDKException {
         if (firstAtomMCS != null) {
-            ChemicalFilters CF = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
+            ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
             if (stereoFilter) {
-                CF.sortResultsByStereoAndBondMatch();
+                chemFilter.sortResultsByStereoAndBondMatch();
             }
             if (fragmentFilter) {
-                CF.sortResultsByFragments();
+                chemFilter.sortResultsByFragments();
             }
 
             if (energyFilter) {
-                CF.sortResultsByEnergies();
+                chemFilter.sortResultsByEnergies();
             }
 
-            this.StereoScore = CF.getStereoMatches();
-            this.fragmentSize = CF.getSortedFragment();
-            this.bEnergies = CF.getSortedEnergy();
+            this.StereoScore = chemFilter.getStereoMatches();
+            this.fragmentSize = chemFilter.getSortedFragment();
+            this.bEnergies = chemFilter.getSortedEnergy();
         }
     }
 
@@ -253,12 +251,9 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized TreeMap<Integer, Integer> getFirstMapping() {
-
-
         if (firstSolution.size() > 0) {
             return firstSolution;
         } else {
-
             return null;
         }
 
@@ -270,12 +265,10 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized List<TreeMap<Integer, Integer>> getAllMapping() {
-
         if (allMCS.size() > 0) {
             //System.out.println("Total Sol= " + allMCS.size());
             return allMCS;
         } else {
-
             return null;
         }
 
@@ -287,12 +280,10 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized Map<IAtom, IAtom> getFirstAtomMapping() {
-
         if (firstSolution.size() > 0) {
             //System.out.println("firstSolution: " + firstAtomMCS);
             return firstAtomMCS;
         } else {
-
             return null;
         }
 
@@ -315,13 +306,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     @Override
     public IAtomContainer getReactantMolecule() {
-
         return RMol.getMolecule();
     }
 
     @Override
     public IAtomContainer getProductMolecule() {
-
         return PMol.getMolecule();
     }
 
@@ -341,19 +330,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
         }
         double matchCount = getFirstMapping().size();
 
-        tanimoto = (matchCount) / (rAtomCount + pAtomCount - matchCount);
-
-//        System.out.println("c" + c);
-//        System.out.println("rAtomCount" + rAtomCount);
-//        System.out.println("pAtomCount" + pAtomCount);
-//        System.out.println("rAtomCount+pAtomCount-c" + (rAtomCount + pAtomCount - c));
-//
-
+        double tanimoto = (matchCount) / (rAtomCount + pAtomCount - matchCount);
 
         BigDecimal tan = new BigDecimal(tanimoto);
 
         tan = tan.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        //System.out.println("Tanimoto Coefficient: " + (c)/(rAtomCount+pAtomCount-c));
         tanimoto = tan.doubleValue();
         return tanimoto;
     }
@@ -383,23 +364,21 @@ public class SubGraphFactory implements IMCSAlgorithm {
                 IAtom indexJPlus = mappingJ.getValue();
                 if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
 
-                    IAtom R1 = indexI;
-                    IAtom R2 = indexIPlus;
+                    IAtom sourceAtom1 = indexI;
+                    IAtom sourceAtom2 = indexIPlus;
 
-                    IBond RBond = Reactant.getBond(R1, R2);
+                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
                     if (RBond != null) {
 
-                        IAtom P1 = indexJ;
-                        IAtom P2 = indexJPlus;
-                        IBond PBond = Product.getBond(P1, P2);
+                        IAtom targetAtom1 = indexJ;
+                        IAtom targetAtom2 = indexJPlus;
+                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
                         if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
                             Score++;
                         }
                     }
-
-
                 }
             }
         }
@@ -418,11 +397,13 @@ public class SubGraphFactory implements IMCSAlgorithm {
     @Override
     @TestMethod("testVFLib")
     public boolean isSubgraph() {
+        IAtomContainer Reactant = RMol.getMolecule();
+        IAtomContainer Product = PMol.getMolecule();
         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
 
             return false;
         }
-        BondType BT = BondType.getInstance();
+        BondType bondType = BondType.getInstance();
         int score = 0;
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
             IAtom indexI = mappingI.getKey();
@@ -433,20 +414,19 @@ public class SubGraphFactory implements IMCSAlgorithm {
                 IAtom indexJPlus = mappingJ.getValue();
                 if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
 
-                    IAtom R1 = indexI;
-                    IAtom R2 = indexIPlus;
+                    IAtom sourceAtom1 = indexI;
+                    IAtom sourceAtom2 = indexIPlus;
 
-                    IBond RBond = RMol.getMolecule().getBond(R1, R2);
+                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
                     if (RBond != null) {
 
-                        IAtom P1 = indexJ;
-                        IAtom P2 = indexJPlus;
-                        IBond PBond = PMol.getMolecule().getBond(P1, P2);
-
+                        IAtom targetAtom1 = indexJ;
+                        IAtom targetAtom2 = indexJPlus;
+                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
                         if (PBond != null) {
 
-                            if (BT.getBondSensitiveFlag()) {
+                            if (bondType.getBondSensitiveFlag()) {
                                 int RBondType = RBond.getOrder().ordinal();
 
                                 int PBondType = PBond.getOrder().ordinal();
@@ -472,17 +452,17 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
         boolean flag = false;
         float size = firstSolution.size();
-        int a = 0;
-        int b = 0;
+        int source = 0;
+        int target = 0;
         if (!removeHydrogen) {
-            a = RMol.getMolecule().getAtomCount();
-            b = PMol.getMolecule().getAtomCount();
+            source = RMol.getMolecule().getAtomCount();
+            target = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        if ((size == a && score / 2 == RMol.getMolecule().getBondCount()) &&
-                (b >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
+        if ((size == source && score / 2 == RMol.getMolecule().getBondCount()) &&
+                (target >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
             flag = true;
         }
         return flag;
@@ -491,52 +471,45 @@ public class SubGraphFactory implements IMCSAlgorithm {
     @Override
     public double getEuclideanDistance() throws IOException {
         int decimalPlaces = 4;
-        double a = 0;
-        double b = 0;
+        double source = 0;
+        double target = 0;
         if (!removeHydrogen) {
-            a = RMol.getMolecule().getAtomCount();
-            b = PMol.getMolecule().getAtomCount();
+            source = RMol.getMolecule().getAtomCount();
+            target = PMol.getMolecule().getAtomCount();
         } else {
-            a = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            b = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        double c = getFirstMapping().size();
+        double common = getFirstMapping().size();
 
-        euclidean = Math.sqrt(a + b - 2 * c);
+        double euclidean = Math.sqrt(source + target - 2 * common);
 
         BigDecimal dist = new BigDecimal(euclidean);
 
         dist = dist.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
-        //System.out.println("euclidean Coefficient: " + (c)/(rAtomCount+pAtomCount-c));
         euclidean = dist.doubleValue();
         return euclidean;
     }
 
     private void vfLibMCS() {
 
-            VFlibTurboHandler mcs = new VFlibTurboHandler();
-            mcs.set(RMol, PMol, removeHydrogen);
-            this.subGraphFlag = mcs.isSubgraph();
+        VFlibTurboHandler mcs = new VFlibTurboHandler();
+        mcs.set(RMol, PMol, removeHydrogen);
+        this.subGraphFlag = mcs.isSubgraph();
 
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
+        firstSolution.clear();
+        allMCS.clear();
+        allAtomMCS.clear();
+        firstAtomMCS.clear();
 
-            if (subGraphFlag) {
-                firstSolution.putAll(mcs.getFirstMapping());
-                allMCS.addAll(mcs.getAllMapping());
-
-
-                firstAtomMCS.putAll(mcs.getFirstAtomMapping());
-                allAtomMCS.addAll(mcs.getAllAtomMapping());
-            }
-//
-//
-//            System.out.println("First Atom MCS: " + firstSolution);
-//            System.out.println("First Atom AllMCS: " + allMCS);
+        if (subGraphFlag) {
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
 
 
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+        }
     }
 
     private void singleMapping() {
