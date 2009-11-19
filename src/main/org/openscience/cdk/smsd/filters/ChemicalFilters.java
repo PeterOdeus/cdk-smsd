@@ -152,8 +152,6 @@ public class ChemicalFilters {
         for (Integer Key : allStereoMCS.keySet()) {
             double score = 0.0;
 //            System.out.println("\nStart score " + score);
-
-
             TreeMap<Integer, Integer> atomsMCS = allStereoMCS.get(Key);
             Map<IAtom, IAtom> atomMapMCS = allStereoAtomMCS.get(Key);
 
@@ -164,12 +162,12 @@ public class ChemicalFilters {
 
             double score1 = getBondScore(score, bondMaps);
 
-            if((score1-score) > 0){
-                stereoMatchFlag=true;
-                score=score1;
+            if ((score1 - score) > 0) {
+                stereoMatchFlag = true;
+                score = score1;
             }
+//            System.out.println("\nStart score1 " + score);
 
-            
 
             SSSRFinder ringFinderR = new SSSRFinder(subgraphRContainer);
             IRingSet rRings = ringFinderR.findRelevantRings();
@@ -213,17 +211,13 @@ public class ChemicalFilters {
                 }
             }
 
-
-
             if (rLength > 0) {
 
                 if (rLength == pLength) {
-
                     score += rLength * 2;
                 }
 
                 if (rLength > pLength) {
-
                     score += (rLength - pLength) * 2;
                 }
 
@@ -708,20 +702,14 @@ public class ChemicalFilters {
         if (i == 1) {
             for (IAtom atoms : molecule.atoms()) {
                 if (!atomsMCS.containsKey(atoms)) {
-
                     subgraphContainer.removeAtomAndConnectedElectronContainers(atoms);
                 }
-
             }
-
-
         } else if (i == 2) {
             for (IAtom atoms : molecule.atoms()) {
                 if (!atomsMCS.containsValue(atoms)) {
-
                     subgraphContainer.removeAtomAndConnectedElectronContainers(atoms);
                 }
-
             }
         } else {
 
@@ -743,11 +731,9 @@ public class ChemicalFilters {
             double pBO = Product.getBondOrderSum(pAtom);
 
             if (rAtom.getHydrogenCount() != null) {
-
                 rHCount = rAtom.getHydrogenCount();
             }
             if (pAtom.getHydrogenCount() != null) {
-
                 pHCount = pAtom.getHydrogenCount();
             }
 
