@@ -37,7 +37,6 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testVFLib() throws Exception {
-
         SubGraphFactory sbf = new SubGraphFactory(false, true, true, true, true);
         sbf.init(Benzene, Benzene);
         Assert.assertEquals(true, sbf.isSubgraph());
