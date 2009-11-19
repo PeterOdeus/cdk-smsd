@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
@@ -41,8 +43,6 @@ import org.openscience.cdk.interfaces.IMolecule;
  * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
  * </p>
  */
-
-
 public class SMSD implements IMCSAlgorithm {
 
     IMCSAlgorithm comparison;
@@ -56,9 +56,8 @@ public class SMSD implements IMCSAlgorithm {
      * @param stereoFilter   true if stereo match is considered else false
      * @param fragmentFilter true if fragement filter is switched on else false
      * @param energyFilter   true if bond energy filter is switched on else false
-     * @throws Exception
      */
-    public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
+    public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
         if (subStructureMode) {
             comparison = new SubGraphFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
         } else {
@@ -78,9 +77,8 @@ public class SMSD implements IMCSAlgorithm {
      * @param stereoFilter   true if stereo match is considered else false
      * @param fragmentFilter true if fragement filter is switched on else false
      * @param energyFilter   true if bond energy filter is switched on else false
-     * @throws Exception
      */
-    public SMSD(int algorithmType, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
+    public SMSD(int algorithmType, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
         comparison = new MCSFactory(algorithmType, bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
         System.gc();
 

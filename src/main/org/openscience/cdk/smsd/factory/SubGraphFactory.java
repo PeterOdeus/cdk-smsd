@@ -78,10 +78,9 @@ public class SubGraphFactory implements IMCSAlgorithm {
      * @param stereoFilter
      * @param fragmentFilter
      * @param energyFilter
-     * @throws java.lang.Exception
      */
     @TestMethod("testVFLib")
-    public SubGraphFactory(boolean BondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
+    public SubGraphFactory(boolean BondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter){
 
         this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;

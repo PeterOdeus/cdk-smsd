@@ -84,7 +84,6 @@ public class MCSFactory implements IMCSAlgorithm {
      * @param stereoFilter
      * @param fragmentFilter
      * @param energyFilter
-     * @throws java.lang.Exception
      */
     public MCSFactory(
             int algorithmType,
@@ -92,7 +91,7 @@ public class MCSFactory implements IMCSAlgorithm {
             boolean removeHydrogen,
             boolean stereoFilter,
             boolean fragmentFilter,
-            boolean energyFilter) throws Exception {
+            boolean energyFilter){
 
         this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;
