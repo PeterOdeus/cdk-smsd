@@ -10,14 +10,11 @@ import org.junit.Test;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKTestCase;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
-import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
@@ -27,21 +24,15 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  */
 public class SMSDTest extends CDKTestCase {
 
-    private static Molecule source;
-    private static Molecule target;
+    
     private static IMolecule Napthalene;
     private static IMolecule Cyclohexane;
     private static IMolecule Benzene;
-    private static SmilesParser sp;
-
     @BeforeClass
     public static void setUp() throws CDKException {
-        source = MoleculeFactory.makeAlphaPinene();
-        target = MoleculeFactory.makeBenzene();
         Napthalene = createNaphthalene();
         Cyclohexane = createCyclohexane();
         Benzene = createBenzene();
-        sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
     }
 
     @Test
