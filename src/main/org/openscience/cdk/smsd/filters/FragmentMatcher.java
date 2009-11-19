@@ -15,7 +15,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR source PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
@@ -66,26 +66,20 @@ public class FragmentMatcher implements IMCSBase {
 
     //~--- constructors -------------------------------------------------------
     private void search() {
-
-//        System.out.println("In FragmentMatcher Builder->FragmentMatcher->search");
-
-        //SimMatrix = new JMatrix(rowSize, colSize);
         int SolutionSize = 0;
         try {
             for (int i = 0; i < ReactantSet.getAtomContainerCount(); i++) {
 
-                IAtomContainer A = ReactantSet.getAtomContainer(i);
-                RMol = new MolHandler(A, false);
+                IAtomContainer source = ReactantSet.getAtomContainer(i);
+                RMol = new MolHandler(source, false);
                 for (int j = 0; j < ProductSet.getAtomContainerCount(); j++) {
 
-                    IAtomContainer B = ProductSet.getAtomContainer(j);
-                    PMol = new MolHandler(B, false);
+                    IAtomContainer target = ProductSet.getAtomContainer(j);
+                    PMol = new MolHandler(target, false);
 
-                    Builder();
+                    builder();
 
                     if (SolutionSize < firstMCS.size()) {
-
-                        //System.out.println("First Solution: " + firstSolution);
 
                         GfirstSolution.clear();
                         GfirstAtomMCS.clear();
@@ -96,19 +90,8 @@ public class FragmentMatcher implements IMCSBase {
                         GallMCS.addAll(allMCS);
                         GfirstAtomMCS.putAll(atomsMCS);
                         GallAtomMCS.addAll(allAtomMCS);
-
-                        //setStereoScore();
-
                         SolutionSize = firstMCS.size();
-
-                        // System.out.println("Best Solution size: " + SolutionSize);
-
-
                     } else if (SolutionSize == firstMCS.size()) {
-
-                        /*Uncomments this if you want tp join all the solutions*/
-                        //joinSolutions();
-                            /*If you uncomment the above method then comment these*/
                         GallMCS.addAll(allMCS);
                         GallAtomMCS.addAll(allAtomMCS);
                     }
@@ -123,7 +106,7 @@ public class FragmentMatcher implements IMCSBase {
 
     }
 
-    private synchronized void Builder() {
+    private synchronized void builder() {
 
         try {
 
@@ -133,25 +116,19 @@ public class FragmentMatcher implements IMCSBase {
             int rAtomCount = RMol.getMolecule().getAtomCount();
             int pAtomCount = PMol.getMolecule().getAtomCount();
 
-//            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
-
-            /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
-
-//            long startTime = System.currentTimeMillis();
-//
             if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
 //                System.out.println("Single Mapping");
-                SingleMapping();
+                singleMapping();
             } else {
                 if (rBondCount >= 6 && rBondCount >= 6) {
-                    VFLibMCS();
+                    vfLibMCS();
                     if (getFirstMapping() == null) {
                         System.gc();
                     }
-//                    System.out.println("Mapped with VFLibMCS");
+//                    System.out.println("Mapped with vfLibMCS");
                 } else {
-                    MCSPlus();
-//                    System.out.println("Mapped with MCSPlus");
+                    mcsPlus();
+//                    System.out.println("Mapped with mcsPlus");
                 }
             }
             System.gc();
@@ -175,7 +152,7 @@ public class FragmentMatcher implements IMCSBase {
 //        }
 //
 //    }
-    private synchronized void MCSPlus() {
+    private synchronized void mcsPlus() {
         try {
             MCSPlusHandler mcs = new MCSPlusHandler();
             mcs.set(RMol, PMol);
@@ -190,7 +167,7 @@ public class FragmentMatcher implements IMCSBase {
         }
     }
 
-    private void VFLibMCS() {
+    private void vfLibMCS() {
 
         try {
             VFlibMCSHandler mcs = new VFlibMCSHandler();
@@ -213,30 +190,28 @@ public class FragmentMatcher implements IMCSBase {
 
     /**
      *
-     * @param A
-     * @param B
+     * @param source
+     * @param target
      * @param removeHydrogen
      */
-    public FragmentMatcher(IAtomContainerSet A, IAtomContainerSet B, boolean removeHydrogen) {
+    public FragmentMatcher(IAtomContainerSet source, IAtomContainerSet target, boolean removeHydrogen) {
 
         this.removeHydrogen = removeHydrogen;
         GallMCS = new ArrayList<TreeMap<Integer, Integer>>();
         GfirstSolution = new TreeMap<Integer, Integer>();
         GallAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         GfirstAtomMCS = new HashMap<IAtom, IAtom>();
-        this.ReactantSet = A;
-        this.ProductSet = B;
+        this.ReactantSet = source;
+        this.ProductSet = target;
         search();
 
     }
 
-    private void SingleMapping() {
+    private void singleMapping() {
         try {
 
             SingleMappingHandler mcs = new SingleMappingHandler();
-
             mcs.set(RMol, PMol);
-
             mcs.searchMCS(removeHydrogen);
 
             firstMCS = mcs.getFirstMapping();
@@ -276,9 +251,6 @@ public class FragmentMatcher implements IMCSBase {
      */
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-        /*for(IAtom I: GfirstAtomMCS){
-        System.out.println(" A " + I.getSymbol());
-        }*/
         return GfirstAtomMCS;
     }
 
