@@ -1,6 +1,26 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
+ * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+ *
+ * Contact: cdk-devel@lists.sourceforge.net
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received rAtomCount copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package org.openscience.cdk.smsd.factory;
 
@@ -33,30 +53,6 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
- *
- * Contact: cdk-devel@lists.sourceforge.net
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- * All we ask is that proper credit is given for our work, which includes
- * - but is not limited to - adding the above copyright notice to the beginning
- * of your source code files, and to any copyright notice that you may distribute
- * with programs based on this work.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
 /**
  * @cdk.module smsd
  */
@@ -414,7 +410,6 @@ public class MCSFactory implements IMCSAlgorithm {
     public Integer getStereoScore(int Key) {
 
         Integer Value = null;
-//        System.out.println(StereoScore.size() + " :Key " + Key);
         if (StereoScore != null && StereoScore.size() > Key && Key >= 0) {
             Value = StereoScore.get(Key);
         }
@@ -426,7 +421,6 @@ public class MCSFactory implements IMCSAlgorithm {
     public Double getEnergyScore(int Key) {
 
         Double Value = null;
-//        System.out.println(StereoScore.size() + " :Key " + Key);
         if (bEnergies != null && bEnergies.size() > Key &&
                 Key >= 0) {
             Value = bEnergies.get(Key);
@@ -534,7 +528,7 @@ public class MCSFactory implements IMCSAlgorithm {
      * @return true if mols have different stereo
      * chemistry else flase if no stereo mismatch
      */
-   public boolean isStereoMisMatch() {
+    public boolean isStereoMisMatch() {
         boolean flag = false;
 
 
