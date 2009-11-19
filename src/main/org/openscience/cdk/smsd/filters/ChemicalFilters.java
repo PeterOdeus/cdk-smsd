@@ -167,61 +167,7 @@ public class ChemicalFilters {
                 score = score1;
             }
 //            System.out.println("\nStart score1 " + score);
-
-
-            SSSRFinder ringFinderR = new SSSRFinder(subgraphRContainer);
-            IRingSet rRings = ringFinderR.findRelevantRings();
-            SSSRFinder ringFinderP = new SSSRFinder(subgraphPContainer);
-            IRingSet pRings = ringFinderP.findRelevantRings();
-
-            int rLength = RingSetManipulator.getAtomCount(rRings);
-            int pLength = RingSetManipulator.getAtomCount(pRings);
-
-            for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(rRings)) {
-                boolean flag = true;
-                for (IAtom a : ac.atoms()) {
-                    for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
-
-                        if (!aMCS.containsKey(a)) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (flag) {
-                    score += 10;
-                }
-            }
-
-            for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(pRings)) {
-                boolean flag = true;
-                for (IAtom a : ac.atoms()) {
-                    for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
-
-                        if (!aMCS.containsValue(a)) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (flag) {
-                    score += 10;
-                }
-            }
-
-            if (rLength > 0) {
-
-                if (rLength == pLength) {
-                    score += rLength * 2;
-                }
-
-                if (rLength > pLength) {
-                    score += (rLength - pLength) * 2;
-                }
-
-            }
+            score = getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
 
             stereoScoreMap.put(Key, score);
         }
@@ -794,6 +740,64 @@ public class ChemicalFilters {
             } else {
                 score = score - Math.abs(RBond.getAtom(1).getFormalCharge() - PBond.getAtom(1).getFormalCharge());
             }
+        }
+        return score;
+    }
+
+    private double getRingMatchScore(double score, IAtomContainer subgraphRContainer, IAtomContainer subgraphPContainer) {
+
+        SSSRFinder ringFinderR = new SSSRFinder(subgraphRContainer);
+        IRingSet rRings = ringFinderR.findRelevantRings();
+        SSSRFinder ringFinderP = new SSSRFinder(subgraphPContainer);
+        IRingSet pRings = ringFinderP.findRelevantRings();
+
+        int rLength = RingSetManipulator.getAtomCount(rRings);
+        int pLength = RingSetManipulator.getAtomCount(pRings);
+
+        for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(rRings)) {
+            boolean flag = true;
+            for (IAtom a : ac.atoms()) {
+                for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
+
+                    if (!aMCS.containsKey(a)) {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+
+            if (flag) {
+                score += 10;
+            }
+        }
+
+        for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(pRings)) {
+            boolean flag = true;
+            for (IAtom a : ac.atoms()) {
+                for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
+
+                    if (!aMCS.containsValue(a)) {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+
+            if (flag) {
+                score += 10;
+            }
+        }
+
+        if (rLength > 0) {
+
+            if (rLength == pLength) {
+                score += rLength * 2;
+            }
+
+            if (rLength > pLength) {
+                score += (rLength - pLength) * 2;
+            }
+
         }
         return score;
     }
