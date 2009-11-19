@@ -36,7 +36,7 @@ import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.smsd.core.tools.TimeManager;
+import org.openscience.cdk.smsd.tools.TimeManager;
 import org.openscience.cdk.smsd.global.TimeOut;
 
 /**

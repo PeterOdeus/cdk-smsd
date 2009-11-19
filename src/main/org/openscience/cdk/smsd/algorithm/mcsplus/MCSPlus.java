@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
-import org.openscience.cdk.smsd.core.tools.TimeManager;
+import org.openscience.cdk.smsd.tools.TimeManager;
 import org.openscience.cdk.smsd.filters.ExactMapping;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.interfaces.IAtomContainer;

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.openscience.cdk.smsd.core.tools.BondEnergies;
+import org.openscience.cdk.smsd.tools.BondEnergies;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openscience.cdk.smsd.core.tools;
+package org.openscience.cdk.smsd.tools;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;

@@ -58,7 +58,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.openscience.cdk.smsd.core.tools.TimeManager;
+import org.openscience.cdk.smsd.tools.TimeManager;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.CDKConstants;

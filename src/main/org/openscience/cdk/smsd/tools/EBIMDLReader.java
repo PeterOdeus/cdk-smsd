@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.cdk.smsd.core.tools;
+package org.openscience.cdk.smsd.tools;
 
 import java.io.IOException;
 import java.io.InputStream;

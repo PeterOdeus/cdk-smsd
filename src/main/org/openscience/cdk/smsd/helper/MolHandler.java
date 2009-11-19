@@ -25,8 +25,8 @@
 package org.openscience.cdk.smsd.helper;
 
 //~--- JDK imports ------------------------------------------------------------
-import org.openscience.cdk.smsd.core.tools.ExtAtomContainerManipulator;
-import org.openscience.cdk.smsd.core.tools.MoleculeSanityCheck;
+import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
+import org.openscience.cdk.smsd.tools.MoleculeSanityCheck;
 import java.io.FileInputStream;
 import java.io.IOException;
 //~--- non-JDK imports --------------------------------------------------------
