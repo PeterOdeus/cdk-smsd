@@ -40,7 +40,6 @@ import org.openscience.cdk.interfaces.IMolecule;
  * <p>SMSD algorithm is described in {@cdk.cite SMSD2009}. 
  * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
  * </p>
- *
  */
 
 
