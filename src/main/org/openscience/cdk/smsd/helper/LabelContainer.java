@@ -32,9 +32,9 @@ import java.util.Map;
  */
 public class LabelContainer {
 
-    private HashMap<String, Integer> labelMap;
+    private HashMap<String, Integer> labelMap = null;
     private int labelCounter = 1;
-    private static LabelContainer INSTANCE = null;
+    private static LabelContainer _instance = null;
 
     protected LabelContainer() {
 
@@ -67,17 +67,15 @@ public class LabelContainer {
         labelMap.put("X", labelCounter++);
         labelMap.put("R", labelCounter++);
         labelMap.put("X1", labelCounter++);
-        
+
 
     }
 
     synchronized public static LabelContainer getInstance() {
-        if (INSTANCE == null) {
-
-            INSTANCE = new LabelContainer();
-
+        if (_instance == null) {
+            _instance = new LabelContainer();
         }
-        return INSTANCE;
+        return _instance;
     }
 
     synchronized public void addLabel(String label) {
@@ -88,7 +86,7 @@ public class LabelContainer {
 
     synchronized public Integer getLabelID(String label) {
 
-        int id = -1;
+        int labelID = -1;
 
         if (!labelMap.containsKey(label)) {
             int lableNo = labelMap.size() + 1;
@@ -96,20 +94,20 @@ public class LabelContainer {
 
         }
 
-        id = labelMap.get(label);
+        labelID = labelMap.get(label);
 
 
-        return id;
+        return labelID;
     }
 
     synchronized public String getLabel(Integer labelID) {
 
-        String id = null;
+        String indexLabel = null;
         boolean flag = false;
 
         for (Map.Entry map : labelMap.entrySet()) {
 
-            id = (String) map.getKey();
+            indexLabel = (String) map.getKey();
 
             if (labelID == map.getValue()) {
                 flag = true;
@@ -118,9 +116,9 @@ public class LabelContainer {
         }
 
         if (!flag) {
-            id = null;
+            indexLabel = null;
         }
-        return id;
+        return indexLabel;
     }
 
     synchronized public int getSize() {

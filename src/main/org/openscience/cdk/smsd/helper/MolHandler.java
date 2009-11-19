@@ -153,7 +153,7 @@ public class MolHandler {
      */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule, boolean removeHydrogen) {
 
-        String ID = _molecule.getID();
+        String molID = _molecule.getID();
         this.removeHydrogen = removeHydrogen;
         this.mol = _molecule;
         if (cleanMolecule) {
@@ -163,14 +163,14 @@ public class MolHandler {
         if (removeHydrogen) {
             try {
                 this.mol = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol);
-                mol.setID(ID);
+                mol.setID(molID);
             } catch (Exception ex) {
                 Logger.getLogger(MolHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {
             this.mol = DefaultChemObjectBuilder.getInstance().newMolecule(mol);
-            mol.setID(ID);
+            mol.setID(molID);
 
         }
         checkFragmentation();
