@@ -41,71 +41,9 @@ import org.openscience.cdk.interfaces.IMolecule;
  * if you are using SMSD module
  * </p>
  *
- * <p> <H2>Usage Example</H2>
- *          EBIMDLReader R1 = new EBIMDLReader(new FileInputStream(mol1));
-            IMolecule A1 = R1.getMolecule();
-
-            EBIMDLReader R2 = new EBIMDLReader(new FileInputStream(mol2));
-            IMolecule A2 = R2.getMolecule();
-
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(A1);
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(A2);
-
-            A1 = (IMolecule) AtomContainerManipulator.removeHydrogens(A1);
-            A2 = (IMolecule) AtomContainerManipulator.removeHydrogens(A2);
-
-            CDKHueckelAromaticityDetector.detectAromaticity(A1);
-            CDKHueckelAromaticityDetector.detectAromaticity(A2);
-
-            boolean substructure = false;
-            boolean bondSensitive = true;
-            boolean removeHydrogen = true;
-            boolean stereoMatch = true;
-            boolean fragmentMinimization = true;
-            boolean energyMinimization = true;
-
-            SMSD comparison = new SMSD(substructure, bondSensitive,
-                    removeHydrogen, stereoMatch, fragmentMinimization, energyMinimization);
-
-            comparison.init(A1, A2);
-
-
-            //Get modified Query and Target Molecules as Mappings will correspond to these molecules
-            IAtomContainer Query = comparison.getReactantMolecule();
-            IAtomContainer Target = comparison.getProductMolecule();
-
-
-            for (Map.Entry<Integer, Integer> mappings : comparison.getFirstMapping().entrySet()) {
-                //Get the mapped atom number in Query Molecule
-                int queryMappingNumber = mappings.getKey();
-                //Get the mapped atom number in Target Molecule
-                int targetMappingNumber = mappings.getValue();
-
-                //Get the mapped atom in Query Molecule
-                IAtom queryAtom = Query.getAtom(queryMappingNumber);
-                //Get the mapped atom in Target Molecule
-                IAtom targetAtom = Target.getAtom(targetMappingNumber);
-                //Print mapped atom numbers
-                System.out.println(queryMappingNumber + " " +
-                        (targetMappingNumber));
-                //Print mapped atoms
-                System.out.println(queryAtom.getSymbol() + " " +
-                        targetAtom.getSymbol());
-            }
-            System.out.println("");
-
-            System.out.println("");
-
-            System.out.println("Stereo Match: " + comparison.getStereoScore(0));
-            System.out.println("Stereo different: " + comparison.isStereoMisMatch());
-            System.out.println("Fragment Size: " + comparison.getFragmentSize(0));
-            System.out.println("Tanimoto Similarity Score: " + comparison.getTanimotoSimilarity());
-            System.out.println("Tanimoto Euclidean Distance: " + comparison.getEuclideanDistance());
-            System.out.println("");
-
- * </p>
- *
  */
+
+
 public class SMSD implements IMCSAlgorithm {
 
     IMCSAlgorithm comparison;
