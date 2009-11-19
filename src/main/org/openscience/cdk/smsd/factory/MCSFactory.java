@@ -160,51 +160,6 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
-//    private int checkCommonAtomCount(IAtomContainer reactantMolecule, IAtomContainer productMolecule) {
-//        ArrayList<String> a = new ArrayList<String>();
-//        for (int i = 0; i < reactantMolecule.getAtomCount(); i++) {
-//            if (removeHydrogen && !reactantMolecule.getAtom(i).getSymbol().equals("H")) {
-//                a.add(reactantMolecule.getAtom(i).getSymbol());
-//            } else {
-//                a.add(reactantMolecule.getAtom(i).getSymbol());
-//            }
-//        }
-//
-//
-//        int common = 0;
-//        for (int i = 0; i < productMolecule.getAtomCount(); i++) {
-//
-//            if (a.contains(productMolecule.getAtom(i).getSymbol())) {
-//                a.remove(productMolecule.getAtom(i).getSymbol());
-//                common++;
-//            }
-//        }
-//        return common - a.size();
-//    }
-    //IRingSet irs = ringFinder.findAllRings(A);
-    /**
-     *
-     * @param Molecule1
-     * @param Molecule2
-     */
-//    private void printMolecules(IAtomContainer Molecule1, IAtomContainer Molecule2) {
-//
-//        System.out.println("Molecule 1: " + Molecule1.getAtomCount());
-//
-//        for (int i = 0; i < Molecule1.getAtomCount(); i++) {
-//
-//            System.out.print(Molecule1.getAtom(i).getSymbol() + " : " + Molecule1.getAtom(i).getID() + ",  ");
-//        }
-//
-//        System.out.println();
-//        System.out.println("Molecule 2: " + Molecule2.getAtomCount());
-//        for (int i = 0; i < Molecule2.getAtomCount(); i++) {
-//
-//            System.out.print(Molecule2.getAtom(i).getSymbol() + " : " + Molecule2.getAtom(i).getID() + ",  ");
-//        }
-//        System.out.println();
-//
-//    }
     private synchronized void mcsBuilder() {
 
         try {
@@ -301,11 +256,6 @@ public class MCSFactory implements IMCSAlgorithm {
 
 //
     private synchronized void fragmentBuilder() {
-
-        //printMolecules(RFrag.getMolecule(0), PFrag.getMolecule(0));
-        //System.out.println("In FragmentMatcher fragmentBuilder");
-        //System.out.println("R Mol Size:" + RFrag.getMoleculeCount() + " P Mol Size: " + PFrag.getMoleculeCount());
-
 
         IMCSBase FM = new FragmentMatcher(RFrag, PFrag, removeHydrogen);
 
@@ -410,13 +360,9 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized void init(IMolecule Reactant, IMolecule Product) {
-        //System.out.println(" Container Size " + Reactant.getAtomCount());
-        //System.out.println(" Container Size " + Product.getAtomCount());
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-
         init(RMol, PMol);
-
     }
 
     /**
@@ -426,62 +372,50 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized void init(IAtomContainer Reactant, IAtomContainer Product) {
-
-        //System.out.println(" Container Size " + Reactant.getBondCount());
-        //System.out.println(" Container Size " + Product.getBondCount());
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-
         init(RMol, PMol);
-
     }
 
     public synchronized void setChemFilters() throws CDKException {
         if (firstAtomMCS != null) {
-            ChemicalFilters CF = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
+            ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
             if (stereoFilter) {
-                CF.sortResultsByStereoAndBondMatch();
+                chemFilter.sortResultsByStereoAndBondMatch();
             }
             if (fragmentFilter) {
-                CF.sortResultsByFragments();
+                chemFilter.sortResultsByFragments();
             }
 
             if (energyFilter) {
-                CF.sortResultsByEnergies();
+                chemFilter.sortResultsByEnergies();
             }
 
-            this.StereoScore = CF.getStereoMatches();
-            this.fragmentSize = CF.getSortedFragment();
-            this.bEnergies = CF.getSortedEnergy();
+            this.StereoScore = chemFilter.getStereoMatches();
+            this.fragmentSize = chemFilter.getSortedFragment();
+            this.bEnergies = chemFilter.getSortedEnergy();
         }
     }
 
     @Override
-    public synchronized Integer getFragmentSize(
-            int Key) {
+    public synchronized Integer getFragmentSize(int Key) {
         Integer Value = null;
         // System.out.println("Key" + Key);
-        if (fragmentSize != null &&
-                firstSolution.size() > 0 &&
-                fragmentSize.size() > Key &&
-                Key >= 0) {
+        if (fragmentSize != null && firstSolution.size() > 0 &&
+                fragmentSize.size() > Key && Key >= 0) {
             Value = fragmentSize.get(Key);
         }
-
         return Value;
 
     }
 
     @Override
-    public Integer getStereoScore(
-            int Key) {
+    public Integer getStereoScore(int Key) {
 
         Integer Value = null;
 //        System.out.println(StereoScore.size() + " :Key " + Key);
-        if (StereoScore != null &&
-                StereoScore.size() > Key &&
-                Key >= 0) {
+        if (StereoScore != null && StereoScore.size() > Key && Key >= 0) {
             Value = StereoScore.get(Key);
         }
 
@@ -489,17 +423,14 @@ public class MCSFactory implements IMCSAlgorithm {
     }
 
     @Override
-    public Double getEnergyScore(
-            int Key) {
+    public Double getEnergyScore(int Key) {
 
         Double Value = null;
 //        System.out.println(StereoScore.size() + " :Key " + Key);
-        if (bEnergies != null &&
-                bEnergies.size() > Key &&
+        if (bEnergies != null && bEnergies.size() > Key &&
                 Key >= 0) {
             Value = bEnergies.get(Key);
         }
-
         return Value;
     }
 
@@ -509,12 +440,9 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized TreeMap<Integer, Integer> getFirstMapping() {
-
-
         if (firstSolution.size() > 0) {
             return firstSolution;
         } else {
-
             return null;
         }
 
@@ -526,13 +454,9 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized List<TreeMap<Integer, Integer>> getAllMapping() {
-
-
         if (allMCS.size() > 0) {
-//            System.out.println("Total Sol= " + allMCS.size());
             return allMCS;
         } else {
-
             return null;
         }
 
@@ -544,9 +468,7 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized Map<IAtom, IAtom> getFirstAtomMapping() {
-
         if (firstSolution.size() > 0) {
-//            System.out.println("firstSolution: " + firstAtomMCS);
             return firstAtomMCS;
         } else {
 
@@ -561,9 +483,7 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public synchronized List<Map<IAtom, IAtom>> getAllAtomMapping() {
-
         if (allMCS.size() > 0) {
-
             return allAtomMCS;
         } else {
             try {
@@ -578,13 +498,11 @@ public class MCSFactory implements IMCSAlgorithm {
 
     @Override
     public IAtomContainer getReactantMolecule() {
-
         return RMol.getMolecule();
     }
 
     @Override
     public IAtomContainer getProductMolecule() {
-
         return PMol.getMolecule();
     }
 
@@ -616,8 +534,8 @@ public class MCSFactory implements IMCSAlgorithm {
      * @return true if mols have different stereo
      * chemistry else flase if no stereo mismatch
      */
-    public boolean isStereoMisMatch() {
-        boolean flag = true;
+   public boolean isStereoMisMatch() {
+        boolean flag = false;
 
 
         IAtomContainer Reactant = RMol.getMolecule();
@@ -633,35 +551,30 @@ public class MCSFactory implements IMCSAlgorithm {
 
                 IAtom indexIPlus = mappingJ.getKey();
                 IAtom indexJPlus = mappingJ.getValue();
-                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
+                if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
 
-                    IAtom R1 = indexI;
-                    IAtom R2 = indexIPlus;
+                    IAtom sourceAtom1 = indexI;
+                    IAtom sourceAtom2 = indexIPlus;
 
-                    IBond RBond = Reactant.getBond(R1, R2);
+                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
                     if (RBond != null) {
 
-                        IAtom P1 = indexJ;
-                        IAtom P2 = indexJPlus;
-                        IBond PBond = Product.getBond(P1, P2);
+                        IAtom targetAtom1 = indexJ;
+                        IAtom targetAtom2 = indexJPlus;
+                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
                         if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
                             Score++;
                         }
                     }
-
-
                 }
             }
         }
 
-
-
-        if (Score == 0) {
-            flag = false;
+        if (Score > 0) {
+            flag = true;
         }
-
         return flag;
     }
 
@@ -714,14 +627,9 @@ public class MCSFactory implements IMCSAlgorithm {
 
                         }
                     }
-
-
                 }
             }
         }
-
-
-
         boolean flag = false;
         float size = firstSolution.size();
         int a = 0;
@@ -767,9 +675,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new VFlibMCSHandler();
-
             mcs.set(RMol, PMol);
-
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
@@ -796,9 +702,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new SingleMappingHandler();
-
             mcs.set(RMol, PMol);
-
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();

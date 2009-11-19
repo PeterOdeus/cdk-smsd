@@ -347,12 +347,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
     @Override
     public boolean isStereoMisMatch() {
         boolean flag = false;
-
-
         IAtomContainer Reactant = RMol.getMolecule();
         IAtomContainer Product = PMol.getMolecule();
-
-
         int Score = 0;
 
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
@@ -382,9 +378,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
                 }
             }
         }
-
-
-
         if (Score > 0) {
             flag = true;
         }
@@ -442,8 +435,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
                         }
                     }
-
-
                 }
             }
         }
