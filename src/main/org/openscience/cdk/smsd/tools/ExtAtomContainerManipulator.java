@@ -69,8 +69,6 @@ import org.w3c.dom.NodeList;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-
 /**
  * <p>This is an extension of CDK AtomContainer.
  * Some part of this code was taken from CDK source code and modified.</p>
@@ -87,96 +85,22 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
         IMolecule newAtomContainer = DefaultChemObjectBuilder.getInstance().newMolecule();
 
-        int atomCount = container.getAtomCount();
-        int bondCount = container.getBondCount();
+
+
         int lonePairCount = container.getLonePairCount();
         int singleElectronCount = container.getSingleElectronCount();
-        IAtom[] atoms = new IAtom[atomCount];
-        IBond[] bonds = new IBond[bondCount];
+
+
         ILonePair[] lonePairs = new ILonePair[lonePairCount];
         ISingleElectron[] singleElectrons = new ISingleElectron[singleElectronCount];
 
-//        Deep copy of the Atoms
+//      Deep copy of the Atoms
+        IAtom[] atoms = copyAtoms(container, newAtomContainer);
 
-        for (int f = 0; f < container.getAtomCount(); f++) {
+//      Deep copy of the bonds
+        copyBonds(atoms, container, newAtomContainer);
 
-            if (container.getAtom(f) instanceof PseudoAtom) {
-
-                atoms[f] = new PseudoAtom(container.getAtom(f));
-            } else {
-                atoms[f] = new Atom(container.getAtom(f));
-            }
-
-
-            if ((container.getAtom(f)).getPoint2d() != null) {
-                atoms[f].setPoint2d(new Point2d(container.getAtom(f).getPoint2d()));
-            }
-            if ((container.getAtom(f)).getPoint3d() != null) {
-                atoms[f].setPoint3d(new Point3d(container.getAtom(f).getPoint3d()));
-            }
-            if ((container.getAtom(f)).getFractionalPoint3d() != null) {
-                atoms[f].setFractionalPoint3d(new Point3d(container.getAtom(f).getFractionalPoint3d()));
-            }
-
-            if (container.getAtom(f).getID() != null) {
-                atoms[f].setID(new String(container.getAtom(f).getID()));
-            }
-            if (container.getAtom(f).getHydrogenCount() != null) {
-                atoms[f].setHydrogenCount(new Integer(container.getAtom(f).getHydrogenCount()));
-            }
-            if (container.getAtom(f).getCharge() != null) {
-                atoms[f].setCharge(new Double(container.getAtom(f).getCharge()));
-            }
-            if (container.getAtom(f).getStereoParity() != null) {
-                atoms[f].setStereoParity(new Integer(container.getAtom(f).getStereoParity()));
-            }
-
-            newAtomContainer.addAtom(atoms[f]);
-
-            if (container.getAtomParity(container.getAtom(f)) != null) {
-                IAtomParity ap = container.getAtomParity(container.getAtom(f));
-                newAtomContainer.addAtomParity(ap);
-            }
-
-        }
-
-//  Deep copy of the bonds
-        for (int f = 0; f < container.getBondCount(); f++) {
-
-
-            bonds[f] = new Bond();
-
-
-            int IndexI = 999;
-            for (int i = 0; i < container.getAtomCount(); i++) {
-                if (container.getBond(f).getAtom(0) == container.getAtom(i)) {
-                    IndexI = i;
-                    break;
-                }
-            }
-            int IndexJ = 999;
-            for (int j = 0; j < container.getAtomCount(); j++) {
-                if (container.getBond(f).getAtom(1) == container.getAtom(j)) {
-                    IndexJ = j;
-                    break;
-                }
-            }
-
-            IAtom atom1 = atoms[IndexI];
-            IAtom atom2 = atoms[IndexJ];
-
-            Order order = container.getBond(f).getOrder();
-            int stereo = container.getBond(f).getStereo();
-            bonds[f] = new Bond(atom1, atom2, order, stereo);
-            if (container.getBond(f).getID() != null) {
-                bonds[f].setID(new String(container.getBond(f).getID()));
-            }
-            newAtomContainer.addBond(bonds[f]);
-
-        }
-
-// Deep copy of the LonePairs
-
+//      Deep copy of the LonePairs
         for (int f = 0; f < container.getLonePairCount(); f++) {
 
             if (container.getAtom(f).getSymbol().equalsIgnoreCase("R")) {
@@ -201,7 +125,6 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
-   
     /**
      *  The method takes an xml files like the following:<br>
      *  &lt;replace-set&gt;<br>
@@ -547,7 +470,6 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
         return hCount;
     }
 
-
     /**
      *
      * @param atomContainer
@@ -805,6 +727,86 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 }
 
             }
+        }
+    }
+
+    private static IAtom[] copyAtoms(IAtomContainer container, IMolecule newAtomContainer) {
+        int atomCount = container.getAtomCount();
+        IAtom[] atoms = new IAtom[atomCount];
+        for (int f = 0; f < container.getAtomCount(); f++) {
+
+            if (container.getAtom(f) instanceof PseudoAtom) {
+                atoms[f] = new PseudoAtom(container.getAtom(f));
+            } else {
+                atoms[f] = new Atom(container.getAtom(f));
+            }
+
+            if ((container.getAtom(f)).getPoint2d() != null) {
+                atoms[f].setPoint2d(new Point2d(container.getAtom(f).getPoint2d()));
+            }
+            if ((container.getAtom(f)).getPoint3d() != null) {
+                atoms[f].setPoint3d(new Point3d(container.getAtom(f).getPoint3d()));
+            }
+            if ((container.getAtom(f)).getFractionalPoint3d() != null) {
+                atoms[f].setFractionalPoint3d(new Point3d(container.getAtom(f).getFractionalPoint3d()));
+            }
+
+            if (container.getAtom(f).getID() != null) {
+                atoms[f].setID(new String(container.getAtom(f).getID()));
+            }
+            if (container.getAtom(f).getHydrogenCount() != null) {
+                atoms[f].setHydrogenCount(new Integer(container.getAtom(f).getHydrogenCount()));
+            }
+            if (container.getAtom(f).getCharge() != null) {
+                atoms[f].setCharge(new Double(container.getAtom(f).getCharge()));
+            }
+            if (container.getAtom(f).getStereoParity() != null) {
+                atoms[f].setStereoParity(new Integer(container.getAtom(f).getStereoParity()));
+            }
+
+            newAtomContainer.addAtom(atoms[f]);
+
+            if (container.getAtomParity(container.getAtom(f)) != null) {
+                IAtomParity ap = container.getAtomParity(container.getAtom(f));
+                newAtomContainer.addAtomParity(ap);
+            }
+
+        }
+
+        return atoms;
+    }
+
+    private static void copyBonds(IAtom[] atoms, IAtomContainer container, IMolecule newAtomContainer) {
+        int bondCount = container.getBondCount();
+        IBond[] bonds = new IBond[bondCount];
+        for (int f = 0; f < container.getBondCount(); f++) {
+            bonds[f] = new Bond();
+            int IndexI = 999;
+            for (int i = 0; i < container.getAtomCount(); i++) {
+                if (container.getBond(f).getAtom(0) == container.getAtom(i)) {
+                    IndexI = i;
+                    break;
+                }
+            }
+            int IndexJ = 999;
+            for (int j = 0; j < container.getAtomCount(); j++) {
+                if (container.getBond(f).getAtom(1) == container.getAtom(j)) {
+                    IndexJ = j;
+                    break;
+                }
+            }
+
+            IAtom atom1 = atoms[IndexI];
+            IAtom atom2 = atoms[IndexJ];
+
+            Order order = container.getBond(f).getOrder();
+            int stereo = container.getBond(f).getStereo();
+            bonds[f] = new Bond(atom1, atom2, order, stereo);
+            if (container.getBond(f).getID() != null) {
+                bonds[f].setID(new String(container.getBond(f).getID()));
+            }
+            newAtomContainer.addBond(bonds[f]);
+
         }
     }
 }
