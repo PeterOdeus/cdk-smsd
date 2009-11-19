@@ -168,7 +168,6 @@ public class ChemicalFilters {
             }
 //            System.out.println("\nStart score1 " + score);
             score = getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
-
             stereoScoreMap.put(Key, score);
         }
 
@@ -176,7 +175,6 @@ public class ChemicalFilters {
         if (stereoMatchFlag) {
 
             Map<Integer, Integer> sortedMap = sortMapByValueInDecendingOrder(stereoScoreMap);
-
             flag = true;
 //            System.out.println(" sortedMap `Size: " + sortedMap.size());
 
@@ -243,12 +241,10 @@ public class ChemicalFilters {
                             int ac2ConnectedAtomNumber = mappings.get(ac1ConnectedAtomNumber);
 
                             IBond ac1Bond = ac1.getBond(atoms, cAtoms);
-
                             IBond ac2Bond = ac2.getBond(ac2.getAtom(ac2AtomNumber), ac2.getAtom(ac2ConnectedAtomNumber));
 
                             if (ac2Bond == null) {
                                 ac2Bond = ac2.getBond(ac2.getAtom(ac2ConnectedAtomNumber), ac2.getAtom(ac2AtomNumber));
-
                             }
 
                             if (ac1Bond != null && ac2Bond != null) {
@@ -300,9 +296,7 @@ public class ChemicalFilters {
             EductFragmentFlag = ConnectivityChecker.isConnected(Educt);
             if (!EductFragmentFlag) {
                 EductFragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Educt));
-
             } else {
-
                 EductFragmentMolSet.addAtomContainer(Educt);
             }
 
@@ -314,11 +308,8 @@ public class ChemicalFilters {
             ProductFragmentFlag = ConnectivityChecker.isConnected(Product);
 
             if (!ProductFragmentFlag) {
-//
                 ProductFragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Product));
-
             } else {
-
                 ProductFragmentMolSet.addAtomContainer(Product);
             }
             countPFrag = ProductFragmentMolSet.getAtomContainerCount();
@@ -427,7 +418,6 @@ public class ChemicalFilters {
 //                System.out.println("Fragment MCS " + allFragmentMCS.get(I) + " Fragment Value: " + fragmentSelectionScore.get(I));
 
             }
-
         }
 
         if (flag) {
