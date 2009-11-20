@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+ * Copyright (C) 2009  Syed Asad Rahman {asad@ebi.ac.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -143,16 +143,12 @@ public class VFMCSState implements IState {
     }
 
     private void loadRootCandidates() {
-//        System.out.println("Node count " + query.countNodes());
-//        System.out.println("Target count " + target.getAtomCount());
         for (int i = 0; i < query.countNodes(); i++) {
             for (int j = 0; j < target.getAtomCount(); j++) {
                 VFMatch match = new VFMatch(query.getNode(i), target.getAtom(j));
                 candidates.add(match);
             }
         }
-
-//        System.out.println("candidates count " + candidates.size());
     }
 
 //@TODO Asad Check the Neighbour count
@@ -186,7 +182,6 @@ public class VFMCSState implements IState {
 
     private boolean matchAtoms(VFMatch match) {
         IAtom atom = match.getTargetAtom();
-//        List<IAtom> targetNeighbors = target.getConnectedAtomsList(atom);
         if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(atom)) {
             return false;
         }
@@ -198,7 +193,6 @@ public class VFMCSState implements IState {
             return true;
         }
 
-//       Commented by Asad to get more HITS
         if (!matchBondsToHead(match)) {
             return false;
         }

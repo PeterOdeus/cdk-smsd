@@ -219,8 +219,7 @@ public class GenerateCompatibilityGraph {
                 int index_bPlus1 = compGraphNodes.get(b + 1);
 
                 // if element ac !=b and atoms on the adjacent sides of the bonds are not equal
-                if (a != b && index_a != index_b &&
-                        index_aPlus1 != index_bPlus1) {
+                if (a != b && index_a != index_b && index_aPlus1 != index_bPlus1) {
 
                     IBond ReactantBond = null;
                     IBond ProductBond = null;
