@@ -34,6 +34,7 @@ import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 /**
  * @cdk.module smsd
@@ -56,62 +57,56 @@ public class SingleMappingHandler implements IMCS {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
     }
+public void init(IMolecule source, IMolecule target) throws CDKException {
 
-    /** Creates a new instance of SearchCliques
-     * @param Reactant
-     * @param Product
-     * @throws java.io.IOException
+        this.source = source;
+        this.target = target;
+    }
+
+    /**
      *
      *
+     * @param reactant
+     * @param product
      */
     @Override
-    public void set(MolHandler Reactant, MolHandler Product) throws IOException {
+    public void init(IAtomContainer reactant, IAtomContainer product) {
 
-        this.source = Reactant.getMolecule();
-        this.target = Product.getMolecule();
-
+        this.source = reactant;
+        this.target = product;
 
     }
 
-    /** Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     * @throws java.io.IOException
+    /**
+     * @param reactant
+     * @param product
      */
     @Override
-    public void set(String ReactantMolFileName, String ProductMolFileName) throws IOException {
+    public void init(MolHandler reactant, MolHandler product) {
 
 
-        String mol1 = ReactantMolFileName;
-        String mol2 = ProductMolFileName;
-
-        MolHandler Reactant = new MolHandler(mol1, false);
-        MolHandler Product = new MolHandler(mol2, false);
-
-        this.set(Reactant, Product);
-        // System.exit(1);
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
 
     }
 
-    /** Creates a new instance of SearchCliques
-     * @param ReactantMol
-     * @param ProductMol
-     * @throws java.io.IOException
+    /**
+     * Creates a new instance of SearchCliques
+     * @param sourceMolFileName
+     * @param targetMolFileName
      */
     @Override
-    public void set(IAtomContainer ReactantMol, IAtomContainer ProductMol) throws IOException {
+    public void init(String sourceMolFileName, String targetMolFileName) {
 
-        IAtomContainer mol1 = ReactantMol;
-        IAtomContainer mol2 = ProductMol;
 
-        MolHandler Reactant = new MolHandler(mol1, false);
-        MolHandler Product = new MolHandler(mol2, false);
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
 
-        this.set(Reactant, Product);
-        // System.exit(1);
+        this.source = new MolHandler(mol1, false).getMolecule();
+        this.target = new MolHandler(mol2, false).getMolecule();
+
 
     }
-
     //Function is called by the main program and serves as a starting point for the comparision procedure.
     /**
      *

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.filters.PostFilter;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
@@ -56,58 +57,65 @@ public class MCSPlusHandler implements IMCS {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
-    /** Creates a new instance of SearchCliques
-     * @param Reactant
-     * @param Product
-     * @throws java.io.IOException
-     *
-     *
+    /**
+     * @param source
+     * @param target
      */
     @Override
-    public void set(MolHandler Reactant, MolHandler Product) throws IOException {
+    public void init(IAtomContainer source, IAtomContainer target) {
 
-        this.source = Reactant.getMolecule();
-        this.target = Product.getMolecule();
-
-
-    }
-
-    /** Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     * @throws java.io.IOException
-     */
-    @Override
-    public void set(String ReactantMolFileName, String ProductMolFileName) throws IOException {
-
-
-        String mol1 = ReactantMolFileName;
-        String mol2 = ProductMolFileName;
+        IAtomContainer mol1 = source;
+        IAtomContainer mol2 = target;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        this.set(Reactant, Product);
-        // System.exit(1);
+        init(Reactant, Product);
 
     }
 
-    /** Creates a new instance of SearchCliques
-     * @param ReactantMol
-     * @param ProductMol
-     * @throws java.io.IOException
+    /**
+     * @param source
+     * @param target
      */
-    @Override
-    public void set(IAtomContainer ReactantMol, IAtomContainer ProductMol) throws IOException {
+    public void init(IMolecule source, IMolecule target) throws CDKException {
 
-        IAtomContainer mol1 = ReactantMol;
-        IAtomContainer mol2 = ProductMol;
+        IMolecule mol1 = source;
+        IMolecule mol2 = target;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        this.set(Reactant, Product);
-        // System.exit(1);
+        init(Reactant, Product);
+    }
+
+    /**
+     * @param sourceMolFileName
+     * @param targetMolFileName
+     */
+    @Override
+    public void init(String sourceMolFileName, String targetMolFileName) {
+
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product);
+
+
+    }
+
+    /**
+     * @param reactant
+     * @param product
+     */
+    @Override
+    public void init(MolHandler reactant, MolHandler product) {
+
+
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
 
     }
 

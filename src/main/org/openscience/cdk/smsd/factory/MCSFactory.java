@@ -26,7 +26,6 @@ package org.openscience.cdk.smsd.factory;
 
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
-import org.openscience.cdk.smsd.interfaces.IMCSBase;
 import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
 import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
@@ -41,7 +40,6 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.smsd.filters.ChemicalFilters;
-import org.openscience.cdk.smsd.filters.FragmentMatcher;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.smsd.helper.MolHandler;
@@ -242,8 +240,8 @@ public class MCSFactory implements IMCSAlgorithm {
 
     private synchronized void fragmentBuilder() {
 
-        IMCSBase fragmentMatcher = new FragmentMatcher(RFrag, PFrag, removeHydrogen);
-
+        FragmentMatcher fragmentMatcher = new FragmentMatcher(RFrag, PFrag);
+        fragmentMatcher.searchMCS(removeHydrogen);
 
         firstSolution.clear();
         allMCS.clear();
@@ -261,7 +259,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new CDKMCSHandler();
 
-            mcs.set(RMol, PMol);
+            mcs.init(RMol, PMol);
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
@@ -289,7 +287,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new MCSPlusHandler();
 
-            mcs.set(RMol, PMol);
+            mcs.init(RMol, PMol);
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
@@ -360,6 +358,15 @@ public class MCSFactory implements IMCSAlgorithm {
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
         init(RMol, PMol);
+    }
+
+    public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        this.init(Reactant, Product);
     }
 
     public synchronized void setChemFilters() throws CDKException {
@@ -658,7 +665,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new VFlibMCSHandler();
-            mcs.set(RMol, PMol);
+            mcs.init(RMol, PMol);
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
@@ -685,7 +692,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new SingleMappingHandler();
-            mcs.set(RMol, PMol);
+            mcs.init(RMol, PMol);
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();

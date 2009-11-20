@@ -79,10 +79,11 @@ public class VFMapper implements IMapper {
     /**
      *
      * @param molecule
+     * @param removeHydrogen 
      */
-    public VFMapper(IAtomContainer molecule) {
+    public VFMapper(IAtomContainer molecule, boolean removeHydrogen) {
 //        this.query = new VFQuery(molecule);
-        this.query = TemplateCompiler.compile(molecule);
+        this.query = TemplateCompiler.compile(molecule, removeHydrogen);
         this.maps = new ArrayList<Map<INode, IAtom>>();
     }
 

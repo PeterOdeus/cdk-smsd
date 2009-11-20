@@ -116,7 +116,6 @@ public class SMSD implements IMCSAlgorithm {
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
-
         System.gc();
     }
 
@@ -137,6 +136,18 @@ public class SMSD implements IMCSAlgorithm {
 
         System.gc();
 
+    }
+
+    public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Query = new MolHandler(mol1, false);
+        MolHandler Target = new MolHandler(mol2, false);
+
+        init(Query, Target);
+        System.gc();
     }
 
     /**

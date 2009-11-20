@@ -26,8 +26,6 @@ package org.openscience.cdk.smsd.interfaces;
 
 import java.io.IOException;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * @cdk.module smsd
@@ -43,29 +41,4 @@ public interface IMCS extends IMCSBase {
      */
     int searchMCS(boolean removeHydrogen) throws IOException, CDKException;
 
-    /**
-     * Creates a new instance of SearchCliques
-     * @param Reactant
-     * @param Product
-     * @throws java.io.IOException
-     *
-     *
-     */
-    void set(MolHandler Reactant, MolHandler Product) throws IOException;
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     * @throws java.io.IOException
-     */
-    void set(String ReactantMolFileName, String ProductMolFileName) throws IOException;
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMol
-     * @param ProductMol
-     * @throws java.io.IOException
-     */
-    void set(IAtomContainer ReactantMol, IAtomContainer ProductMol) throws IOException;
 }

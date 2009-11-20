@@ -23,16 +23,18 @@
 package org.openscience.cdk.smsd.interfaces;
 
 import java.io.IOException;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 /**
  * @cdk.module smsd
  */
 public interface IMCSAlgorithm extends IMCSBase {
 
+    /**
+     * 
+     * @param Key
+     * @return
+     */
     Double getEnergyScore(int Key);
 
     Integer getFragmentSize(int Key);
@@ -50,29 +52,36 @@ public interface IMCSAlgorithm extends IMCSBase {
     double getTanimotoSimilarity() throws IOException;
 
     double getEuclideanDistance() throws IOException;
+//
+//    /**
+//     * Creates a new instance of SearchCliques
+//     * @param Query
+//     * @param Target
+//     * @param removeHydrogen
+//     * @throws java.io.IOException
+//     *
+//     *
+//     */
+//    void set(MolHandler Query, MolHandler Target, boolean removeHydrogen) throws IOException;
+//
+//    /**
+//     * Creates a new instance of SearchCliques
+//     * @param ReactantMolFileName
+//     * @param ProductMolFileName
+//     * @param removeHydrogen
+//     * @throws java.io.IOException
+//     */
+//    void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) throws IOException;
+//
+//    /**
+//     * Creates a new instance of SearchCliques
+//     * @param ReactantMol
+//     * @param ProductMol
+//     * @param removeHydrogen
+//     * @throws java.io.IOException
+//     */
+//    void set(IAtomContainer ReactantMol, IAtomContainer ProductMol, boolean removeHydrogen) throws IOException;
+//
 
-    /**
-     *
-     * @param Reactant
-     * @param Product
-     * @throws CDKException 
-     *
-     */
-    void init(MolHandler Reactant, MolHandler Product) throws CDKException;
-
-    /**
-     *
-     * @param Reactant
-     * @param Product
-     * @throws CDKException 
-     */
-    void init(IMolecule Reactant, IMolecule Product) throws CDKException;
-
-    /**
-     *
-     * @param Reactant
-     * @param Product
-     * @throws CDKException 
-     */
-    void init(IAtomContainer Reactant, IAtomContainer Product) throws CDKException;
+   
 }

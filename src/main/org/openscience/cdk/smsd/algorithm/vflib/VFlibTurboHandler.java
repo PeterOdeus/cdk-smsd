@@ -27,16 +27,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.map.VFMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
-import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.ISubGraph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 /**
  * @cdk.module smsd
@@ -66,9 +67,9 @@ public class VFlibTurboHandler implements ISubGraph {
      * else false
      */
     @Override
-    public boolean isSubgraph() {
+    public boolean isSubgraph(boolean removeHydrogen) {
 
-        IQuery query = TemplateCompiler.compile(source);
+        IQuery query = TemplateCompiler.compile(source,removeHydrogen);
 
         IMapper mapper = new VFMapper(query);
 
@@ -124,78 +125,91 @@ public class VFlibTurboHandler implements ISubGraph {
         return hCount;
     }
 
-    /**
-     * Set the VFLib software
-     *
-     * @param reactant
-     * @param product
-     * @param removeHydrogen
+  /**
+     * @param source
+     * @param target
      */
     @Override
-    public void set(IAtomContainer reactant, IAtomContainer product, boolean removeHydrogen) {
+    public void init(IAtomContainer source, IAtomContainer target) {
 
-        this.source = reactant;
-        this.target = product;
+        IAtomContainer mol1 = source;
+        IAtomContainer mol2 = target;
 
-        /*Remove Hydrogen by Asad*/
-        if (checkForH(source) > 0 && removeHydrogen) {
-            source = ExtAtomContainerManipulator.removeHydrogens(reactant);
-        }
-        if (checkForH(target) > 0 && removeHydrogen) {
-            target = ExtAtomContainerManipulator.removeHydrogens(product);
-        }
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product);
 
     }
 
     /**
-     * Set the VFLib software
-     *
-     * @param reactant
-     * @param product
-     * @param removeHydrogen
+     * @param source
+     * @param target
+     */
+    public void init(IMolecule source, IMolecule target) throws CDKException {
+
+        IMolecule mol1 = source;
+        IMolecule mol2 = target;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product);
+    }
+
+    /**
+     * @param sourceMolFileName
+     * @param targetMolFileName
      */
     @Override
-    public void set(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
+    public void init(String sourceMolFileName, String targetMolFileName) {
 
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product);
+
+
+    }
+
+    /**
+     * @param reactant
+     * @param product
+     */
+    @Override
+    public void init(MolHandler reactant, MolHandler product) {
 
         this.source = reactant.getMolecule();
         this.target = product.getMolecule();
 
-        /*Remove Hydrogen by Asad*/
-        if (checkForH(source) > 0 && removeHydrogen) {
-            source = ExtAtomContainerManipulator.removeHydrogens(reactant.getMolecule());
-        }
-        if (checkForH(target) > 0 && removeHydrogen) {
-            target = ExtAtomContainerManipulator.removeHydrogens(product.getMolecule());
-        }
-
-
     }
 
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     * @param removeHydrogen
-     */
-    @Override
-    public void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) {
-
-
-        String mol1 = ReactantMolFileName;
-        String mol2 = ProductMolFileName;
-
-        this.source = new MolHandler(mol1, false, removeHydrogen).getMolecule();
-        this.target = new MolHandler(mol2, false, removeHydrogen).getMolecule();
-
-        if (checkForH(source) > 0 && removeHydrogen) {
-            source = ExtAtomContainerManipulator.removeHydrogens(source);
-        }
-        if (checkForH(target) > 0 && removeHydrogen) {
-            target = ExtAtomContainerManipulator.removeHydrogens(target);
-        }
-
-    }
+//    /**
+//     * Creates a new instance of SearchCliques
+//     * @param ReactantMolFileName
+//     * @param ProductMolFileName
+//     * @param removeHydrogen
+//     */
+//    @Override
+//    public void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) {
+//
+//
+//        String mol1 = ReactantMolFileName;
+//        String mol2 = ProductMolFileName;
+//
+//        this.source = new MolHandler(mol1, false, removeHydrogen).getMolecule();
+//        this.target = new MolHandler(mol2, false, removeHydrogen).getMolecule();
+//
+//        if (checkForH(source) > 0 && removeHydrogen) {
+//            source = ExtAtomContainerManipulator.removeHydrogens(source);
+//        }
+//        if (checkForH(target) > 0 && removeHydrogen) {
+//            target = ExtAtomContainerManipulator.removeHydrogens(target);
+//        }
+//
+//    }
 
     /**
      *

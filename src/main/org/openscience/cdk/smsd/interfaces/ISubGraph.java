@@ -34,40 +34,12 @@ public interface ISubGraph extends IMCSBase {
 
     /**
      *
+     * @param removeHydrogen 
      * @return true if Query/Reactant is a subgraph of Target/Product
      * else false
      * @throws java.io.IOException
      * @throws CDKException 
      */
-    boolean isSubgraph() throws IOException, CDKException;
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param Query
-     * @param Target
-     * @param removeHydrogen 
-     * @throws java.io.IOException
-     *
-     *
-     */
-    void set(MolHandler Query, MolHandler Target, boolean removeHydrogen) throws IOException;
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     * @param removeHydrogen 
-     * @throws java.io.IOException
-     */
-    void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) throws IOException;
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMol
-     * @param ProductMol
-     * @param removeHydrogen 
-     * @throws java.io.IOException
-     */
-    void set(IAtomContainer ReactantMol, IAtomContainer ProductMol, boolean removeHydrogen) throws IOException;
+    boolean isSubgraph(boolean removeHydrogen) throws IOException, CDKException;
 
 }

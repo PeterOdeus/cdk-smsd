@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.algorithm.mcgregor.McGregor;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
@@ -81,9 +82,9 @@ public class VFlibMCSHandler implements IMCS {
     @Override
     public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
 
+        matchVFLibMCS(removeHydrogen);
+
         boolean flag = mcgregorFlag();
-
-
 
         if (flag) {
             List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
@@ -152,6 +153,17 @@ public class VFlibMCSHandler implements IMCS {
 
     }
 
+    private int checkForH(IAtomContainer mol) {
+        int hCount = 0;
+        for (int i = 0; i < mol.getAtomCount(); i++) {
+
+            if (mol.getAtom(i).getSymbol().equals("H")) {
+                hCount++;
+            }
+        }
+        return hCount;
+    }
+
     private boolean mcgregorFlag() {
         int commonAtomCount = checkCommonAtomCount(source, target);
         if (commonAtomCount > vfMCSSize && commonAtomCount > vfMCSSize) {
@@ -163,46 +175,78 @@ public class VFlibMCSHandler implements IMCS {
     }
 
     /**
-     * Set the VFLib software
-     *
-     * @param reactant
-     * @param product
+     * @param source
+     * @param target
      */
     @Override
-    public void set(IAtomContainer reactant, IAtomContainer product) {
+    public void init(IAtomContainer source, IAtomContainer target) {
 
-        IAtomContainer mol1 = reactant;
-        IAtomContainer mol2 = product;
+        IAtomContainer mol1 = source;
+        IAtomContainer mol2 = target;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        this.set(Reactant, Product);
+        init(Reactant, Product);
 
     }
 
     /**
-     * Set the SMSD software
-     *
+     * @param source
+     * @param target
+     */
+    public void init(IMolecule source, IMolecule target) throws CDKException {
+
+        IMolecule mol1 = source;
+        IMolecule mol2 = target;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product);
+    }
+
+    /**
+     * @param sourceMolFileName
+     * @param targetMolFileName
      */
     @Override
-    public void set(MolHandler Reactant, MolHandler Product) {
+    public void init(String sourceMolFileName, String targetMolFileName) {
 
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product);
+
+    }
+
+    /**
+     * 
+     *
+     * @param Reactant
+     * @param Product
+     */
+    @Override
+    public void init(MolHandler Reactant, MolHandler Product) {
+        source = Reactant.getMolecule();
+        target = Product.getMolecule();
+    }
+
+    private void matchVFLibMCS(boolean removeHydrogen) {
         IQuery query = null;
         IMapper mapper = null;
         boolean RONP = false;
-        source = Reactant.getMolecule();
-        target = Product.getMolecule();
-
         if (source.getAtomCount() <= target.getAtomCount()) {
 
-            query = TemplateCompiler.compile(source);
+            query = TemplateCompiler.compile(source, removeHydrogen);
             mapper = new VFMCSMapper(query);
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(target));
             RONP = true;
 
         } else {
-            query = TemplateCompiler.compile(target);
+            query = TemplateCompiler.compile(target, removeHydrogen);
             mapper = new VFMCSMapper(query);
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(source));
             RONP = false;
@@ -248,24 +292,6 @@ public class VFlibMCSHandler implements IMCS {
         }
     }
 
-    /**
-     * Creates commonAtomList new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     */
-    @Override
-    public void set(String ReactantMolFileName, String ProductMolFileName) {
-
-        String mol1 = ReactantMolFileName;
-        String mol2 = ProductMolFileName;
-
-        MolHandler Reactant = new MolHandler(mol1, false);
-        MolHandler Product = new MolHandler(mol2, false);
-        this.set(Reactant, Product);
-
-
-    }
-
     private boolean hasMap(Map<Integer, Integer> map, List<TreeMap<Integer, Integer>> mapGlobal) {
 
         for (Map<Integer, Integer> test : mapGlobal) {
@@ -273,10 +299,7 @@ public class VFlibMCSHandler implements IMCS {
             if (test.equals(map)) {
                 return true;
             }
-
         }
-
-
         return false;
     }
 

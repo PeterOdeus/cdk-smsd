@@ -27,14 +27,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.smsd.interfaces.IMCS;
 
 /**
  * @cdk.module smsd
@@ -59,22 +60,55 @@ public class CDKMCSHandler implements IMCS {
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-
-
     }
 
 
     /**
-     *
-     * 
-     * @param reactant
-     * @param product
+     * @param source
+     * @param target
      */
     @Override
-    public void set(IAtomContainer reactant, IAtomContainer product) {
+    public void init(IAtomContainer source, IAtomContainer target) {
 
-        this.source = reactant;
-        this.target = product;
+        IAtomContainer mol1 = source;
+        IAtomContainer mol2 = target;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product);
+
+    }
+
+    /**
+     * @param source
+     * @param target
+     */
+    public void init(IMolecule source, IMolecule target) throws CDKException {
+
+        IMolecule mol1 = source;
+        IMolecule mol2 = target;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product);
+    }
+
+    /**
+     * @param sourceMolFileName
+     * @param targetMolFileName
+     */
+    @Override
+    public void init(String sourceMolFileName, String targetMolFileName) {
+
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product);
+
 
     }
 
@@ -85,32 +119,13 @@ public class CDKMCSHandler implements IMCS {
      * @param product
      */
     @Override
-    public void set(MolHandler reactant, MolHandler product) {
+    public void init(MolHandler reactant, MolHandler product) {
 
 
         this.source = reactant.getMolecule();
         this.target = product.getMolecule();
 
     }
-
-    /**
-     * Creates a new instance of SearchCliques
-     * @param ReactantMolFileName
-     * @param ProductMolFileName
-     */
-    @Override
-    public void set(String ReactantMolFileName, String ProductMolFileName) {
-
-
-        String mol1 = ReactantMolFileName;
-        String mol2 = ProductMolFileName;
-
-        this.source = new MolHandler(mol1, false).getMolecule();
-        this.target = new MolHandler(mol2, false).getMolecule();
-
-
-    }
-
     /**
      * 
      * @return

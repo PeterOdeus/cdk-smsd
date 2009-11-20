@@ -25,12 +25,49 @@ package org.openscience.cdk.smsd.interfaces;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smsd.helper.MolHandler;
 
 /**
  * @cdk.module smsd
  */
 public interface IMCSBase {
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @throws CDKException
+     *
+     */
+    void init(MolHandler source, MolHandler target) throws CDKException;
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @throws CDKException
+     */
+    void init(IMolecule source, IMolecule target) throws CDKException;
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @throws CDKException
+     */
+    void init(IAtomContainer source, IAtomContainer target) throws CDKException;
+
+    /**
+     *
+     * @param sourceMolFileName
+     * @param targetMolFileName
+     * @throws CDKException
+     */
+    void init(String sourceMolFileName, String targetMolFileName) throws CDKException;
 
     /**
      * 

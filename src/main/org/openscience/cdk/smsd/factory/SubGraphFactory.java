@@ -175,6 +175,15 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     }
 
+     public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+        String mol1 = sourceMolFileName;
+        String mol2 = targetMolFileName;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product);
+    }
+
     public synchronized void setChemFilters() throws CDKException {
         if (firstAtomMCS != null) {
             ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
@@ -471,8 +480,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private void vfLibMCS() {
 
         VFlibTurboHandler mcs = new VFlibTurboHandler();
-        mcs.set(RMol, PMol, removeHydrogen);
-        this.subGraphFlag = mcs.isSubgraph();
+        mcs.init(RMol, PMol);
+        this.subGraphFlag = mcs.isSubgraph(removeHydrogen);
 
         firstSolution.clear();
         allMCS.clear();
@@ -494,8 +503,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
             SingleMappingHandler mcs = new SingleMappingHandler();
 
-            mcs.set(RMol, PMol);
-
+            mcs.init(RMol, PMol);
             mcs.searchMCS(removeHydrogen);
 
             firstSolution.clear();
