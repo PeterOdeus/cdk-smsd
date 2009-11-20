@@ -42,7 +42,6 @@ import org.openscience.cdk.interfaces.IMolecule;
  * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
  * </p>
  */
-
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
 public class SMSD implements IMCSAlgorithm {
 
@@ -53,17 +52,13 @@ public class SMSD implements IMCSAlgorithm {
      * @param subStructureMode true for fast substructure search without
      * exhaustive MCS else false
      * @param bondTypeFlag   true will considered bond types for mapping else false
-     * @param stereoFilter   true if stereo match is considered else false
-     * @param fragmentFilter true if fragement filter is switched on else false
-     * @param energyFilter   true if bond energy filter is switched on else false
      */
-    public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+    public SMSD(boolean subStructureMode, boolean bondTypeFlag) {
         if (subStructureMode) {
-            comparison = new SubGraphFactory(bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
+            comparison = new SubGraphFactory(bondTypeFlag);
         } else {
-            comparison = new MCSFactory(bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
+            comparison = new MCSFactory(bondTypeFlag);
         }
-
         System.gc();
 
     }
@@ -73,12 +68,9 @@ public class SMSD implements IMCSAlgorithm {
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
      * exhaustive MCS else false
      * @param bondTypeFlag   true will considered bond types for mapping else false
-     * @param stereoFilter   true if stereo match is considered else false
-     * @param fragmentFilter true if fragement filter is switched on else false
-     * @param energyFilter   true if bond energy filter is switched on else false
      */
-    public SMSD(int algorithmType, boolean bondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
-        comparison = new MCSFactory(algorithmType, bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
+    public SMSD(int algorithmType, boolean bondTypeFlag) {
+        comparison = new MCSFactory(algorithmType, bondTypeFlag);
         System.gc();
 
     }
@@ -149,6 +141,17 @@ public class SMSD implements IMCSAlgorithm {
 
         init(Query, Target, removeHydrogen);
         System.gc();
+    }
+
+    /*
+     * @param stereoFilter   true if stereo match is considered else false
+     * @param fragmentFilter true if fragement filter is switched on else false
+     * @param energyFilter   true if bond energy filter is switched on else false
+     */
+    
+    @Override
+    public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+        comparison.setChemFilters(stereoFilter, fragmentFilter, energyFilter);
     }
 
     /**

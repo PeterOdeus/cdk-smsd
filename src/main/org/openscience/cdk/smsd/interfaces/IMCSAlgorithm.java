@@ -71,6 +71,14 @@ public interface IMCSAlgorithm extends IMCSBase {
     void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException;
 
     /**
+     *
+     * @param stereoFilter
+     * @param fragmentFilter
+     * @param energyFilter
+     */
+    void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter);
+
+    /**
      * 
      * @param Key get total bond breaking energy of the match
      * @return

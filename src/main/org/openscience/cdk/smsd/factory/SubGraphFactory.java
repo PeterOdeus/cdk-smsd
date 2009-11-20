@@ -66,25 +66,14 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
     private boolean removeHydrogen = false;
-    private boolean stereoFilter = false;
-    private boolean fragmentFilter = false;
-    private boolean energyFilter = false;
     private boolean subGraphFlag = false;
 
     /**
      * 
      * @param BondTypeFlag 
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
      */
     @TestMethod("testVFLib")
-    public SubGraphFactory(boolean BondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
-
-        this.stereoFilter = stereoFilter;
-        this.fragmentFilter = fragmentFilter;
-        this.energyFilter = energyFilter;
-
+    public SubGraphFactory(boolean BondTypeFlag) {
         firstSolution = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
@@ -128,15 +117,10 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
-        try {
-            this.removeHydrogen = removeHydrogen;
-            this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
-            this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
-            mcsBuilder();
-            setChemFilters();
-        } catch (CDKException ex) {
-            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.removeHydrogen = removeHydrogen;
+        this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
+        this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
+        mcsBuilder();
     }
 
     /**
@@ -176,7 +160,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
         init(Reactant, Product, removeHydrogen);
     }
 
-    public synchronized void setChemFilters() throws CDKException {
+    public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+
         if (firstAtomMCS != null) {
             ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
@@ -188,7 +173,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
             }
 
             if (energyFilter) {
-                chemFilter.sortResultsByEnergies();
+                try {
+                    chemFilter.sortResultsByEnergies();
+                } catch (CDKException ex) {
+                    Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             this.StereoScore = chemFilter.getStereoMatches();

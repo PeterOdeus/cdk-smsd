@@ -6,7 +6,6 @@ package org.openscience.cdk.smsd.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
@@ -25,7 +24,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
@@ -33,17 +31,11 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
-import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.ringsearch.AllRingsFinder;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -124,69 +116,6 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
-    /**
-     *  The method takes an xml files like the following:<br>
-     *  &lt;replace-set&gt;<br>
-     *  &lt;replace&gt;O=N=O&lt;/replace&gt;<br>
-     *  &lt;replacement&gt;[O-][N+]=O&lt;/replacement&gt;<br>
-     *  &lt;/replace-set&gt;<br>
-     *  All parts in atomContainer which are the same as replace will be changed according to replacement.
-     *  Currently the following changes are done: BondOrder, FormalCharge.
-     *  For detection of fragments like replace, we rely on UniversalIsomorphismTester.
-     *  doc may contain several replace-sets and atom replace-set may contain several replace fragments, which will all be normalized according to replacement.
-     *
-     * @param  atomContainer                          The atomcontainer to normalize.
-     * @param  doc                         The configuration file.
-     * @return                             Did atom replacement take place?
-     * @exception  InvalidSmilesException  doc contains an invalid smiles.
-     * @throws CDKException 
-     */
-    public static boolean normalize(IAtomContainer atomContainer, Document doc) throws InvalidSmilesException, CDKException {
-        NodeList nl = doc.getElementsByTagName("replace-set");
-        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        boolean change = false;
-        for (int i = 0; i < nl.getLength(); i++) {
-            Element child = (Element) nl.item(i);
-            NodeList replaces = child.getElementsByTagName("replace");
-            NodeList replacement = child.getElementsByTagName("replacement");
-            String replacementstring = replacement.item(0).getFirstChild().getNodeValue();
-            if (replacementstring.indexOf("\n") > -1 || replacementstring.length() < 1) {
-                replacementstring = replacement.item(0).getFirstChild().getNextSibling().getNodeValue();
-            }
-            IAtomContainer replacementStructure = sp.parseSmiles(replacementstring);
-            for (int k = 0; k < replaces.getLength(); k++) {
-                Element replace = (Element) replaces.item(k);
-                String replacestring = replace.getFirstChild().getNodeValue();
-                if (replacestring.indexOf("\n") > -1 || replacestring.length() < 1) {
-                    replacestring = replace.getFirstChild().getNextSibling().getNodeValue();
-                }
-                IAtomContainer replaceStructure = sp.parseSmiles(replacestring);
-                List l = null;
-                while ((l = UniversalIsomorphismTester.getSubgraphMap(atomContainer, replaceStructure)) != null) {
-                    @SuppressWarnings("unchecked")
-                    List<RMap> l2 = UniversalIsomorphismTester.makeAtomsMapOfBondsMap(l, atomContainer, replaceStructure);
-                    Iterator bondit = l.iterator();
-                    while (bondit.hasNext()) {
-                        RMap rmap = (RMap) bondit.next();
-                        org.openscience.cdk.interfaces.IBond acbond = atomContainer.getBond(rmap.getId1());
-                        org.openscience.cdk.interfaces.IBond replacebond = replacementStructure.getBond(rmap.getId2());
-                        acbond.setOrder(replacebond.getOrder());
-                        change = true;
-                    }
-                    Iterator atomit = l2.iterator();
-                    while (atomit.hasNext()) {
-                        RMap rmap = (RMap) atomit.next();
-                        org.openscience.cdk.interfaces.IAtom acatom = atomContainer.getAtom(rmap.getId1());
-                        org.openscience.cdk.interfaces.IAtom replaceatom = replacementStructure.getAtom(rmap.getId2());
-                        acatom.setFormalCharge(replaceatom.getFormalCharge());
-                        change = true;
-                    }
-                }
-            }
-        }
-        return (change);
-    }
-
     public static String fixSmiles(String Smiles) {
         Smiles = Smiles.replaceAll("CL", "Cl");
         Smiles = Smiles.replaceAll("(H)", "([H])");
@@ -207,14 +136,14 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 //                boolean nitro = false;
 
                 if (atom.getSymbol().equals("N")) {
-                    List ca = mol.getConnectedAtomsList(atom);
+                    List connectedAtom = mol.getConnectedAtomsList(atom);
 
-                    if (ca.size() == 3) {
+                    if (connectedAtom.size() == 3) {
                         IAtom[] cao = new IAtom[2];
 
                         int count = 0;
                         for (int j = 0; j <= 2; j++) {
-                            if (((IAtom) ca.get(j)).getSymbol().equals("O")) {
+                            if (((IAtom) connectedAtom.get(j)).getSymbol().equals("O")) {
                                 count++;
                             }
                         }
@@ -222,7 +151,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                         if (count > 1) {
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
-                                IAtom caj = (IAtom) ca.get(j);
+                                IAtom caj = (IAtom) connectedAtom.get(j);
                                 if ((caj.getSymbol().equals("O")) && (mol.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
                                     cao[count] = caj;
                                     count++;
@@ -244,7 +173,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                             }
                         } //else if (count==1) {// end if count>1
 
-                    }// end ca==3 if
+                    }// end connectedAtom==3 if
 
                 } // end symbol == N
 
@@ -266,14 +195,14 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 //                boolean nitro = false;
 
                 if (atom.getSymbol().equals("N")) {
-                    List ca = mol.getConnectedAtomsList(atom);
+                    List connectedAtom = mol.getConnectedAtomsList(atom);
 
-                    if (ca.size() == 3) {
+                    if (connectedAtom.size() == 3) {
                         IAtom[] cao = new IAtom[2];
 
                         int count = 0;
                         for (int j = 0; j <= 2; j++) {
-                            IAtom caj = (IAtom) ca.get(j);
+                            IAtom caj = (IAtom) connectedAtom.get(j);
                             if (caj.getSymbol().equals("O")) {
                                 count++;
                             }
@@ -282,7 +211,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                         if (count > 1) {
                             count = 0;
                             for (int j = 0; j <= 2; j++) {
-                                IAtom caj = (IAtom) ca.get(j);
+                                IAtom caj = (IAtom) connectedAtom.get(j);
                                 if ((caj.getSymbol().equals("O")) && (mol.getConnectedAtomsCount(caj) == 1)) {// account for possibility of ONO2
                                     cao[count] = caj;
                                     count++;
@@ -308,7 +237,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                         } // end if count>1
 
 
-                    }// end ca==3 if
+                    }// end connectedAtom==3 if
 
                 } // end symbol == N
 
@@ -380,12 +309,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 if (haveatom && ring.getAtomCount() == 6) {
                     mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC, true);
                 }
-
             }
-
         }
-
-
     }
 
     public static void fixSulphurH(IMolecule mol) {
@@ -462,9 +387,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      * @note function added by Asad
      * @return IAtomContainer without Hydrogen. If an AtomContainer has atom single atom which
      * is atom Hydrogen then its not removed.
-     * @throws Exception
      */
-    public static IAtomContainer removeHydrogensAndPreserveAtomID(IAtomContainer atomContainer) throws Exception {
+    public static IAtomContainer removeHydrogensAndPreserveAtomID(IAtomContainer atomContainer){
         Map<IAtom, IAtom> map = new HashMap<IAtom, IAtom>();        // maps original atoms to clones.
         List<IAtom> remove = new ArrayList<IAtom>();  // lists removed Hs.
         IMolecule mol = null;
@@ -498,61 +422,10 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                     remove.add(atom);   // maintain list of removed H.
                 }
             }
-
-            // Clone bonds except those involving removed atoms.
-            count = atomContainer.getBondCount();
-            for (int i = 0; i < count; i++) {
-                // Check bond.
-                final IBond bond = atomContainer.getBond(i);
-                boolean removedBond = false;
-                final int length = bond.getAtomCount();
-                for (int k = 0; k < length; k++) {
-                    if (remove.contains(bond.getAtom(k))) {
-                        removedBond = true;
-                        break;
-                    }
-                }
-
-                // Clone/remove this bond?
-                if (!removedBond) // if (!remove.contains(atoms[0]) && !remove.contains(atoms[1]))
-                {
-                    IBond clone = null;
-                    try {
-                        clone = (IBond) atomContainer.getBond(i).clone();
-                    } catch (CloneNotSupportedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    assert clone != null;
-                    clone.setAtoms(new IAtom[]{map.get(bond.getAtom(0)), map.get(bond.getAtom(1))});
-                    mol.addBond(clone);
-                }
-            }
-
-
-
-            // Recompute hydrogen counts of neighbours of removed Hydrogens.
-            for (IAtom aRemove : remove) {
-                // Process neighbours.
-                for (IAtom iAtom : atomContainer.getConnectedAtomsList(aRemove)) {
-                    final IAtom neighb = map.get(iAtom);
-                    if (neighb == null) {
-                        continue; // since for the case of H2, neight H has atom heavy atom neighbor
-                    }
-                    //Added by Asad
-                    if (!(neighb instanceof PseudoAtom)) {
-                        neighb.setHydrogenCount(
-                                (neighb.getHydrogenCount() == null ? 0 : neighb.getHydrogenCount()) + 1);
-                    } else {
-                        neighb.setHydrogenCount(0);
-                    }
-                }
-            }
-            mol.setProperties(atomContainer.getProperties());
-            mol.setFlags(atomContainer.getFlags());
-            if (atomContainer.getID() != null) {
-                mol.setID(atomContainer.getID());
-            }
+//            Clone bonds except those involving removed atoms.
+            mol = cloneNonHBonds(mol, atomContainer, remove, map);
+//            Recompute hydrogen counts of neighbours of removed Hydrogens.
+            mol = removeHydrogen(mol, atomContainer, remove, map);
 
         } else {
             mol = atomContainer.getBuilder().newMolecule(atomContainer);
@@ -576,9 +449,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      * @note function added by Asad
      * @return IAtomContainer without Hydrogen. If an AtomContainer has atom single atom which
      * is atom Hydrogen then its not removed.
-     * @throws Exception
      */
-    public static IAtomContainer convertExplicitToImplicitHydrogens(IAtomContainer atomContainer) throws Exception {
+    public static IAtomContainer convertExplicitToImplicitHydrogens(IAtomContainer atomContainer) {
         Map<IAtom, IAtom> map = new HashMap<IAtom, IAtom>();        // maps original atoms to clones.
         List<IAtom> remove = new ArrayList<IAtom>();  // lists removed Hs.
         IMolecule mol = null;
@@ -780,6 +652,75 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             newAtomContainer.addBond(bonds[f]);
 
         }
+    }
+
+    private static IMolecule removeHydrogen(
+            IMolecule mol,
+            IAtomContainer atomContainer,
+            List<IAtom> remove,
+            Map<IAtom, IAtom> map) {
+
+        // Recompute hydrogen counts of neighbours of removed Hydrogens.
+        for (IAtom aRemove : remove) {
+            // Process neighbours.
+            for (IAtom iAtom : atomContainer.getConnectedAtomsList(aRemove)) {
+                final IAtom neighb = map.get(iAtom);
+                if (neighb == null) {
+                    continue; // since for the case of H2, neight H has atom heavy atom neighbor
+                    }
+                //Added by Asad
+                if (!(neighb instanceof PseudoAtom)) {
+                    neighb.setHydrogenCount(
+                            (neighb.getHydrogenCount() == null ? 0 : neighb.getHydrogenCount()) + 1);
+                } else {
+                    neighb.setHydrogenCount(0);
+                }
+            }
+        }
+        mol.setProperties(atomContainer.getProperties());
+        mol.setFlags(atomContainer.getFlags());
+        if (atomContainer.getID() != null) {
+            mol.setID(atomContainer.getID());
+        }
+        return mol;
+    }
+
+    private static IMolecule cloneNonHBonds(
+            IMolecule mol,
+            IAtomContainer atomContainer,
+            List<IAtom> remove,
+            Map<IAtom, IAtom> map) {
+        // Clone bonds except those involving removed atoms.
+        int count = atomContainer.getBondCount();
+        for (int i = 0; i < count; i++) {
+            // Check bond.
+            final IBond bond = atomContainer.getBond(i);
+            boolean removedBond = false;
+            final int length = bond.getAtomCount();
+            for (int k = 0; k < length; k++) {
+                if (remove.contains(bond.getAtom(k))) {
+                    removedBond = true;
+                    break;
+                }
+            }
+
+            // Clone/remove this bond?
+            if (!removedBond) // if (!remove.contains(atoms[0]) && !remove.contains(atoms[1]))
+            {
+                IBond clone = null;
+                try {
+                    clone = (IBond) atomContainer.getBond(i).clone();
+                } catch (CloneNotSupportedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                assert clone != null;
+                clone.setAtoms(new IAtom[]{map.get(bond.getAtom(0)), map.get(bond.getAtom(1))});
+                mol.addBond(clone);
+            }
+        }
+
+        return mol;
     }
 }
 

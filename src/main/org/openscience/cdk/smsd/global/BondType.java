@@ -33,7 +33,7 @@ package org.openscience.cdk.smsd.global;
 public class BondType {
 
     private static BondType _instance = null;
-    private static boolean bondtype = false;
+    private static boolean bondSensitive = false;
 
     /**
      *
@@ -55,7 +55,7 @@ public class BondType {
      * @param isBondSensitive (set true if bondsensetive else false)
      */
     public void setBondSensitiveFlag(boolean isBondSensitive) {
-        BondType.bondtype = isBondSensitive;
+        BondType.bondSensitive = isBondSensitive;
     }
 
     /**
@@ -63,10 +63,10 @@ public class BondType {
      * @return true if bondsensitive else false
      */
     public boolean getBondSensitiveFlag() {
-        return bondtype;
+        return bondSensitive;
     }
 
     public void reset() {
-        bondtype = false;
+        bondSensitive = false;
     }
 }

@@ -54,7 +54,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 /**
  * @cdk.module smsd
  */
-
 public class MCSFactory implements IMCSAlgorithm {
 
     private List<TreeMap<Integer, Integer>> allMCS = null;
@@ -68,9 +67,6 @@ public class MCSFactory implements IMCSAlgorithm {
     private List<Integer> StereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
-    private boolean stereoFilter = false;
-    private boolean fragmentFilter = false;
-    private boolean energyFilter = false;
     private IMCS mcs = null;
     private int algorithmType = 0;
     private boolean removeHydrogen = false;
@@ -79,61 +75,9 @@ public class MCSFactory implements IMCSAlgorithm {
      * 
      * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 cdkMCS
      * @param bondTypeFlag
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
      */
-    public MCSFactory(
-            int algorithmType,
-            boolean bondTypeFlag,
-            boolean stereoFilter,
-            boolean fragmentFilter,
-            boolean energyFilter) {
-        this.stereoFilter = stereoFilter;
-        this.fragmentFilter = fragmentFilter;
-        this.energyFilter = energyFilter;
+    public MCSFactory(int algorithmType, boolean bondTypeFlag) {
         this.algorithmType = algorithmType;
-
-
-        firstSolution = new TreeMap<Integer, Integer>();
-        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
-        firstAtomMCS = new HashMap<IAtom, IAtom>();
-
-        if (bondTypeFlag) {
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.10);
-        } else {
-
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.15);
-        }
-
-        BondType BT = BondType.getInstance();
-        BT.reset();
-        BT.setBondSensitiveFlag(bondTypeFlag);
-
-
-    }
-
-    /**
-     *
-     * @param bondTypeFlag
-     * @param stereoFilter
-     * @param fragmentFilter
-     * @param energyFilter
-     */
-    public MCSFactory(
-            boolean bondTypeFlag,
-            boolean stereoFilter,
-            boolean fragmentFilter,
-            boolean energyFilter) {
-
-        this.stereoFilter = stereoFilter;
-        this.fragmentFilter = fragmentFilter;
-        this.energyFilter = energyFilter;
-
-
         firstSolution = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
@@ -151,8 +95,30 @@ public class MCSFactory implements IMCSAlgorithm {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(bondTypeFlag);
+    }
 
+    /**
+     *
+     * @param bondTypeFlag
+     */
+    public MCSFactory(boolean bondTypeFlag) {
+        firstSolution = new TreeMap<Integer, Integer>();
+        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
+        firstAtomMCS = new HashMap<IAtom, IAtom>();
 
+        if (bondTypeFlag) {
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.10);
+        } else {
+
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.15);
+        }
+
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(bondTypeFlag);
     }
 
     private synchronized void mcsBuilder() {
@@ -267,7 +233,6 @@ public class MCSFactory implements IMCSAlgorithm {
             allAtomMCS.clear();
             firstAtomMCS.clear();
 
-
             firstSolution.putAll(mcs.getFirstMapping());
             allMCS.addAll(mcs.getAllMapping());
 
@@ -318,23 +283,18 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
-        this.removeHydrogen=removeHydrogen;
-        try {
+        this.removeHydrogen = removeHydrogen;
+        this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
+        this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
 
-            this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
-            this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
-
-            if (RMol.getConnectedFlag() && PMol.getConnectedFlag()) {
-                mcsBuilder();
-            } else {
-                this.RFrag = RMol.getFragmentedMolecule();
-                this.PFrag = PMol.getFragmentedMolecule();
-                fragmentBuilder();
-            }
-            setChemFilters();
-        } catch (CDKException ex) {
-            Logger.getLogger(SubGraphFactory.class.getName()).log(Level.SEVERE, null, ex);
+        if (RMol.getConnectedFlag() && PMol.getConnectedFlag()) {
+            mcsBuilder();
+        } else {
+            this.RFrag = RMol.getFragmentedMolecule();
+            this.PFrag = PMol.getFragmentedMolecule();
+            fragmentBuilder();
         }
+
     }
 
     /**
@@ -373,7 +333,8 @@ public class MCSFactory implements IMCSAlgorithm {
         init(Reactant, Product, removeHydrogen);
     }
 
-    public synchronized void setChemFilters() throws CDKException {
+    public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+
         if (firstAtomMCS != null) {
             ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
 
@@ -385,7 +346,11 @@ public class MCSFactory implements IMCSAlgorithm {
             }
 
             if (energyFilter) {
-                chemFilter.sortResultsByEnergies();
+                try {
+                    chemFilter.sortResultsByEnergies();
+                } catch (CDKException ex) {
+                    Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             this.StereoScore = chemFilter.getStereoMatches();

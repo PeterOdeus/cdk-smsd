@@ -60,8 +60,6 @@ public class BondEnergies {
 
     protected BondEnergies() {
         key = 1;
-
-
         // =========Hydrogen Block==============
 
         bondEngergies = new TreeMap<Integer, List<Object>>();
@@ -863,26 +861,26 @@ public class BondEnergies {
 
     /**
      * 
-     * @param a1 First atom
-     * @param a2 Second atom
+     * @param sourceAtom First atom
+     * @param targetAtom Second atom
      * @param bondOrder (single, double etc)
      * @return bond energy
      */
-    public Integer getEnergies(IAtom a1, IAtom a2, Order bondOrder) {
+    public Integer getEnergies(IAtom sourceAtom, IAtom targetAtom, Order bondOrder) {
         Integer D_kJ_per_mol = -1;
 
         for (List<Object> atom : bondEngergies.values()) {
 
             String atom1 = (String) atom.get(0);
             String atom2 = (String) atom.get(1);
-            if (atom1.equalsIgnoreCase(a1.getSymbol()) && atom2.equalsIgnoreCase(a2.getSymbol())) {
+            if (atom1.equalsIgnoreCase(sourceAtom.getSymbol()) && atom2.equalsIgnoreCase(targetAtom.getSymbol())) {
 
                 Order order = (Order) atom.get(2);
                 if (order.compareTo(bondOrder) == 0) {
 
                     D_kJ_per_mol = (Integer) atom.get(3);
                 }
-            } else if (atom2.equalsIgnoreCase(a1.getSymbol()) && atom1.equalsIgnoreCase(a2.getSymbol())) {
+            } else if (atom2.equalsIgnoreCase(sourceAtom.getSymbol()) && atom1.equalsIgnoreCase(targetAtom.getSymbol())) {
 
                 Order order = (Order) atom.get(2);
                 if (order.compareTo(bondOrder) == 0) {

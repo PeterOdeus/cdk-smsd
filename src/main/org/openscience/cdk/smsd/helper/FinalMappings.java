@@ -4,8 +4,8 @@
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
+ * This program is free software; you can redistribute iterator and/or
+ * modify iterator under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  * All we ask is that proper credit is given for our work, which includes
@@ -13,7 +13,7 @@
  * of your source code files, and to any copyright notice that you may distribute
  * with programs based on this work.
  *
- * This program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that iterator will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
@@ -52,27 +52,27 @@ public class FinalMappings implements IFinalMapping {
     }
 
     @Override
-    synchronized public void add(TreeMap<Integer, Integer> v) {
-        _mappings.add(v);
+    synchronized public void add(TreeMap<Integer, Integer> mapping) {
+        _mappings.add(mapping);
     }
 
     /**
      * 
-     * @param v
+     * @param mappings
      */
     @Override
-    synchronized public final void set(List<TreeMap<Integer, Integer>> v) {
+    synchronized public final void set(List<TreeMap<Integer, Integer>> mappings) {
 
         _mappings.clear();
-        for (TreeMap<Integer, Integer> M : v) {
-            _mappings.add(M);
+        for (TreeMap<Integer, Integer> mapping : mappings) {
+            _mappings.add(mapping);
         }
     }
 
     @Override
     synchronized public Iterator<TreeMap<Integer, Integer>> getIterator() {
-        Iterator<TreeMap<Integer, Integer>> it = _mappings.iterator();
-        return it;
+        Iterator<TreeMap<Integer, Integer>> iterator = _mappings.iterator();
+        return iterator;
     }
 
     @Override

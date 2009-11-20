@@ -116,8 +116,8 @@ public class MDLFileReader {
             Mol = (IMolecule) reader2.read(new Molecule());
             reader2.close();
         } catch (CDKException e) {
-            String s = e.toString();
-            if (s.contains("This file must be read with the MDLV3000Reader.")) {
+            String string = e.toString();
+            if (string.contains("This file must be read with the MDLV3000Reader.")) {
                 MDLV3000Reader reader2 = new MDLV3000Reader(reader, mode);
                 try {
                     Mol = (IMolecule) reader2.read(new Molecule());
@@ -126,7 +126,7 @@ public class MDLFileReader {
                 }
                 reader2.close();
 
-            } else if (s.contains("This file must be read with the MDLReader.")) {
+            } else if (string.contains("This file must be read with the MDLReader.")) {
                 try {
                     MDLReader reader2 = new MDLReader(reader, mode);
                     Mol = (IMolecule) reader2.read(new Molecule());
