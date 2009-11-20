@@ -159,15 +159,12 @@ public class VFLibTest extends CDKTestCase {
     public void testItShouldHaveANextCandidateInTheSecondaryState() {
         IState state = new VFState(benzeneQuery, benzene);
         VFMatch match = new VFMatch(benzeneQuery.getNode(0), benzene.getAtom(0));
-
         IState nextState = state.nextState(match);
-
         Assert.assertTrue(nextState.hasNextCandidate());
     }
 
     public void testItShouldMatchHexaneToHexane() {
         IMapper mapper = new VFMapper(hexaneQuery);
-
         Assert.assertTrue(mapper.hasMap(hexane));
     }
 
@@ -176,20 +173,17 @@ public class VFLibTest extends CDKTestCase {
      */
     public void testItShouldMatchHexaneToHexaneWhenUsingMolecule() {
         IMapper mapper = new VFMapper(hexane);
-
         Assert.assertTrue(mapper.hasMap(hexane));
     }
 
     public void testItShouldFindTwoMapsFromHexaneToHexane() {
         IMapper mapper = new VFMapper(hexaneQuery);
-
         List<Map<INode, IAtom>> maps = mapper.getMaps(hexane);
         Assert.assertEquals(2, maps.size());
     }
 
     public static IMolecule createHexane() throws CDKException {
         IMolecule result = DefaultChemObjectBuilder.getInstance().newMolecule();
-
         IAtom c1 = DefaultChemObjectBuilder.getInstance().newAtom("C");
         c1.setID("1");
         IAtom c2 = DefaultChemObjectBuilder.getInstance().newAtom("C");
