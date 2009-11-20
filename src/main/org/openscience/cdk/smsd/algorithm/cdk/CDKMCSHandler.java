@@ -160,7 +160,7 @@ public class CDKMCSHandler implements IMCS {
 
         } catch (CDKException e) {
             rmap = null;
-//            System.err.println("WARNING: CDKMCS: most probably time out error ");
+//            System.err.println("WARNING: graphContainer: most probably time out error ");
         }
 
         return 0;

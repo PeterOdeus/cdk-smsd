@@ -95,7 +95,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  *  IAtomContainer atomContainer = sp.parseSmiles("CC(=O)OC(=O)C"); // acetic acid anhydride
  *  IAtomContainer SMILESquery = sp.parseSmiles("CC"); // acetic acid anhydride
  *  IQueryAtomContainer query = IQueryAtomContainerCreator.createBasicQueryContainer(SMILESquery);
- *  boolean isSubstructure = CDKMCS.isSubgraph(atomContainer, query);
+ *  boolean isSubstructure = graphContainer.isSubgraph(atomContainer, query);
  *  </pre>
  *
  *  <p><font color="#FF0000">WARNING</font>:
@@ -295,26 +295,26 @@ public class CDKMCS {
     //Fixed by Asad
     public static List<List<CDKRMap>> getSubgraphAtomsMaps(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
 
-        List<List<CDKRMap>> l = new ArrayList<List<CDKRMap>>();
+        List<List<CDKRMap>> listCDKRMap = new ArrayList<List<CDKRMap>>();
 
         List<CDKRMap> list = checkSingleAtomCases(sourceGraph, targetGraph);
 
         if (list != null) {
-            l.add(list);
+            listCDKRMap.add(list);
         }
-        if (l != null) {
+        if (listCDKRMap != null) {
             // FIXME: this cannot be right... :(
             List<List<CDKRMap>> listMap = makeAtomsMapsOfBondsMaps(CDKMCS.getSubgraphMaps(sourceGraph, targetGraph), sourceGraph, targetGraph);
             if (listMap != null) {
-                l.addAll(listMap);
+                listCDKRMap.addAll(listMap);
             }
         }
 
-        if (l.isEmpty()) {
+        if (listCDKRMap.isEmpty()) {
             return null;
         } else {
 
-            return l;
+            return listCDKRMap;
         }
     }
 
@@ -329,23 +329,23 @@ public class CDKMCS {
     //Fixed by Asad
     public static List<CDKRMap> getSubgraphAtomsMap(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
 
-        List<CDKRMap> l = new ArrayList<CDKRMap>();
+        List<CDKRMap> listCDKRMap = new ArrayList<CDKRMap>();
         List<CDKRMap> list = checkSingleAtomCases(sourceGraph, targetGraph);
         if (list != null) {
-            l.addAll(list);
+            listCDKRMap.addAll(list);
         }
-        if (l.isEmpty()) {
+        if (listCDKRMap.isEmpty()) {
             list = makeAtomsMapOfBondsMap(CDKMCS.getSubgraphMap(sourceGraph, targetGraph), sourceGraph, targetGraph);
             if (list != null) {
-                l.addAll(list);
+                listCDKRMap.addAll(list);
             }
         }
 
-        if (l.isEmpty()) {
+        if (listCDKRMap.isEmpty()) {
             return null;
         } else {
             // FIXME: this cannot be right...
-            return l;
+            return listCDKRMap;
         }
     }
 
@@ -426,11 +426,11 @@ public class CDKMCS {
      */
     public static BitSet getBitSet(IAtomContainer atomContainer) {
         BitSet bitSet;
-        int n = atomContainer.getBondCount();
+        int bondCount = atomContainer.getBondCount();
 
-        if (n != 0) {
-            bitSet = new BitSet(n);
-            for (int i = 0; i < n; i++) {
+        if (bondCount != 0) {
+            bitSet = new BitSet(bondCount);
+            for (int i = 0; i < bondCount; i++) {
                 bitSet.set(i);
             }
         } else {
@@ -467,9 +467,9 @@ public class CDKMCS {
      *
      * @param  sourceGraph                first molecule. Must not be an IQueryAtomContainer.
      * @param  targetGraph                second molecule. May be an IQueryAtomContainer.
-     * @param  c1                initial condition ( bonds from sourceGraph that
+     * @param  sourceBitSet                initial condition ( bonds from sourceGraph that
      *                           must be contains in the solution )
-     * @param  c2                initial condition ( bonds from targetGraph that
+     * @param  targetBitSet                initial condition ( bonds from targetGraph that
      *                           must be contains in the solution )
      * @param  findAllStructure  if false stop at the first structure found
      * @param  findAllMap        if true search all the 'mappings' for one same
@@ -477,8 +477,8 @@ public class CDKMCS {
      * @return                   a List of Lists of CDKRMap objects that represent the search solutions
      * @throws CDKException
      */
-    public static List<List<CDKRMap>> search(IAtomContainer sourceGraph, IAtomContainer targetGraph, BitSet c1,
-            BitSet c2, boolean findAllStructure, boolean findAllMap) throws CDKException {
+    public static List<List<CDKRMap>> search(IAtomContainer sourceGraph, IAtomContainer targetGraph,
+            BitSet sourceBitSet,BitSet targetBitSet, boolean findAllStructure, boolean findAllMap) throws CDKException {
 
         // reset result
         List<List<CDKRMap>> rMapsList = new ArrayList<List<CDKRMap>>();
@@ -503,7 +503,7 @@ public class CDKMCS {
             throw new CDKException("Timeout exceeded in getOverlaps");
         }
         // parse the CDKRGraph with the given constrains and options
-        rGraph.parse(c1, c2, findAllStructure, findAllMap, timeManager);
+        rGraph.parse(sourceBitSet, targetBitSet, findAllStructure, findAllMap, timeManager);
         List<BitSet> solutionList = rGraph.getSolutions();
 
         // conversions of CDKRGraph's internal solutions to G1/G2 mappings
@@ -527,12 +527,12 @@ public class CDKMCS {
      * Projects a list of CDKRMap on a molecule.
      *
      * @param  rMapList  the list to project
-     * @param  graphContainer         the molecule on which project
-     * @param  id        the id in the CDKRMap of the molecule graphContainer
+     * @param  graphContainer  the molecule on which project
+     * @param  index        the index in the CDKRMap of the molecule graphContainer
      * @return           an AtomContainer
      */
-    public static IAtomContainer project(List<CDKRMap> rMapList, IAtomContainer g, int id) {
-        IAtomContainer ac = g.getBuilder().newAtomContainer();
+    public static IAtomContainer project(List<CDKRMap> rMapList, IAtomContainer graphContainer, int index) {
+        IAtomContainer ac = graphContainer.getBuilder().newAtomContainer();
 
         Map<IAtom, IAtom> table = new HashMap<IAtom, IAtom>();
         IAtom a1;
@@ -542,10 +542,10 @@ public class CDKMCS {
 
         for (Iterator<CDKRMap> i = rMapList.iterator(); i.hasNext();) {
             CDKRMap rMap = i.next();
-            if (id == CDKMCS.ID1) {
-                bond = g.getBond(rMap.getId1());
+            if (index == CDKMCS.ID1) {
+                bond = graphContainer.getBond(rMap.getId1());
             } else {
-                bond = g.getBond(rMap.getId2());
+                bond = graphContainer.getBond(rMap.getId2());
             }
 
             a = bond.getAtom(0);
@@ -573,7 +573,7 @@ public class CDKMCS {
                 ac.addAtom(a2);
                 table.put(a, a2);
             }
-            IBond newBond = g.getBuilder().newBond(a1, a2, bond.getOrder());
+            IBond newBond = graphContainer.getBuilder().newBond(a1, a2, bond.getOrder());
             newBond.setFlag(
                     CDKConstants.ISAROMATIC,
                     bond.getFlag(CDKConstants.ISAROMATIC));
@@ -587,7 +587,7 @@ public class CDKMCS {
      *
      * @param  rMapsList  list of RMapsList to project
      * @param  graphContainer          the molecule on which project
-     * @param  id         the id in the CDKRMap of the molecule graphContainer
+     * @param  index         the index in the CDKRMap of the molecule graphContainer
      * @return            a list of AtomContainer
      */
     public static ArrayList<IAtomContainer> projectList(List<List<CDKRMap>> rMapsList, IAtomContainer graphContainer, int id) {
@@ -689,17 +689,17 @@ public class CDKMCS {
     /**
      *  This makes maps of matching atoms out of a maps of matching bonds as produced by the get(Subgraph|Ismorphism)Maps methods.
      *
-     * @param  l   The list produced by the getMap method.
+     * @param  listCDKRMap   The list produced by the getMap method.
      * @param  sourceGraph  The first atom container. Must not be a IQueryAtomContainer.
      * @param  targetGraph  The second one (first and second as in getMap). May be an QueryAtomContaienr.
      * @return A List of Vectors of CDKRMap objects of matching Atoms.
      */
-    public static List<List<CDKRMap>> makeAtomsMapsOfBondsMaps(List<List<CDKRMap>> l, IAtomContainer sourceGraph, IAtomContainer targetGraph) {
-        if (l == null) {
-            return l;
+    public static List<List<CDKRMap>> makeAtomsMapsOfBondsMaps(List<List<CDKRMap>> listCDKRMap, IAtomContainer sourceGraph, IAtomContainer targetGraph) {
+        if (listCDKRMap == null) {
+            return listCDKRMap;
         }
         List<List<CDKRMap>> result = new ArrayList<List<CDKRMap>>();
-        for (List<CDKRMap> l2 : l) {
+        for (List<CDKRMap> l2 : listCDKRMap) {
             result.add(makeAtomsMapOfBondsMap(l2, sourceGraph, targetGraph));
         }
         return result;
@@ -708,19 +708,19 @@ public class CDKMCS {
     /**
      *  This makes a map of matching atoms out of a map of matching bonds as produced by the get(Subgraph|Ismorphism)Map methods.
      *
-     * @param  l   The list produced by the getMap method.
+     * @param  listCDKRMap   The list produced by the getMap method.
      * @param  sourceGraph  first molecule. Must not be an IQueryAtomContainer.
      * @param  targetGraph  second molecule. May be an IQueryAtomContainer.
      * @return     The mapping found projected on sourceGraph. This is a List of CDKRMap objects containing Ids of matching atoms.
      */
-    public static List<CDKRMap> makeAtomsMapOfBondsMap(List<CDKRMap> l, IAtomContainer sourceGraph, IAtomContainer targetGraph) {
-        if (l == null) {
-            return (l);
+    public static List<CDKRMap> makeAtomsMapOfBondsMap(List<CDKRMap> listCDKRMap, IAtomContainer sourceGraph, IAtomContainer targetGraph) {
+        if (listCDKRMap == null) {
+            return (listCDKRMap);
         }
         List<CDKRMap> result = new ArrayList<CDKRMap>();
-        for (int i = 0; i < l.size(); i++) {
-            IBond bond1 = sourceGraph.getBond(l.get(i).getId1());
-            IBond bond2 = targetGraph.getBond(l.get(i).getId2());
+        for (int i = 0; i < listCDKRMap.size(); i++) {
+            IBond bond1 = sourceGraph.getBond(listCDKRMap.get(i).getId1());
+            IBond bond2 = targetGraph.getBond(listCDKRMap.get(i).getId2());
             IAtom[] atom1 = BondManipulator.getAtomArray(bond1);
             IAtom[] atom2 = BondManipulator.getAtomArray(bond2);
             for (int j = 0; j < 2; j++) {
@@ -728,10 +728,10 @@ public class CDKMCS {
                 for (int k = 0; k < bondsConnectedToAtom1j.size(); k++) {
                     if (bondsConnectedToAtom1j.get(k) != bond1) {
                         IBond testBond = bondsConnectedToAtom1j.get(k);
-                        for (int m = 0; m < l.size(); m++) {
+                        for (int m = 0; m < listCDKRMap.size(); m++) {
                             IBond testBond2;
-                            if ((l.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
-                                testBond2 = targetGraph.getBond((l.get(m)).getId2());
+                            if ((listCDKRMap.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
+                                testBond2 = targetGraph.getBond((listCDKRMap.get(m)).getId2());
                                 for (int n = 0; n < 2; n++) {
                                     List<IBond> bondsToTest = targetGraph.getConnectedBondsList(atom2[n]);
                                     if (bondsToTest.contains(testBond2)) {

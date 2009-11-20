@@ -632,16 +632,16 @@ public class ChemicalFilters {
         return StereoScore;
     }
 
-    private IAtomContainer getMappedFragment(IAtomContainer molecule, Map<IAtom, IAtom> atomsMCS, int i) {
+    private IAtomContainer getMappedFragment(IAtomContainer molecule, Map<IAtom, IAtom> atomsMCS, int key) {
         IAtomContainer subgraphContainer = DefaultChemObjectBuilder.getInstance().newAtomContainer(molecule);
         atomsMCS.keySet();
-        if (i == 1) {
+        if (key == 1) {
             for (IAtom atoms : molecule.atoms()) {
                 if (!atomsMCS.containsKey(atoms)) {
                     subgraphContainer.removeAtomAndConnectedElectronContainers(atoms);
                 }
             }
-        } else if (i == 2) {
+        } else if (key == 2) {
             for (IAtom atoms : molecule.atoms()) {
                 if (!atomsMCS.containsValue(atoms)) {
                     subgraphContainer.removeAtomAndConnectedElectronContainers(atoms);
@@ -649,7 +649,7 @@ public class ChemicalFilters {
             }
         } else {
 
-            System.out.println("1: Reactant, 2: Product " + i + "is invalid option");
+            System.out.println("1: Reactant, 2: Product " + key + "is invalid option");
         }
 
         return subgraphContainer;

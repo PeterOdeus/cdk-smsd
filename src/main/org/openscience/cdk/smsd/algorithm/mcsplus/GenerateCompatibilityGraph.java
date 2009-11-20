@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+ * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.atomCont.uk}
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -89,10 +89,10 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private List<List<Integer>> labelAtoms(IAtomContainer ac) {
+    private List<List<Integer>> labelAtoms(IAtomContainer atomCont) {
         List<List<Integer>> label_list = new ArrayList<List<Integer>>();
 
-        for (int i = 0; i < ac.getAtomCount(); i++) {
+        for (int i = 0; i < atomCont.getAtomCount(); i++) {
             LabelContainer labelContainer = LabelContainer.getInstance();
             ArrayList<Integer> label = new ArrayList<Integer>(7);
 //            label.setSize(7);
@@ -101,13 +101,13 @@ public class GenerateCompatibilityGraph {
                 label.add(a, 0);
             }
 
-            IAtom refAtom = ac.getAtom(i);
+            IAtom refAtom = atomCont.getAtom(i);
             String atom1_type = refAtom.getSymbol();
 
             label.set(0, labelContainer.getLabelID(atom1_type));
 
             int count_neighbors = 1;
-            List<IAtom> connAtoms = ac.getConnectedAtomsList(refAtom);
+            List<IAtom> connAtoms = atomCont.getConnectedAtomsList(refAtom);
 
             for (IAtom negAtom : connAtoms) {
                 String atom2_type = negAtom.getSymbol();
@@ -146,10 +146,10 @@ public class GenerateCompatibilityGraph {
 
     }
 
-    private List<IAtom> reduceAtomSet(IAtomContainer ac) {
+    private List<IAtom> reduceAtomSet(IAtomContainer atomCont) {
 
         List<IAtom> basic_atoms = new ArrayList<IAtom>();
-        for (IAtom atom : ac.atoms()) {
+        for (IAtom atom : atomCont.atoms()) {
             basic_atoms.add(atom);
         }
         return basic_atoms;
@@ -218,7 +218,7 @@ public class GenerateCompatibilityGraph {
                 int index_b = compGraphNodes.get(b);
                 int index_bPlus1 = compGraphNodes.get(b + 1);
 
-                // if element ac !=b and atoms on the adjacent sides of the bonds are not equal
+                // if element atomCont !=b and atoms on the adjacent sides of the bonds are not equal
                 if (a != b && index_a != index_b && index_aPlus1 != index_bPlus1) {
 
                     IBond ReactantBond = null;
@@ -349,15 +349,15 @@ public class GenerateCompatibilityGraph {
     protected int compatibilityGraphIfCEdgeIsZeroBS() throws IOException {
 
 
-        int comp_graph_nodes_C_zero_List_size = compGraphNodesCZero.size();
+        int compGraphNodesCZeroListSize = compGraphNodesCZero.size();
 
         cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
         dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a < comp_graph_nodes_C_zero_List_size; a = a + 4) {
+        for (int a = 0; a < compGraphNodesCZeroListSize; a = a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);
-            for (int b = 0; b < comp_graph_nodes_C_zero_List_size; b = b + 4) {
+            for (int b = 0; b < compGraphNodesCZeroListSize; b = b + 4) {
                 int index_b = compGraphNodesCZero.get(b);
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);
 
@@ -411,19 +411,19 @@ public class GenerateCompatibilityGraph {
      */
     protected int compatibilityGraphCEdgeZeroBIS() throws IOException {
 
-        int comp_graph_nodes_C_zero_List_size = compGraphNodesCZero.size();
+        int compGraphNodesCZeroListSize = compGraphNodesCZero.size();
         cEdges = new ArrayList<Integer>(); //Initialize the cEdges List
         dEdges = new ArrayList<Integer>(); //Initialize the dEdges List
 
-        for (int a = 0; a < comp_graph_nodes_C_zero_List_size; a = a + 4) {
+        for (int a = 0; a < compGraphNodesCZeroListSize; a = a + 4) {
             int index_a = compGraphNodesCZero.get(a);
             int index_aPlus1 = compGraphNodesCZero.get(a + 1);
-            for (int b = a + 4; b < comp_graph_nodes_C_zero_List_size; b =
+            for (int b = a + 4; b < compGraphNodesCZeroListSize; b =
                             b + 4) {
                 int index_b = compGraphNodesCZero.get(b);
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);
 
-                // if element ac !=b and atoms on the adjacent sides of the bonds are not equal
+                // if element atomCont !=b and atoms on the adjacent sides of the bonds are not equal
                 if ((a != b) &&
                         (index_a != index_b) &&
                         (index_aPlus1 != index_bPlus1)) {

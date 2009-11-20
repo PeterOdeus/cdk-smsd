@@ -75,7 +75,7 @@ public class CDKRMapHandler {
             // System.out.println("Searched Single Molecule Mapping Case: ");
 
             List overlaps = CDKMCS.checkSingleAtomCases(source, target);
-            //timeoutFlag=CDKMCS.getTimeOutFlag();
+            //timeoutFlag=graphContainer.getTimeOutFlag();
 
 
             int nAtomsMatched = overlaps.size();
@@ -98,7 +98,7 @@ public class CDKRMapHandler {
             List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
 
 
-            //timeoutFlag=CDKMCS.getTimeOutFlag();
+            //timeoutFlag=graphContainer.getTimeOutFlag();
             //System.out.println("Searched: ");
 
             List reducedList = removeSubGraph(overlaps);
@@ -154,7 +154,7 @@ public class CDKRMapHandler {
             // System.out.println("Searched Single Molecule Mapping Case: ");
 
             List overlaps = CDKMCS.checkSingleAtomCases(source, target);
-            //timeoutFlag=CDKMCS.getTimeOutFlag();
+            //timeoutFlag=graphContainer.getTimeOutFlag();
 
 
             int nAtomsMatched = overlaps.size();
@@ -175,8 +175,8 @@ public class CDKRMapHandler {
             //source (Mol1), target (Mol2), RGraph1, RGraph2, true, true( search all MCS)
 
             List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
-//            List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, false);
-            //timeoutFlag=CDKMCS.getTimeOutFlag();
+//            List overlaps = graphContainer.search(source, target, new BitSet(), new BitSet(), true, false);
+            //timeoutFlag=graphContainer.getTimeOutFlag();
             //System.out.println("Searched: ");
 
             List reducedList = removeSubGraph(overlaps);
