@@ -43,10 +43,10 @@ public class VFLibTest extends CDKTestCase {
     public static void setUp() throws CDKException {
         hexane = createHexane();
         System.out.println(" " + hexane.getAtomCount());
-        hexaneQuery = TemplateCompiler.compile(hexane, true);
+        hexaneQuery = TemplateCompiler.compile(hexane);
         System.out.println(" " + hexaneQuery.countNodes());
         benzene = createBenzene();
-        benzeneQuery = TemplateCompiler.compile(benzene, true);
+        benzeneQuery = TemplateCompiler.compile(benzene);
     }
 
     public void testItShouldFindAllMatchCandidatesInTheRootState() {
@@ -171,8 +171,11 @@ public class VFLibTest extends CDKTestCase {
         Assert.assertTrue(mapper.hasMap(hexane));
     }
 
+    /**
+     * 
+     */
     public void testItShouldMatchHexaneToHexaneWhenUsingMolecule() {
-        IMapper mapper = new VFMapper(hexane, true);
+        IMapper mapper = new VFMapper(hexane);
 
         Assert.assertTrue(mapper.hasMap(hexane));
     }
