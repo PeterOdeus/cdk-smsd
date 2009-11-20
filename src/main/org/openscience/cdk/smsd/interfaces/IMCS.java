@@ -33,12 +33,10 @@ import org.openscience.cdk.exception.CDKException;
 public interface IMCS extends IMCSBase {
 
     /**
-     *
-     * @param removeHydrogen 
      * @return
      * @throws java.io.IOException
      * @throws CDKException
      */
-    int searchMCS(boolean removeHydrogen) throws IOException, CDKException;
+    int searchMCS() throws IOException, CDKException;
 
 }

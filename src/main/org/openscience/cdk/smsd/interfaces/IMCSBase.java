@@ -40,34 +40,38 @@ public interface IMCSBase {
      *
      * @param source
      * @param target
+     * @param removeHydrogen
      * @throws CDKException
      *
      */
-    void init(MolHandler source, MolHandler target) throws CDKException;
+    void init(MolHandler source, MolHandler target, boolean removeHydrogen) throws CDKException;
 
     /**
      *
      * @param source
      * @param target
+     * @param removeHydrogen
      * @throws CDKException
      */
-    void init(IMolecule source, IMolecule target) throws CDKException;
+    void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException;
 
     /**
      *
      * @param source
      * @param target
+     * @param removeHydrogen
      * @throws CDKException
      */
-    void init(IAtomContainer source, IAtomContainer target) throws CDKException;
+    void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) throws CDKException;
 
     /**
      *
      * @param sourceMolFileName
      * @param targetMolFileName
+     * @param removeHydrogen 
      * @throws CDKException
      */
-    void init(String sourceMolFileName, String targetMolFileName) throws CDKException;
+    void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException;
 
     /**
      * 

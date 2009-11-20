@@ -67,18 +67,17 @@ public class MCSFactory implements IMCSAlgorithm {
     private List<Integer> StereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
-    private boolean removeHydrogen = false;
     private boolean stereoFilter = false;
     private boolean fragmentFilter = false;
     private boolean energyFilter = false;
     private IMCS mcs = null;
     private int algorithmType = 0;
+    private boolean removeHydrogen = false;
 
     /**
      * 
      * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 cdkMCS
      * @param bondTypeFlag
-     * @param removeHydrogen
      * @param stereoFilter
      * @param fragmentFilter
      * @param energyFilter
@@ -86,12 +85,9 @@ public class MCSFactory implements IMCSAlgorithm {
     public MCSFactory(
             int algorithmType,
             boolean bondTypeFlag,
-            boolean removeHydrogen,
             boolean stereoFilter,
             boolean fragmentFilter,
             boolean energyFilter) {
-
-        this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;
         this.fragmentFilter = fragmentFilter;
         this.energyFilter = energyFilter;
@@ -119,14 +115,19 @@ public class MCSFactory implements IMCSAlgorithm {
 
     }
 
+    /**
+     *
+     * @param bondTypeFlag
+     * @param stereoFilter
+     * @param fragmentFilter
+     * @param energyFilter
+     */
     public MCSFactory(
             boolean bondTypeFlag,
-            boolean removeHydrogen,
             boolean stereoFilter,
             boolean fragmentFilter,
             boolean energyFilter) {
 
-        this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;
         this.fragmentFilter = fragmentFilter;
         this.energyFilter = energyFilter;
@@ -162,8 +163,6 @@ public class MCSFactory implements IMCSAlgorithm {
         int pAtomCount = PMol.getMolecule().getAtomCount();
 
 //            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
-
-        /*This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap if bonds are less than 2*/
 
 //            long startTime = System.currentTimeMillis();
 //
@@ -240,8 +239,8 @@ public class MCSFactory implements IMCSAlgorithm {
 
     private synchronized void fragmentBuilder() {
 
-        FragmentMatcher fragmentMatcher = new FragmentMatcher(RFrag, PFrag);
-        fragmentMatcher.searchMCS(removeHydrogen);
+        FragmentMatcher fragmentMatcher = new FragmentMatcher(RFrag, PFrag, removeHydrogen);
+        fragmentMatcher.searchMCS();
 
         firstSolution.clear();
         allMCS.clear();
@@ -259,8 +258,8 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new CDKMCSHandler();
 
-            mcs.init(RMol, PMol);
-            mcs.searchMCS(removeHydrogen);
+            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.searchMCS();
 
             firstSolution.clear();
             allMCS.clear();
@@ -287,8 +286,8 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new MCSPlusHandler();
 
-            mcs.init(RMol, PMol);
-            mcs.searchMCS(removeHydrogen);
+            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.searchMCS();
 
             firstSolution.clear();
             allMCS.clear();
@@ -317,7 +316,7 @@ public class MCSFactory implements IMCSAlgorithm {
      *
      */
     @Override
-    public void init(MolHandler Reactant, MolHandler Product) {
+    public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
         try {
 
             this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
@@ -342,10 +341,11 @@ public class MCSFactory implements IMCSAlgorithm {
      * @param Product
      */
     @Override
-    public synchronized void init(IMolecule Reactant, IMolecule Product) {
+    public synchronized void init(IMolecule Reactant, IMolecule Product, boolean removeHydrogen) {
+        this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-        init(RMol, PMol);
+        init(RMol, PMol, removeHydrogen);
     }
 
     /**
@@ -354,19 +354,21 @@ public class MCSFactory implements IMCSAlgorithm {
      * @param Product
      */
     @Override
-    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product) {
+    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product, boolean removeHydrogen) {
+        this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-        init(RMol, PMol);
+        init(RMol, PMol, removeHydrogen);
     }
 
-    public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
+        this.removeHydrogen = removeHydrogen;
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        this.init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     public synchronized void setChemFilters() throws CDKException {
@@ -665,8 +667,8 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new VFlibMCSHandler();
-            mcs.init(RMol, PMol);
-            mcs.searchMCS(removeHydrogen);
+            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.searchMCS();
 
             firstSolution.clear();
             allMCS.clear();
@@ -692,8 +694,8 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new SingleMappingHandler();
-            mcs.init(RMol, PMol);
-            mcs.searchMCS(removeHydrogen);
+            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.searchMCS();
 
             firstSolution.clear();
             allMCS.clear();

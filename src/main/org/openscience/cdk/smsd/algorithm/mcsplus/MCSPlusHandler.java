@@ -62,7 +62,7 @@ public class MCSPlusHandler implements IMCS {
      * @param target
      */
     @Override
-    public void init(IAtomContainer source, IAtomContainer target) {
+    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
         IAtomContainer mol1 = source;
         IAtomContainer mol2 = target;
@@ -70,7 +70,7 @@ public class MCSPlusHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
     }
 
@@ -78,7 +78,7 @@ public class MCSPlusHandler implements IMCS {
      * @param source
      * @param target
      */
-    public void init(IMolecule source, IMolecule target) throws CDKException {
+    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
 
         IMolecule mol1 = source;
         IMolecule mol2 = target;
@@ -86,7 +86,7 @@ public class MCSPlusHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     /**
@@ -94,14 +94,14 @@ public class MCSPlusHandler implements IMCS {
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName) {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
 
     }
@@ -111,30 +111,25 @@ public class MCSPlusHandler implements IMCS {
      * @param product
      */
     @Override
-    public void init(MolHandler reactant, MolHandler product) {
-
-
+    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
         this.source = reactant.getMolecule();
         this.target = product.getMolecule();
-
     }
 
     //Function is called by the main program and serves as a starting point for the comparision procedure.
     /**
-     *
-     * @param removeHydrogen
      * @return
      * @throws java.io.IOException
      */
     @Override
-    public int searchMCS(boolean removeHydrogen) throws IOException {
+    public int searchMCS() throws IOException {
         List<List<Integer>> _mappings = null;
         try {
             if (source.getAtomCount() > target.getAtomCount()) {
-                _mappings = new MCSPlus().getOverlaps(source, target, removeHydrogen);
+                _mappings = new MCSPlus().getOverlaps(source, target);
             } else {
                 flagExchange = true;
-                _mappings = new MCSPlus().getOverlaps(target, source, removeHydrogen);
+                _mappings = new MCSPlus().getOverlaps(target, source);
 
             }
 

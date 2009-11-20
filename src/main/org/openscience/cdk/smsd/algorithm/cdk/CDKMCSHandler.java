@@ -62,13 +62,12 @@ public class CDKMCSHandler implements IMCS {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
-
     /**
      * @param source
      * @param target
      */
     @Override
-    public void init(IAtomContainer source, IAtomContainer target) {
+    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
         IAtomContainer mol1 = source;
         IAtomContainer mol2 = target;
@@ -76,7 +75,7 @@ public class CDKMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
     }
 
@@ -84,7 +83,7 @@ public class CDKMCSHandler implements IMCS {
      * @param source
      * @param target
      */
-    public void init(IMolecule source, IMolecule target) throws CDKException {
+    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
 
         IMolecule mol1 = source;
         IMolecule mol2 = target;
@@ -92,7 +91,7 @@ public class CDKMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     /**
@@ -100,14 +99,14 @@ public class CDKMCSHandler implements IMCS {
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName) {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
 
     }
@@ -119,19 +118,17 @@ public class CDKMCSHandler implements IMCS {
      * @param product
      */
     @Override
-    public void init(MolHandler reactant, MolHandler product) {
-
-
+    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
         this.source = reactant.getMolecule();
         this.target = product.getMolecule();
-
     }
+
     /**
      * 
      * @return
      */
     @Override
-    public int searchMCS(boolean removeHydrogen) throws CDKException {
+    public int searchMCS() throws CDKException {
 
 
         CDKRMapHandler rmap = new CDKRMapHandler();

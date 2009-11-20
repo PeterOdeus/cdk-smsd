@@ -65,17 +65,13 @@ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
  */
 public class TemplateCompiler implements IQueryCompiler {
 
-//    private Reducer reducer;
-//    private Map<IAtom, Integer> reductions;
     private IAtomContainer molecule;
-    private boolean removeHydrogen = false;
 
-    public TemplateCompiler(boolean removeHydrogen) {
-        this.removeHydrogen = removeHydrogen;
+    public TemplateCompiler() {
     }
 
-    public static IQuery compile(IAtomContainer molecule, boolean removeHydrogen) {
-        TemplateCompiler compiler = new TemplateCompiler(removeHydrogen);
+    public static IQuery compile(IAtomContainer molecule) {
+        TemplateCompiler compiler = new TemplateCompiler();
         compiler.setMolecule(molecule);
         return compiler.compile();
     }
@@ -90,46 +86,27 @@ public class TemplateCompiler implements IQueryCompiler {
 
     @Override
     public IQuery compile() {
-//        IAtomContainer copy = (IAtomContainer) queryMolecule.clone();
-//        reductions.clear();
-        //Remove Hydrogen if Necesarry Asad
-//            reducer.reduce(copy, reductions);
         return build(molecule);
     }
 
     private IQuery build(IAtomContainer queryMolecule) {
         VFQueryBuilder result = new VFQueryBuilder();
 
-        for (int i = 0; i < queryMolecule.getAtomCount(); i++) {
 
-            if (removeHydrogen) {
-                IAtom atom = queryMolecule.getAtom(i);
-                if (!atom.getSymbol().equalsIgnoreCase("H")) {
-                    IQueryAtom matcher = createMatcher(atom);
-                    if (matcher != null) {
-                        result.addNode(matcher, atom);
-                    }
-                }
-            } else {
-                IAtom atom = queryMolecule.getAtom(i);
-                IQueryAtom matcher = createMatcher(atom);
-                if (matcher != null) {
-                    result.addNode(matcher, atom);
-                }
+        for (int i = 0; i < queryMolecule.getAtomCount(); i++) {
+            IAtom atom = queryMolecule.getAtom(i);
+            IQueryAtom matcher = createMatcher(atom);
+            if (matcher != null) {
+                result.addNode(matcher, atom);
             }
+
         }
 
         for (int i = 0; i < queryMolecule.getBondCount(); i++) {
             IBond bond = queryMolecule.getBond(i);
             IAtom sourceAtom = bond.getAtom(0);
             IAtom targetAtom = bond.getAtom(1);
-            if (removeHydrogen &&
-                    (!sourceAtom.getSymbol().equalsIgnoreCase("H") &&
-                    !targetAtom.getSymbol().equalsIgnoreCase("H"))) {
-                result.connect(result.getNode(sourceAtom), result.getNode(targetAtom), createBondMatcher(bond));
-            } else {
-                result.connect(result.getNode(sourceAtom), result.getNode(targetAtom), createBondMatcher(bond));
-            }
+            result.connect(result.getNode(sourceAtom), result.getNode(targetAtom), createBondMatcher(bond));
         }
 
         return result;

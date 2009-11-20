@@ -74,15 +74,13 @@ public class SubGraphFactory implements IMCSAlgorithm {
     /**
      * 
      * @param BondTypeFlag 
-     * @param removeHydrogen
      * @param stereoFilter
      * @param fragmentFilter
      * @param energyFilter
      */
     @TestMethod("testVFLib")
-    public SubGraphFactory(boolean BondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter){
+    public SubGraphFactory(boolean BondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
 
-        this.removeHydrogen = removeHydrogen;
         this.stereoFilter = stereoFilter;
         this.fragmentFilter = fragmentFilter;
         this.energyFilter = energyFilter;
@@ -103,22 +101,22 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
     private synchronized void mcsBuilder() {
 
-            int rBondCount = RMol.getMolecule().getBondCount();
-            int pBondCount = PMol.getMolecule().getBondCount();
+        int rBondCount = RMol.getMolecule().getBondCount();
+        int pBondCount = PMol.getMolecule().getBondCount();
 
 //
 //            This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap
 //             if bonds are less than 2
 
-            if (rBondCount > 1 && pBondCount > 1) {
-                //System.out.println("\nVF-MCS\n");
-                vfLibMCS();
+        if (rBondCount > 1 && pBondCount > 1) {
+            //System.out.println("\nVF-MCS\n");
+            vfLibMCS();
 
-            } else {
-                singleMapping();
-            }
+        } else {
+            singleMapping();
+        }
 
-            System.gc();
+        System.gc();
 
     }
 
@@ -129,9 +127,9 @@ public class SubGraphFactory implements IMCSAlgorithm {
      *
      */
     @Override
-    public void init(MolHandler Reactant, MolHandler Product) {
+    public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
         try {
-
+            this.removeHydrogen = removeHydrogen;
             this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
             this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
             mcsBuilder();
@@ -148,14 +146,11 @@ public class SubGraphFactory implements IMCSAlgorithm {
      */
     @Override
     @TestMethod("testVFLib")
-    public synchronized void init(IMolecule Reactant, IMolecule Product) {
-        //System.out.println(" Container Size " + Reactant.getAtomCount());
-        //System.out.println(" Container Size " + Product.getAtomCount());
+    public synchronized void init(IMolecule Reactant, IMolecule Product, boolean removeHydrogen) {
+        this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-
-        init(RMol, PMol);
-
+        init(RMol, PMol, removeHydrogen);
     }
 
     /**
@@ -164,24 +159,21 @@ public class SubGraphFactory implements IMCSAlgorithm {
      * @param Product
      */
     @Override
-    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product) {
-
-        //System.out.println(" Container Size " + Reactant.getBondCount());
-        //System.out.println(" Container Size " + Product.getBondCount());
+    public synchronized void init(IAtomContainer Reactant, IAtomContainer Product, boolean removeHydrogen) {
+        this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant, false, removeHydrogen);
         this.PMol = new MolHandler(Product, false, removeHydrogen);
-
-        init(RMol, PMol);
-
+        init(RMol, PMol, removeHydrogen);
     }
 
-     public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
+        this.removeHydrogen = removeHydrogen;
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     public synchronized void setChemFilters() throws CDKException {
@@ -480,8 +472,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private void vfLibMCS() {
 
         VFlibTurboHandler mcs = new VFlibTurboHandler();
-        mcs.init(RMol, PMol);
-        this.subGraphFlag = mcs.isSubgraph(removeHydrogen);
+        mcs.init(RMol, PMol, removeHydrogen);
+        this.subGraphFlag = mcs.isSubgraph();
 
         firstSolution.clear();
         allMCS.clear();
@@ -503,8 +495,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
             SingleMappingHandler mcs = new SingleMappingHandler();
 
-            mcs.init(RMol, PMol);
-            mcs.searchMCS(removeHydrogen);
+            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.searchMCS();
 
             firstSolution.clear();
             allMCS.clear();

@@ -47,6 +47,7 @@ public class SingleMappingHandler implements IMCS {
     private static List<TreeMap<Integer, Integer>> allMCS = null;
     private IAtomContainer source = null;
     private IAtomContainer target = null;
+    private boolean removeH=false;
 
     public SingleMappingHandler() {
 
@@ -57,68 +58,79 @@ public class SingleMappingHandler implements IMCS {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
 
     }
-public void init(IMolecule source, IMolecule target) throws CDKException {
-
-        this.source = source;
-        this.target = target;
-    }
 
     /**
-     *
-     *
-     * @param reactant
-     * @param product
+     * @param source
+     * @param target
      */
     @Override
-    public void init(IAtomContainer reactant, IAtomContainer product) {
+    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
-        this.source = reactant;
-        this.target = product;
+        IAtomContainer mol1 = source;
+        IAtomContainer mol2 = target;
+
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+
+        init(Reactant, Product, removeHydrogen);
 
     }
 
     /**
-     * @param reactant
-     * @param product
+     * @param source
+     * @param target
      */
-    @Override
-    public void init(MolHandler reactant, MolHandler product) {
+    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
 
+        IMolecule mol1 = source;
+        IMolecule mol2 = target;
 
-        this.source = reactant.getMolecule();
-        this.target = product.getMolecule();
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
 
+        init(Reactant, Product, removeHydrogen);
     }
 
     /**
-     * Creates a new instance of SearchCliques
      * @param sourceMolFileName
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName) {
-
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
-        this.source = new MolHandler(mol1, false).getMolecule();
-        this.target = new MolHandler(mol2, false).getMolecule();
+        MolHandler Reactant = new MolHandler(mol1, false);
+        MolHandler Product = new MolHandler(mol2, false);
+        init(Reactant, Product, removeHydrogen);
 
 
     }
+
+    /**
+     * @param reactant
+     * @param product
+     */
+    @Override
+    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
+        this.removeH=removeHydrogen;
+    }
     //Function is called by the main program and serves as a starting point for the comparision procedure.
+
     /**
      *
      * @return
      * @throws java.io.IOException
      */
     @Override
-    public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
+    public int searchMCS() throws IOException, CDKException {
 
 
         SingleMapping singleMapping = new SingleMapping();
-        singleMapping.getOverLaps(source, target, removeHydrogen);
+        singleMapping.getOverLaps(source, target,removeH);
 
 
         setAllMapping();

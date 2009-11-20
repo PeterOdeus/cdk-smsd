@@ -50,16 +50,15 @@ public class SMSD implements IMCSAlgorithm {
      * @param subStructureMode true for fast substructure search without
      * exhaustive MCS else false
      * @param bondTypeFlag   true will considered bond types for mapping else false
-     * @param removeHydrogen true if Hydrogen are not to be mapped else false
      * @param stereoFilter   true if stereo match is considered else false
      * @param fragmentFilter true if fragement filter is switched on else false
      * @param energyFilter   true if bond energy filter is switched on else false
      */
-    public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+    public SMSD(boolean subStructureMode, boolean bondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
         if (subStructureMode) {
-            comparison = new SubGraphFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
+            comparison = new SubGraphFactory(bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
         } else {
-            comparison = new MCSFactory(bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
+            comparison = new MCSFactory(bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
         }
 
         System.gc();
@@ -71,13 +70,12 @@ public class SMSD implements IMCSAlgorithm {
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
      * exhaustive MCS else false
      * @param bondTypeFlag   true will considered bond types for mapping else false
-     * @param removeHydrogen true if Hydrogen are not to be mapped else false
      * @param stereoFilter   true if stereo match is considered else false
      * @param fragmentFilter true if fragement filter is switched on else false
      * @param energyFilter   true if bond energy filter is switched on else false
      */
-    public SMSD(int algorithmType, boolean bondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
-        comparison = new MCSFactory(algorithmType, bondTypeFlag, removeHydrogen, stereoFilter, fragmentFilter, energyFilter);
+    public SMSD(int algorithmType, boolean bondTypeFlag, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
+        comparison = new MCSFactory(algorithmType, bondTypeFlag, stereoFilter, fragmentFilter, energyFilter);
         System.gc();
 
     }
@@ -90,10 +88,10 @@ public class SMSD implements IMCSAlgorithm {
      * 
      */
     @Override
-    public void init(MolHandler Query, MolHandler Target) throws CDKException {
+    public void init(MolHandler Query, MolHandler Target, boolean removeHydrogen) throws CDKException {
 
         if (Query.getMolecule().getAtomCount() > 0 && Target.getMolecule().getAtomCount() > 0) {
-            comparison.init(Query, Target);
+            comparison.init(Query, Target, removeHydrogen);
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
@@ -109,10 +107,10 @@ public class SMSD implements IMCSAlgorithm {
      * @throws CDKException
      */
     @Override
-    public synchronized void init(IMolecule Query, IMolecule Target) throws CDKException {
+    public synchronized void init(IMolecule Query, IMolecule Target, boolean removeHydrogen) throws CDKException {
 
         if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
-            comparison.init(Query, Target);
+            comparison.init(Query, Target, removeHydrogen);
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
@@ -126,10 +124,10 @@ public class SMSD implements IMCSAlgorithm {
      * @throws CDKException
      */
     @Override
-    public synchronized void init(IAtomContainer Query, IAtomContainer Target) throws CDKException {
+    public synchronized void init(IAtomContainer Query, IAtomContainer Target, boolean removeHydrogen) throws CDKException {
 
         if (Query.getAtomCount() > 0 && Target.getAtomCount() > 0) {
-            comparison.init(Query, Target);
+            comparison.init(Query, Target, removeHydrogen);
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
@@ -138,7 +136,7 @@ public class SMSD implements IMCSAlgorithm {
 
     }
 
-    public void init(String sourceMolFileName, String targetMolFileName) throws CDKException {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
@@ -146,7 +144,7 @@ public class SMSD implements IMCSAlgorithm {
         MolHandler Query = new MolHandler(mol1, false);
         MolHandler Target = new MolHandler(mol2, false);
 
-        init(Query, Target);
+        init(Query, Target, removeHydrogen);
         System.gc();
     }
 

@@ -80,9 +80,9 @@ public class VFlibMCSHandler implements IMCS {
      * @throws CDKException 
      */
     @Override
-    public int searchMCS(boolean removeHydrogen) throws IOException, CDKException {
+    public int searchMCS() throws IOException, CDKException {
 
-        matchVFLibMCS(removeHydrogen);
+        matchVFLibMCS();
 
         boolean flag = mcgregorFlag();
 
@@ -179,7 +179,7 @@ public class VFlibMCSHandler implements IMCS {
      * @param target
      */
     @Override
-    public void init(IAtomContainer source, IAtomContainer target) {
+    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
         IAtomContainer mol1 = source;
         IAtomContainer mol2 = target;
@@ -187,7 +187,7 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
     }
 
@@ -195,7 +195,7 @@ public class VFlibMCSHandler implements IMCS {
      * @param source
      * @param target
      */
-    public void init(IMolecule source, IMolecule target) throws CDKException {
+    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
 
         IMolecule mol1 = source;
         IMolecule mol2 = target;
@@ -203,7 +203,7 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     /**
@@ -211,42 +211,41 @@ public class VFlibMCSHandler implements IMCS {
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName) {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
+
 
     }
 
     /**
-     * 
-     *
-     * @param Reactant
-     * @param Product
+     * @param reactant
+     * @param product
      */
     @Override
-    public void init(MolHandler Reactant, MolHandler Product) {
-        source = Reactant.getMolecule();
-        target = Product.getMolecule();
+    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
+        this.source = reactant.getMolecule();
+        this.target = product.getMolecule();
     }
 
-    private void matchVFLibMCS(boolean removeHydrogen) {
+    private void matchVFLibMCS() {
         IQuery query = null;
         IMapper mapper = null;
         boolean RONP = false;
         if (source.getAtomCount() <= target.getAtomCount()) {
 
-            query = TemplateCompiler.compile(source, removeHydrogen);
+            query = TemplateCompiler.compile(source);
             mapper = new VFMCSMapper(query);
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(target));
             RONP = true;
 
         } else {
-            query = TemplateCompiler.compile(target, removeHydrogen);
+            query = TemplateCompiler.compile(target);
             mapper = new VFMCSMapper(query);
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(source));
             RONP = false;

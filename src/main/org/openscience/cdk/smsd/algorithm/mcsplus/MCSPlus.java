@@ -48,18 +48,17 @@ public class MCSPlus {
      * 
      * @param ac1
      * @param ac2
-     * @param removeHydrogen
      * @return
      * @throws CDKException
      */
-    protected List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2, boolean removeHydrogen) throws CDKException {
+    protected List<List<Integer>> getOverlaps(IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
         Stack<List<Integer>> maxCliqueSet = null;
         List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
 
         try {
 
-            GenerateCompatibilityGraph gcg = new GenerateCompatibilityGraph(ac1, ac2, removeHydrogen);
+            GenerateCompatibilityGraph gcg = new GenerateCompatibilityGraph(ac1, ac2);
             List<Integer> comp_graph_nodes = gcg.getCompGraphNodes();
 
             List<Integer> C_edges = gcg.getCEgdes();

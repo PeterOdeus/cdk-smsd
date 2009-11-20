@@ -37,51 +37,57 @@ public interface IMCSAlgorithm extends IMCSBase {
      */
     Double getEnergyScore(int Key);
 
+    /**
+     *
+     * @param Key
+     * @return
+     */
     Integer getFragmentSize(int Key);
 
+    /**
+     *
+     * @return
+     */
     IAtomContainer getProductMolecule();
 
+    /**
+     *
+     * @return
+     */
     IAtomContainer getReactantMolecule();
 
+    /**
+     *
+     * @param Key
+     * @return
+     */
     Integer getStereoScore(int Key);
 
+    /**
+     *
+     * @return
+     */
     boolean isStereoMisMatch();
 
+    /**
+     *
+     * @return
+     */
     boolean isSubgraph();
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     double getTanimotoSimilarity() throws IOException;
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     double getEuclideanDistance() throws IOException;
-//
-//    /**
-//     * Creates a new instance of SearchCliques
-//     * @param Query
-//     * @param Target
-//     * @param removeHydrogen
-//     * @throws java.io.IOException
-//     *
-//     *
-//     */
-//    void set(MolHandler Query, MolHandler Target, boolean removeHydrogen) throws IOException;
-//
-//    /**
-//     * Creates a new instance of SearchCliques
-//     * @param ReactantMolFileName
-//     * @param ProductMolFileName
-//     * @param removeHydrogen
-//     * @throws java.io.IOException
-//     */
-//    void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) throws IOException;
-//
-//    /**
-//     * Creates a new instance of SearchCliques
-//     * @param ReactantMol
-//     * @param ProductMol
-//     * @param removeHydrogen
-//     * @throws java.io.IOException
-//     */
-//    void set(IAtomContainer ReactantMol, IAtomContainer ProductMol, boolean removeHydrogen) throws IOException;
-//
 
    
 }

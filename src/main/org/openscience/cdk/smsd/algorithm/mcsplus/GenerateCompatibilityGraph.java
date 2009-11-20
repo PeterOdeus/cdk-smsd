@@ -46,7 +46,6 @@ public class GenerateCompatibilityGraph {
     private List<Integer> dEdges = new ArrayList<Integer>();
     private int cEdgesSize = 0;
     private int dEdgesSize = 0;
-    private boolean removeHydrogen = false;
     private IAtomContainer source = null;
     private IAtomContainer target = null;
     private boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
@@ -55,13 +54,11 @@ public class GenerateCompatibilityGraph {
      * 
      * @param source
      * @param target
-     * @param HFlag Hydrogen removal flag
      * @throws java.io.IOException
      */
-    protected GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target, boolean HFlag) throws IOException {
+    protected GenerateCompatibilityGraph(IAtomContainer source, IAtomContainer target) throws IOException {
         this.source = source;
         this.target = target;
-        this.removeHydrogen = HFlag;
 
         compatibilityGraphNodes();
 
@@ -153,13 +150,7 @@ public class GenerateCompatibilityGraph {
 
         List<IAtom> basic_atoms = new ArrayList<IAtom>();
         for (IAtom atom : ac.atoms()) {
-            if (removeHydrogen) {
-                if (!atom.getSymbol().equalsIgnoreCase("H")) {
-                    basic_atoms.add(atom);
-                }
-            } else {
-                basic_atoms.add(atom);
-            }
+            basic_atoms.add(atom);
         }
         return basic_atoms;
     }
@@ -331,32 +322,19 @@ public class GenerateCompatibilityGraph {
                 //You can also check object equal or charge, hydrogen count etc
 
                 if (atom1.getSymbol().equalsIgnoreCase(atom2.getSymbol())) {
-                    if (removeHydrogen) {
-                        if (!atom1.getSymbol().equalsIgnoreCase("H") || !atom2.getSymbol().equalsIgnoreCase("H")) {
-                            if (!map.contains(i + "_" + j)) {
-                                compGraphNodesCZero.add(i);
-                                compGraphNodesCZero.add(j);
-                                compGraphNodesCZero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-                                compGraphNodesCZero.add(count_nodes);
-                                compGraphNodes.add(i);
-                                compGraphNodes.add(j);
-                                compGraphNodes.add(count_nodes++);
-                                map.add(i + "_" + j);
-                            }
-                        }
-                    } else {
-                        if (!map.contains(i + "_" + j)) {
-                            compGraphNodesCZero.add(i);
-                            compGraphNodesCZero.add(j);
-                            compGraphNodesCZero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-                            compGraphNodesCZero.add(count_nodes);
-                            compGraphNodes.add(i);
-                            compGraphNodes.add(j);
-                            compGraphNodes.add(count_nodes++);
-                            map.add(i + "_" + j);
-                        }
+
+                    if (!map.contains(i + "_" + j)) {
+                        compGraphNodesCZero.add(i);
+                        compGraphNodesCZero.add(j);
+                        compGraphNodesCZero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
+                        compGraphNodesCZero.add(count_nodes);
+                        compGraphNodes.add(i);
+                        compGraphNodes.add(j);
+                        compGraphNodes.add(count_nodes++);
+                        map.add(i + "_" + j);
                     }
                 }
+
             }
         }
         map.clear();

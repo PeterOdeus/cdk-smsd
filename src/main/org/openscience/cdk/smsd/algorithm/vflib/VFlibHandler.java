@@ -70,9 +70,9 @@ public class VFlibHandler implements ISubGraph {
      * @throws CDKException
      */
     @Override
-    public boolean isSubgraph(boolean removeHydrogen) throws IOException, CDKException {
+    public boolean isSubgraph() throws IOException, CDKException {
 
-        IQuery query = TemplateCompiler.compile(source, removeHydrogen);
+        IQuery query = TemplateCompiler.compile(source);
 
         IMapper mapper = new VFMapper(query);
 
@@ -136,7 +136,7 @@ public class VFlibHandler implements ISubGraph {
      * @param target
      */
     @Override
-    public void init(IAtomContainer source, IAtomContainer target) {
+    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
         IAtomContainer mol1 = source;
         IAtomContainer mol2 = target;
@@ -144,7 +144,7 @@ public class VFlibHandler implements ISubGraph {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
     }
 
@@ -152,7 +152,7 @@ public class VFlibHandler implements ISubGraph {
      * @param source
      * @param target
      */
-    public void init(IMolecule source, IMolecule target) throws CDKException {
+    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
 
         IMolecule mol1 = source;
         IMolecule mol2 = target;
@@ -160,7 +160,7 @@ public class VFlibHandler implements ISubGraph {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
     }
 
     /**
@@ -168,14 +168,14 @@ public class VFlibHandler implements ISubGraph {
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName) {
+    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product);
+        init(Reactant, Product, removeHydrogen);
 
 
     }
@@ -185,11 +185,9 @@ public class VFlibHandler implements ISubGraph {
      * @param product
      */
     @Override
-    public void init(MolHandler reactant, MolHandler product) {
-
+    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
         this.source = reactant.getMolecule();
         this.target = product.getMolecule();
-
     }
 
     /**
