@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
@@ -41,6 +42,8 @@ import org.openscience.cdk.interfaces.IMolecule;
  * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
  * </p>
  */
+
+@TestClass("org.openscience.cdk.smsd.SMSDTest")
 public class SMSD implements IMCSAlgorithm {
 
     IMCSAlgorithm comparison;

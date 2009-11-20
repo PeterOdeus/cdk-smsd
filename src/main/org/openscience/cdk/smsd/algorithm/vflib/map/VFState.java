@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
@@ -44,6 +45,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * 
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.algorithm.vflib.VFLibTest")
 public class VFState implements IState {
 
     private List<VFMatch> candidates;

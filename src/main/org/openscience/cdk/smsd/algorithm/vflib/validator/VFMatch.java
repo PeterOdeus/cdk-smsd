@@ -46,12 +46,14 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.validator;
 
+import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
 import org.openscience.cdk.interfaces.IAtom;
 
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.algorithm.vflib.VFLibTest")
 public class VFMatch {
 
     private INode query;

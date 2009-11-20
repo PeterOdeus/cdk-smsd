@@ -54,6 +54,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 /**
  * @cdk.module smsd
  */
+
 public class MCSFactory implements IMCSAlgorithm {
 
     private List<TreeMap<Integer, Integer>> allMCS = null;

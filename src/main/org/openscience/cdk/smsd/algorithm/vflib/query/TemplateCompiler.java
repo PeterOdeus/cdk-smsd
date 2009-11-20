@@ -46,6 +46,7 @@
  */
 package org.openscience.cdk.smsd.algorithm.vflib.query;
 
+import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -63,6 +64,7 @@ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
  * 
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.algorithm.vflib.VFLibTest")
 public class TemplateCompiler implements IQueryCompiler {
 
     private IAtomContainer molecule;
