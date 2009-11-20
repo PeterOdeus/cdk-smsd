@@ -320,20 +320,16 @@ public class GenerateCompatibilityGraph {
 
                 //You can also check object equal or charge, hydrogen count etc
 
-                if (atom1.getSymbol().equalsIgnoreCase(atom2.getSymbol())) {
-
-                    if (!map.contains(i + "_" + j)) {
-                        compGraphNodesCZero.add(i);
-                        compGraphNodesCZero.add(j);
-                        compGraphNodesCZero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
-                        compGraphNodesCZero.add(count_nodes);
-                        compGraphNodes.add(i);
-                        compGraphNodes.add(j);
-                        compGraphNodes.add(count_nodes++);
-                        map.add(i + "_" + j);
-                    }
+                if (atom1.getSymbol().equalsIgnoreCase(atom2.getSymbol()) && (!map.contains(i + "_" + j))) {
+                    compGraphNodesCZero.add(i);
+                    compGraphNodesCZero.add(j);
+                    compGraphNodesCZero.add(labelContainer.getLabelID(atom1.getSymbol())); //i.e C is label 1
+                    compGraphNodesCZero.add(count_nodes);
+                    compGraphNodes.add(i);
+                    compGraphNodes.add(j);
+                    compGraphNodes.add(count_nodes++);
+                    map.add(i + "_" + j);
                 }
-
             }
         }
         map.clear();
@@ -347,7 +343,6 @@ public class GenerateCompatibilityGraph {
      * @throws IOException
      */
     protected int compatibilityGraphIfCEdgeIsZeroBS() throws IOException {
-
 
         int compGraphNodesCZeroListSize = compGraphNodesCZero.size();
 
@@ -424,8 +419,7 @@ public class GenerateCompatibilityGraph {
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);
 
                 // if element atomCont !=b and atoms on the adjacent sides of the bonds are not equal
-                if ((a != b) &&
-                        (index_a != index_b) &&
+                if ((a != b) && (index_a != index_b) &&
                         (index_aPlus1 != index_bPlus1)) {
 
 
