@@ -433,15 +433,15 @@ public class CDKRGraph {
         // only nodes that fulfill the initial constrains
         // are allowed in the initial extension set : targetBitSet
         for (Iterator<CDKRNode> i = graph.iterator(); i.hasNext();) {
-            CDKRNode rn = i.next();
+            CDKRNode rNode = i.next();
 
             if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
                 //System.out.println("|Hello|");
                 throw new CDKException("Timeout exceeded in getOverlaps");
             }
 
-            if ((sourceBitSet.get(rn.getRMap().id1) || sourceBitSet.isEmpty()) && (targetBitSet.get(rn.getRMap().id2) || targetBitSet.isEmpty())) {
-                bistSet.set(graph.indexOf(rn));
+            if ((sourceBitSet.get(rNode.getRMap().id1) || sourceBitSet.isEmpty()) && (targetBitSet.get(rNode.getRMap().id2) || targetBitSet.isEmpty())) {
+                bistSet.set(graph.indexOf(rNode));
             }
         }
         return bistSet;
@@ -518,12 +518,12 @@ public class CDKRGraph {
     @Override
     public String toString() {
         String message = "";
-        int j = 0;
+        int jIndex = 0;
 
         for (Iterator<CDKRNode> i = graph.iterator(); i.hasNext();) {
-            CDKRNode rn = i.next();
-            message += "-------------\n" + "CDKRNode " + j + "\n" + rn.toString() + "\n";
-            j++;
+            CDKRNode rNode = i.next();
+            message += "-------------\n" + "CDKRNode " + jIndex + "\n" + rNode.toString() + "\n";
+            jIndex++;
         }
         return message;
     }
