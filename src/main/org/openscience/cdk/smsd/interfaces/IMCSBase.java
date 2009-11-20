@@ -25,53 +25,12 @@ package org.openscience.cdk.smsd.interfaces;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smsd.helper.MolHandler;
 
 /**
  * @cdk.module smsd
  */
 public interface IMCSBase {
-
-    /**
-     *
-     * @param source
-     * @param target
-     * @param removeHydrogen
-     * @throws CDKException
-     *
-     */
-    void init(MolHandler source, MolHandler target, boolean removeHydrogen) throws CDKException;
-
-    /**
-     *
-     * @param source
-     * @param target
-     * @param removeHydrogen
-     * @throws CDKException
-     */
-    void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException;
-
-    /**
-     *
-     * @param source
-     * @param target
-     * @param removeHydrogen
-     * @throws CDKException
-     */
-    void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) throws CDKException;
-
-    /**
-     *
-     * @param sourceMolFileName
-     * @param targetMolFileName
-     * @param removeHydrogen 
-     * @throws CDKException
-     */
-    void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException;
 
     /**
      * 

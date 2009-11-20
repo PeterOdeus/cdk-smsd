@@ -23,7 +23,10 @@
 package org.openscience.cdk.smsd.interfaces;
 
 import java.io.IOException;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smsd.helper.MolHandler;
 
 /**
  * @cdk.module smsd
@@ -31,28 +34,65 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public interface IMCSAlgorithm extends IMCSBase {
 
     /**
+     *
+     * @param source
+     * @param target
+     * @param removeHydrogen true if remove H before mapping
+     * @throws CDKException
+     *
+     */
+    void init(MolHandler source, MolHandler target, boolean removeHydrogen) throws CDKException;
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @param removeHydrogen true if remove H before mapping
+     * @throws CDKException
+     */
+    void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException;
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @param removeHydrogen true if remove H before mapping
+     * @throws CDKException
+     */
+    void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) throws CDKException;
+
+    /**
+     *
+     * @param sourceMolFileName
+     * @param targetMolFileName
+     * @param removeHydrogen true if remove H before mapping
+     * @throws CDKException
+     */
+    void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException;
+
+    /**
      * 
-     * @param Key
+     * @param Key get total bond breaking energy of the match
      * @return
      */
     Double getEnergyScore(int Key);
 
     /**
      *
-     * @param Key
+     * @param Key get total fragment count of the match
      * @return
      */
     Integer getFragmentSize(int Key);
 
     /**
      *
-     * @return
+     * @return return modified Product Molecule
      */
     IAtomContainer getProductMolecule();
 
     /**
      *
-     * @return
+     * @return return modified Reactant Molecule
      */
     IAtomContainer getReactantMolecule();
 
@@ -65,29 +105,27 @@ public interface IMCSAlgorithm extends IMCSBase {
 
     /**
      *
-     * @return
+     * @return true if two molecules have same stereo match
      */
     boolean isStereoMisMatch();
 
     /**
      *
-     * @return
+     * @return true if query molecule is a subgraph of the target molecule
      */
     boolean isSubgraph();
 
     /**
      *
-     * @return
+     * @return Tanimoto Similarity between 0 and 1
      * @throws IOException
      */
     double getTanimotoSimilarity() throws IOException;
 
     /**
      *
-     * @return
+     * @return Euclidean Distance (lower the score, better the match)
      * @throws IOException
      */
     double getEuclideanDistance() throws IOException;
-
-   
 }

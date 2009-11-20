@@ -258,7 +258,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new CDKMCSHandler();
 
-            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.set(RMol, PMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -286,7 +286,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
             mcs = new MCSPlusHandler();
 
-            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.set(RMol, PMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -317,6 +317,7 @@ public class MCSFactory implements IMCSAlgorithm {
      */
     @Override
     public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
+        this.removeHydrogen=removeHydrogen;
         try {
 
             this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
@@ -667,7 +668,7 @@ public class MCSFactory implements IMCSAlgorithm {
         try {
 
             mcs = new VFlibMCSHandler();
-            mcs.init(RMol, PMol, removeHydrogen);
+            mcs.set(RMol, PMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -693,8 +694,8 @@ public class MCSFactory implements IMCSAlgorithm {
     private void singleMapping() {
         try {
 
-            mcs = new SingleMappingHandler();
-            mcs.init(RMol, PMol, removeHydrogen);
+            mcs = new SingleMappingHandler(removeHydrogen);
+            mcs.set(RMol, PMol);
             mcs.searchMCS();
 
             firstSolution.clear();

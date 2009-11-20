@@ -179,7 +179,7 @@ public class VFlibMCSHandler implements IMCS {
      * @param target
      */
     @Override
-    public void init(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
+    public void set(IAtomContainer source, IAtomContainer target) {
 
         IAtomContainer mol1 = source;
         IAtomContainer mol2 = target;
@@ -187,7 +187,7 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product, removeHydrogen);
+        set(Reactant, Product);
 
     }
 
@@ -195,7 +195,7 @@ public class VFlibMCSHandler implements IMCS {
      * @param source
      * @param target
      */
-    public void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException {
+    public void set(IMolecule source, IMolecule target) throws CDKException {
 
         IMolecule mol1 = source;
         IMolecule mol2 = target;
@@ -203,7 +203,7 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
 
-        init(Reactant, Product, removeHydrogen);
+        set(Reactant, Product);
     }
 
     /**
@@ -211,26 +211,26 @@ public class VFlibMCSHandler implements IMCS {
      * @param targetMolFileName
      */
     @Override
-    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) {
+    public void set(String sourceMolFileName, String targetMolFileName) {
 
         String mol1 = sourceMolFileName;
         String mol2 = targetMolFileName;
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-        init(Reactant, Product, removeHydrogen);
+        set(Reactant, Product);
 
 
     }
 
     /**
-     * @param reactant
-     * @param product
+     * @param source
+     * @param target
      */
     @Override
-    public void init(MolHandler reactant, MolHandler product, boolean removeHydrogen) {
-        this.source = reactant.getMolecule();
-        this.target = product.getMolecule();
+    public void set(MolHandler source, MolHandler target) {
+        this.source = source.getMolecule();
+        this.target = target.getMolecule();
     }
 
     private void matchVFLibMCS() {

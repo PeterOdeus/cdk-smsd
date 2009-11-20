@@ -472,7 +472,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private void vfLibMCS() {
 
         VFlibTurboHandler mcs = new VFlibTurboHandler();
-        mcs.init(RMol, PMol, removeHydrogen);
+        mcs.set(RMol, PMol);
         this.subGraphFlag = mcs.isSubgraph();
 
         firstSolution.clear();
@@ -493,9 +493,8 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private void singleMapping() {
         try {
 
-            SingleMappingHandler mcs = new SingleMappingHandler();
-
-            mcs.init(RMol, PMol, removeHydrogen);
+            SingleMappingHandler mcs = new SingleMappingHandler(removeHydrogen);
+            mcs.set(RMol, PMol);
             mcs.searchMCS();
 
             firstSolution.clear();
