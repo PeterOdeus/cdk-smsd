@@ -116,6 +116,11 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
+    /**
+     *
+     * @param Smiles
+     * @return
+     */
     public static String fixSmiles(String Smiles) {
         Smiles = Smiles.replaceAll("CL", "Cl");
         Smiles = Smiles.replaceAll("(H)", "([H])");
@@ -186,6 +191,11 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
 
     }
 
+    /**
+     *
+     * @param mol
+     * @return
+     */
     public static boolean fixNitroGroups2(IMolecule mol) {
         // changes nitros given by [N+](=O)[O-] to N(=O)(=O) 
         boolean changed = false;
@@ -313,6 +323,10 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
         }
     }
 
+    /**
+     *
+     * @param mol
+     */
     public static void fixSulphurH(IMolecule mol) {
         // removes extra H's attached to sulphurs
         //logger.debug("EnterFixSulphur");

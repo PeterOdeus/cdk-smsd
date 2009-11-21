@@ -66,6 +66,9 @@ public class BondType {
         return bondSensitive;
     }
 
+    /**
+     * reset bond sensitive flag to default
+     */
     public void reset() {
         bondSensitive = false;
     }

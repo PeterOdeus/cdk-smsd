@@ -80,6 +80,11 @@ public class VFState implements IState {
     private List<IAtom> targetPath;
     private Map<INode, IAtom> map;
 
+    /**
+     *
+     * @param query
+     * @param target
+     */
     public VFState(IQuery query, IAtomContainer target) {
         this.map = new HashMap<INode, IAtom>();
         this.queryPath = new ArrayList<INode>();

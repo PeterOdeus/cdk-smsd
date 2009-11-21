@@ -54,19 +54,56 @@ import org.openscience.cdk.interfaces.IAtom;
  */
 public interface IQuery {
 
+    /**
+     *
+     * @return
+     */
     public Iterable<INode> nodes();
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public INode getNode(int index);
 
+    /**
+     *
+     * @return
+     */
     public Iterable<IEdge> edges();
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public IEdge getEdge(int index);
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     public IAtom getAtom(INode node);
 
+    /**
+     *
+     * @param source
+     * @param target
+     * @return
+     */
     public IEdge getEdge(INode source, INode target);
 
+    /**
+     *
+     * @return
+     */
     public int countEdges();
 
+    /**
+     *
+     * @return
+     */
     public int countNodes();
 }

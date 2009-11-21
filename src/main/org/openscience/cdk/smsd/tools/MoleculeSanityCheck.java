@@ -85,6 +85,10 @@ public class MoleculeSanityCheck {
         return molecule;
     }
 
+    /**
+     *
+     * @param mol
+     */
     public static void fixAromaticity(IAtomContainer mol) {
         // need to find rings and aromaticity again since added H's
 

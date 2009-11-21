@@ -51,10 +51,18 @@ public class TimeOut {
     protected TimeOut() {
     }
 
+    /**
+     *
+     * @param timeout
+     */
     public void setTimeOut(double timeout) {
         this.time = timeout;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getTimeOut() {
         return time;
     }

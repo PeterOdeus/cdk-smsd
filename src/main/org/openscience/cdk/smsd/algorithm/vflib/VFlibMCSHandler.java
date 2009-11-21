@@ -59,17 +59,16 @@ public class VFlibMCSHandler implements IMCS {
     private List<Map<INode, IAtom>> vfLibSolutions = null;
     private int vfMCSSize = 0;
 
+    /**
+     * constructor
+     */
     public VFlibMCSHandler() {
-
-
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         allAtomMCS_copy = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
         allMCS_copy = new ArrayList<TreeMap<Integer, Integer>>();
-
-
     }
 
     /**

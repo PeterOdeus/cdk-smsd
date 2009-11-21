@@ -69,19 +69,35 @@ public class TemplateCompiler implements IQueryCompiler {
 
     private IAtomContainer molecule;
 
+    /**
+     *
+     */
     public TemplateCompiler() {
     }
 
+    /**
+     *
+     * @param molecule
+     * @return
+     */
     public static IQuery compile(IAtomContainer molecule) {
         TemplateCompiler compiler = new TemplateCompiler();
         compiler.setMolecule(molecule);
         return compiler.compile();
     }
 
+    /**
+     *
+     * @param molecule
+     */
     public void setMolecule(IAtomContainer molecule) {
         this.molecule = molecule;
     }
 
+    /**
+     *
+     * @return
+     */
     public IAtomContainer getMolecule() {
         return molecule;
     }

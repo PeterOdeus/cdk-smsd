@@ -51,14 +51,14 @@ public class VFlibTurboHandler implements ISubGraph {
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
 
+    /**
+     * Constructor
+     */
     public VFlibTurboHandler() {
-
-
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-
     }
 
     /**

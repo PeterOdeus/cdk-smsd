@@ -960,6 +960,12 @@ public class McGregor {
         return 0;
     }
 
+    /**
+     *
+     * @param ReactantBond
+     * @param ProductBond
+     * @return
+     */
     public boolean bondMatch(IBond ReactantBond, IBond ProductBond) {
         boolean Flag = false;
         int ReactantBondType = ReactantBond.getOrder().ordinal();

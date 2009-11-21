@@ -62,7 +62,10 @@ public class FragmentMatcher {
     private Map<IAtom, IAtom> GfirstAtomMCS;
     private boolean removeHydrogen = false;
 
-    //~--- constructors -------------------------------------------------------
+    
+    /**
+     * ~--- constructors -----
+     */
     public void searchMCS() {
         int SolutionSize = 0;
         try {

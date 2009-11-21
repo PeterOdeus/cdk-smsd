@@ -106,6 +106,11 @@ public class MolHandler {
         }
     }
 
+    /**
+     *
+     * @param MolFile
+     * @param cleanMolecule
+     */
     public MolHandler(String MolFile, boolean cleanMolecule) {
 
         MDLReader molRead;
@@ -168,6 +173,11 @@ public class MolHandler {
         checkFragmentation();
     }
 
+    /**
+     *
+     * @param _molecule
+     * @param cleanMolecule
+     */
     public MolHandler(IAtomContainer _molecule, boolean cleanMolecule) {
 
         String molID = _molecule.getID();
@@ -191,10 +201,18 @@ public class MolHandler {
         checkFragmentation();
     }
 
+    /**
+     *
+     * @return get processed / modified molecule
+     */
     public IAtomContainer getMolecule() {
         return mol;
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean getRemoveHydrogenFlag() {
         return removeHydrogen;
     }

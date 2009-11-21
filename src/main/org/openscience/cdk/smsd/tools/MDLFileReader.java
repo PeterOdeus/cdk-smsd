@@ -49,6 +49,12 @@ public class MDLFileReader {
 
     private static IMolecule Mol = null;
 
+    /**
+     *
+     * @param inputStream
+     * @param mode
+     * @throws IOException
+     */
     public MDLFileReader(InputStream inputStream, Mode mode) throws IOException {
 
         try {

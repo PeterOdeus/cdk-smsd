@@ -131,6 +131,9 @@ public class CDKMCS {
      * 
      */
     public static double timeout = TimeOut.getInstance().getTimeOut();
+    /**
+     * Bond sensitive flag
+     */
     public static boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
     private static boolean timeoutFlag;
     static TimeManager timeManager;

@@ -71,6 +71,10 @@ public class LabelContainer {
 
     }
 
+    /**
+     *
+     * @return
+     */
     synchronized public static LabelContainer getInstance() {
         if (_instance == null) {
             _instance = new LabelContainer();
@@ -78,12 +82,21 @@ public class LabelContainer {
         return _instance;
     }
 
+    /**
+     *
+     * @param label
+     */
     synchronized public void addLabel(String label) {
         //System.err.println("List added");
         int lableNo = labelMap.size() + 1;
         labelMap.put(label, lableNo);
     }
 
+    /**
+     *
+     * @param label
+     * @return
+     */
     synchronized public Integer getLabelID(String label) {
 
         int labelID = -1;
@@ -100,6 +113,11 @@ public class LabelContainer {
         return labelID;
     }
 
+    /**
+     *
+     * @param labelID
+     * @return
+     */
     synchronized public String getLabel(Integer labelID) {
 
         String indexLabel = null;
@@ -121,6 +139,10 @@ public class LabelContainer {
         return indexLabel;
     }
 
+    /**
+     *
+     * @return
+     */
     synchronized public int getSize() {
         return labelMap.size();
     }

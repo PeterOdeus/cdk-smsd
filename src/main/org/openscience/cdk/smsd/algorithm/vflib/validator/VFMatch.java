@@ -59,15 +59,28 @@ public class VFMatch {
     private INode query;
     private IAtom target;
 
+    /**
+     *
+     * @param query
+     * @param target
+     */
     public VFMatch(INode query, IAtom target) {
         this.query = query;
         this.target = target;
     }
 
+    /**
+     *
+     * @return
+     */
     public INode getQueryNode() {
         return query;
     }
 
+    /**
+     *
+     * @return
+     */
     public IAtom getTargetAtom() {
         return target;
     }

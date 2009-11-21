@@ -327,6 +327,10 @@ public class ChemicalFilters {
 
     }
 
+    /**
+     *
+     * @throws CDKException
+     */
     public synchronized void sortResultsByEnergies() throws CDKException {
 
 //        System.out.println("\nSort By Energies");

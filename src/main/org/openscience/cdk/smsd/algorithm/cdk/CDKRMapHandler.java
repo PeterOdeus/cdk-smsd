@@ -516,6 +516,10 @@ public class CDKRMapHandler {
         return false;
     }
 
+    /**
+     *
+     * @return time out flag
+     */
     public boolean getTimeOutFlag() {
 
         boolean flag = false;

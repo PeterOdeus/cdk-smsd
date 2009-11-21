@@ -44,6 +44,9 @@ public class TimeManager {
     private double startTime;
     private SimpleDateFormat dateFormat;
 
+    /**
+     * Constructor
+     */
     public TimeManager() {
 
         dateFormat = new SimpleDateFormat("HH:mm:ss");

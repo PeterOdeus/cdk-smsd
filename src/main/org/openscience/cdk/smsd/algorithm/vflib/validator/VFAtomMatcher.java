@@ -57,6 +57,9 @@ public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
 
     private int maximumNeighbors;
 
+    /**
+     * Constructor
+     */
     public VFAtomMatcher() {
         symbol = null;
         maximumNeighbors = -1;
@@ -106,6 +109,10 @@ public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
         return true;
     }
 
+    /**
+     *
+     * @param maximum
+     */
     public void setMaximumNeighbors(int maximum) {
         this.maximumNeighbors = maximum;
     }

@@ -38,6 +38,10 @@ public class NodeBuilder implements INode {
     private List<IEdge> edgesList;
     private IQueryAtom matcher;
 
+    /**
+     *
+     * @param matcher
+     */
     public NodeBuilder(IQueryAtom matcher) {
         edgesList = new ArrayList<IEdge>();
         neighborsList = new ArrayList<INode>();

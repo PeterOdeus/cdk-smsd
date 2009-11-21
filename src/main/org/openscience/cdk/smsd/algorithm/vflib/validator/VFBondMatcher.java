@@ -60,13 +60,23 @@ public class VFBondMatcher extends Bond implements IQueryBond {
 
     private IBond queryBond;
     private int unsaturation = 0;
+    /**
+     * Bond type flag
+     */
     protected boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
+    /**
+     * Constructor
+     */
     public VFBondMatcher() {
         this.queryBond = null;
         this.unsaturation = -1;
     }
 
+    /**
+     *
+     * @param queryBond
+     */
     public VFBondMatcher(IBond queryBond) {
         this.queryBond = queryBond;
         this.unsaturation = getUnsaturation(queryBond);

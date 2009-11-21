@@ -40,6 +40,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class MCSPlus {
 
+    /**
+     * time out value
+     */
     public static double timeout = TimeOut.getInstance().getTimeOut();
     private static TimeManager timeManager;
     private static boolean timeoutFlag = false;

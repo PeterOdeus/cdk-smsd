@@ -145,6 +145,9 @@ public class SingleMappingHandler implements IMCS {
         return 0;
     }
 
+    /**
+     * Set the mappings
+     */
     public final void setAllMapping() {
         try {
 
