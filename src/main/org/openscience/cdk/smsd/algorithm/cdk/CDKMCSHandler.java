@@ -45,7 +45,7 @@ public class CDKMCSHandler implements IMCS {
 //    //~--- fields -------------------------------------------------------------
     private IAtomContainer source;
     private IAtomContainer target;
-    private boolean RonPFlag = false;
+    private boolean rOnPFlag = false;
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
@@ -135,19 +135,15 @@ public class CDKMCSHandler implements IMCS {
         try {
 
             if ((source.getAtomCount() == target.getAtomCount()) && source.getBondCount() == target.getBondCount()) {
-                RonPFlag = true;
-                //System.err.print("True");
-
+                rOnPFlag = true;
                 rmap.calculateOverlapsAndReduceExactMatch(source, target);
 
             } else if (source.getAtomCount() > target.getAtomCount() && source.getBondCount() != target.getBondCount()) {
-                RonPFlag = true;
-                //System.err.print("True");
-
+                rOnPFlag = true;
                 rmap.calculateOverlapsAndReduce(source, target);
 
             } else {
-                RonPFlag = false;
+                rOnPFlag = false;
                 rmap.calculateOverlapsAndReduce(target, source);
 
 
@@ -216,7 +212,7 @@ public class CDKMCSHandler implements IMCS {
                     int IIndex = Solutions.getKey().intValue();
                     int JIndex = Solutions.getValue().intValue();
 
-                    if (RonPFlag) {
+                    if (rOnPFlag) {
                         atomMappings.put(IIndex, JIndex);
                     } else {
                         atomMappings.put(JIndex, IIndex);

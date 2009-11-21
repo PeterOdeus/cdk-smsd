@@ -318,66 +318,7 @@ public class CDKRMapHandler {
         return result;
     }
 
-//    /**
-//     *  This makes sourceAtom map of matching atoms out of sourceAtom map of matching bonds as produced by the get(Subgraph|Ismorphism)Map methods.
-//     *
-//     * @param  rMapList   The list produced by the getMap method.
-//     * @param  graph1  first molecule. Must not be an IQueryAtomContainer.
-//     * @param  graph2  second molecule. May be an IQueryAtomContainer.
-//     * @return     The mapping found projected on graph1. This is sourceAtom List of CDKRMap objects containing Ids of matching atoms.
-//     */
-//    @SuppressWarnings("unchecked")
-//    protected List makeAtomsMapOfBondsMap(List rMapList, IAtomContainer graph1, IAtomContainer graph2) {
-//        if (rMapList == null) {
-//            return (rMapList);
-//        }
-//        List result = new ArrayList();
-//        for (int i = 0; i < rMapList.size(); i++) {
-//            IBond bond1 = graph1.getBond(((CDKRMap) rMapList.get(i)).getId1());
-//            IBond bond2 = graph2.getBond(((CDKRMap) rMapList.get(i)).getId2());
-//            IAtom[] atom1 = BondManipulator.getAtomArray(bond1);
-//            IAtom[] atom2 = BondManipulator.getAtomArray(bond2);
-//            for (int j = 0; j < 2; j++) {
-//                List bondsConnectedToAtom1j = graph1.getConnectedBondsList(atom1[j]);
-//                for (int k = 0; k < bondsConnectedToAtom1j.size(); k++) {
-//                    if (bondsConnectedToAtom1j.get(k) != bond1) {
-//                        IBond testBond = (IBond) bondsConnectedToAtom1j.get(k);
-//                        for (int m = 0; m < rMapList.size(); m++) {
-//                            IBond testBond2;
-//                            if (((CDKRMap) rMapList.get(m)).getId1() == graph1.getBondNumber(testBond)) {
-//                                testBond2 = graph2.getBond(((CDKRMap) rMapList.get(m)).getId2());
-//                                for (int n = 0; n < 2; n++) {
-//                                    List bondsToTest = graph2.getConnectedBondsList(atom2[n]);
-//                                    if (bondsToTest.contains(testBond2)) {
-//                                        CDKRMap map;
-//                                        if (j == n) {
-//                                            map = new CDKRMap(graph1.getAtomNumber(atom1[0]), graph2.getAtomNumber(atom2[0]));
-//                                        } else {
-//                                            map = new CDKRMap(graph1.getAtomNumber(atom1[1]), graph2.getAtomNumber(atom2[0]));
-//                                        }
-//                                        if (!result.contains(map)) {
-//                                            //System.out.println("Added Solution");
-//                                            result.add(map);
-//                                        }
-//                                        CDKRMap map2;
-//                                        if (j == n) {
-//                                            map2 = new CDKRMap(graph1.getAtomNumber(atom1[1]), graph2.getAtomNumber(atom2[1]));
-//                                        } else {
-//                                            map2 = new CDKRMap(graph1.getAtomNumber(atom1[0]), graph2.getAtomNumber(atom2[1]));
-//                                        }
-//                                        if (!result.contains(map2)) {
-//                                            result.add(map2);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return (result);
-//    }
+
     /**
      *
      * @param overlaps
@@ -461,7 +402,6 @@ public class CDKRMapHandler {
 
 
         for (Object o : list) {
-            //System.err.print("Map " + o.getClass());
             CDKRMap rmap = (CDKRMap) o;
             IAtom sourceAtom = source.getAtom(rmap.getId1());
             IAtom targetAtom = target.getAtom(rmap.getId2());
@@ -470,25 +410,15 @@ public class CDKRMapHandler {
             array1.add(sourceAtom);
             array2.add(targetAtom);
 
-
-//            System.err.print("Map " + sourceAtom.getSymbol());
-//            System.err.print("Map " + targetAtom.getSymbol());
-
             int IndexI = source.getAtomNumber(sourceAtom);
             int IndexJ = target.getAtomNumber(targetAtom);
 
             atomNumbersFromContainer.put(IndexI, IndexJ);
 
-
-
             /*Added the Mapping Numbers to the FinalMapping*
              */
             _mapping.add(atomNumbersFromContainer);
-
-
-
         }
-
     }
 
     /**
@@ -539,17 +469,6 @@ public class CDKRMapHandler {
 
 
         }
-
-
-
-        //Asad: Uncomment this part of the code to remove the matched parts from the Molecules.
-
-        /*for (IAtom atom : array1) {
-        source.removeAtomAndConnectedElectronContainers(atom);
-        }
-        for (IAtom atom : array2) {
-        target.removeAtomAndConnectedElectronContainers(atom);
-        }*/
     }
 
     /**

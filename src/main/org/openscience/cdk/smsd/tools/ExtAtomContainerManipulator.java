@@ -611,8 +611,8 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             newAtomContainer.addAtom(atoms[f]);
 
             if (container.getAtomParity(container.getAtom(f)) != null) {
-                IAtomParity ap = container.getAtomParity(container.getAtom(f));
-                newAtomContainer.addAtomParity(ap);
+                IAtomParity atomParity = container.getAtomParity(container.getAtom(f));
+                newAtomContainer.addAtomParity(atomParity);
             }
 
         }

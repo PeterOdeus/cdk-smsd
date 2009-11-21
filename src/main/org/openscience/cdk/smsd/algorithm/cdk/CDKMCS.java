@@ -819,20 +819,20 @@ public class CDKMCS {
                                 ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC) &&
                                 ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))) &&
                                 ( // atome type conditions
-                                ( // sAtom = tAtom && b1 = b2
+                                ( // sAtom = tAtom && g2Bond1 = g2Bond2
                                 ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()) &&
                                 ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())) ||
-                                ( // sAtom = b2 && b1 = tAtom
+                                ( // sAtom = g2Bond2 && g2Bond1 = tAtom
                                 ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()) &&
                                 ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol())))) {
                             graph.addNode(new CDKRNode(i, j));
                         }
 
                     } else {
-                        if (( // sAtom = tAtom && b1 = b2
+                        if (( // sAtom = tAtom && g2Bond1 = g2Bond2
                                 ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()) &&
                                 ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())) ||
-                                ( // sAtom = b2 && b1 = tAtom
+                                ( // sAtom = g2Bond2 && g2Bond1 = tAtom
                                 ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()) &&
                                 ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()))) {
                             graph.addNode(new CDKRNode(i, j));
@@ -861,16 +861,16 @@ public class CDKMCS {
             rNode.getForbidden().set(i);
         }
 
-        IBond a1;
-        IBond a2;
-        IBond b1;
-        IBond b2;
+        IBond g1Bond1;
+        IBond g1Bond2;
+        IBond g2Bond1;
+        IBond g2Bond2;
 
         graph.setFirstGraphSize(ac1.getBondCount());
         graph.setSecondGraphSize(ac2.getBondCount());
 
         for (int i = 0; i < graph.getGraph().size(); i++) {
-            CDKRNode rNode = graph.getGraph().get(i);
+            CDKRNode rNodeI = graph.getGraph().get(i);
 
             // two nodes are neighbours if their adjacency
             // relationship in are equivalent in G1 and G2
@@ -882,30 +882,30 @@ public class CDKMCS {
 
                     throw new CDKException("Timeout exceeded in getOverlaps");
                 }
-                CDKRNode y = graph.getGraph().get(j);
+                CDKRNode rNodeJ = graph.getGraph().get(j);
 
-                a1 = ac1.getBond(graph.getGraph().get(i).getRMap().getId1());
-                a2 = ac2.getBond(graph.getGraph().get(i).getRMap().getId2());
-                b1 = ac1.getBond(graph.getGraph().get(j).getRMap().getId1());
-                b2 = ac2.getBond(graph.getGraph().get(j).getRMap().getId2());
+                g1Bond1 = ac1.getBond(graph.getGraph().get(i).getRMap().getId1());
+                g1Bond2 = ac2.getBond(graph.getGraph().get(i).getRMap().getId2());
+                g2Bond1 = ac1.getBond(graph.getGraph().get(j).getRMap().getId1());
+                g2Bond2 = ac2.getBond(graph.getGraph().get(j).getRMap().getId2());
 
-                if (a2 instanceof IQueryBond) {
-                    if (a1.equals(b1) || a2.equals(b2) ||
-                            !queryAdjacencyAndOrder(a1, b1, a2, b2)) {
-                        rNode.getForbidden().set(j);
-                        y.getForbidden().set(i);
-                    } else if (hasCommonAtom(a1, b1)) {
-                        rNode.getExtension().set(j);
-                        y.getExtension().set(i);
+                if (g1Bond2 instanceof IQueryBond) {
+                    if (g1Bond1.equals(g2Bond1) || g1Bond2.equals(g2Bond2) ||
+                            !queryAdjacencyAndOrder(g1Bond1, g2Bond1, g1Bond2, g2Bond2)) {
+                        rNodeI.getForbidden().set(j);
+                        rNodeJ.getForbidden().set(i);
+                    } else if (hasCommonAtom(g1Bond1, g2Bond1)) {
+                        rNodeI.getExtension().set(j);
+                        rNodeJ.getExtension().set(i);
                     }
                 } else {
-                    if (a1.equals(b1) || a2.equals(b2) ||
-                            (!getCommonSymbol(a1, b1).equals(getCommonSymbol(a2, b2)))) {
-                        rNode.getForbidden().set(j);
-                        y.getForbidden().set(i);
-                    } else if (hasCommonAtom(a1, b1)) {
-                        rNode.getExtension().set(j);
-                        y.getExtension().set(i);
+                    if (g1Bond1.equals(g2Bond1) || g1Bond2.equals(g2Bond2) ||
+                            (!getCommonSymbol(g1Bond1, g2Bond1).equals(getCommonSymbol(g1Bond2, g2Bond2)))) {
+                        rNodeI.getForbidden().set(j);
+                        rNodeJ.getForbidden().set(i);
+                    } else if (hasCommonAtom(g1Bond1, g2Bond1)) {
+                        rNodeI.getExtension().set(j);
+                        rNodeJ.getExtension().set(i);
                     }
                 }
             }
@@ -948,25 +948,25 @@ public class CDKMCS {
 //     *  Determines if 2 bond have 1 atom in common if second is atom query AtomContainer
 //     *
 //     * @param  sAtom  first bond
-//     * @param  b1  second bond
+//     * @param  g2Bond1  second bond
 //     * @return    the symbol of the common atom or "" if
 //     *            the 2 bonds have no common atom
 //     */
-//    private static boolean queryAdjacency(IBond sAtom, IBond b1, IBond tAtom, IBond b2) {
+//    private static boolean queryAdjacency(IBond sAtom, IBond g2Bond1, IBond tAtom, IBond g2Bond2) {
 //
 //        IAtom atom1 = null;
 //        IAtom atom2 = null;
 //
-//        if (sAtom.contains(b1.getAtom(0))) {
-//            atom1 = b1.getAtom(0);
-//        } else if (sAtom.contains(b1.getAtom(1))) {
-//            atom1 = b1.getAtom(1);
+//        if (sAtom.contains(g2Bond1.getAtom(0))) {
+//            atom1 = g2Bond1.getAtom(0);
+//        } else if (sAtom.contains(g2Bond1.getAtom(1))) {
+//            atom1 = g2Bond1.getAtom(1);
 //        }
 //
-//        if (tAtom.contains(b2.getAtom(0))) {
-//            atom2 = b2.getAtom(0);
-//        } else if (tAtom.contains(b2.getAtom(1))) {
-//            atom2 = b2.getAtom(1);
+//        if (tAtom.contains(g2Bond2.getAtom(0))) {
+//            atom2 = g2Bond2.getAtom(0);
+//        } else if (tAtom.contains(g2Bond2.getAtom(1))) {
+//            atom2 = g2Bond2.getAtom(1);
 //        }
 //
 //        if (atom1 != null && atom2 != null) {

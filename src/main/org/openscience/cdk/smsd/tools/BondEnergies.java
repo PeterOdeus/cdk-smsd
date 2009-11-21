@@ -873,21 +873,17 @@ public class BondEnergies {
 
             String atom1 = (String) atom.get(0);
             String atom2 = (String) atom.get(1);
-            if (atom1.equalsIgnoreCase(sourceAtom.getSymbol()) && atom2.equalsIgnoreCase(targetAtom.getSymbol())) {
+            if (
+                    (atom1.equalsIgnoreCase(sourceAtom.getSymbol())
+                    && atom2.equalsIgnoreCase(targetAtom.getSymbol()))
+                    || (atom2.equalsIgnoreCase(sourceAtom.getSymbol())
+                    && atom1.equalsIgnoreCase(targetAtom.getSymbol()))){
 
                 Order order = (Order) atom.get(2);
                 if (order.compareTo(bondOrder) == 0) {
 
                     D_kJ_per_mol = (Integer) atom.get(3);
                 }
-            } else if (atom2.equalsIgnoreCase(sourceAtom.getSymbol()) && atom1.equalsIgnoreCase(targetAtom.getSymbol())) {
-
-                Order order = (Order) atom.get(2);
-                if (order.compareTo(bondOrder) == 0) {
-
-                    D_kJ_per_mol = (Integer) atom.get(3);
-                }
-
             }
 
         }

@@ -1,5 +1,3 @@
-
-
 /* $Revision$ $Author$ $Date$
  *
  * Copyright (C) 2002-2007  Stephane Werner <mail@ixelis.net>
@@ -49,7 +47,7 @@ import java.util.BitSet;
 public class CDKRNode {
     // G1/G2 mapping
 
-   CDKRMap rMap = null;
+    CDKRMap rMap = null;
     // set of neighbour nodes in the RGraph
     BitSet extension = null;
     // set of incompatible nodes in the RGraph
@@ -126,6 +124,7 @@ public class CDKRNode {
      *
      *@return    the string representation of the CDKRNode
      */
+    @Override
     public String toString() {
         return ("id1 : " + rMap.id1 + ", id2 : " + rMap.id2 + "\n" + "extension : " + extension + "\n" + "forbiden : " + forbidden);
     }

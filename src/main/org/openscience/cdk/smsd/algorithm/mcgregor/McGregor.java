@@ -987,10 +987,8 @@ public class McGregor {
 
 
 
-        for (int x = 0; x <
-                bondnum_A; x++) {
-            for (int y = 0; y <
-                    bondnum_B; y++) {
+        for (int x = 0; x < bondnum_A; x++) {
+            for (int y = 0; y < bondnum_B; y++) {
 
 
                 if (MARCS_vector.get(x * bondnum_B + y) == 1) {
@@ -1009,22 +1007,17 @@ public class McGregor {
                     IAtom P2_B = target.getAtom(Atom2_moleculeB);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
 
-
 //                    //Bond Order Check Introduced by Asad
 
                     boolean bMatch = bondMatch(ReactantBond, ProductBond);
 
-                    for (int z = 0; z <
-                            mapped_atoms_num; z++) {
+                    for (int z = 0; z < mapped_atoms_num; z++) {
 
                         int Mapped_Atom_1 = current_MAPPING.get(z * 2 + 0);
                         int Mapped_Atom_2 = current_MAPPING.get(z * 2 + 1);
 
                         if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                            if (bondTypeFlag && bMatch) {
-                                additional_mapping.add(Atom2_moleculeA);
-                                additional_mapping.add(Atom2_moleculeB);
-                            } else if (!bondTypeFlag) {
+                            if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
                                 additional_mapping.add(Atom2_moleculeA);
                                 additional_mapping.add(Atom2_moleculeB);
                             }
@@ -1032,10 +1025,7 @@ public class McGregor {
                         }
 
                         if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                            if (bondTypeFlag && bMatch) {
-                                additional_mapping.add(Atom2_moleculeA);
-                                additional_mapping.add(Atom1_moleculeB);
-                            } else if (!bondTypeFlag) {
+                            if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
                                 additional_mapping.add(Atom2_moleculeA);
                                 additional_mapping.add(Atom1_moleculeB);
                             }
@@ -1043,10 +1033,7 @@ public class McGregor {
                         }
 
                         if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                            if (bondTypeFlag && bMatch) {
-                                additional_mapping.add(Atom1_moleculeA);
-                                additional_mapping.add(Atom2_moleculeB);
-                            } else if (!bondTypeFlag) {
+                            if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
                                 additional_mapping.add(Atom1_moleculeA);
                                 additional_mapping.add(Atom2_moleculeB);
                             }
@@ -1054,10 +1041,7 @@ public class McGregor {
                         }
 
                         if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                            if (bondTypeFlag && bMatch) {
-                                additional_mapping.add(Atom1_moleculeA);
-                                additional_mapping.add(Atom1_moleculeB);
-                            } else if (!bondTypeFlag) {
+                            if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
                                 additional_mapping.add(Atom1_moleculeA);
                                 additional_mapping.add(Atom1_moleculeB);
                             }
@@ -1073,13 +1057,11 @@ public class McGregor {
         int additional_mapping_size = additional_mapping.size();
 
         //add McGregorBondTypeInSensitive mapping to the Clique mapping
-        for (int a = 0; a <
-                additional_mapping_size; a =
-                        a + 2) {
+        for (int a = 0; a < additional_mapping_size; a = a + 2) {
             current_MAPPING.add(additional_mapping.get(a + 0));
             current_MAPPING.add(additional_mapping.get(a + 1));
         }
-//remove recurring mappings from current_MAPPING
+//        remove recurring mappings from current_MAPPING
 
         List<Integer> unique_MAPPING = removeRecurringMappings(current_MAPPING);
 
@@ -1096,9 +1078,7 @@ public class McGregor {
         List<Integer> temp_map = new ArrayList<Integer>();
         int temp_counter = 0;
         int atom_mapping_size = atom_mapping.size();
-        for (int x = 0; x <
-                atom_mapping_size; x =
-                        x + 2) {
+        for (int x = 0; x < atom_mapping_size; x = x + 2) {
             int atom = atom_mapping.get(x);
             for (int y = x + 2; y < atom_mapping_size; y = y + 2) {
                 if (atom == atom_mapping.get(y)) {
@@ -1109,8 +1089,7 @@ public class McGregor {
             if (exist == true) {
                 temp_map.add(atom_mapping.get(x + 0));
                 temp_map.add(atom_mapping.get(x + 1));
-                temp_counter =
-                        temp_counter + 2;
+                temp_counter = temp_counter + 2;
             }
 
             exist = true;
@@ -1159,8 +1138,7 @@ public class McGregor {
                 } else {
                     if (arcsleft > bestarcsleft) {
                         removeTreeStructure(first);
-                        first =
-                                last = new BinaryTree(-1);
+                        first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
 
@@ -1208,8 +1186,7 @@ public class McGregor {
                 if (arcsleft >= bestarcsleft) {
                     if (arcsleft > bestarcsleft) {
                         removeTreeStructure(first);
-                        first =
-                                last = new BinaryTree(-1);
+                        first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
                         while (!bestARCS.empty()) {
@@ -1270,13 +1247,11 @@ public class McGregor {
             }
         }
 
-        for (int v = 0; v <
-                nNumGlobalA; v++) {
+        for (int v = 0; v < nNumGlobalA; v++) {
             MARCS.set(v * nNumGlobalB + column, 0);
         }
 
-        for (int w = 0; w <
-                nNumGlobalB; w++) {
+        for (int w = 0; w < nNumGlobalB; w++) {
             MARCS.set(row * nNumGlobalB + w, 0);
         }
 
