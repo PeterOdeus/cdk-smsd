@@ -37,11 +37,57 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 /**
- * @cdk.module smsd
- * <p>SMSD algorithm is described in {@cdk.cite SMSD2009}. 
- * If you are using SMSD module, please cite {@cdk.cite SMSD2009}.
- * </p>
+ *  This class implements the SMSD a multipurpose structure comparison tool.
+ *  It allows users to find maximal common substructure (MCS), perform the
+ *  mapping of a substructure in another structure, and the mapping of
+ *  two isomorphic structures.
+ *
+ *  It also comes with various published algorithms and user is free to
+ *  choose his favorite algorithm to perform MCS or substructure search.
+ *  For example 0: SMSD algorithm, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
+ *
+ *  It also has a set of robust chemical filter (i.e. bond energy, fragment count,
+ *  stereo & bond match) for sort out the reported MCS solution in a chemically
+ *  relevant manner. Each comparison can be made with or without bond sensitive
+ *  mode and with implicit or explicit hydrogens.
+ *
+ *  An example for MCS search:
+ *  <pre>
+ *  //Bond Sensitive is set true
+ *  SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+ *  // acetic acid anhydride
+ *  IAtomContainer A1 = sp.parseSmiles("CC");
+ *  // acetic acid anhydride
+ *  IAtomContainer A2 = sp.parseSmiles("CC(=O)OC(=O)C");
+ *  SMSD comparison = new SMSD(3, true);
+ *  // set molecules and remove hydrogens
+ *  comparison.init(A1, A2, true);
+ *  // set chemical filter true
+ *  comparison.setChemFilters(true, true, true);
+ *  System.out.println("Tanimoto coeffcient:  " + comparison.getTanimotoSimilarity());
+ *  System.out.println("A1 is a subgraph of A2:  " + comparison.isSubgraph());
+ *  //Get Modified AtomContainer
+ *  IAtomContainer Mol1 = comparison.getReactantMolecule();
+ *  IAtomContainer Mol2 = comparison.getProductMolecule();
+ *  // Print the mapping between molecules
+ *  System.out.println(" Mappings: ");
+ *  for (Map.Entry<Integer, Integer> mapping : comparison.getFirstMapping().entrySet()) {
+ *      System.out.println((mapping.getKey() + 1) + " " + (mapping.getValue() + 1));
+ *
+ *      IAtom eAtom = Mol1.getAtom(mapping.getKey());
+ *      IAtom pAtom = Mol2.getAtom(mapping.getValue());
+ *      System.out.println(eAtom.getSymbol() + " " + pAtom.getSymbol());
+ *  }
+ *  System.out.println("");
+ *  </pre>
+ *
+ *  @cdk.module smsd
+ *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
+ *  If you are using SMSD module</p>
+ *  <p><font color="#FF0000">please cite {@cdk.cite SMSD2009}.</font>:
+ *  </p>
  */
+
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
 public class SMSD implements IMCSAlgorithm {
 
