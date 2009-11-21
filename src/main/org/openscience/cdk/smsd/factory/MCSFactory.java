@@ -64,7 +64,7 @@ public class MCSFactory implements IMCSAlgorithm {
     private MolHandler PMol = null;
     private IAtomContainerSet RFrag = null;
     private IAtomContainerSet PFrag = null;
-    private List<Integer> StereoScore = null;
+    private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
     private IMCS mcs = null;
@@ -353,7 +353,7 @@ public class MCSFactory implements IMCSAlgorithm {
                 }
             }
 
-            this.StereoScore = chemFilter.getStereoMatches();
+            this.stereoScore = chemFilter.getStereoMatches();
             this.fragmentSize = chemFilter.getSortedFragment();
             this.bEnergies = chemFilter.getSortedEnergy();
         }
@@ -375,8 +375,8 @@ public class MCSFactory implements IMCSAlgorithm {
     public Integer getStereoScore(int Key) {
 
         Integer Value = null;
-        if (StereoScore != null && StereoScore.size() > Key && Key >= 0) {
-            Value = StereoScore.get(Key);
+        if (stereoScore != null && stereoScore.size() > Key && Key >= 0) {
+            Value = stereoScore.get(Key).intValue();
         }
 
         return Value;

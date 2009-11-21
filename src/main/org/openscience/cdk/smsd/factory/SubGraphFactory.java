@@ -62,7 +62,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
     private Map<IAtom, IAtom> firstAtomMCS = null;
     private MolHandler RMol = null;
     private MolHandler PMol = null;
-    private List<Integer> StereoScore = null;
+    private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
     private boolean removeHydrogen = false;
@@ -180,7 +180,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
                 }
             }
 
-            this.StereoScore = chemFilter.getStereoMatches();
+            this.stereoScore = chemFilter.getStereoMatches();
             this.fragmentSize = chemFilter.getSortedFragment();
             this.bEnergies = chemFilter.getSortedEnergy();
         }
@@ -202,9 +202,9 @@ public class SubGraphFactory implements IMCSAlgorithm {
     public Integer getStereoScore(int Key) {
 
         Integer value = null;
-//        System.out.println(StereoScore.size() + " :Key " + Key);
-        if (StereoScore.size() > Key && Key >= 0) {
-            value = StereoScore.get(Key);
+//        System.out.println(stereoScore.size() + " :Key " + Key);
+        if (stereoScore.size() > Key && Key >= 0) {
+            value = stereoScore.get(Key).intValue();
 //             System.out.println("\nScore " + value);
         }
         return value;
@@ -214,7 +214,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
     public Double getEnergyScore(int Key) {
 
         Double Value = null;
-//        System.out.println(StereoScore.size() + " :Key " + Key);
+//        System.out.println(stereoScore.size() + " :Key " + Key);
         if (bEnergies.size() > Key && Key >= 0) {
             Value = bEnergies.get(Key);
         }
