@@ -128,79 +128,40 @@ public class MCSFactory implements IMCSAlgorithm {
 
         int rAtomCount = RMol.getMolecule().getAtomCount();
         int pAtomCount = PMol.getMolecule().getAtomCount();
-
-//            int commonAtoms = checkCommonAtomCount(RMol.getMolecule(), PMol.getMolecule());
-
-//            long startTime = System.currentTimeMillis();
-//
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
-//                System.out.println("Single Mapping");
             singleMapping();
         } else if (algorithmType == 0) {
-//                System.err.println("Default");
-//                System.out.println("mcsBuilder");
-//                printMolecules(RMol.getMolecule(), PMol.getMolecule());
-
             mcsPlus();
             if (getFirstMapping() == null) {
                 mcs = null;
                 System.gc();
-//                    System.err.println("mcsPlus timeout ");
                 vfLibMCS();
-//                    System.out.println("Mapped with VF-McGregor");
-                }
+            }
         } else if (algorithmType == 1) {
-//                System.err.println("mcsPlus");
-//                System.out.println("mcsBuilder");
-//                printMolecules(RMol.getMolecule(), PMol.getMolecule());
             mcsPlus();
             if (getFirstMapping() == null) {
                 mcs = null;
-//                    System.out.println("Time-out occured mcsPlus");
-//                    System.gc();
-                }
+            }
 
         } else if (algorithmType == 2) {
-//                System.err.println("vfLibMCS");
-//                System.out.println("mcsBuilder");
-//                printMolecules(RMol.getMolecule(), PMol.getMolecule());
-
             if (rBondCount >= 6 && rBondCount >= 6) {
                 vfLibMCS();
                 if (getFirstMapping() == null) {
                     mcs = null;
                     System.gc();
                 }
-//                    System.out.println("Mapped with vfLibMCS");
-                } else {
+            } else {
                 mcsPlus();
-//                    System.out.println("Mapped with mcsPlus");
-                }
+            }
         } else if (algorithmType == 3) {
-//                 System.err.println("cdkMCS");
             cdkMCS();
             if (getFirstMapping() == null) {
-//                    System.out.println("Time-out occured mcsPlus");
                 mcs = null;
                 System.gc();
             }
 
-//              System.out.println("Mapped with cdkMCS");
-
         }
-//
-////
-//            System.out.println("MCS solution count:" + this.allMCS.size());
-//            System.out.println("solution Size:" + this.allMCS.firstElement().size());
-//            for (Map.Entry<IAtom, IAtom> map : allAtomMCS.firstElement().entrySet()) {
-//                System.out.println(map.getKey().getSymbol() + ":" + map.getValue().getSymbol());
-//                System.out.println(map.getKey().getID() + ":" + map.getValue().getID());
-//            }
-//            long endTime = System.currentTimeMillis();
         System.gc();
-//            System.out.println("Calculation Time: " + (endTime - startTime) * 0.001 + " seconds");
-//            System.out.println("!Done!\n");
-
 
     }
 
@@ -426,20 +387,16 @@ public class MCSFactory implements IMCSAlgorithm {
         return tanimoto;
     }
 
-    @Override
     /**
      *
      * @return true if mols have different stereo
      * chemistry else flase if no stereo mismatch
      */
+    @Override
     public boolean isStereoMisMatch() {
         boolean flag = false;
-
-
         IAtomContainer Reactant = RMol.getMolecule();
         IAtomContainer Product = PMol.getMolecule();
-
-
         int Score = 0;
 
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
@@ -449,27 +406,24 @@ public class MCSFactory implements IMCSAlgorithm {
 
                 IAtom indexIPlus = mappingJ.getKey();
                 IAtom indexJPlus = mappingJ.getValue();
-                if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
+                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
 
                     IAtom sourceAtom1 = indexI;
                     IAtom sourceAtom2 = indexIPlus;
 
                     IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
-                    if (RBond != null) {
+                    IAtom targetAtom1 = indexJ;
+                    IAtom targetAtom2 = indexJPlus;
+                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
-                        IAtom targetAtom1 = indexJ;
-                        IAtom targetAtom2 = indexJPlus;
-                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
-
-                        if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
-                            Score++;
-                        }
+                    if ((RBond != null && PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
+                        Score++;
                     }
                 }
+
             }
         }
-
         if (Score > 0) {
             flag = true;
         }
@@ -477,12 +431,13 @@ public class MCSFactory implements IMCSAlgorithm {
     }
 
     /**
-     * @return true if ac1 is sourceAtomCount subgraph of ac2
+     * @return true if ac1 is rAtomCount subgraph of ac2
      */
     @Override
     public boolean isSubgraph() {
+        IAtomContainer Reactant = RMol.getMolecule();
+        IAtomContainer Product = PMol.getMolecule();
         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
-
             return false;
         }
         BondType bondType = BondType.getInstance();
@@ -498,49 +453,30 @@ public class MCSFactory implements IMCSAlgorithm {
 
                     IAtom sourceAtom1 = indexI;
                     IAtom sourceAtom2 = indexIPlus;
+                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
-                    IBond RBond = RMol.getMolecule().getBond(sourceAtom1, sourceAtom2);
+                    IAtom targetAtom1 = indexJ;
+                    IAtom targetAtom2 = indexJPlus;
+                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
-                    if (RBond != null) {
-
-                        IAtom targetAtom1 = indexJ;
-                        IAtom targetAtom2 = indexJPlus;
-                        IBond PBond = PMol.getMolecule().getBond(targetAtom1, targetAtom2);
-
-                        if (PBond != null) {
-
-                            if (bondType.getBondSensitiveFlag()) {
-                                int RBondType = RBond.getOrder().ordinal();
-
-                                int PBondType = PBond.getOrder().ordinal();
-
-                                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
-                                    score++;
-                                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
-                                    score++;
-                                }
-                            } else {
-                                score++;
-                            }
-
-                        }
-                    }
+                    score += getBondMatchScore(RBond, PBond, bondType);
                 }
             }
         }
+
         boolean flag = false;
         float size = firstSolution.size();
-        int sourceAtomCount = 0;
-        int targetAtomCount = 0;
+        int source = 0;
+        int target = 0;
         if (!removeHydrogen) {
-            sourceAtomCount = RMol.getMolecule().getAtomCount();
-            targetAtomCount = PMol.getMolecule().getAtomCount();
+            source = RMol.getMolecule().getAtomCount();
+            target = PMol.getMolecule().getAtomCount();
         } else {
-            sourceAtomCount = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            targetAtomCount = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
+            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
         }
-        if ((size == sourceAtomCount && score / 2 == RMol.getMolecule().getBondCount()) &&
-                (targetAtomCount >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
+        if ((size == source && score / 2 == RMol.getMolecule().getBondCount()) &&
+                (target >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
             flag = true;
         }
         return flag;
@@ -631,6 +567,25 @@ public class MCSFactory implements IMCSAlgorithm {
         }
 
         return count;
+    }
+
+    private int getBondMatchScore(IBond RBond, IBond PBond, BondType bondType) {
+        int score = 0;
+        if (RBond != null && PBond != null) {
+            if (bondType.getBondSensitiveFlag()) {
+                int RBondType = RBond.getOrder().ordinal();
+                int PBondType = PBond.getOrder().ordinal();
+
+                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+                    score++;
+                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
+                    score++;
+                }
+            } else {
+                score++;
+            }
+        }
+        return score;
     }
 }
 

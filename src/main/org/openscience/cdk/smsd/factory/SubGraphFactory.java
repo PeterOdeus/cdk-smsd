@@ -97,9 +97,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 //             if bonds are less than 2
 
         if (rBondCount > 1 && pBondCount > 1) {
-            //System.out.println("\nVF-MCS\n");
             vfLibMCS();
-
         } else {
             singleMapping();
         }
@@ -274,24 +272,22 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
                 IAtom indexIPlus = mappingJ.getKey();
                 IAtom indexJPlus = mappingJ.getValue();
-                if (indexI.equals(indexIPlus) && indexJ.equals(indexJPlus)) {
+                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
 
                     IAtom sourceAtom1 = indexI;
                     IAtom sourceAtom2 = indexIPlus;
 
                     IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
-                    if (RBond != null) {
+                    IAtom targetAtom1 = indexJ;
+                    IAtom targetAtom2 = indexJPlus;
+                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
-                        IAtom targetAtom1 = indexJ;
-                        IAtom targetAtom2 = indexJPlus;
-                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
-
-                        if ((PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
-                            Score++;
-                        }
+                    if ((RBond != null && PBond != null) && (RBond.getStereo() != PBond.getStereo())) {
+                        Score++;
                     }
                 }
+
             }
         }
         if (Score > 0) {
@@ -309,7 +305,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
         IAtomContainer Reactant = RMol.getMolecule();
         IAtomContainer Product = PMol.getMolecule();
         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
-
             return false;
         }
         BondType bondType = BondType.getInstance();
@@ -325,37 +320,16 @@ public class SubGraphFactory implements IMCSAlgorithm {
 
                     IAtom sourceAtom1 = indexI;
                     IAtom sourceAtom2 = indexIPlus;
-
                     IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
 
-                    if (RBond != null) {
+                    IAtom targetAtom1 = indexJ;
+                    IAtom targetAtom2 = indexJPlus;
+                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
 
-                        IAtom targetAtom1 = indexJ;
-                        IAtom targetAtom2 = indexJPlus;
-                        IBond PBond = Product.getBond(targetAtom1, targetAtom2);
-                        if (PBond != null) {
-
-                            if (bondType.getBondSensitiveFlag()) {
-                                int RBondType = RBond.getOrder().ordinal();
-
-                                int PBondType = PBond.getOrder().ordinal();
-
-                                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
-                                    score++;
-                                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
-                                    score++;
-                                }
-                            } else {
-                                score++;
-                            }
-
-                        }
-                    }
+                    score += getBondMatchScore(RBond, PBond, bondType);
                 }
             }
         }
-
-
 
         boolean flag = false;
         float size = firstSolution.size();
@@ -454,5 +428,24 @@ public class SubGraphFactory implements IMCSAlgorithm {
         }
 
         return count;
+    }
+
+    private int getBondMatchScore(IBond RBond, IBond PBond, BondType bondType) {
+        int score = 0;
+        if (RBond != null && PBond != null) {
+            if (bondType.getBondSensitiveFlag()) {
+                int RBondType = RBond.getOrder().ordinal();
+                int PBondType = PBond.getOrder().ordinal();
+
+                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+                    score++;
+                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
+                    score++;
+                }
+            } else {
+                score++;
+            }
+        }
+        return score;
     }
 }
