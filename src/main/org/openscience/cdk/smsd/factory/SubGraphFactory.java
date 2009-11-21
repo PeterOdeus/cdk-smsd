@@ -93,7 +93,6 @@ public class SubGraphFactory implements IMCSAlgorithm {
         int rBondCount = RMol.getMolecule().getBondCount();
         int pBondCount = PMol.getMolecule().getBondCount();
 
-//
 //            This is importsnt because CDK fails to Generate makeAtomsMapOfBondsMap
 //             if bonds are less than 2
 
