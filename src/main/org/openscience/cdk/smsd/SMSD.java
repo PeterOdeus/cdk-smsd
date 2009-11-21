@@ -148,7 +148,6 @@ public class SMSD implements IMCSAlgorithm {
      * @param fragmentFilter true if fragement filter is switched on else false
      * @param energyFilter   true if bond energy filter is switched on else false
      */
-    
     @Override
     public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
         comparison.setChemFilters(stereoFilter, fragmentFilter, energyFilter);
@@ -210,13 +209,7 @@ public class SMSD implements IMCSAlgorithm {
      */
     @Override
     public Integer getStereoScore(int Key) {
-        Integer solution = null;
-        solution = comparison.getStereoScore(Key);
-        if (solution == null) {
-            solution = 0;
-        }
-        return solution;
-
+        return comparison.getStereoScore(Key);
     }
 
     /**
@@ -227,13 +220,7 @@ public class SMSD implements IMCSAlgorithm {
      */
     @Override
     public Integer getFragmentSize(int Key) {
-        Integer solution = null;
-
-        solution = comparison.getFragmentSize(Key);
-        if (solution == null) {
-            solution = 0;
-        }
-        return solution;
+        return comparison.getFragmentSize(Key);
     }
 
     /**
@@ -244,13 +231,7 @@ public class SMSD implements IMCSAlgorithm {
      */
     @Override
     public Double getEnergyScore(int Key) {
-        Double solution = 0.0;
-
-        solution = comparison.getEnergyScore(Key);
-        if (solution == null) {
-            solution = 0.0;
-        }
-        return solution;
+        return comparison.getEnergyScore(Key);
     }
 
     /**

@@ -361,98 +361,37 @@ public class MCSFactory implements IMCSAlgorithm {
 
     @Override
     public synchronized Integer getFragmentSize(int Key) {
-        Integer Value = null;
-        // System.out.println("Key" + Key);
-        if (fragmentSize != null && firstSolution.size() > 0 &&
-                fragmentSize.size() > Key && Key >= 0) {
-            Value = fragmentSize.get(Key);
-        }
-        return Value;
-
+        return fragmentSize.get(Key) == null ? null : fragmentSize.get(Key);
     }
 
     @Override
     public Integer getStereoScore(int Key) {
-
-        Integer Value = null;
-        if (stereoScore != null && stereoScore.size() > Key && Key >= 0) {
-            Value = stereoScore.get(Key).intValue();
-        }
-
-        return Value;
+        return stereoScore.get(Key) == null ? null : stereoScore.get(Key).intValue();
     }
 
     @Override
     public Double getEnergyScore(int Key) {
-
-        Double Value = null;
-        if (bEnergies != null && bEnergies.size() > Key &&
-                Key >= 0) {
-            Value = bEnergies.get(Key);
-        }
-        return Value;
+        return bEnergies.get(Key) == null ? null : bEnergies.get(Key);
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public synchronized TreeMap<Integer, Integer> getFirstMapping() {
-        if (firstSolution.size() > 0) {
-            return firstSolution;
-        } else {
-            return null;
-        }
-
+        return firstSolution.isEmpty() ? null : firstSolution;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public synchronized List<TreeMap<Integer, Integer>> getAllMapping() {
-        if (allMCS.size() > 0) {
-            return allMCS;
-        } else {
-            return null;
-        }
-
+        return allMCS.isEmpty() ? null : allMCS;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public synchronized Map<IAtom, IAtom> getFirstAtomMapping() {
-        if (firstSolution.size() > 0) {
-            return firstAtomMCS;
-        } else {
-
-            return null;
-        }
-
+        return firstAtomMCS.isEmpty() ? null : firstAtomMCS;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public synchronized List<Map<IAtom, IAtom>> getAllAtomMapping() {
-        if (allMCS.size() > 0) {
-            return allAtomMCS;
-        } else {
-            try {
-                throw new CDKException("No Solutions!");
-            } catch (CDKException ex) {
-                Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return null;
-        }
-
+        return allAtomMCS.isEmpty() ? null : allAtomMCS;
     }
 
     @Override

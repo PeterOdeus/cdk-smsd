@@ -118,7 +118,6 @@ public class VFMapper implements IMapper {
     public boolean hasMap(IAtomContainer target) {
         VFState state = new VFState(query, target);
         maps.clear();
-
         return mapFirst(state);
     }
 
