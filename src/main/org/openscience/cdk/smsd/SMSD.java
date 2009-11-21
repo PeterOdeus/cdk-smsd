@@ -97,7 +97,6 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  @cdk.module smsd
  *  
  */
-
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
 public class SMSD implements IMCSAlgorithm {
 
@@ -105,15 +104,15 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      * 
-     * @param subStructureMode true for fast substructure search without
+     * @param turboStructureSearchMode true for fast substructure search without
      * exhaustive MCS else false
-     * @param bondTypeFlag   true will considered bond types for mapping else false
+     * @param bondSensitiveFlag true will activate bond order match else false
      */
-    public SMSD(boolean subStructureMode, boolean bondTypeFlag) {
-        if (subStructureMode) {
-            comparison = new SubGraphFactory(bondTypeFlag);
+    public SMSD(boolean turboStructureSearchMode, boolean bondSensitiveFlag) {
+        if (turboStructureSearchMode) {
+            comparison = new SubGraphFactory(bondSensitiveFlag);
         } else {
-            comparison = new MCSFactory(bondTypeFlag);
+            comparison = new MCSFactory(bondSensitiveFlag);
         }
         System.gc();
 
@@ -122,13 +121,11 @@ public class SMSD implements IMCSAlgorithm {
     /**
      *
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
-     * exhaustive MCS else false
-     * @param bondTypeFlag   true will considered bond types for mapping else false
+     * @param bondSensitiveFlag true will activate bond order match else false
      */
-    public SMSD(int algorithmType, boolean bondTypeFlag) {
-        comparison = new MCSFactory(algorithmType, bondTypeFlag);
+    public SMSD(int algorithmType, boolean bondSensitiveFlag) {
+        comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
         System.gc();
-
     }
 
     /**
@@ -146,9 +143,6 @@ public class SMSD implements IMCSAlgorithm {
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
-
-        System.gc();
-
     }
 
     /**
@@ -165,7 +159,6 @@ public class SMSD implements IMCSAlgorithm {
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
-        System.gc();
     }
 
     /**
@@ -182,21 +175,13 @@ public class SMSD implements IMCSAlgorithm {
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
-
-        System.gc();
-
     }
 
     public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
-
-        String mol1 = sourceMolFileName;
-        String mol2 = targetMolFileName;
-
-        MolHandler Query = new MolHandler(mol1, false);
-        MolHandler Target = new MolHandler(mol2, false);
+        MolHandler Query = new MolHandler(sourceMolFileName, false);
+        MolHandler Target = new MolHandler(targetMolFileName, false);
 
         init(Query, Target, removeHydrogen);
-        System.gc();
     }
 
     /*
@@ -211,12 +196,10 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      * 
-     * @return All the possible mapped MCS atoms
-     * List of mappings. Each map in the list has
-     * atom-atom equivalence of the mappings
-     * between query and target molecule i.e.
-     * map.getKey() for the query and map.getValue()
-     * for the target molecule
+     * @return A List of all possible mapped MCS atoms.
+     * Each map in the list has atom-atom equivalence of the mappings
+     * between query and target molecule i.e. map.getKey() for the query
+     * and map.getValue() for the target molecule
      */
     @Override
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
@@ -225,12 +208,10 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      *
-     * @return All the possible mapped MCS atom index
-     * List of mappings. Each map in the list has
-     * atom-atom equivalence of the mappings
-     * between query and target molecule i.e.
-     * map.getKey() for the query and map.getValue()
-     * for the target molecule
+     * @return A List of all possible mapped MCS atom index.
+     * Each map in the list has atom-atom equivalence index of the mappings
+     * between query and target molecule i.e. map.getKey() for the query
+     * and map.getValue() for the target molecule
      */
     @Override
     public List<TreeMap<Integer, Integer>> getAllMapping() {
@@ -239,7 +220,7 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      * 
-     * @return One of the best MCS hits
+     * @return One of the best MCS solution(s) atoms
      *
      */
     @Override
@@ -249,7 +230,7 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      * 
-     * @return One of the best MCS hits
+     * @return One of the best MCS solution(s) index
      */
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
@@ -259,8 +240,7 @@ public class SMSD implements IMCSAlgorithm {
     /**
      * 
      * @param Key position
-     * @return total stereo matching 
-     * score for the mapped part
+     * @return Stereo matching score for the mapped part
      * 
      */
     @Override
@@ -271,7 +251,7 @@ public class SMSD implements IMCSAlgorithm {
     /**
      * 
      * @param Key position
-     * @return number of fragment(s) generated after removing the mapped parts
+     * @return Fragment count(s) generated after removing the mapped parts
      * 
      */
     @Override
@@ -282,7 +262,7 @@ public class SMSD implements IMCSAlgorithm {
     /**
      * 
      * @param Key position
-     * @return total energy required to remove the mapped part
+     * @return Total bond breaking energy required to remove the mapped part
      *
      */
     @Override
@@ -320,8 +300,8 @@ public class SMSD implements IMCSAlgorithm {
 
     /**
      * 
-     * @return true if mols have different stereo 
-     * chemistry else flase if no stereo mismatch
+     * @return true if no stereo mismatch occures
+     * else false if stereo mismatch occures
      */
     @Override
     public boolean isStereoMisMatch() {
