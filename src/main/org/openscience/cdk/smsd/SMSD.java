@@ -64,7 +64,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  comparison.init(A1, A2, true);
  *  // set chemical filter true
  *  comparison.setChemFilters(true, true, true);
- *  System.out.println("Tanimoto coeffcient:  " + comparison.getTanimotoSimilarity());
+ *  System.out.println("Tanimoto coefficient:  " + comparison.getTanimotoSimilarity());
  *  System.out.println("A1 is a subgraph of A2:  " + comparison.isSubgraph());
  *  //Get Modified AtomContainer
  *  IAtomContainer Mol1 = comparison.getReactantMolecule();
