@@ -37,33 +37,43 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 /**
- *  This class implements the SMSD a multipurpose structure comparison tool.
- *  It allows users to find maximal common substructure (MCS), perform the
- *  mapping of a substructure in another structure, and the mapping of
- *  two isomorphic structures.
+ *  <p>This class implements the SMSD- a multipurpose structure comparison tool.
+ *  It allows users to, i) find the maximal common substructure(s) (MCS);
+ *  ii) perform the mapping of a substructure in another structure, and;
+ *  iii) map two isomorphic structures.</p>
  *
- *  It also comes with various published algorithms and user is free to
+ *  <p>It also comes with various published algorithms. The user is free to
  *  choose his favorite algorithm to perform MCS or substructure search.
- *  For example 0: SMSD algorithm, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
+ *  For example 0: SMSD algorithm, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS</p>
  *
- *  It also has a set of robust chemical filter (i.e. bond energy, fragment count,
- *  stereo & bond match) for sort out the reported MCS solution in a chemically
- *  relevant manner. Each comparison can be made with or without bond sensitive
- *  mode and with implicit or explicit hydrogens.
+ *  <p>It also has a set of robust chemical filters (i.e. bond energy, fragment
+ *  count, stereo & bond match) to sort the reported MCS solutions in a chemically
+ *  relevant manner. Each comparison can be made with or without using the bond
+ *  sensitive mode and with implicit or explicit hydrogens.</p>
  *
- *  An example for MCS search:
+ *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
+ *  </p>
+ *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.el.</i>
+ *  Journal of Cheminformatics 2009</font>, 1:12 doi:10.1186/1758-2946-1-12 
+ *  </p>
+ *
+ *  <p>An example for MCS search:</p>
+ *  <font color="#003366">
  *  <pre>
- *  //Bond Sensitive is set true
  *  SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
  *  // acetic acid anhydride
  *  IAtomContainer A1 = sp.parseSmiles("CC");
  *  // acetic acid anhydride
  *  IAtomContainer A2 = sp.parseSmiles("CC(=O)OC(=O)C");
+ *
+ *  //Bond Sensitive is set true
  *  SMSD comparison = new SMSD(3, true);
  *  // set molecules and remove hydrogens
  *  comparison.init(A1, A2, true);
  *  // set chemical filter true
  *  comparison.setChemFilters(true, true, true);
+ *
+ *  //Get similarity score
  *  System.out.println("Tanimoto coefficient:  " + comparison.getTanimotoSimilarity());
  *  System.out.println("A1 is a subgraph of A2:  " + comparison.isSubgraph());
  *  //Get Modified AtomContainer
@@ -79,13 +89,13 @@ import org.openscience.cdk.interfaces.IMolecule;
  *      System.out.println(eAtom.getSymbol() + " " + pAtom.getSymbol());
  *  }
  *  System.out.println("");
+ * 
  *  </pre>
+ *  </font>
+ *
  *
  *  @cdk.module smsd
- *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
- *  If you are using SMSD module</p>
- *  <p><font color="#FF0000">please cite {@cdk.cite SMSD2009}.</font>:
- *  </p>
+ *  
  */
 
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
