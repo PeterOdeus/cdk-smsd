@@ -50,7 +50,7 @@ public class MoleculeSanityCheck {
      * @param molecule
      * @return
      */
-    protected static IAtomContainer checkAndCleanMolecule(IAtomContainer molecule) {
+    public static IAtomContainer checkAndCleanMolecule(IAtomContainer molecule) {
         boolean isMarkush = false;
         for (IAtom atom : molecule.atoms()) {
             if (atom.getSymbol().equals("R")) {
