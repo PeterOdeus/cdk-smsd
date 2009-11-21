@@ -97,41 +97,7 @@ public class VFlibMCSHandler implements IMCS {
                 _mappings = mgit.getMappings();
                 mgit = null;
             }
-            int counter = 0;
-            for (List<Integer> mapping : _mappings) {
-
-                Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
-                TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
-
-                for (int index = 0; index < mapping.size(); index += 2) {
-                    IAtom qAtom = null;
-                    IAtom tAtom = null;
-
-                    qAtom = source.getAtom(mapping.get(index));
-                    tAtom = target.getAtom(mapping.get(index + 1));
-
-
-                    Integer qIndex = mapping.get(index);
-                    Integer tIndex = mapping.get(index + 1);
-
-
-                    if (qIndex != null && tIndex != null) {
-                        atomatomMapping.put(qAtom, tAtom);
-                        indexindexMapping.put(qIndex, tIndex);
-                    } else {
-                        throw new CDKException("Atom index pointing to NULL");
-                    }
-                }
-
-                if ((!atomatomMapping.isEmpty()) &&
-                        (!hasMap(indexindexMapping, allMCS))) {
-                    allAtomMCS.add(counter, atomatomMapping);
-                    allMCS.add(counter, indexindexMapping);
-                    counter++;
-                }
-
-            }
-
+            setMappings(_mappings);
 
         } else if (!allAtomMCS_copy.isEmpty()) {
             allAtomMCS.addAll(allAtomMCS_copy);
@@ -143,6 +109,44 @@ public class VFlibMCSHandler implements IMCS {
             firstMCS.putAll(allMCS.get(0));
         }
         return 0;
+
+    }
+
+    private void setMappings(List<List<Integer>> _mappings) throws CDKException {
+        int counter = 0;
+        for (List<Integer> mapping : _mappings) {
+
+            Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
+            TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
+
+            for (int index = 0; index < mapping.size(); index += 2) {
+                IAtom qAtom = null;
+                IAtom tAtom = null;
+
+                qAtom = source.getAtom(mapping.get(index));
+                tAtom = target.getAtom(mapping.get(index + 1));
+
+
+                Integer qIndex = mapping.get(index);
+                Integer tIndex = mapping.get(index + 1);
+
+
+                if (qIndex != null && tIndex != null) {
+                    atomatomMapping.put(qAtom, tAtom);
+                    indexindexMapping.put(qIndex, tIndex);
+                } else {
+                    throw new CDKException("Atom index pointing to NULL");
+                }
+            }
+
+            if ((!atomatomMapping.isEmpty()) &&
+                    (!hasMap(indexindexMapping, allMCS))) {
+                allAtomMCS.add(counter, atomatomMapping);
+                allMCS.add(counter, indexindexMapping);
+                counter++;
+            }
+
+        }
 
     }
 
