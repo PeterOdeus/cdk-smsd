@@ -1,0 +1,366 @@
+From a3c156c1486eba0fa0167472d9458e3361f3a5a0 Mon Sep 17 00:00:00 2001
+From: Rajarshi  Guha <rajarshi.guha@gmail.com>
+Date: Fri, 13 Nov 2009 08:32:33 -0500
+Subject: [PATCH 4/5] Added similarity methods to the similarity package so that we can drop the EBI Similarity class (even though it is not actually used in the other SMSD classes)
+
+---
+ .../org/openscience/cdk/similarity/Cosine.java     |   88 ++++++++++++++++++++
+ src/main/org/openscience/cdk/similarity/Dice.java  |   87 +++++++++++++++++++
+ .../org/openscience/cdk/similarity/CosineTest.java |   72 ++++++++++++++++
+ .../org/openscience/cdk/similarity/DiceTest.java   |   72 ++++++++++++++++
+ 4 files changed, 319 insertions(+), 0 deletions(-)
+ create mode 100644 src/main/org/openscience/cdk/similarity/Cosine.java
+ create mode 100644 src/main/org/openscience/cdk/similarity/Dice.java
+ create mode 100644 src/test/org/openscience/cdk/similarity/CosineTest.java
+ create mode 100644 src/test/org/openscience/cdk/similarity/DiceTest.java
+
+diff --git a/src/main/org/openscience/cdk/similarity/Cosine.java b/src/main/org/openscience/cdk/similarity/Cosine.java
+new file mode 100644
+index 0000000..f792dfd
+--- /dev/null
++++ b/src/main/org/openscience/cdk/similarity/Cosine.java
+@@ -0,0 +1,88 @@
++/*  $RCSfile$
++ *  $Author$
++ *  $Date$
++ *  $Revision$
++ *
++ *  Copyright (C) 2009 Rajarshi Guha <rajarshi.guha@gmail.com>
++ *
++ *  Contact: cdk-devel@lists.sourceforge.net
++ *
++ *  This program is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU Lesser General Public License
++ *  as published by the Free Software Foundation; either version 2.1
++ *  of the License, or (at your option) any later version.
++ *  All we ask is that proper credit is given for our work, which includes
++ *  - but is not limited to - adding the above copyright notice to the beginning
++ *  of your source code files, and to any copyright notice that you may distribute
++ *  with programs based on this work.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU Lesser General Public License for more details.
++ *
++ *  You should have received a copy of the GNU Lesser General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ */
++package org.openscience.cdk.similarity;
++
++
++import org.openscience.cdk.annotations.TestClass;
++import org.openscience.cdk.annotations.TestMethod;
++import org.openscience.cdk.exception.CDKException;
++
++import java.util.BitSet;
++
++/**
++ * Calculates the Cosine coefficient for a given pair of two fingerprint bitsets or real valued feature vectors.
++ * <p/>
++ * The Cosine coefficient is one way to quantitatively measure the "distance" or similarity of two chemical
++ * structures.
++ * <p/>
++ * <p>You can use the FingerPrinter class to retrieve two fingerprint bitsets. We assume that you have two structures
++ * stored in cdk.Molecule objects. A tanimoto coefficient can then be calculated like:
++ * <pre>
++ *   BitSet fingerprint1 = Fingerprinter.getFingerprint(molecule1);
++ *   BitSet fingerprint2 = Fingerprinter.getFingerprint(molecule2);
++ *   float cosine_coefficient = Cosine.calculate(fingerprint1, fingerprint2);
++ *  </pre>
++ * <p/>
++ * <p>The FingerPrinter assumes that hydrogens are explicitely given, if this is desired!
++ *
++ * @author Rajarshi Guha
++ * @cdk.githash
++ * @cdk.created 2009-11-13
++ * @cdk.keyword cosine
++ * @cdk.keyword similarity
++ * @cdk.keyword carbo
++ * @cdk.module fingerprint
++ */
++@TestClass("org.openscience.cdk.similarity.CosineTest")
++public class Cosine {
++
++    /**
++     * Evaluates Cosine coefficient for two bit sets.
++     *
++     * @param bitset1 A bitset (such as a fingerprint) for the first molecule
++     * @param bitset2 A bitset (such as a fingerprint) for the second molecule
++     * @return The Cosine coefficient
++     * @throws org.openscience.cdk.exception.CDKException
++     *          if bitsets are not of the same length
++     */
++    @TestMethod("testCosine1,testCosine2")
++    public static float calculate(BitSet bitset1, BitSet bitset2) throws CDKException {
++        float _bitset1_cardinality = bitset1.cardinality();
++        float _bitset2_cardinality = bitset2.cardinality();
++        if (bitset1.size() != bitset2.size()) {
++            throw new CDKException("Bisets must have the same bit length");
++        }
++
++        BitSet one_and_two = (BitSet) bitset1.clone();
++        one_and_two.and(bitset2);
++        float _common_bit_count = one_and_two.cardinality();
++
++        return (float) (_common_bit_count / (Math.sqrt(_bitset1_cardinality * _bitset2_cardinality)));
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/org/openscience/cdk/similarity/Dice.java b/src/main/org/openscience/cdk/similarity/Dice.java
+new file mode 100644
+index 0000000..79afe9a
+--- /dev/null
++++ b/src/main/org/openscience/cdk/similarity/Dice.java
+@@ -0,0 +1,87 @@
++/*  $RCSfile$
++ *  $Author$
++ *  $Date$
++ *  $Revision$
++ *
++ *  Copyright (C) 2009 Rajarshi Guha <rajarshi.guha@gmail.com>
++ *
++ *  Contact: cdk-devel@lists.sourceforge.net
++ *
++ *  This program is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU Lesser General Public License
++ *  as published by the Free Software Foundation; either version 2.1
++ *  of the License, or (at your option) any later version.
++ *  All we ask is that proper credit is given for our work, which includes
++ *  - but is not limited to - adding the above copyright notice to the beginning
++ *  of your source code files, and to any copyright notice that you may distribute
++ *  with programs based on this work.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU Lesser General Public License for more details.
++ *
++ *  You should have received a copy of the GNU Lesser General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ */
++package org.openscience.cdk.similarity;
++
++
++import org.openscience.cdk.annotations.TestClass;
++import org.openscience.cdk.annotations.TestMethod;
++import org.openscience.cdk.exception.CDKException;
++
++import java.util.BitSet;
++
++/**
++ * Calculates the Dice coefficient for a given pair of two fingerprint bitsets or real valued feature vectors.
++ * <p/>
++ * The Dice coefficient is one way to quantitatively measure the "distance" or similarity of two chemical
++ * structures.
++ * <p/>
++ * <p>You can use the FingerPrinter class to retrieve two fingerprint bitsets. We assume that you have two structures
++ * stored in cdk.Molecule objects. A tanimoto coefficient can then be calculated like:
++ * <pre>
++ *   BitSet fingerprint1 = Fingerprinter.getFingerprint(molecule1);
++ *   BitSet fingerprint2 = Fingerprinter.getFingerprint(molecule2);
++ *   float dice_coefficient = Dice.calculate(fingerprint1, fingerprint2);
++ *  </pre>
++ * <p/>
++ * <p>The FingerPrinter assumes that hydrogens are explicitely given, if this is desired!
++ *
++ * @author Rajarshi Guha
++ * @cdk.githash
++ * @cdk.created 2009-11-13
++ * @cdk.keyword dice
++ * @cdk.keyword similarity
++ * @cdk.keyword sorensen
++ * @cdk.module fingerprint
++ */
++@TestClass("org.openscience.cdk.similarity.CosineTest")
++public class Dice {
++
++    /**
++     * Evaluates Dice coefficient for two bit sets.
++     *
++     * @param bitset1 A bitset (such as a fingerprint) for the first molecule
++     * @param bitset2 A bitset (such as a fingerprint) for the second molecule
++     * @return The Dice coefficient
++     * @throws org.openscience.cdk.exception.CDKException
++     *          if bitsets are not of the same length
++     */
++    @TestMethod("testDice1,testDice2")
++    public static float calculate(BitSet bitset1, BitSet bitset2) throws CDKException {
++        float _bitset1_cardinality = bitset1.cardinality();
++        float _bitset2_cardinality = bitset2.cardinality();
++        if (bitset1.size() != bitset2.size()) {
++            throw new CDKException("Bisets must have the same bit length");
++        }
++
++        BitSet one_and_two = (BitSet) bitset1.clone();
++        one_and_two.and(bitset2);
++        float _common_bit_count = one_and_two.cardinality();
++        return 2 * _common_bit_count / (_bitset1_cardinality + _bitset2_cardinality);                
++    }
++}
+\ No newline at end of file
+diff --git a/src/test/org/openscience/cdk/similarity/CosineTest.java b/src/test/org/openscience/cdk/similarity/CosineTest.java
+new file mode 100644
+index 0000000..fb97b64
+--- /dev/null
++++ b/src/test/org/openscience/cdk/similarity/CosineTest.java
+@@ -0,0 +1,72 @@
++/*
++ * $RCSfile$    
++ * $Author$    
++ * $Date$    
++ * $Revision$
++ * 
++ * Copyright (C) 1997-2007  The Chemistry Development Kit (CKD) project
++ * 
++ * Contact: cdk-devel@lists.sourceforge.net
++ * 
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1
++ * of the License, or (at your option) any later version.
++ * All I ask is that proper credit is given for my work, which includes
++ * - but is not limited to - adding the above copyright notice to the beginning
++ * of your source code files, and to any copyright notice that you may distribute
++ * with programs based on this work.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ * 
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA. 
++ * 
++ */
++
++package org.openscience.cdk.similarity;
++
++import org.junit.Assert;
++import org.junit.Test;
++import org.openscience.cdk.CDKTestCase;
++import org.openscience.cdk.Molecule;
++import org.openscience.cdk.fingerprint.Fingerprinter;
++import org.openscience.cdk.templates.MoleculeFactory;
++
++import java.util.BitSet;
++
++/**
++ * @cdk.module test-fingerprint
++ */
++public class CosineTest extends CDKTestCase {
++
++    boolean standAlone = false;
++
++    @Test
++    public void testCosine1() throws Exception {
++        Molecule mol1 = MoleculeFactory.makeIndole();
++        Molecule mol2 = MoleculeFactory.makePyrrole();
++        Fingerprinter fingerprinter = new Fingerprinter();
++        BitSet bs1 = fingerprinter.getFingerprint(mol1);
++        BitSet bs2 = fingerprinter.getFingerprint(mol2);
++        float cosine = Cosine.calculate(bs1, bs2);
++        if (standAlone) System.out.println("Cosine: " + cosine);
++        if (!standAlone) Assert.assertEquals(0.5962, cosine, 0.01);
++    }
++
++    @Test
++    public void testCosine2() throws Exception {
++        Molecule mol1 = MoleculeFactory.makeIndole();
++        Molecule mol2 = MoleculeFactory.makeIndole();
++        Fingerprinter fingerprinter = new Fingerprinter();
++        BitSet bs1 = fingerprinter.getFingerprint(mol1);
++        BitSet bs2 = fingerprinter.getFingerprint(mol2);
++        float cosine = Cosine.calculate(bs1, bs2);
++        if (standAlone) System.out.println("Cosine: " + cosine);
++        if (!standAlone) Assert.assertEquals(1.0, cosine, 0.001);
++    }
++}
+\ No newline at end of file
+diff --git a/src/test/org/openscience/cdk/similarity/DiceTest.java b/src/test/org/openscience/cdk/similarity/DiceTest.java
+new file mode 100644
+index 0000000..72af574
+--- /dev/null
++++ b/src/test/org/openscience/cdk/similarity/DiceTest.java
+@@ -0,0 +1,72 @@
++/*
++ * $RCSfile$    
++ * $Author$    
++ * $Date$    
++ * $Revision$
++ * 
++ * Copyright (C) 1997-2007  The Chemistry Development Kit (CKD) project
++ * 
++ * Contact: cdk-devel@lists.sourceforge.net
++ * 
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1
++ * of the License, or (at your option) any later version.
++ * All I ask is that proper credit is given for my work, which includes
++ * - but is not limited to - adding the above copyright notice to the beginning
++ * of your source code files, and to any copyright notice that you may distribute
++ * with programs based on this work.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ * 
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA. 
++ * 
++ */
++
++package org.openscience.cdk.similarity;
++
++import org.junit.Assert;
++import org.junit.Test;
++import org.openscience.cdk.CDKTestCase;
++import org.openscience.cdk.Molecule;
++import org.openscience.cdk.fingerprint.Fingerprinter;
++import org.openscience.cdk.templates.MoleculeFactory;
++
++import java.util.BitSet;
++
++/**
++ * @cdk.module test-fingerprint
++ */
++public class DiceTest extends CDKTestCase {
++
++    boolean standAlone = false;
++
++    @Test
++    public void testDice1() throws Exception {
++        Molecule mol1 = MoleculeFactory.makeIndole();
++        Molecule mol2 = MoleculeFactory.makePyrrole();
++        Fingerprinter fingerprinter = new Fingerprinter();
++        BitSet bs1 = fingerprinter.getFingerprint(mol1);
++        BitSet bs2 = fingerprinter.getFingerprint(mol2);
++        float dice = Dice.calculate(bs1, bs2);
++        if (standAlone) System.out.println("Dice: " + dice);
++        if (!standAlone) Assert.assertEquals(0.5245, dice, 0.01);
++    }
++
++    @Test
++    public void testDice2() throws Exception {
++        Molecule mol1 = MoleculeFactory.makeIndole();
++        Molecule mol2 = MoleculeFactory.makeIndole();
++        Fingerprinter fingerprinter = new Fingerprinter();
++        BitSet bs1 = fingerprinter.getFingerprint(mol1);
++        BitSet bs2 = fingerprinter.getFingerprint(mol2);
++        float dice = Dice.calculate(bs1, bs2);
++        if (standAlone) System.out.println("Dice: " + dice);
++        if (!standAlone) Assert.assertEquals(1.0, dice, 0.001);
++    }
++}
+\ No newline at end of file
+-- 
+1.6.1.2
+

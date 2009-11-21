@@ -1,0 +1,89 @@
+From 969d07b6fb93cd9e97bdc9bffafbc1cd8aad4d5e Mon Sep 17 00:00:00 2001
+From: Egon Willighagen <egonw@users.sourceforge.net>
+Date: Thu, 12 Nov 2009 23:52:21 +0100
+Subject: [PATCH] Moved to the CoverageAnnotationTest approach
+
+---
+ .../cdk/smsd/factory/SubGraphFactory.java          |   17 ++++++++++++-----
+ .../openscience/cdk/coverage/SmsdCoverageTest.java |    2 +-
+ 2 files changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/src/main/org/openscience/cdk/smsd/factory/SubGraphFactory.java b/src/main/org/openscience/cdk/smsd/factory/SubGraphFactory.java
+index 2c200dc..774ae6a 100644
+--- a/src/main/org/openscience/cdk/smsd/factory/SubGraphFactory.java
++++ b/src/main/org/openscience/cdk/smsd/factory/SubGraphFactory.java
+@@ -13,6 +13,14 @@ import java.util.TreeMap;
+ import java.util.Vector;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
++
++import org.openscience.cdk.CDKConstants;
++import org.openscience.cdk.annotations.TestClass;
++import org.openscience.cdk.annotations.TestMethod;
++import org.openscience.cdk.interfaces.IAtom;
++import org.openscience.cdk.interfaces.IAtomContainer;
++import org.openscience.cdk.interfaces.IBond;
++import org.openscience.cdk.interfaces.IMolecule;
+ import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
+ import org.openscience.cdk.smsd.algorithm.vflib.VFlibTurboHandler;
+ import org.openscience.cdk.smsd.core.tools.EBIException;
+@@ -21,11 +29,6 @@ import org.openscience.cdk.smsd.global.BondType;
+ import org.openscience.cdk.smsd.global.TimeOut;
+ import org.openscience.cdk.smsd.helper.MolHandler;
+ import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+-import org.openscience.cdk.CDKConstants;
+-import org.openscience.cdk.interfaces.IAtom;
+-import org.openscience.cdk.interfaces.IAtomContainer;
+-import org.openscience.cdk.interfaces.IBond;
+-import org.openscience.cdk.interfaces.IMolecule;
+ 
+ /**
+  *
+@@ -54,6 +57,7 @@ import org.openscience.cdk.interfaces.IMolecule;
+ /**
+  * @cdk.module smsd
+  */
++@TestClass("org.openscience.cdk.smsd.SMSDTest")
+ public class SubGraphFactory implements IMCSAlgorithm {
+ 
+     private List<TreeMap<Integer, Integer>> allMCS = null;
+@@ -82,6 +86,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
+      * @param energyFilter
+      * @throws java.lang.Exception
+      */
++    @TestMethod("testVFLib")
+     public SubGraphFactory(boolean BondTypeFlag, boolean removeHydrogen, boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) throws Exception {
+ 
+         this.removeHydrogen = removeHydrogen;
+@@ -158,6 +163,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
+      * @param Product
+      */
+     @Override
++    @TestMethod("testVFLib")
+     public synchronized void init(IMolecule Reactant, IMolecule Product) {
+         //System.out.println(" Container Size " + Reactant.getAtomCount());
+         //System.out.println(" Container Size " + Product.getAtomCount());
+@@ -413,6 +419,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
+      * @return true if ac1 is a subgraph of ac2
+      */
+     @Override
++    @TestMethod("testVFLib")
+     public boolean isSubgraph() {
+         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
+ 
+diff --git a/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java b/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
+index 3890e51..be52ca3 100644
+--- a/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
++++ b/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
+@@ -26,7 +26,7 @@ import org.junit.Test;
+  *
+  * @cdk.module test-smsd
+  */
+-public class SmsdCoverageTest extends CoverageTest {
++public class SmsdCoverageTest extends CoverageAnnotationTest {
+ 
+     private final static String CLASS_LIST = "smsd.javafiles";
+     
+-- 
+1.6.3.3
+

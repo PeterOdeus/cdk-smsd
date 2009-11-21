@@ -1,0 +1,41 @@
+From b5affda4ff9c7a135a3622a6aadb4ee239e63594 Mon Sep 17 00:00:00 2001
+From: Egon Willighagen <egonw@users.sourceforge.net>
+Date: Tue, 17 Nov 2009 21:33:26 +0100
+Subject: [PATCH 1/2] Added missing @cdk.module statements
+
+---
+ .../core/tools/ExtAtomContainerManipulator.java    |    2 ++
+ .../cdk/smsd/algorithm/vflib/VFLibTest.java        |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/src/main/org/openscience/cdk/smsd/core/tools/ExtAtomContainerManipulator.java b/src/main/org/openscience/cdk/smsd/core/tools/ExtAtomContainerManipulator.java
+index ea86432..22b0eca 100644
+--- a/src/main/org/openscience/cdk/smsd/core/tools/ExtAtomContainerManipulator.java
++++ b/src/main/org/openscience/cdk/smsd/core/tools/ExtAtomContainerManipulator.java
+@@ -50,6 +50,8 @@ import org.w3c.dom.NodeList;
+  * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK  * @contact asad@ebi.ac.uk
+  * This is an extension of CDK Atom container where we have modfiled few methods
+  * Some part of this code was taken from CDK source code and modified
++ *
++ * @cdk.module smsd
+  */
+ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
+ 
+diff --git a/src/test/org/openscience/cdk/smsd/algorithm/vflib/VFLibTest.java b/src/test/org/openscience/cdk/smsd/algorithm/vflib/VFLibTest.java
+index 4b7bb5b..a382de5 100644
+--- a/src/test/org/openscience/cdk/smsd/algorithm/vflib/VFLibTest.java
++++ b/src/test/org/openscience/cdk/smsd/algorithm/vflib/VFLibTest.java
+@@ -28,8 +28,9 @@ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFMatch;
+ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+ 
+ /**
+- *
+  * @author sar
++ *
++ * @cdk.module test-smsd
+  */
+ public class VFLibTest extends CDKTestCase {
+ 
+-- 
+1.6.3.3
+

@@ -1,0 +1,43 @@
+From 53fe8a538db02c3f5120b5041bcb348d2e085ec5 Mon Sep 17 00:00:00 2001
+From: Rajarshi  Guha <rajarshi.guha@gmail.com>
+Date: Fri, 13 Nov 2009 07:37:53 -0500
+Subject: [PATCH 2/3] Fixed modification to EBIException - which should be dropped later anyway
+
+---
+ .../cdk/smsd/core/tools/EBIException.java          |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/main/org/openscience/cdk/smsd/core/tools/EBIException.java b/src/main/org/openscience/cdk/smsd/core/tools/EBIException.java
+index 35bf268..5bde705 100644
+--- a/src/main/org/openscience/cdk/smsd/core/tools/EBIException.java
++++ b/src/main/org/openscience/cdk/smsd/core/tools/EBIException.java
+@@ -28,7 +28,7 @@ package org.openscience.cdk.smsd.core.tools;
+ /**
+  * @cdk.module smsd
+  */
+-public class CDKException extends Exception {
++public class EBIException extends Exception {
+ 
+     private static final long serialVersionUID = 8371328769230823678L;
+ 
+@@ -37,7 +37,7 @@ public class CDKException extends Exception {
+      *
+      * @param message for the constructed exception
+      */
+-    public CDKException(String message) {
++    public EBIException(String message) {
+         super(message);
+     }
+ 
+@@ -48,7 +48,7 @@ public class CDKException extends Exception {
+      * @param message for the constructed exception
+      * @param cause   the Throwable that triggered this CDKException
+      */
+-    public CDKException(String message, Throwable cause) {
++    public EBIException(String message, Throwable cause) {
+         super(message, cause);
+     }
+ }
+-- 
+1.6.1.2
+

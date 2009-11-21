@@ -1,0 +1,33 @@
+From a3811dd832a9bfa10d5f205d68b10bb0080409b4 Mon Sep 17 00:00:00 2001
+From: Egon Willighagen <egonw@users.sourceforge.net>
+Date: Tue, 17 Nov 2009 21:33:41 +0100
+Subject: [PATCH 2/2] Added new test class to module test
+
+---
+ .../openscience/cdk/modulesuites/MsmsdTests.java   |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java b/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
+index b3e4029..7e91e14 100644
+--- a/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
++++ b/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
+@@ -23,6 +23,7 @@ import org.junit.runners.Suite;
+ import org.junit.runners.Suite.SuiteClasses;
+ import org.openscience.cdk.coverage.SmsdCoverageTest;
+ import org.openscience.cdk.smsd.SMSDTest;
++import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
+ 
+ /**
+  * TestSuite that runs all the unit tests for the smsd module.
+@@ -33,6 +34,7 @@ import org.openscience.cdk.smsd.SMSDTest;
+ @SuiteClasses(value={
+     SmsdCoverageTest.class,
+     
+-    SMSDTest.class
++    SMSDTest.class,
++    VFLibTest.class
+ })
+ public class MsmsdTests {}
+-- 
+1.6.3.3
+

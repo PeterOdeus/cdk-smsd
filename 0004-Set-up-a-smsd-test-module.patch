@@ -1,0 +1,181 @@
+From a2d702c457a0f5f7667b2541b8aab858b9bad31e Mon Sep 17 00:00:00 2001
+From: Egon Willighagen <egonw@users.sourceforge.net>
+Date: Thu, 12 Nov 2009 00:11:36 +0100
+Subject: [PATCH 4/5] Set up a smsd test module
+
+---
+ build.xml                                          |    4 +-
+ src/META-INF/test-smsd.cdkdepends                  |   10 +++++
+ src/META-INF/test-smsd.devellibdepends             |    1 +
+ src/META-INF/test-smsd.libdepends                  |    4 ++
+ .../openscience/cdk/coverage/SmsdCoverageTest.java |   40 ++++++++++++++++++++
+ .../openscience/cdk/modulesuites/MsmsdTests.java   |   38 +++++++++++++++++++
+ src/test/org/openscience/cdk/smsd/SMSDTest.java    |    2 +
+ 7 files changed, 97 insertions(+), 2 deletions(-)
+ create mode 100644 src/META-INF/test-smsd.cdkdepends
+ create mode 100644 src/META-INF/test-smsd.devellibdepends
+ create mode 100644 src/META-INF/test-smsd.libdepends
+ create mode 100644 src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
+ create mode 100644 src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
+
+diff --git a/build.xml b/build.xml
+index 9ee3802..20119a0 100644
+--- a/build.xml
++++ b/build.xml
+@@ -537,7 +537,7 @@
+         	      test-nonotify"/>
+         <foreach target="compile-module" param="module"
+             parallel="${parallel}" maxthreads="${threadCount}"
+-            list="test-qsarprotein,test-qsarionpot"/>
++            list="test-qsarprotein,test-qsarionpot,test-smsd"/>
+     </target>
+ 
+ 	<target id="jarTestdata" name="jarTestdata" description="Creates jar files with test data.">
+@@ -995,7 +995,7 @@
+                       smarts,fingerprint,smiles,qsar,qsaratomic,qsarbond,
+                       qsarmolecular,qsarionpot,qsarprotein,pdb,pcore,inchi,
+                       structgen,libiomd,libiocml,formula,render,extra,sdg,
+-                      ioformats"/>
++                      ioformats,smsd"/>
+         </target>
+ 
+         <target id="limitations" name="limitations" depends="noJunit, dist-all"
+diff --git a/src/META-INF/test-smsd.cdkdepends b/src/META-INF/test-smsd.cdkdepends
+new file mode 100644
+index 0000000..3bbc15a
+--- /dev/null
++++ b/src/META-INF/test-smsd.cdkdepends
+@@ -0,0 +1,10 @@
++cdk-annotation.jar
++cdk-interfaces.jar
++cdk-core.jar
++cdk-standard.jar
++cdk-data.jar
++cdk-smsd.jar
++cdk-extra.jar
++cdk-test.jar
++cdk-smiles.jar
++cdk-valencycheck.jar
+diff --git a/src/META-INF/test-smsd.devellibdepends b/src/META-INF/test-smsd.devellibdepends
+new file mode 100644
+index 0000000..66fec2d
+--- /dev/null
++++ b/src/META-INF/test-smsd.devellibdepends
+@@ -0,0 +1 @@
++junit-4.5.jar
+diff --git a/src/META-INF/test-smsd.libdepends b/src/META-INF/test-smsd.libdepends
+new file mode 100644
+index 0000000..2cd94e7
+--- /dev/null
++++ b/src/META-INF/test-smsd.libdepends
+@@ -0,0 +1,4 @@
++vecmath1.2-1.14.jar
++commons-cli-1.0.jar
++log4j.jar
++jgrapht-0.6.0.jar
+diff --git a/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java b/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
+new file mode 100644
+index 0000000..3890e51
+--- /dev/null
++++ b/src/test/org/openscience/cdk/coverage/SmsdCoverageTest.java
+@@ -0,0 +1,40 @@
++/* Copyright (C) 2009  Egon Willighagen <egonw@user.sf.net>
++ * 
++ * Contact: cdk-devel@lists.sourceforge.net
++ * 
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ * 
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA. 
++ */
++package org.openscience.cdk.coverage;
++
++import org.junit.BeforeClass;
++import org.junit.Test;
++
++/**
++ * TestSuite that runs all the sample tests.
++ *
++ * @cdk.module test-smsd
++ */
++public class SmsdCoverageTest extends CoverageTest {
++
++    private final static String CLASS_LIST = "smsd.javafiles";
++    
++    @BeforeClass public static void setUp() throws Exception {
++        loadClassList(CLASS_LIST, SmsdCoverageTest.class.getClassLoader());
++    }
++
++    @Test public void testCoverage() {
++        super.runCoverageTest();
++    }
++}
+diff --git a/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java b/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
+new file mode 100644
+index 0000000..b3e4029
+--- /dev/null
++++ b/src/test/org/openscience/cdk/modulesuites/MsmsdTests.java
+@@ -0,0 +1,38 @@
++/* Copyright (C) 2009  Egon Willighagen <egonw@user.sf.net>
++ * 
++ * Contact: cdk-devel@lists.sourceforge.net
++ * 
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ * 
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA. 
++ */
++package org.openscience.cdk.modulesuites;
++
++import org.junit.runner.RunWith;
++import org.junit.runners.Suite;
++import org.junit.runners.Suite.SuiteClasses;
++import org.openscience.cdk.coverage.SmsdCoverageTest;
++import org.openscience.cdk.smsd.SMSDTest;
++
++/**
++ * TestSuite that runs all the unit tests for the smsd module.
++ *
++ * @cdk.module test-smsd
++ */
++@RunWith(value=Suite.class)
++@SuiteClasses(value={
++    SmsdCoverageTest.class,
++    
++    SMSDTest.class
++})
++public class MsmsdTests {}
+diff --git a/src/test/org/openscience/cdk/smsd/SMSDTest.java b/src/test/org/openscience/cdk/smsd/SMSDTest.java
+index 0a58ad7..d0a50e2 100644
+--- a/src/test/org/openscience/cdk/smsd/SMSDTest.java
++++ b/src/test/org/openscience/cdk/smsd/SMSDTest.java
+@@ -23,6 +23,8 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+ 
+ /**
+  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk>
++ * 
++ * @cdk.module test-smsd
+  */
+ public class SMSDTest extends CDKTestCase {
+ 
+-- 
+1.6.3.3
+

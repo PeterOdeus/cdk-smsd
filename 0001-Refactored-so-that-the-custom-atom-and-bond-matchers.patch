@@ -1,0 +1,420 @@
+From efd44f8e5f3d96a7df6135c0b4629a25ab81eca6 Mon Sep 17 00:00:00 2001
+From: Rajarshi  Guha <rajarshi.guha@gmail.com>
+Date: Sat, 14 Nov 2009 09:37:59 -0500
+Subject: [PATCH] Refactored so that the custom atom and bond matchers for the vflib implementation are removed and usage is replaced with IQueryAtom and IQueryBond
+
+---
+ .../smsd/algorithm/vflib/builder/EdgeBuilder.java  |    8 ++--
+ .../smsd/algorithm/vflib/builder/NodeBuilder.java  |   13 +++--
+ .../algorithm/vflib/builder/VFQueryBuilder.java    |   17 +++---
+ .../algorithm/vflib/interfaces/IAtomMatcher.java   |   57 -------------------
+ .../algorithm/vflib/interfaces/IBondMatcher.java   |   58 --------------------
+ .../cdk/smsd/algorithm/vflib/interfaces/IEdge.java |    4 +-
+ .../cdk/smsd/algorithm/vflib/interfaces/INode.java |    6 ++-
+ .../algorithm/vflib/query/TemplateCompiler.java    |   16 +++---
+ .../algorithm/vflib/validator/VFAtomMatcher.java   |    5 +-
+ .../algorithm/vflib/validator/VFBondMatcher.java   |    7 ++-
+ 10 files changed, 42 insertions(+), 149 deletions(-)
+ delete mode 100644 src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IAtomMatcher.java
+ delete mode 100644 src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IBondMatcher.java
+
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/EdgeBuilder.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/EdgeBuilder.java
+index 4bbadfd..7c36b9e 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/EdgeBuilder.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/EdgeBuilder.java
+@@ -22,7 +22,7 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.builder;
+ 
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
++import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+ 
+@@ -33,7 +33,7 @@ public class EdgeBuilder implements IEdge {
+ 
+     private NodeBuilder source;
+     private NodeBuilder target;
+-    private IBondMatcher matcher;
++    private IQueryBond matcher;
+ 
+     /**
+      * 
+@@ -41,7 +41,7 @@ public class EdgeBuilder implements IEdge {
+      * @param target
+      * @param matcher
+      */
+-    public EdgeBuilder(NodeBuilder source, NodeBuilder target, IBondMatcher matcher) {
++    public EdgeBuilder(NodeBuilder source, NodeBuilder target, IQueryBond matcher) {
+         this.source = source;
+         this.target = target;
+         this.matcher = matcher;
+@@ -73,7 +73,7 @@ public class EdgeBuilder implements IEdge {
+      * @return
+      */
+     @Override
+-    public IBondMatcher getBondMatcher() {
++    public IQueryBond getBondMatcher() {
+         return matcher;
+     }
+ }
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/NodeBuilder.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/NodeBuilder.java
+index ded0dfd..1e1e925 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/NodeBuilder.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/NodeBuilder.java
+@@ -22,12 +22,13 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.builder;
+ 
+-import java.util.ArrayList;
+-import java.util.List;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
++import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+ 
++import java.util.ArrayList;
++import java.util.List;
++
+ /**
+  * @cdk.module smsd
+  */
+@@ -35,9 +36,9 @@ public class NodeBuilder implements INode {
+ 
+     private List<INode> neighbors;
+     private List<IEdge> edges;
+-    private IAtomMatcher matcher;
++    private IQueryAtom matcher;
+ 
+-    public NodeBuilder(IAtomMatcher matcher) {
++    public NodeBuilder(IQueryAtom matcher) {
+         edges = new ArrayList<IEdge>();
+         neighbors = new ArrayList<INode>();
+         this.matcher = matcher;
+@@ -54,7 +55,7 @@ public class NodeBuilder implements INode {
+     }
+ 
+     @Override
+-    public IAtomMatcher getAtomMatcher() {
++    public IQueryAtom getAtomMatcher() {
+         return matcher;
+     }
+ 
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/VFQueryBuilder.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/VFQueryBuilder.java
+index 1f7f4f3..60f1b26 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/VFQueryBuilder.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/builder/VFQueryBuilder.java
+@@ -47,16 +47,17 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.builder;
+ 
++import org.openscience.cdk.interfaces.IAtom;
++import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
++import org.openscience.cdk.isomorphism.matchers.IQueryBond;
++import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
++import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
++import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
++
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IEdge;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.INode;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
+-import org.openscience.cdk.interfaces.IAtom;
+ 
+ /**
+  * @cdk.module smsd
+@@ -159,7 +160,7 @@ public class VFQueryBuilder implements IQuery {
+      * @param atom
+      * @return
+      */
+-    public INode addNode(IAtomMatcher matcher, IAtom atom) {
++    public INode addNode(IQueryAtom matcher, IAtom atom) {
+         NodeBuilder node = new NodeBuilder(matcher);
+         nodes.add(node);
+         NodesBonds.put(node, atom);
+@@ -198,7 +199,7 @@ public class VFQueryBuilder implements IQuery {
+      * @param matcher
+      * @return
+      */
+-    public IEdge connect(INode source, INode target, IBondMatcher matcher) {
++    public IEdge connect(INode source, INode target, IQueryBond matcher) {
+         NodeBuilder sourceImpl = (NodeBuilder) source;
+         NodeBuilder targetImpl = (NodeBuilder) target;
+         EdgeBuilder edge = new EdgeBuilder(sourceImpl, targetImpl, matcher);
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IAtomMatcher.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IAtomMatcher.java
+deleted file mode 100644
+index 959c45c..0000000
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IAtomMatcher.java
++++ /dev/null
+@@ -1,57 +0,0 @@
+-/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+- *
+- * Contact: cdk-devel@lists.sourceforge.net
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public License
+- * as published by the Free Software Foundation; either version 2.1
+- * of the License, or (at your option) any later version.
+- * All we ask is that proper credit is given for our work, which includes
+- * - but is not limited to - adding the above copyright notice to the beginning
+- * of your source code files, and to any copyright notice that you may distribute
+- * with programs based on this work.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+- * 
+- * MX Cheminformatics Tools for Java
+- *
+- * Copyright (c) 2007-2009 Metamolecular, LLC
+- *
+- * http://metamolecular.com
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a copy
+- * of this software and associated documentation files (the "Software"), to deal
+- * in the Software without restriction, including without limitation the rights
+- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+- * copies of the Software, and to permit persons to whom the Software is
+- * furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+- * THE SOFTWARE.
+- */
+-package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
+-
+-import org.openscience.cdk.interfaces.IAtom;
+-
+-/**
+- * @cdk.module smsd
+- */
+-public interface IAtomMatcher {
+-
+-    boolean matches(IAtom atom);
+-}
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IBondMatcher.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IBondMatcher.java
+deleted file mode 100644
+index 8212ab4..0000000
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IBondMatcher.java
++++ /dev/null
+@@ -1,58 +0,0 @@
+-/* Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+- *
+- * Contact: cdk-devel@lists.sourceforge.net
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public License
+- * as published by the Free Software Foundation; either version 2.1
+- * of the License, or (at your option) any later version.
+- * All we ask is that proper credit is given for our work, which includes
+- * - but is not limited to - adding the above copyright notice to the beginning
+- * of your source code files, and to any copyright notice that you may distribute
+- * with programs based on this work.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+- * 
+- * MX Cheminformatics Tools for Java
+- *
+- * Copyright (c) 2007-2009 Metamolecular, LLC
+- *
+- * http://metamolecular.com
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a copy
+- * of this software and associated documentation files (the "Software"), to deal
+- * in the Software without restriction, including without limitation the rights
+- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+- * copies of the Software, and to permit persons to whom the Software is
+- * furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+- * THE SOFTWARE.
+- */
+-package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
+-
+-import org.openscience.cdk.interfaces.IBond;
+-
+-/**
+- * @cdk.module smsd
+- */
+-public interface IBondMatcher {
+-
+-    public boolean matches(IBond bond);
+-}
+-
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IEdge.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IEdge.java
+index aaf716b..6cb687d 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IEdge.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/IEdge.java
+@@ -47,6 +47,8 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
+ 
++import org.openscience.cdk.isomorphism.matchers.IQueryBond;
++
+ /**
+  * @cdk.module smsd
+  */
+@@ -56,5 +58,5 @@ public interface IEdge {
+ 
+     public INode getTarget();
+ 
+-    public IBondMatcher getBondMatcher();
++    public IQueryBond getBondMatcher();
+ }
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/INode.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/INode.java
+index 6c49109..ca3ec62 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/INode.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/interfaces/INode.java
+@@ -47,10 +47,12 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.interfaces;
+ 
+-import java.util.List;
++import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+ import org.openscience.cdk.smsd.algorithm.vflib.builder.EdgeBuilder;
+ import org.openscience.cdk.smsd.algorithm.vflib.builder.NodeBuilder;
+ 
++import java.util.List;
++
+ /**
+  * @cdk.module smsd
+  */
+@@ -72,7 +74,7 @@ public interface INode {
+      *
+      * @return
+      */
+-    public IAtomMatcher getAtomMatcher();
++    public IQueryAtom getAtomMatcher();
+ 
+     /**
+      *
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/query/TemplateCompiler.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/query/TemplateCompiler.java
+index 0abf8cd..989b8ac 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/query/TemplateCompiler.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/query/TemplateCompiler.java
+@@ -47,16 +47,16 @@
+ package org.openscience.cdk.smsd.algorithm.vflib.query;
+ 
+ 
++import org.openscience.cdk.interfaces.IAtom;
++import org.openscience.cdk.interfaces.IAtomContainer;
++import org.openscience.cdk.interfaces.IBond;
++import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
++import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+ import org.openscience.cdk.smsd.algorithm.vflib.builder.VFQueryBuilder;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
+ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQueryCompiler;
+ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFAtomMatcher;
+ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
+-import org.openscience.cdk.interfaces.IAtom;
+-import org.openscience.cdk.interfaces.IAtomContainer;
+-import org.openscience.cdk.interfaces.IBond;
+ 
+ /**
+  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
+@@ -109,7 +109,7 @@ public class TemplateCompiler implements IQueryCompiler {
+ 
+         for (int i = 0; i < queryMolecule.getAtomCount(); i++) {
+             IAtom atom = queryMolecule.getAtom(i);
+-            IAtomMatcher matcher = createMatcher(atom);
++            IQueryAtom matcher = createMatcher(atom);
+ 
+             if (matcher != null) {
+                 result.addNode(matcher, atom);
+@@ -136,11 +136,11 @@ public class TemplateCompiler implements IQueryCompiler {
+         return result;
+     }
+ 
+-    private IAtomMatcher createMatcher(IAtom atom) {
++    private IQueryAtom createMatcher(IAtom atom) {
+         return new VFAtomMatcher(atom);
+     }
+ 
+-    private IBondMatcher createBondMatcher(IBond bond) {
++    private IQueryBond createBondMatcher(IBond bond) {
+         return new VFBondMatcher(bond);
+     }
+ }
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFAtomMatcher.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFAtomMatcher.java
+index b6a7e8c..1f0fb45 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFAtomMatcher.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFAtomMatcher.java
+@@ -47,13 +47,14 @@
+ package org.openscience.cdk.smsd.algorithm.vflib.validator;
+ 
+ 
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IAtomMatcher;
++import org.openscience.cdk.PseudoAtom;
+ import org.openscience.cdk.interfaces.IAtom;
++import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+ 
+ /**
+  * @cdk.module smsd
+  */
+-public class VFAtomMatcher implements IAtomMatcher {
++public class VFAtomMatcher extends PseudoAtom implements IQueryAtom {
+ 
+     private String symbol;
+     private int maximumNeighbors;
+diff --git a/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFBondMatcher.java b/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFBondMatcher.java
+index 240461e..9b21e86 100644
+--- a/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFBondMatcher.java
++++ b/src/main/org/openscience/cdk/smsd/algorithm/vflib/validator/VFBondMatcher.java
+@@ -46,16 +46,17 @@
+  */
+ package org.openscience.cdk.smsd.algorithm.vflib.validator;
+ 
+-import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IBondMatcher;
+-import org.openscience.cdk.smsd.global.BondType;
++import org.openscience.cdk.Bond;
+ import org.openscience.cdk.CDKConstants;
+ import org.openscience.cdk.interfaces.IAtom;
+ import org.openscience.cdk.interfaces.IBond;
++import org.openscience.cdk.isomorphism.matchers.IQueryBond;
++import org.openscience.cdk.smsd.global.BondType;
+ 
+ /**
+  * @cdk.module smsd
+  */
+-public class VFBondMatcher implements IBondMatcher {
++public class VFBondMatcher extends Bond implements IQueryBond {
+ 
+     private IBond queryBond;
+     private int unsaturation = 0;
+-- 
+1.6.1.2
+

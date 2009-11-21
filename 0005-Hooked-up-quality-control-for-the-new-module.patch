@@ -1,0 +1,87 @@
+From 029b14a14d7e9e85fc681530c67b4cd17d934f2d Mon Sep 17 00:00:00 2001
+From: Egon Willighagen <egonw@users.sourceforge.net>
+Date: Thu, 12 Nov 2009 00:14:25 +0100
+Subject: [PATCH 5/5] Hooked up quality control for the new module
+
+---
+ javadoc.xml       |    1 +
+ pmd-migrating.xml |    2 ++
+ pmd-unused.xml    |    2 ++
+ pmd.xml           |    2 ++
+ 4 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/javadoc.xml b/javadoc.xml
+index 702b223..e2c0b72 100755
+--- a/javadoc.xml
++++ b/javadoc.xml
+@@ -140,6 +140,7 @@
+       <antcall target="doccheck-module"><param name="module" value="valencycheck"/></antcall>
+       <antcall target="doccheck-module"><param name="module" value="charges"/></antcall>
+       <antcall target="doccheck-module"><param name="module" value="diff"/></antcall>
++      <antcall target="doccheck-module"><param name="module" value="smsd"/></antcall>
+     </target>
+ 
+     <target name="check-doccheck">
+diff --git a/pmd-migrating.xml b/pmd-migrating.xml
+index 28706f0..7789c99 100644
+--- a/pmd-migrating.xml
++++ b/pmd-migrating.xml
+@@ -55,6 +55,7 @@
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="valencycheck"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="charges"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="diff"/></antcall>
++      <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="smsd"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="migrating-qm"/><param name="module" value="qm"/></antcall>
+       <!-- the test modules -->
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="test-core"/></antcall>
+@@ -79,6 +80,7 @@
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="test-qsarprotein"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="test-diff"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="test-qm"/></antcall>
++      <antcall target="test-module"><param name="pmd.test" value="migrating"/><param name="module" value="test-smsd"/></antcall>
+     </target>
+ 
+     <target id="test-module" name="test-module"
+diff --git a/pmd-unused.xml b/pmd-unused.xml
+index c76b039..f6696c6 100644
+--- a/pmd-unused.xml
++++ b/pmd-unused.xml
+@@ -56,6 +56,7 @@
+       <antcall target="test-module"><param name="module" value="charges"/></antcall>
+       <antcall target="test-module"><param name="module" value="diff"/></antcall>
+       <antcall target="test-module"><param name="module" value="qm"/></antcall>
++      <antcall target="test-module"><param name="module" value="smsd"/></antcall>
+       <!-- the test modules -->
+       <antcall target="test-module"><param name="module" value="test-core"/></antcall>
+       <antcall target="test-module"><param name="module" value="test-interfaces"/></antcall>
+@@ -79,6 +80,7 @@
+       <antcall target="test-module"><param name="module" value="test-qsarprotein"/></antcall>
+       <antcall target="test-module"><param name="module" value="test-diff"/></antcall>
+       <antcall target="test-module"><param name="module" value="test-qm"/></antcall>
++      <antcall target="test-module"><param name="module" value="test-smsd"/></antcall>
+     </target>
+ 
+     <target id="test-module" name="test-module"
+diff --git a/pmd.xml b/pmd.xml
+index 28cf635..5c8468f 100644
+--- a/pmd.xml
++++ b/pmd.xml
+@@ -55,6 +55,7 @@
+       <antcall target="test-module"><param name="pmd.test" value="custom"/><param name="module" value="valencycheck"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="custom"/><param name="module" value="charges"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="custom"/><param name="module" value="diff"/></antcall>
++      <antcall target="test-module"><param name="pmd.test" value="custom"/><param name="module" value="smsd"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="custom-qm"/><param name="module" value="qm"/></antcall>
+       <!-- the test modules -->
+       <antcall target="test-module"><param name="pmd.test" value="custom-test"/><param name="module" value="test-core"/></antcall>
+@@ -79,6 +80,7 @@
+       <antcall target="test-module"><param name="pmd.test" value="custom-test"/><param name="module" value="test-charges"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="custom-test"/><param name="module" value="test-diff"/></antcall>
+       <antcall target="test-module"><param name="pmd.test" value="custom-test"/><param name="module" value="test-qm"/></antcall>
++      <antcall target="test-module"><param name="pmd.test" value="custom-test"/><param name="module" value="test-smsd"/></antcall>
+     </target>
+ 
+     <target id="test-module" name="test-module"
+-- 
+1.6.3.3
+
