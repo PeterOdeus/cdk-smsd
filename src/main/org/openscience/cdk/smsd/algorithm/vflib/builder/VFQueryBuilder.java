@@ -75,42 +75,22 @@ public class VFQueryBuilder implements IQuery {
         NodesBonds = new HashMap<INode, IAtom>();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Iterable<IEdge> edges() {
         return edgesList;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Iterable<INode> nodes() {
         return nodesList;
     }
 
-    /**
-     *
-     * @param index
-     * @return
-     */
     @Override
     public INode getNode(int index) {
         return nodesList.get(index);
     }
 
-    /**
-     *
-     * @param atom 
-     * @return
-     */
     public INode getNode(IAtom atom) {
-
-
 
         for (Map.Entry<INode, IAtom> v : NodesBonds.entrySet()) {
             if (v.getValue().equals(atom)) {
@@ -121,22 +101,11 @@ public class VFQueryBuilder implements IQuery {
         return null;
     }
 
-    /**
-     *
-     * @param index
-     * @return
-     */
     @Override
     public IEdge getEdge(int index) {
         return edgesList.get(index);
     }
 
-    /**
-     *
-     * @param source
-     * @param target
-     * @return
-     */
     @Override
     public IEdge getEdge(INode source, INode target) {
         if (source == target) {
@@ -167,11 +136,6 @@ public class VFQueryBuilder implements IQuery {
         return node;
     }
 
-    /**
-     *
-     * @param node
-     * @return
-     */
     @Override
     public IAtom getAtom(INode node) {
         return NodesBonds.get(node);
@@ -182,10 +146,6 @@ public class VFQueryBuilder implements IQuery {
         return nodesList.size();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int countEdges() {
         return edgesList.size();

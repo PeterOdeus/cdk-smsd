@@ -59,28 +59,16 @@ public class NodeBuilder implements INode {
         return matcher;
     }
 
-    /**
-     * 
-     * @return
-     */
     @Override
     public List<IEdge> getEdges() {
         return edgesList;
     }
 
-    /**
-     *
-     * @param edge
-     */
     @Override
     public void addEdge(EdgeBuilder edge) {
         edgesList.add(edge);
     }
 
-    /**
-     *
-     * @param node
-     */
     @Override
     public void addneighbor(NodeBuilder node) {
         neighborsList.add(node);

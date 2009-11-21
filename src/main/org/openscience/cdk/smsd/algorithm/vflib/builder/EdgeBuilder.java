@@ -46,29 +46,17 @@ public class EdgeBuilder implements IEdge {
         this.target = target;
         this.matcher = matcher;
     }
-
-    /**
-     * 
-     * @return
-     */
+  
     @Override
     public INode getSource() {
         return source;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public INode getTarget() {
         return target;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public IQueryBond getBondMatcher() {
         return matcher;

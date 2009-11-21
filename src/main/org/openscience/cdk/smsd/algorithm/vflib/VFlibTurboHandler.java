@@ -124,7 +124,8 @@ public class VFlibTurboHandler implements ISubGraph {
         }
         return hCount;
     }
- /**
+
+    /**
      * @param source
      * @param target
      */
@@ -169,10 +170,7 @@ public class VFlibTurboHandler implements ISubGraph {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
         set(Reactant, Product);
-
-
     }
-
 
     /**
      * @param source
@@ -184,34 +182,6 @@ public class VFlibTurboHandler implements ISubGraph {
         this.target = target.getMolecule();
     }
 
-//    /**
-//     * Creates a new instance of SearchCliques
-//     * @param ReactantMolFileName
-//     * @param ProductMolFileName
-//     * @param removeHydrogen
-//     */
-//    @Override
-//    public void set(String ReactantMolFileName, String ProductMolFileName, boolean removeHydrogen) {
-//
-//
-//        String mol1 = ReactantMolFileName;
-//        String mol2 = ProductMolFileName;
-//
-//        this.source = new MolHandler(mol1, false, removeHydrogen).getMolecule();
-//        this.target = new MolHandler(mol2, false, removeHydrogen).getMolecule();
-//
-//        if (checkForH(source) > 0 && removeHydrogen) {
-//            source = ExtAtomContainerManipulator.removeHydrogens(source);
-//        }
-//        if (checkForH(target) > 0 && removeHydrogen) {
-//            target = ExtAtomContainerManipulator.removeHydrogens(target);
-//        }
-//
-//    }
-    /**
-     *
-     * @return
-     */
     @Override
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;

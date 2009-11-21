@@ -120,17 +120,6 @@ public class VFlibHandler implements ISubGraph {
 
     }
 
-    private int checkForH(IAtomContainer mol) {
-        int hCount = 0;
-        for (int i = 0; i < mol.getAtomCount(); i++) {
-
-            if (mol.getAtom(i).getSymbol().equals("H")) {
-                hCount++;
-            }
-        }
-        return hCount;
-    }
-
     /**
      * @param source
      * @param target
@@ -180,7 +169,6 @@ public class VFlibHandler implements ISubGraph {
 
     }
 
-
     /**
      * @param source
      * @param target
@@ -191,10 +179,6 @@ public class VFlibHandler implements ISubGraph {
         this.target = target.getMolecule();
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;

@@ -119,7 +119,6 @@ public class VFlibMCSHandler implements IMCS {
                         atomatomMapping.put(qAtom, tAtom);
                         indexindexMapping.put(qIndex, tIndex);
                     } else {
-
                         throw new CDKException("Atom index pointing to NULL");
                     }
                 }
@@ -135,19 +134,13 @@ public class VFlibMCSHandler implements IMCS {
 
 
         } else if (!allAtomMCS_copy.isEmpty()) {
-
-
             allAtomMCS.addAll(allAtomMCS_copy);
             allMCS.addAll(allMCS_copy);
         }
 
-
-
         if (!allAtomMCS.isEmpty()) {
             atomsMCS.putAll(allAtomMCS.get(0));
             firstMCS.putAll(allMCS.get(0));
-
-
         }
         return 0;
 
@@ -186,7 +179,6 @@ public class VFlibMCSHandler implements IMCS {
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-
         set(Reactant, Product);
 
     }
@@ -202,7 +194,6 @@ public class VFlibMCSHandler implements IMCS {
 
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
-
         set(Reactant, Product);
     }
 
@@ -219,8 +210,6 @@ public class VFlibMCSHandler implements IMCS {
         MolHandler Reactant = new MolHandler(mol1, false);
         MolHandler Product = new MolHandler(mol2, false);
         set(Reactant, Product);
-
-
     }
 
     /**
@@ -302,10 +291,6 @@ public class VFlibMCSHandler implements IMCS {
         return false;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
         return allAtomMCS;
