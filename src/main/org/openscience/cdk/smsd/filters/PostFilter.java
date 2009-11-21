@@ -55,16 +55,13 @@ public class PostFilter {
         boolean flag = false;
 
         for (Map<Integer, Integer> map : nonRedundantMapping) {
-            if (map.entrySet().equals(newMap)) {
+            if (map.equals(newMap)) {
                 flag = true;
+                break;
             } else {
                 flag = false;
-                break;
             }
         }
-
-
-
         return flag;
     }
 
