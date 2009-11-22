@@ -62,6 +62,7 @@ import org.openscience.cdk.smsd.tools.TimeManager;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -117,10 +118,12 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  * @author      Stephane Werner from IXELIS mail@ixelis.net
  * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.atomContainer.uk> (modified the orignal code)
  * @cdk.created 2002-07-17
- * @cdk.require java1.4+
+ * @cdk.require java1.5+
  * @cdk.module  smsd
  * @cdk.svnrev  $Revision$
  */
+
+@TestClass("org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest")
 public class CDKMCS {
 
     final static int ID1 = 0;
