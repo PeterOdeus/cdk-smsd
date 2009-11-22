@@ -51,9 +51,8 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  relevant manner. Each comparison can be made with or without using the bond
  *  sensitive mode and with implicit or explicit hydrogens.</p>
  *
- *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
- *  </p>
- *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.el.</i>
+ *  
+ *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.al.</i>
  *  Journal of Cheminformatics 2009</font>, 1:12 doi:10.1186/1758-2946-1-12 
  *  </p>
  *
@@ -93,7 +92,8 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  </pre>
  *  </font>
  *
- *
+ *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
+ *  </p>
  *  @cdk.module smsd
  *  
  */
