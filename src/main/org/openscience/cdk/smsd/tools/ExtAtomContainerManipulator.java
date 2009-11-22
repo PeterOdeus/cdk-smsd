@@ -36,7 +36,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 
-
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.atomContainer.uk}
@@ -402,7 +401,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
      * @return IAtomContainer without Hydrogen. If an AtomContainer has atom single atom which
      * is atom Hydrogen then its not removed.
      */
-    public static IAtomContainer removeHydrogensAndPreserveAtomID(IAtomContainer atomContainer){
+    public static IAtomContainer removeHydrogensAndPreserveAtomID(IAtomContainer atomContainer) {
         Map<IAtom, IAtom> map = new HashMap<IAtom, IAtom>();        // maps original atoms to clones.
         List<IAtom> remove = new ArrayList<IAtom>();  // lists removed Hs.
         IMolecule mol = null;
@@ -496,9 +495,9 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             }
 
             // Clone bonds except those involving removed atoms.
-            mol=cloneAndMarkNonHBonds(mol, atomContainer, remove, map);
+            mol = cloneAndMarkNonHBonds(mol, atomContainer, remove, map);
             // Recompute hydrogen counts of neighbours of removed Hydrogens.
-            mol=reComputeHydrogens(mol, atomContainer, remove, map);
+            mol = reComputeHydrogens(mol, atomContainer, remove, map);
         } else {
             mol = atomContainer.getBuilder().newMolecule(atomContainer);
             mol.setProperties(atomContainer.getProperties());
