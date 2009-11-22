@@ -437,9 +437,9 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 }
             }
 //            Clone bonds except those involving removed atoms.
-            mol = cloneNonHBonds(mol, atomContainer, remove, map);
+            mol = cloneAndMarkNonHBonds(mol, atomContainer, remove, map);
 //            Recompute hydrogen counts of neighbours of removed Hydrogens.
-            mol = removeHydrogen(mol, atomContainer, remove, map);
+            mol = reComputeHydrogens(mol, atomContainer, remove, map);
 
         } else {
             mol = atomContainer.getBuilder().newMolecule(atomContainer);
@@ -496,58 +496,9 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             }
 
             // Clone bonds except those involving removed atoms.
-            count = atomContainer.getBondCount();
-            for (int i = 0; i < count; i++) {
-                // Check bond.
-                final IBond bond = atomContainer.getBond(i);
-                boolean removedBond = false;
-                final int length = bond.getAtomCount();
-                for (int k = 0; k < length; k++) {
-                    if (remove.contains(bond.getAtom(k))) {
-                        removedBond = true;
-                        break;
-                    }
-                }
-
-                // Clone/remove this bond?
-                if (!removedBond) // if (!remove.contains(atoms[0]) && !remove.contains(atoms[1]))
-                {
-                    IBond clone = null;
-                    try {
-                        clone = (IBond) atomContainer.getBond(i).clone();
-                    } catch (CloneNotSupportedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    assert clone != null;
-                    clone.setAtoms(new IAtom[]{map.get(bond.getAtom(0)), map.get(bond.getAtom(1))});
-                    mol.addBond(clone);
-                }
-            }
-
+            mol=cloneAndMarkNonHBonds(mol, atomContainer, remove, map);
             // Recompute hydrogen counts of neighbours of removed Hydrogens.
-            for (IAtom aRemove : remove) {
-                // Process neighbours.
-                for (IAtom iAtom : atomContainer.getConnectedAtomsList(aRemove)) {
-                    final IAtom neighb = map.get(iAtom);
-                    if (neighb == null) {
-                        continue; // since for the case of H2, neight H has atom heavy atom neighbor
-                    }
-                    //Added by Asad
-                    if (!(neighb instanceof PseudoAtom)) {
-                        neighb.setHydrogenCount(
-                                (neighb.getHydrogenCount() == null ? 0 : neighb.getHydrogenCount()) + 1);
-                    } else {
-                        neighb.setHydrogenCount(0);
-                    }
-                }
-            }
-            mol.setProperties(atomContainer.getProperties());
-            mol.setFlags(atomContainer.getFlags());
-            if (atomContainer.getID() != null) {
-                mol.setID(atomContainer.getID());
-            }
-
+            mol=reComputeHydrogens(mol, atomContainer, remove, map);
         } else {
             mol = atomContainer.getBuilder().newMolecule(atomContainer);
             mol.setProperties(atomContainer.getProperties());
@@ -668,7 +619,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
         }
     }
 
-    private static IMolecule removeHydrogen(
+    private static IMolecule reComputeHydrogens(
             IMolecule mol,
             IAtomContainer atomContainer,
             List<IAtom> remove,
@@ -699,7 +650,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
         return mol;
     }
 
-    private static IMolecule cloneNonHBonds(
+    private static IMolecule cloneAndMarkNonHBonds(
             IMolecule mol,
             IAtomContainer atomContainer,
             List<IAtom> remove,
