@@ -64,7 +64,7 @@ public class McGregor {
     private int neighborBondNumB = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
     private int setBondNumB = 0; //number of remaining molecule B bonds after the clique search, which aren't neighbors
     /*This should be more or equal to all the atom types*/
-    private static final String[] SignROW = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
+    private static final String[] SignArray = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
         "$13", "$15", "$16", "$17", "$18", "$19", "$20", "$21", "$22", "$23", "$24",
         "$25", "$26", "$27", "$28", "$29", "$30", "$31", "$32", "$33", "$34", "$35", "$36",
         "$37", "$38", "$39", "$40", "$41", "$42", "$43", "$44", "$45", "$46",
@@ -171,15 +171,15 @@ public class McGregor {
             atomA_is_unmapped = true;
         }
 
-        int SR_count = 0;
+        int counter = 0;
 
-        QueryProcessor queryProcess = new QueryProcessor(source, target, c_tab1_copy, c_tab2_copy, SignROW, neighborBondnumA, setBondNumA);
+        QueryProcessor queryProcess = new QueryProcessor(source, target, c_tab1_copy, c_tab2_copy, SignArray, neighborBondnumA, setBondNumA);
 
 
         queryProcess.process(unmapped_atoms_molA, mapping_size,
                 i_bond_neighborsA, i_bond_setA,
                 c_bond_neighborsA, c_bond_setA,
-                mapped_atoms, SR_count);
+                mapped_atoms, counter);
 
         this.c_tab1_copy = queryProcess.getCTab1();
         this.c_tab2_copy = queryProcess.getCTab2();
@@ -216,7 +216,7 @@ public class McGregor {
         //The special signs must be transfered to the corresponding atoms of molecule A
 
 
-        TargetProcessor targetProcess = new TargetProcessor(target, c_tab1_copy, c_tab2_copy, SignROW, neighborBondNumB, setBondNumB, neighborBondnumA, i_bond_neighborsA, c_bond_neighborsA);
+        TargetProcessor targetProcess = new TargetProcessor(target, c_tab1_copy, c_tab2_copy, SignArray, neighborBondNumB, setBondNumB, neighborBondnumA, i_bond_neighborsA, c_bond_neighborsA);
 
 
         targetProcess.process(unmapped_atoms_molB,
@@ -226,7 +226,7 @@ public class McGregor {
                 c_bond_neighborsB,
                 c_bond_setB,
                 mapped_atoms,
-                SR_count);
+                counter);
 
         this.c_tab1_copy = targetProcess.getCTab1();
         this.c_tab2_copy = targetProcess.getCTab2();
@@ -258,10 +258,6 @@ public class McGregor {
         c_tab2_copy.clear();
         generateCTab2Copy();
 
-
-        //System.out.println("C_Tab1_Copy " + c_tab1_copy);
-        //System.out.println("C_Tab2_Copy " + c_tab2_copy);
-
         //find mapped atoms of both molecules and store these in mapped_atoms
         List<Integer> mapped_atoms = new ArrayList<Integer>();
 
@@ -283,8 +279,6 @@ public class McGregor {
         int clique_siz = clique_vector.size();
         int vec_size = comp_graph_nodes.size();
 
-//        System.out.println("clique_siz: " + clique_siz);
-        //System.out.println("vec_size: " + vec_size);
 
         int cliqueNumber = 0;
 
@@ -315,7 +309,6 @@ public class McGregor {
 
             for (int b = 0; b < clique_siz; b++) {
                 //the number of nodes == number of assigned pairs
-                //System.out.println(mapped_atoms.get(b * 2)+" z:" + z);
                 if (mapped_atoms.get(b * 2) == a) {
                     atomA_is_unmapped = false;
                 }
@@ -331,7 +324,7 @@ public class McGregor {
         //bonds of molecule A, which are relevant for the McGregorBondTypeInSensitive algorithm.
         //The special signs must be transfered to the corresponding atoms of molecule B
 
-        QueryProcessor queryProcess = new QueryProcessor(source, target, c_tab1_copy, c_tab2_copy, SignROW, neighborBondnumA, setBondNumA);
+        QueryProcessor queryProcess = new QueryProcessor(source, target, c_tab1_copy, c_tab2_copy, SignArray, neighborBondnumA, setBondNumA);
 
 
         queryProcess.process(unmapped_atoms_molA, clique_siz,
@@ -365,12 +358,6 @@ public class McGregor {
             atomB_is_unmapped = true;
         }
 
-//        System.out.println("Not mapped B: ");
-//        for (int z = 0; z < unmapped_numB; z++) {
-//            System.out.print(unmapped_atoms_molB.get(z) + " ");
-//        }
-//        System.out.println("");
-
 
         //Extract bonds which are related with unmapped atoms of molecule B.
         //In case that unmapped atoms are connected with already mapped atoms, the mapped atoms are labelled with
@@ -380,7 +367,7 @@ public class McGregor {
 
 
 
-        TargetProcessor targetProcess = new TargetProcessor(target, c_tab1_copy, c_tab2_copy, SignROW, neighborBondNumB, setBondNumB, neighborBondnumA, i_bond_neighborsA, c_bond_neighborsA);
+        TargetProcessor targetProcess = new TargetProcessor(target, c_tab1_copy, c_tab2_copy, SignArray, neighborBondNumB, setBondNumB, neighborBondnumA, i_bond_neighborsA, c_bond_neighborsA);
 
 
         targetProcess.process(unmapped_atoms_molB,
@@ -399,19 +386,11 @@ public class McGregor {
 
         boolean dummy = false;
 
-//        System.out.println("Calling iterator with mapped atoms number " + mapped_atom_number);
-//        System.out.println("Neighbor");
-//        System.out.println(neighborBondnumA + " " + neighborBondNumB);
-
-//        System.out.println("Mapped Atoms before Iterator1: " + mapped_atoms);
-
-
         iterator(dummy, mapped_atom_number, mapped_atoms, neighborBondnumA, neighborBondNumB, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, setBondNumA, setBondNumB, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 
-        // System.out.println("iterator Over");
     }
 
-    private int iterator(boolean MAPPING_check,
+    private int iterator(boolean mappingCheckFlag,
             int mapped_atom_num,
             List<Integer> mapped_atoms_org,
             int neighbor_bondnum_A,
@@ -467,13 +446,11 @@ public class McGregor {
 //
                 } else if ((!bondTypeFlag) &&
                         (((G1A.compareToIgnoreCase(G1B) == 0) && (G2A.compareToIgnoreCase(G2B) == 0)) || ((G1A.compareToIgnoreCase(G2B) == 0) && (G2A.compareToIgnoreCase(G1B) == 0)))) {
-
-//                    System.out.println("Eins bei: " + G1A + " " + G2A + " " + G1B + " " + G2B);
                     no_further_mapping_possible = false;
                 }
             }
         }
-        if (neighbor_bondnum_A == 0 || neighbor_bondnum_B == 0 || MAPPING_check || no_further_mapping_possible) {
+        if (neighbor_bondnum_A == 0 || neighbor_bondnum_B == 0 || mappingCheckFlag || no_further_mapping_possible) {
             try {
                 if (mapped_atom_num >= globalMCSSize) {
 //                    System.out.println("Hello-1");
@@ -483,39 +460,26 @@ public class McGregor {
 //                        System.out.println("best_MAPPING_size: " + globalMCSSize);
                         mappings.clear();
                     }
-
                     mappings.add(mapped_atoms);
 //                    System.out.println("mappings " + mappings);
                 }
-
-
-
-
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            //System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-            //NoMoreMappingFlag = false;
             return 0;
         }
 
         i_globalA.clear();
-
         i_globalB.clear();
-
         c_globalA.clear();
-
         c_globalB.clear();
         //redefining of global vectors and variables
         nNumGlobalA = neighbor_bondnum_A; //N global variable defined
         nNumGlobalB = neighbor_bondnum_B; //N global variable defined
 
         i_globalA.addAll(i_bond_neighbor_atoms_A);
-
         i_globalB.addAll(i_bond_neighbor_atoms_B);
-
         c_globalA.addAll(c_bond_neighborsA);
-
         c_globalB.addAll(c_bond_neighborsB);
 
         modifiedARCS.clear();
@@ -601,7 +565,6 @@ public class McGregor {
             //new arrays for i_bond_setA + i_bond_setB + c_bond_setB + c_bond_setB
 
             setBondNumA = 0; //instead of set_num_A
-
             setBondNumB = 0; //instead of set_num_B
 
             List<Integer> new_i_bond_setA = new ArrayList<Integer>(); //instead of i_bond_setA
@@ -638,7 +601,7 @@ public class McGregor {
 
             //The special signs must be transfered to the corresponding atoms of molecule B
 
-            int SR_count = 0;
+            int counter = 0;
             boolean bond_considered = false;
             boolean normal_bond = true;
             for (int a = 0; a < set_num_A; a++) {
@@ -657,13 +620,13 @@ public class McGregor {
                                 new_c_neighborsA.add(c_setA_copy.get(a * 4 + 0));
                                 if (c_setA_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
 
-                                    new_c_neighborsA.add(SignROW[SR_count]);
+                                    new_c_neighborsA.add(SignArray[counter]);
                                     new_c_neighborsA.add("X");
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 1));
-                                    changeCharBonds(i_bond_setA.get(a * 3 + 1), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
+                                    changeCharBonds(i_bond_setA.get(a * 3 + 1), SignArray[counter], set_num_A, i_bond_setA, c_setA_copy);
                                     int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 1), 1, new_MAPPING);
-                                    changeCharBonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
-                                    SR_count++;
+                                    changeCharBonds(cor_atom, SignArray[counter], set_num_B, i_bond_setB, c_setB_copy);
+                                    counter++;
 
                                 } else {
 
@@ -704,14 +667,14 @@ public class McGregor {
                                 new_i_neighborsA.add(i_bond_setA.get(a * 3 + 2));
                                 if (c_setA_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
 
-                                    new_c_neighborsA.add(SignROW[SR_count]);
+                                    new_c_neighborsA.add(SignArray[counter]);
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 1));
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 0));
                                     new_c_neighborsA.add("X");
-                                    changeCharBonds(i_bond_setA.get(a * 3 + 0), SignROW[SR_count], set_num_A, i_bond_setA, c_setA_copy);
+                                    changeCharBonds(i_bond_setA.get(a * 3 + 0), SignArray[counter], set_num_A, i_bond_setA, c_setA_copy);
                                     int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 0), 1, new_MAPPING);
-                                    changeCharBonds(cor_atom, SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
-                                    SR_count++;
+                                    changeCharBonds(cor_atom, SignArray[counter], set_num_B, i_bond_setB, c_setB_copy);
+                                    counter++;
 
                                 } else {
                                     new_c_neighborsA.add(c_setA_copy.get(a * 4 + 0));
@@ -782,13 +745,13 @@ public class McGregor {
                                 new_i_neighborsB.add(i_bond_setB.get(a * 3 + 2));
                                 if (c_setB_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 0));
-                                    new_c_neighborsB.add(SignROW[SR_count]);
+                                    new_c_neighborsB.add(SignArray[counter]);
                                     new_c_neighborsB.add("X");
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 1));
-                                    changeCharBonds(i_bond_setB.get(a * 3 + 1), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    changeCharBonds(i_bond_setB.get(a * 3 + 1), SignArray[counter], set_num_B, i_bond_setB, c_setB_copy);
                                     int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setB.get(a * 3 + 1), 2, new_MAPPING);
-                                    changeCharBonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
-                                    SR_count++;
+                                    changeCharBonds(cor_atom, SignArray[counter], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
+                                    counter++;
 
                                 } else {
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 0));
@@ -829,14 +792,14 @@ public class McGregor {
                                 new_i_neighborsB.add(i_bond_setB.get(a * 3 + 2));
 
                                 if (c_setB_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
-                                    new_c_neighborsB.add(SignROW[SR_count]);
+                                    new_c_neighborsB.add(SignArray[counter]);
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 1));
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 0));
                                     new_c_neighborsB.add("X");
-                                    changeCharBonds(i_bond_setB.get(a * 3 + 0), SignROW[SR_count], set_num_B, i_bond_setB, c_setB_copy);
+                                    changeCharBonds(i_bond_setB.get(a * 3 + 0), SignArray[counter], set_num_B, i_bond_setB, c_setB_copy);
                                     int cor_atom = searchCorrespondingAtom(new_MAPPING_size, i_bond_setB.get(a * 3 + 0), 2, new_MAPPING);
-                                    changeCharBonds(cor_atom, SignROW[SR_count], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
-                                    SR_count++;
+                                    changeCharBonds(cor_atom, SignArray[counter], new_neighbor_numA, new_i_neighborsA, new_c_neighborsA);
+                                    counter++;
                                 } else {
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 0));
                                     new_c_neighborsB.add(c_setB_copy.get(a * 4 + 1));
@@ -956,10 +919,9 @@ public class McGregor {
         return Flag;
     }
 
-    private List<Integer> findMcGregorMapping(List<Integer> MARCS_vector_org, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
+    private List<Integer> findMcGregorMapping(List<Integer> MARCS, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
 
-        List<Integer> MARCS_vector = new ArrayList<Integer>(MARCS_vector_org);
-        List<Integer> current_MAPPING = new ArrayList<Integer>(current_MAPPING_org);
+        List<Integer> currentMapping = new ArrayList<Integer>(current_MAPPING_org);
         List<Integer> i_bonds_A = new ArrayList<Integer>(i_bonds_A_org);
         List<Integer> i_bonds_B = new ArrayList<Integer>(i_bonds_B_org);
         List<Integer> additional_mapping = new ArrayList<Integer>();
@@ -970,7 +932,7 @@ public class McGregor {
             for (int y = 0; y < bondnum_B; y++) {
 
 
-                if (MARCS_vector.get(x * bondnum_B + y) == 1) {
+                if (MARCS.get(x * bondnum_B + y) == 1) {
 
 
                     int Atom1_moleculeA = i_bonds_A.get(x * 3 + 0);
@@ -994,8 +956,8 @@ public class McGregor {
 
                         for (int z = 0; z < mapped_atoms_num; z++) {
 
-                            int Mapped_Atom_1 = current_MAPPING.get(z * 2 + 0);
-                            int Mapped_Atom_2 = current_MAPPING.get(z * 2 + 1);
+                            int Mapped_Atom_1 = currentMapping.get(z * 2 + 0);
+                            int Mapped_Atom_2 = currentMapping.get(z * 2 + 1);
 
                             if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
                                 additional_mapping.add(Atom2_moleculeA);
@@ -1023,16 +985,16 @@ public class McGregor {
         }
 
 
-        int additional_mapping_size = additional_mapping.size();
+        int additionalMappingSize = additional_mapping.size();
 
         //add McGregorBondTypeInSensitive mapping to the Clique mapping
-        for (int a = 0; a < additional_mapping_size; a = a + 2) {
-            current_MAPPING.add(additional_mapping.get(a + 0));
-            current_MAPPING.add(additional_mapping.get(a + 1));
+        for (int a = 0; a < additionalMappingSize; a = a + 2) {
+            currentMapping.add(additional_mapping.get(a + 0));
+            currentMapping.add(additional_mapping.get(a + 1));
         }
-//        remove recurring mappings from current_MAPPING
+//        remove recurring mappings from currentMapping
 
-        List<Integer> unique_MAPPING = removeRecurringMappings(current_MAPPING);
+        List<Integer> unique_MAPPING = removeRecurringMappings(currentMapping);
 
         return unique_MAPPING;
     }

@@ -486,22 +486,17 @@ public class ChemicalFilters {
     private synchronized Double getMappedMoleculeEnergies(TreeMap<Integer, Integer> MCSAtomSolution) throws CDKException {
 
 //        System.out.println("\nSort By Energies");
-        BondEnergies bondEnergy = BondEnergies.getInstance();
         double totalBondEnergy = -9999.0;
 
         IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(RMol.getMolecule());
         IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(PMol.getMolecule());
 
-
-        Iterator<IAtom> eIterator = Educt.atoms().iterator();
-        Iterator<IAtom> pIterator = Product.atoms().iterator();
-
-        while (eIterator.hasNext()) {
-            eIterator.next().setFlag(0, false);
+        for (IAtom eAtom : Educt.atoms()) {
+            eAtom.setFlag(0, false);
         }
 
-        while (pIterator.hasNext()) {
-            pIterator.next().setFlag(0, false);
+        for (IAtom pAtom : Product.atoms()) {
+            pAtom.setFlag(0, false);
         }
 
 
@@ -519,29 +514,7 @@ public class ChemicalFilters {
         }
 
         if (MCSAtomSolution != null) {
-
-            Double eEnergy = 0.0;
-            for (int i = 0; i < Educt.getBondCount(); i++) {
-                IBond bond = Educt.getBond(i);
-                if ((bond.getAtom(0).getFlag(0) == true && bond.getAtom(1).getFlag(0) == false) || (bond.getAtom(0).getFlag(0) == false && bond.getAtom(1).getFlag(0) == true)) {
-                    Integer val = bondEnergy.getEnergies(bond.getAtom(0), bond.getAtom(1), bond.getOrder());
-                    if (val != null) {
-                        eEnergy += val;
-                    }
-                }
-
-            }
-            Double pEnergy = 0.0;
-            for (int j = 0; j < Product.getBondCount(); j++) {
-                IBond bond = Product.getBond(j);
-                if ((bond.getAtom(0).getFlag(0) == true && bond.getAtom(1).getFlag(0) == false) || (bond.getAtom(0).getFlag(0) == false && bond.getAtom(1).getFlag(0) == true)) {
-                    Integer val = bondEnergy.getEnergies(bond.getAtom(0), bond.getAtom(1), bond.getOrder());
-                    if (val != null) {
-                        eEnergy += val;
-                    }
-                }
-            }
-            totalBondEnergy = eEnergy + pEnergy;
+            totalBondEnergy = getEnergy(Educt, Product);
         }
         return totalBondEnergy;
     }
@@ -723,39 +696,8 @@ public class ChemicalFilters {
         int rLength = RingSetManipulator.getAtomCount(rRings);
         int pLength = RingSetManipulator.getAtomCount(pRings);
 
-        for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(rRings)) {
-            boolean flag = true;
-            for (IAtom a : ac.atoms()) {
-                for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
-
-                    if (!aMCS.containsKey(a)) {
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-
-            if (flag) {
-                score += 10;
-            }
-        }
-
-        for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(pRings)) {
-            boolean flag = true;
-            for (IAtom a : ac.atoms()) {
-                for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
-
-                    if (!aMCS.containsValue(a)) {
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-
-            if (flag) {
-                score += 10;
-            }
-        }
+        score += getRingMatch(rRings, 1);
+        score += getRingMatch(pRings, 2);
 
         if (rLength > 0) {
 
@@ -767,6 +709,52 @@ public class ChemicalFilters {
                 score += (rLength - pLength) * 2;
             }
 
+        }
+        return score;
+    }
+
+    private double getEnergy(IAtomContainer Educt, IAtomContainer Product) throws CDKException {
+        Double eEnergy = 0.0;
+        BondEnergies bondEnergy = BondEnergies.getInstance();
+        for (int i = 0; i < Educt.getBondCount(); i++) {
+            IBond bond = Educt.getBond(i);
+            eEnergy += getBondEnergy(bond, bondEnergy);
+        }
+        Double pEnergy = 0.0;
+        for (int j = 0; j < Product.getBondCount(); j++) {
+            IBond bond = Product.getBond(j);
+            pEnergy += getBondEnergy(bond, bondEnergy);
+        }
+        return (eEnergy + pEnergy);
+    }
+
+    private double getBondEnergy(IBond bond, BondEnergies bondEnergy) {
+        double energy = 0.0;
+        if ((bond.getAtom(0).getFlag(0) == true && bond.getAtom(1).getFlag(0) == false) || (bond.getAtom(0).getFlag(0) == false && bond.getAtom(1).getFlag(0) == true)) {
+            Integer val = bondEnergy.getEnergies(bond.getAtom(0), bond.getAtom(1), bond.getOrder());
+            if (val != null) {
+                energy = val;
+            }
+        }
+        return energy;
+    }
+
+    private double getRingMatch(IRingSet Rings, int type) {
+        double score = 0.0;
+        for (IAtomContainer ac : RingSetManipulator.getAllAtomContainers(Rings)) {
+            boolean flag = true;
+            for (IAtom a : ac.atoms()) {
+                for (Map<IAtom, IAtom> aMCS : allAtomMCS) {
+                    if ((type == 1 && !aMCS.containsKey(a)) || (type == 2 && !aMCS.containsValue(a))) {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+
+            if (flag) {
+                score += 10;
+            }
         }
         return score;
     }
