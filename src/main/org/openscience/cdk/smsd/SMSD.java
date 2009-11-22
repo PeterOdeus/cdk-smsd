@@ -60,10 +60,10 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  <font color="#003366">
  *  <pre>
  *  SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
- *  // acetic acid anhydride
- *  IAtomContainer A1 = sp.parseSmiles("CC");
- *  // acetic acid anhydride
- *  IAtomContainer A2 = sp.parseSmiles("CC(=O)OC(=O)C");
+ *  // Benzene
+ *  IAtomContainer A1 = sp.parseSmiles("C1=CC=CC=C1");
+ *  // Napthalene
+ *  IAtomContainer A2 = sp.parseSmiles("C1=CC2=C(C=C1)C=CC=C2");
  *
  *  //Bond Sensitive is set true
  *  SMSD comparison = new SMSD(3, true);
