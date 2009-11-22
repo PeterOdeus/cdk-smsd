@@ -42,6 +42,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.CDKTestCase;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -55,8 +56,8 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainerCreator;
 import org.openscience.cdk.isomorphism.matchers.SymbolQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -70,6 +71,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testIsSubgraph_IAtomContainer_IAtomContainer() throws java.lang.Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         AtomContainer mol = MoleculeFactory.makeAlphaPinene();
         AtomContainer frag1 = MoleculeFactory.makeCyclohexene(); //one double bond in ring
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
@@ -88,9 +92,13 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1708336
+     * @throws CDKException
      */
     @Test
-    public void testSFBug1708336() throws Exception {
+    public void testSFBug1708336() throws CDKException {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         DefaultChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         IAtomContainer atomContainer = builder.newAtomContainer();
         atomContainer.addAtom(builder.newAtom("C"));
@@ -124,6 +132,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void test2() throws java.lang.Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         AtomContainer mol = MoleculeFactory.makeAlphaPinene();
         AtomContainer frag1 = MoleculeFactory.makeCyclohexane(); // no double bond in ring
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
@@ -140,6 +151,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void test3() throws java.lang.Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         AtomContainer mol = MoleculeFactory.makeIndole();
         AtomContainer frag1 = MoleculeFactory.makePyrrole();
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
@@ -156,6 +170,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testBasicQueryAtomContainer() throws Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         IAtomContainer atomContainer = sp.parseSmiles("CC(=O)OC(=O)C"); // acetic acid anhydride
         IAtomContainer SMILESquery = sp.parseSmiles("CC"); // acetic acid anhydride
@@ -166,6 +183,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testGetSubgraphAtomsMaps_IAtomContainer() throws java.lang.Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         int[] result1 = {6, 5, 7, 8, 0};
         int[] result2 = {3, 4, 2, 1, 0};
 
@@ -179,7 +199,7 @@ public class CDKMCSTest extends CDKTestCase {
         List list = CDKMCS.getSubgraphAtomsMaps(mol, frag1);
         List first = (List) list.get(0);
         for (int i = 0; i < first.size(); i++) {
-            RMap rmap = (RMap) first.get(i);
+            CDKRMap rmap = (CDKRMap) first.get(i);
             Assert.assertEquals(rmap.getId1(), result1[i]);
             Assert.assertEquals(rmap.getId2(), result2[i]);
         }
@@ -187,6 +207,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testGetSubgraphMap_IAtomContainer_IAtomContainer() throws Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         String molfile = "data/mdl/decalin.mol";
         String queryfile = "data/mdl/decalin.mol";
         Molecule mol = new Molecule();
@@ -216,9 +239,13 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1110537
+     * @throws CDKException
      */
     @Test
-    public void testGetOverlaps_IAtomContainer_IAtomContainer() throws Exception {
+    public void testGetOverlaps_IAtomContainer_IAtomContainer() throws CDKException {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         String file1 = "data/mdl/5SD.mol";
         String file2 = "data/mdl/ADN.mol";
         Molecule mol1 = new Molecule();
@@ -240,9 +267,13 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1208740
+     * @throws CDKException
      */
     @Test
-    public void testSFBug1208740() throws Exception {
+    public void testSFBug1208740() throws CDKException {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         String file1 = "data/mdl/bug1208740_1.mol";
         String file2 = "data/mdl/bug1208740_2.mol";
         Molecule mol1 = new Molecule();
@@ -274,6 +305,7 @@ public class CDKMCSTest extends CDKTestCase {
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
         Assert.assertTrue(CDKHueckelAromaticityDetector.detectAromaticity(mol2));
         list = CDKMCS.getOverlaps(mol1, mol2);
+        //Fix me returns 9 hits
         Assert.assertEquals(8, list.size());
         list = CDKMCS.getOverlaps(mol2, mol1);
         Assert.assertEquals(8, list.size());
@@ -281,9 +313,13 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 999330
+     * @throws CDKException
      */
     @Test
-    public void testSFBug999330() throws Exception {
+    public void testSFBug999330() throws CDKException {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         String file1 = "data/mdl/5SD.mol";
         String file2 = "data/mdl/ADN.mol";
         Molecule mol1 = new Molecule();
@@ -306,6 +342,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testItself() throws Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         String smiles = "C1CCCCCCC1CC";
         QueryAtomContainer query = QueryAtomContainerCreator.createAnyAtomContainer(new SmilesParser(DefaultChemObjectBuilder.getInstance()).parseSmiles(smiles), true);
         IAtomContainer ac = new SmilesParser(DefaultChemObjectBuilder.getInstance()).parseSmiles(smiles);
@@ -326,6 +365,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testIsIsomorph_IAtomContainer_IAtomContainer() throws Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         AtomContainer ac1 = new AtomContainer();
         ac1.addAtom(new Atom("C"));
         AtomContainer ac2 = new AtomContainer();
@@ -336,6 +378,9 @@ public class CDKMCSTest extends CDKTestCase {
 
     @Test
     public void testAnyAtomAnyBondCase() throws Exception {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         IAtomContainer target = sp.parseSmiles("O1C=CC=C1");
         IAtomContainer queryac = sp.parseSmiles("C1CCCC1");
@@ -347,9 +392,13 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1633201
+     * @throws CDKException
      */
     @Test
-    public void testFirstArgumentMustNotBeAnQueryAtomContainer() throws Exception {
+    public void testFirstArgumentMustNotBeAnQueryAtomContainer() throws CDKException {
+        BondType bondType = BondType.getInstance();
+        bondType.reset();
+        bondType.setBondSensitiveFlag(true);
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         IAtomContainer target = sp.parseSmiles("O1C=CC=C1");
         IAtomContainer queryac = sp.parseSmiles("C1CCCC1");
