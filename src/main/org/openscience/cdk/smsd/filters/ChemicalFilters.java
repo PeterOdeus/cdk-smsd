@@ -124,18 +124,18 @@ public class ChemicalFilters {
 
     }
 
-    private void addSolution(int counter, int I,
+    private void addSolution(int counter, int key,
             Map<Integer, Map<IAtom, IAtom>> allFragmentAtomMCS,
             Map<Integer, TreeMap<Integer, Integer>> allFragmentMCS,
             Map<Integer, Double> stereoScoreMap,
             Map<Integer, Double> energyScoreMap,
             Map<Integer, Integer> fragmentScoreMap) {
 
-        allAtomMCS.add(counter, allFragmentAtomMCS.get(I));
-        allMCS.add(counter, allFragmentMCS.get(I));
-        stereoScore.add(counter, stereoScoreMap.get(I));
-        fragmentSize.add(counter, fragmentScoreMap.get(I));
-        bEnergies.add(counter, energyScoreMap.get(I));
+        allAtomMCS.add(counter, allFragmentAtomMCS.get(key));
+        allMCS.add(counter, allFragmentMCS.get(key));
+        stereoScore.add(counter, stereoScoreMap.get(key));
+        fragmentSize.add(counter, fragmentScoreMap.get(key));
+        bEnergies.add(counter, energyScoreMap.get(key));
 
     }
 
