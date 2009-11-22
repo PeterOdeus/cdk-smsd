@@ -51,9 +51,11 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  relevant manner. Each comparison can be made with or without using the bond
  *  sensitive mode and with implicit or explicit hydrogens.</p>
  *
+ *  <p>SMSD algorithm is described in the Rahman <i>et.al.</i> paper{@cdk.cite SMSD2009}.
+ *  </p>
  *  
- *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.al.</i>
- *  Journal of Cheminformatics 2009</font>, 1:12 doi:10.1186/1758-2946-1-12 
+ *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.al. 2009</i></font>
+ *  {@cdk.cite SMSD2009}
  *  </p>
  *
  *  <p>An example for MCS search:</p>
@@ -64,9 +66,9 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  IAtomContainer A1 = sp.parseSmiles("C1=CC=CC=C1");
  *  // Napthalene
  *  IAtomContainer A2 = sp.parseSmiles("C1=CC2=C(C=C1)C=CC=C2");
- *
+ *  //Algorithm { 0: SMSD, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS}
  *  //Bond Sensitive is set true
- *  SMSD comparison = new SMSD(3, true);
+ *  SMSD comparison = new SMSD(0, true);
  *  // set molecules and remove hydrogens
  *  comparison.init(A1, A2, true);
  *  // set chemical filter true
@@ -80,7 +82,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  IAtomContainer Mol2 = comparison.getProductMolecule();
  *  // Print the mapping between molecules
  *  System.out.println(" Mappings: ");
- *  for (Map.Entry<Integer, Integer> mapping : comparison.getFirstMapping().entrySet()) {
+ *  for (Map.Entry <Integer, Integer> mapping : comparison.getFirstMapping().entrySet()) {
  *      System.out.println((mapping.getKey() + 1) + " " + (mapping.getValue() + 1));
  *
  *      IAtom eAtom = Mol1.getAtom(mapping.getKey());
@@ -92,8 +94,6 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  </pre>
  *  </font>
  *
- *  <p>SMSD algorithm is described in {@cdk.cite SMSD2009}.
- *  </p>
  *  @cdk.module smsd
  *  
  */
