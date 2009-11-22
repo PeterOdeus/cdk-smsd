@@ -35,7 +35,7 @@ import java.util.BitSet;
  *  betwwen two edges of the source graphs G1 and G2 that are compared. Two
  *  edges may be associated if they have at least one common feature. The
  *  association is defined outside this class. The node keeps tracks of the ID
- *  of the mapped edges (in an RMap), of its neighbours in the RGraph it belongs
+ *  of the mapped edges (in an CDKRMap), of its neighbours in the RGraph it belongs
  *  to and of the set of incompatible nodes (nodes that may not be along with
  *  this node in the same solution)
  *
@@ -54,7 +54,7 @@ public class CDKRNode {
     BitSet forbidden = null;
 
     /**
-     *  Constructor for the CDKRNode object
+     *  Constructor for the RNode object
      *
      *@param  id1  number of the bond in the graphe 1
      *@param  id2  number of the bond in the graphe 2
@@ -66,7 +66,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Sets the rMap attribute of the CDKRNode object
+     *  Sets the rMap attribute of the RNode object
      *
      *@param  rMap  The new rMap value
      */
@@ -75,7 +75,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Sets the extension attribute of the CDKRNode object
+     *  Sets the extension attribute of the RNode object
      *
      *@param  extension  The new extension value
      */
@@ -84,7 +84,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Sets the forbidden attribute of the CDKRNode object
+     *  Sets the forbidden attribute of the RNode object
      *
      *@param  forbidden  The new forbidden value
      */
@@ -93,7 +93,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Gets the rMap attribute of the CDKRNode object
+     *  Gets the rMap attribute of the RNode object
      *
      *@return    The rMap value
      */
@@ -102,7 +102,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Gets the extension attribute of the CDKRNode object
+     *  Gets the extension attribute of the RNode object
      *
      *@return    The extension value
      */
@@ -111,7 +111,7 @@ public class CDKRNode {
     }
 
     /**
-     *  Gets the forbidden attribute of the CDKRNode object
+     *  Gets the forbidden attribute of the RNode object
      *
      *@return    The forbidden value
      */
@@ -120,9 +120,9 @@ public class CDKRNode {
     }
 
     /**
-     *  Returns a string representation of the CDKRNode
+     *  Returns a string representation of the RNode
      *
-     *@return    the string representation of the CDKRNode
+     *@return    the string representation of the RNode
      */
     @Override
     public String toString() {

@@ -93,13 +93,12 @@ public class CDKRMap {
     /**
      *  The equals method.
      *
-     * @param  obj  The object to compare.
+     * @param  o  The object to compare.
      * @return    true=if both ids equal, else false.
      */
     @Override
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-    public boolean equals(Object obj) {
-        if (((CDKRMap) obj).id1 == id1 && ((CDKRMap) obj).id2 == id2) {
+    public boolean equals(Object o) {
+        if (((CDKRMap) o).id1 == id1 && ((CDKRMap) o).id2 == id2) {
             return (true);
         } else {
             return (false);
@@ -108,9 +107,9 @@ public class CDKRMap {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + this.id1;
-        hash = 17 * hash + this.id2;
+        int hash = 5;
+        hash = 79 * hash + this.id1;
+        hash = 79 * hash + this.id2;
         return hash;
     }
 }

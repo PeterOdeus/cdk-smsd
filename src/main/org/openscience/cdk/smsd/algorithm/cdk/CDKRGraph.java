@@ -137,6 +137,12 @@ public class CDKRGraph {
         graphBitSet = new BitSet();
     }
 
+    private void checkTimeOut() throws CDKException {
+        if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
+            throw new CDKException("Timeout exceeded in getOverlaps");
+        }
+    }
+
     /**
      *  Returns the size of the first of the two
      *  compared graphs.
@@ -218,9 +224,7 @@ public class CDKRGraph {
         // initialize the list of solution
 
         this.timeManager = timeManager;
-        if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-            throw new CDKException("Timeout exceeded in getOverlaps");
-        }
+        checkTimeOut();
         // initialize the list of solution
         solutionList.clear();
 
@@ -252,9 +256,7 @@ public class CDKRGraph {
         BitSet newForbidden = null;
         BitSet potentialNode = null;
 
-        if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-            throw new CDKException("Timeout exceeded in getOverlaps");
-        }
+        checkTimeOut();
 
         // if there is no more extension possible we
         // have reached a potential new solution
@@ -337,12 +339,7 @@ public class CDKRGraph {
             // new one, the previous solution is removed.
             for (Iterator<BitSet> i = solutionList.listIterator(); i.hasNext() && !included;) {
                 BitSet sol = i.next();
-
-                if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-                    //System.out.println("|Hello|");
-                    throw new CDKException("Timeout exceeded in getOverlaps");
-                }
-
+                checkTimeOut();
                 if (!sol.equals(traversed)) {
                     // if we asked to save all 'mappings' then keep this mapping
                     if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
@@ -435,10 +432,7 @@ public class CDKRGraph {
         for (Iterator<CDKRNode> i = graph.iterator(); i.hasNext();) {
             CDKRNode rNode = i.next();
 
-            if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-                //System.out.println("|Hello|");
-                throw new CDKException("Timeout exceeded in getOverlaps");
-            }
+            checkTimeOut();
 
             if ((sourceBitSet.get(rNode.getRMap().id1) || sourceBitSet.isEmpty()) && (targetBitSet.get(rNode.getRMap().id2) || targetBitSet.isEmpty())) {
                 bistSet.set(graph.indexOf(rNode));

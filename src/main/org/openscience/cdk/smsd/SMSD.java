@@ -95,6 +95,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  </font>
  *
  *  @cdk.module smsd
+ *  @cdk.require java1.5+
  *  
  */
 @TestClass("org.openscience.cdk.smsd.SMSDTest")

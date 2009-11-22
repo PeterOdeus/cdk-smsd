@@ -87,7 +87,6 @@ public class MCSFactory implements IMCSAlgorithm {
             TimeOut tmo = TimeOut.getInstance();
             tmo.setTimeOut(0.10);
         } else {
-
             TimeOut tmo = TimeOut.getInstance();
             tmo.setTimeOut(0.15);
         }
