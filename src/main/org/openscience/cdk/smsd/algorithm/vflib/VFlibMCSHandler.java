@@ -149,17 +149,6 @@ public class VFlibMCSHandler implements IMCS {
 
     }
 
-    private int checkForH(IAtomContainer mol) {
-        int hCount = 0;
-        for (int i = 0; i < mol.getAtomCount(); i++) {
-
-            if (mol.getAtom(i).getSymbol().equals("H")) {
-                hCount++;
-            }
-        }
-        return hCount;
-    }
-
     private boolean mcgregorFlag() {
         int commonAtomCount = checkCommonAtomCount(source, target);
         if (commonAtomCount > vfMCSSize && commonAtomCount > vfMCSSize) {

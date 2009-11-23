@@ -112,19 +112,6 @@ public class VFlibTurboHandler implements ISubGraph {
 
     }
 
-    private int checkForH(IAtomContainer mol) {
-        int hCount = 0;
-
-        for (int i = 0; i < mol.getAtomCount(); i++) {
-
-            if (mol.getAtom(i).getSymbol().equals("H")) {
-                hCount++;
-            }
-
-        }
-        return hCount;
-    }
-
     /**
      * @param source
      * @param target
