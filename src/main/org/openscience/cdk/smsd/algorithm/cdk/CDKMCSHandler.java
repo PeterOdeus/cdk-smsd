@@ -62,7 +62,7 @@ public class CDKMCSHandler implements IMCS {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
-     /**
+    /**
      * @param source
      * @param target
      */
@@ -110,7 +110,6 @@ public class CDKMCSHandler implements IMCS {
 
 
     }
-
 
     /**
      * @param source
@@ -265,14 +264,14 @@ public class CDKMCSHandler implements IMCS {
 
     private final synchronized void setFirstMapping() {
 
-        if (allMCS.size() > 0) {
+        if (!allMCS.isEmpty()) {
             firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
         }
 
     }
 
     private final synchronized void setFirstAtomMapping() {
-        if (atomsMCS.size() > 0) {
+        if (!atomsMCS.isEmpty()) {
             atomsMCS = new TreeMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 

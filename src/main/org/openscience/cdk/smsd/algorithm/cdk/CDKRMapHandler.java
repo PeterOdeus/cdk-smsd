@@ -65,19 +65,9 @@ public class CDKRMapHandler {
 
         _mapping = new ArrayList<TreeMap<Integer, Integer>>();
 
-        //System.out.println("Searching: ");
-        //List overlaps = UniversalIsomorphismTesterBondTypeInSensitive.getSubgraphAtomsMap(source, target);
-
-
 
         if ((source.getAtomCount() == 1) || (target.getAtomCount() == 1)) {
-
-            // System.out.println("Searched Single Molecule Mapping Case: ");
-
             List overlaps = CDKMCS.checkSingleAtomCases(source, target);
-            //timeoutFlag=graphContainer.getTimeOutFlag();
-
-
             int nAtomsMatched = overlaps.size();
             nAtomsMatched = (nAtomsMatched > 0) ? 1 : 0;
             if (nAtomsMatched > 0) {
@@ -89,29 +79,12 @@ public class CDKRMapHandler {
             }
 
         } else {
-
-            /*Time out set by Asad equalt 2 min*/
-            //UniversalIsomorphismTesterBondTypeInSensitive.timeout=12000000;
-
-            //source (Mol1), target (Mol2), RGraph1, RGraph2, true, true( search all MCS)
-
             List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
 
-
-            //timeoutFlag=graphContainer.getTimeOutFlag();
-            //System.out.println("Searched: ");
-
             List reducedList = removeSubGraph(overlaps);
-
-
             Stack<List> allMaxOverlaps = getAllMaximum(reducedList);
-
-            //Stack<List> allMaxOverlaps = getAllMaximum(overlaps);
-
-
             while (!allMaxOverlaps.empty()) {
 //                System.out.println("source: " + source.getAtomCount() + ", target: " + target.getAtomCount() + ", overl: " + allMaxOverlaps.peek().size());
-                @SuppressWarnings("unchecked")
                 List maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
 //                System.out.println("size of maxOverlaps: " + maxOverlapsAtoms.size());
                 identifyMatchedParts(maxOverlapsAtoms, source, target);
@@ -120,12 +93,7 @@ public class CDKRMapHandler {
             }
         }
 
-
         FinalMappings.getInstance().set(_mapping);
-//
-//        System.out.println("Mapping count: " + _mapping.size());
-//        System.out.println("Mapping Size: " + _mapping.firstElement());
-
 
     }
 
@@ -147,62 +115,30 @@ public class CDKRMapHandler {
         //System.out.println("Searching: ");
         //List overlaps = UniversalIsomorphismTesterBondTypeInSensitive.getSubgraphAtomsMap(source, target);
 
-
-
         if ((source.getAtomCount() == 1) || (target.getAtomCount() == 1)) {
 
-            // System.out.println("Searched Single Molecule Mapping Case: ");
-
             List overlaps = CDKMCS.checkSingleAtomCases(source, target);
-            //timeoutFlag=graphContainer.getTimeOutFlag();
-
-
             int nAtomsMatched = overlaps.size();
             nAtomsMatched = (nAtomsMatched > 0) ? 1 : 0;
             if (nAtomsMatched > 0) {
-                /*UnComment this to get one Unique Mapping*/
-                //List reducedList = removeRedundantMappingsForSingleAtomCase(overlaps);
-                //int counter = 0;
                 identifyMatchedPartsforSingleAtoms(overlaps, source, target);
-
             }
 
         } else {
 
-            /*Time out set by Asad equalt 2 min*/
-            //UniversalIsomorphismTesterBondTypeInSensitive.timeout=12000000;
-
-            //source (Mol1), target (Mol2), RGraph1, RGraph2, true, true( search all MCS)
-
             List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
-//            List overlaps = graphContainer.search(source, target, new BitSet(), new BitSet(), true, false);
-            //timeoutFlag=graphContainer.getTimeOutFlag();
-            //System.out.println("Searched: ");
 
             List reducedList = removeSubGraph(overlaps);
-
-
             Stack<List> allMaxOverlaps = getAllMaximum(reducedList);
 
-            //Stack<List> allMaxOverlaps = getAllMaximum(overlaps);
-
-
             while (!allMaxOverlaps.empty()) {
-//                System.out.println("source: " + source.getAtomCount() + ", target: " + target.getAtomCount() + ", overl: " + allMaxOverlaps.peek().size());
-                @SuppressWarnings("unchecked")
                 List maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
-//                System.out.println("size of maxOverlaps: " + maxOverlapsAtoms.size());
                 identifyMatchedParts(maxOverlapsAtoms, source, target);
-//                identifyMatchedParts(allMaxOverlaps.peek(), source, target);
 
                 allMaxOverlaps.pop();
             }
         }
         FinalMappings.getInstance().set(_mapping);
-//
-//        System.out.println("Mapping count: " + _mapping.size());
-//        System.out.println("Mapping Size: " + _mapping.firstElement());
-
     }
 
     /**
@@ -211,18 +147,13 @@ public class CDKRMapHandler {
      * @return
      */
     protected List removeSubGraph(List overlaps) {
-        @SuppressWarnings("unchecked")
+
         List reducedList = new ArrayList(overlaps);
 
         for (int i = 0; i < overlaps.size(); i++) {
-            //System.out.println("i: " + i + ", overlaps.size(): " + overlaps.size());
-            //System.out.println("overlaps i: " + overlaps.get(i).getClass().getName());
             List graphI = (List) overlaps.get(i);
 
-
             for (int j = i + 1; j < overlaps.size(); j++) {
-                //System.out.println("j: " + j + ", overlaps.size(): " + overlaps.size());
-                //System.out.println("overlaps j: " + overlaps.get(j).getClass().getName());
 
                 List graphJ = (List) overlaps.get(j);
 
@@ -246,15 +177,10 @@ public class CDKRMapHandler {
      * @param overlaps
      * @return
      */
-    @SuppressWarnings("unchecked")
     protected List removeRedundantMappingsForSingleAtomCase(List overlaps) {
-        @SuppressWarnings("unchecked")
-
         List reducedList = new ArrayList();
-
         reducedList.add(overlaps.get(0));
         //reducedList.add(overlaps.get(1));
-
         return reducedList;
 
     }
@@ -318,7 +244,6 @@ public class CDKRMapHandler {
         return result;
     }
 
-
     /**
      *
      * @param overlaps
@@ -358,7 +283,7 @@ public class CDKRMapHandler {
             //System.out.println("O size" + sourceAtom.size());
 
             if (arrayList.size() > count) {
-                @SuppressWarnings("unchecked")
+
                 List list = new ArrayList(arrayList);
                 count = arrayList.size();
 
@@ -369,7 +294,7 @@ public class CDKRMapHandler {
                 //allMaximumMappings.clear();
                 allMaximumMappings.push(list);
             } else if (arrayList.size() == count) {
-                @SuppressWarnings("unchecked")
+
                 List list = new ArrayList(arrayList);
                 count = arrayList.size();
                 allMaximumMappings.push(list);
@@ -456,7 +381,7 @@ public class CDKRMapHandler {
 
             array1.add(sAtom);
             array2.add(tAtom);
-            
+
             int IndexI = source.getAtomNumber(sAtom);
             int IndexJ = target.getAtomNumber(tAtom);
 
