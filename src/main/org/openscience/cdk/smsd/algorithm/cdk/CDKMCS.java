@@ -894,29 +894,29 @@ public class CDKMCS {
      * Determines if two bonds have at least one atom in common.
      *
      * @param  atom  first bond
-     * @param  b  second bond
+     * @param  bondB  second bond
      * @return    the symbol of the common atom or "" if
      *            the 2 bonds have no common atom
      */
-    private static boolean hasCommonAtom(IBond a, IBond b) {
-        return a.contains(b.getAtom(0)) || a.contains(b.getAtom(1));
+    private static boolean hasCommonAtom(IBond bondA, IBond bondB) {
+        return bondA.contains(bondB.getAtom(0)) || bondA.contains(bondB.getAtom(1));
     }
 
     /**
      *  Determines if 2 bond have 1 atom in common and returns the common symbol
      *
      * @param  atom  first bond
-     * @param  b  second bond
+     * @param  bondB  second bond
      * @return    the symbol of the common atom or "" if
      *            the 2 bonds have no common atom
      */
-    private static String getCommonSymbol(IBond a, IBond b) {
+    private static String getCommonSymbol(IBond bondA, IBond bondB) {
         String symbol = "";
 
-        if (a.contains(b.getAtom(0))) {
-            symbol = b.getAtom(0).getSymbol();
-        } else if (a.contains(b.getAtom(1))) {
-            symbol = b.getAtom(1).getSymbol();
+        if (bondA.contains(bondB.getAtom(0))) {
+            symbol = bondB.getAtom(0).getSymbol();
+        } else if (bondA.contains(bondB.getAtom(1))) {
+            symbol = bondB.getAtom(1).getSymbol();
         }
 
         return symbol;
