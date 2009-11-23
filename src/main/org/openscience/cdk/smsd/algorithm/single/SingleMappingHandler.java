@@ -216,7 +216,6 @@ public class SingleMappingHandler implements IMCS {
 
     @Override
     public TreeMap<Integer, Integer> getFirstMapping() {
-
         return firstMCS;
     }
 

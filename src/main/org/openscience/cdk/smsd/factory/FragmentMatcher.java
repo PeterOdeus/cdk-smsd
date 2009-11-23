@@ -62,7 +62,6 @@ public class FragmentMatcher {
     private Map<IAtom, IAtom> GfirstAtomMCS;
     private boolean removeHydrogen = false;
 
-    
     /**
      * ~--- constructors -----
      */
@@ -138,21 +137,6 @@ public class FragmentMatcher {
         }
     }
 
-//    private synchronized void CDKMCS() {
-//        try {
-//            CDKMCSHandler mcs = new CDKMCSHandler();
-//            mcs.set(RMol, PMol);
-//            mcs.searchMCS(removeHydrogen);
-//            firstMCS = mcs.getFirstMapping();
-//            allMCS = mcs.getAllMapping();
-//            allAtomMCS = mcs.getAllAtomMapping();
-//            atomsMCS = mcs.getFirstAtomMapping();
-//
-//        } catch (CDKException ex) {
-//            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
     private synchronized void mcsPlus() {
         try {
             MCSPlusHandler mcs = new MCSPlusHandler();

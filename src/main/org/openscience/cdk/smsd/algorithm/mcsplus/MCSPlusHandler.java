@@ -173,9 +173,6 @@ public class MCSPlusHandler implements IMCS {
             ex.printStackTrace();
         }
 
-//        System.out.println("Number of MCS solution: " + allMCS.size());
-
-
     }
 
     private final synchronized void setAllAtomMapping() {

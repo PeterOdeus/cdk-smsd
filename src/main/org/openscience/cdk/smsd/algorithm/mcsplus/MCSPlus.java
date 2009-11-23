@@ -72,27 +72,14 @@ public class MCSPlus {
                 return null;
             }
             timeManager = new TimeManager();
-            if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-                //System.out.println("|Hello|");
-                timeoutFlag = true;
-                throw new CDKException("Timeout exceeded in getOverlaps");
-            }
+            checkTimeOut();
             BKKCKCF init = new BKKCKCF(comp_graph_nodes, C_edges, D_edges);
             maxCliqueSet = init.getMaxCliqueSet();
-            if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-                //System.out.println("|Hello|");
-                timeoutFlag = true;
-                throw new CDKException("Timeout exceeded in getOverlaps");
-            }
+            checkTimeOut();
             //clear all the compatibility graph content
             gcg.clear();
-//            int clique_number = 1;
             while (!maxCliqueSet.empty()) {
-                if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
-                    //System.out.println("|Hello|");
-                    timeoutFlag = true;
-                    throw new CDKException("Timeout exceeded in getOverlaps");
-                }
+                checkTimeOut();
                 List<Integer> clique_List = maxCliqueSet.peek();
 
                 int clique_size = clique_List.size();
@@ -106,7 +93,6 @@ public class MCSPlus {
                     _mappings = ExactMapping.extractMapping(_mappings, comp_graph_nodes, clique_List);
                 }
                 maxCliqueSet.pop();
-//                clique_number++;
             }
         } catch (IOException ex) {
             Logger.getLogger(MCSPlus.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,5 +114,13 @@ public class MCSPlus {
         }
         System.out.println("Flag: " + flag);
         return flag;
+    }
+
+    private void checkTimeOut() throws CDKException {
+        if (timeout > -1 && timeManager.getElapsedTimeInMinutes() > timeout) {
+            //System.out.println("|Hello|");
+            timeoutFlag = true;
+            throw new CDKException("Timeout exceeded in getOverlaps");
+        }
     }
 }

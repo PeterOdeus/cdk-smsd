@@ -46,7 +46,6 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  */
 public class CDKRMapHandler {
 
-//    boolean RonPFlag = false;
     private List<TreeMap<Integer, Integer>> _mapping;
     static IAtomContainer source;
     static IAtomContainer target;
