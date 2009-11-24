@@ -69,6 +69,10 @@ public class McGregor {
         "$47", "$48", "$49", "$50", "$51", "$52", "$53", "$54", "$55"
     };
     protected boolean newMatrix = false;
+    /**
+     * Bond sensitive flag
+     *
+     */
     protected boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
@@ -492,8 +496,8 @@ public class McGregor {
                     IAtom p2B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(p1B, p2B);
 
-
-                    if (bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) {
+                    boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
+                    if (bondTypeFlag && bMatch) {
                         moreMappingPossible = true;
                         break;
                     }
@@ -567,7 +571,8 @@ public class McGregor {
                     IAtom P1_B = target.getAtom(Index_J);
                     IAtom P2_B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
-                    if (bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) {
+                    boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
+                    if (bondTypeFlag && bMatch) {
                         modifiedARCS.set(row * neighbor_bondnum_B + column, 1);
                     } else if (!bondTypeFlag) {
                         modifiedARCS.set(row * neighbor_bondnum_B + column, 1);
