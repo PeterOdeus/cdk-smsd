@@ -125,7 +125,7 @@ public class SMSD implements IMCSAlgorithm {
      * @param bondSensitiveFlag true will activate bond order match else false
      */
     public SMSD(Algorithm algorithmType, boolean bondSensitiveFlag) {
-        comparison = new MCSFactory(algorithmType.type(), bondSensitiveFlag);
+        comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
         System.gc();
     }
 

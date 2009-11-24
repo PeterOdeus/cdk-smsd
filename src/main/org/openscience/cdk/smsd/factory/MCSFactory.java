@@ -68,7 +68,7 @@ public class MCSFactory implements IMCSAlgorithm {
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
     private IMCS mcs = null;
-    private int algorithmType = 0;
+    private Algorithm algorithmType;
     private boolean removeHydrogen = false;
 
     /**
@@ -76,7 +76,7 @@ public class MCSFactory implements IMCSAlgorithm {
      * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 cdkMCS
      * @param bondTypeFlag
      */
-    public MCSFactory(int algorithmType, boolean bondTypeFlag) {
+    public MCSFactory(Algorithm algorithmType, boolean bondTypeFlag) {
         this.algorithmType = algorithmType;
         firstSolution = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
@@ -129,20 +129,20 @@ public class MCSFactory implements IMCSAlgorithm {
         int pAtomCount = PMol.getMolecule().getAtomCount();
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
-        } else if (algorithmType == 0) {
+        } else if (algorithmType.equals(Algorithm.DEFAULT)) {
             mcsPlus();
             if (getFirstMapping() == null) {
                 mcs = null;
                 System.gc();
                 vfLibMCS();
             }
-        } else if (algorithmType == 1) {
+        } else if (algorithmType.equals(Algorithm.MCSPlus)) {
             mcsPlus();
             if (getFirstMapping() == null) {
                 mcs = null;
             }
 
-        } else if (algorithmType == 2) {
+        } else if (algorithmType.equals(Algorithm.VFLibMCS)) {
             if (rBondCount >= 6 && rBondCount >= 6) {
                 vfLibMCS();
                 if (getFirstMapping() == null) {
@@ -152,7 +152,7 @@ public class MCSFactory implements IMCSAlgorithm {
             } else {
                 mcsPlus();
             }
-        } else if (algorithmType == 3) {
+        } else if (algorithmType.equals(Algorithm.CDKMCS)) {
             cdkMCS();
             if (getFirstMapping() == null) {
                 mcs = null;
