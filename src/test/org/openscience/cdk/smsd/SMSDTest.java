@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
@@ -47,7 +48,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testCDKMCS() throws Exception {
-        SMSD ebimcs = new SMSD(3, false);
+        SMSD ebimcs = new SMSD(Algorithm.CDKMCS, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(true, ebimcs.isSubgraph());
@@ -55,7 +56,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testMCSPlus() throws Exception {
-        SMSD ebimcs = new SMSD(1, false);
+        SMSD ebimcs = new SMSD(Algorithm.MCSPlus, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(true, ebimcs.isSubgraph());
@@ -63,12 +64,12 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSD() throws Exception {
-        SMSD ebimcs = new SMSD(0, false);
+        SMSD ebimcs = new SMSD(Algorithm.DEFAULT, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(6, ebimcs.getFirstMapping().size());
 
-        SMSD ebimcs1 = new SMSD(0, true);
+        SMSD ebimcs1 = new SMSD(Algorithm.DEFAULT, true);
         ebimcs1.init(Benzene, Napthalene, true);
         ebimcs1.setChemFilters(true, true, true);
         Assert.assertEquals(6, ebimcs1.getFirstAtomMapping().size());
@@ -76,12 +77,12 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDBondSensitive() throws Exception {
-        SMSD ebimcs = new SMSD(3, true);
+        SMSD ebimcs = new SMSD(Algorithm.DEFAULT, true);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(false, ebimcs.isSubgraph());
 
-        SMSD ebimcs1 = new SMSD(3, true);
+        SMSD ebimcs1 = new SMSD(Algorithm.DEFAULT, true);
         ebimcs1.init(Cyclohexane, Benzene, true);
         ebimcs1.setChemFilters(true, true, true);
         Assert.assertEquals(false, ebimcs1.isSubgraph());
@@ -89,12 +90,12 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDBondInSensitive() throws Exception {
-        SMSD ebimcs = new SMSD(0, false);
+        SMSD ebimcs = new SMSD(Algorithm.DEFAULT, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(6, ebimcs.getFirstAtomMapping().size());
-        
-        SMSD ebimcs1 = new SMSD(0, false);
+
+        SMSD ebimcs1 = new SMSD(Algorithm.DEFAULT, false);
         ebimcs1.init(Benzene, Napthalene, true);
         ebimcs1.setChemFilters(true, true, true);
         Assert.assertEquals(6, ebimcs1.getFirstAtomMapping().size());
@@ -102,7 +103,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDChemicalFilters() throws Exception {
-        SMSD ebimcs = new SMSD(3, false);
+        SMSD ebimcs = new SMSD(Algorithm.DEFAULT, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(6, ebimcs.getFirstAtomMapping().size());
@@ -111,7 +112,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDScores() throws Exception {
-        SMSD ebimcs = new SMSD(3, false);
+        SMSD ebimcs = new SMSD(Algorithm.DEFAULT, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(Cyclohexane.getAtomCount(), ebimcs.getFirstMapping().size());

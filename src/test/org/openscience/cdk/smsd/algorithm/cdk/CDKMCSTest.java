@@ -42,7 +42,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.CDKTestCase;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.AtomContainerAtomPermutor;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -92,10 +91,10 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1708336
-     * @throws CDKException
+     * @throws Exception
      */
     @Test
-    public void testSFBug1708336() throws CDKException {
+    public void testSFBug1708336() throws Exception {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(true);
@@ -239,10 +238,10 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1110537
-     * @throws CDKException
+     * @throws Exception
      */
     @Test
-    public void testGetOverlaps_IAtomContainer_IAtomContainer() throws CDKException {
+    public void testGetOverlaps_IAtomContainer_IAtomContainer() throws Exception {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(true);
@@ -267,10 +266,10 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1208740
-     * @throws CDKException
+     * @throws Exception
      */
     @Test
-    public void testSFBug1208740() throws CDKException {
+    public void testSFBug1208740() throws Exception {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(true);
@@ -313,10 +312,10 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 999330
-     * @throws CDKException
+     * @throws Exception
      */
     @Test
-    public void testSFBug999330() throws CDKException {
+    public void testSFBug999330() throws Exception {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(true);
@@ -392,10 +391,10 @@ public class CDKMCSTest extends CDKTestCase {
 
     /**
      * @cdk.bug 1633201
-     * @throws CDKException
+     * @throws Exception
      */
     @Test
-    public void testFirstArgumentMustNotBeAnQueryAtomContainer() throws CDKException {
+    public void testFirstArgumentMustNotBeAnQueryAtomContainer() throws Exception {
         BondType bondType = BondType.getInstance();
         bondType.reset();
         bondType.setBondSensitiveFlag(true);
