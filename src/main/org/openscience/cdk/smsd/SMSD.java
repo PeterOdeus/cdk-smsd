@@ -66,9 +66,9 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  IAtomContainer A1 = sp.parseSmiles("C1=CC=CC=C1");
  *  // Napthalene
  *  IAtomContainer A2 = sp.parseSmiles("C1=CC2=C(C=C1)C=CC=C2");
- *  //Algorithm { 0: SMSD, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS}
+ *  //{ 0: Default SMSD Algorithm, 1: MCSPlus Algorithm, 2: VFLibMCS Algorithm, 3: CDKMCS Algorithm}
  *  //Bond Sensitive is set true
- *  SMSD comparison = new SMSD(0, true);
+ *  SMSD comparison = new SMSD(Algorithm.DEFAULT, true);
  *  // set molecules and remove hydrogens
  *  comparison.init(A1, A2, true);
  *  // set chemical filter true
@@ -124,8 +124,8 @@ public class SMSD implements IMCSAlgorithm {
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
      * @param bondSensitiveFlag true will activate bond order match else false
      */
-    public SMSD(int algorithmType, boolean bondSensitiveFlag) {
-        comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
+    public SMSD(Algorithm algorithmType, boolean bondSensitiveFlag) {
+        comparison = new MCSFactory(algorithmType.type(), bondSensitiveFlag);
         System.gc();
     }
 

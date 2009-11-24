@@ -34,6 +34,46 @@ import org.openscience.cdk.smsd.helper.MolHandler;
 public interface IMCSAlgorithm extends IMCSBase {
 
     /**
+     * 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
+     */
+    public enum Algorithm {
+
+        DEFAULT(0, "Default SMSD algorithm"),
+        MCSPlus(1, "MCS Plus algorithm"),
+        VFLibMCS(2, "VF Lib based MCS algorithm"),
+        CDKMCS(3, "CDK UIT MCS");
+        private final int type;
+        private final String description;
+
+        Algorithm(int aStatus, String desc) {
+            this.type = aStatus;
+            this.description = desc;
+        }
+
+        public int type() {
+            return this.type;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public String description() {
+            return this.description;
+        }
+
+        /**
+         * 
+         * @param <status>
+         * @param obj
+         * @return
+         */
+        public <status> int compareTo(Algorithm obj) {
+            return 0;
+        }
+    }
+
+    /**
      *
      * @param source
      * @param target

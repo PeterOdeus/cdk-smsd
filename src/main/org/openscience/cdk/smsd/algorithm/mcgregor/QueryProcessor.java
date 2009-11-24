@@ -217,8 +217,127 @@ public class QueryProcessor {
             bond_considered = false;
         }
 
-        /*******************************************************************************///        System.out.println("Neighbor A & B");
     }
+
+//    protected void process(List<Integer> unmapped_atoms_molA,
+//            int mappingSize,
+//            List<Integer> i_bond_neighborsA,
+//            List<Integer> i_bond_setA,
+//            List<String> c_bond_neighborsA,
+//            List<String> c_bond_setA,
+//            List<Integer> mapped_atoms,
+//            int SR_count){
+//
+//          boolean bond_considered = false;
+//            boolean normal_bond = true;
+//            for (int a = 0; a < set_num_A; a++) {
+//
+//                int _elementAt_a = i_bond_setA.get(a * 3 + 0).intValue();
+//                for (int b = 0; b < unmapped_numA; b++) {
+//                    Integer unMappedAtomIndex = unmapped_atoms_molA.get(b);
+//                    if (unMappedAtomIndex == _elementAt_a) {
+//                        for (int c = 0; c < new_MAPPING_size; c++) {
+//
+//                            if (new_MAPPING.get(c * 2 + 0).equals(i_bond_setA.get(a * 3 + 1))) {
+//
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 0));
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 1));
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 2));
+//                                new_c_neighborsA.add(cTab1Copy.get(a * 4 + 0));
+//                                if (cTab1Copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
+//
+//                                    new_c_neighborsA.add(SignArray[counter]);
+//                                    new_c_neighborsA.add("X");
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 1));
+//                                    changeCharBonds(i_bond_setA.get(a * 3 + 1), SignArray[counter], set_num_A, i_bond_setA, cTab1Copy);
+//                                    int cor_atom = McGregorChecks.searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 1), 1, new_MAPPING);
+//                                    changeCharBonds(cor_atom, SignArray[counter], set_num_B, i_bond_setB, cTab2Copy);
+//                                    counter++;
+//
+//                                } else {
+//
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 1));
+//                                    new_c_neighborsA.add("X");
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 3));
+//
+//                                }
+//
+//                                normal_bond = false;
+//                                new_neighbor_numA++;
+//
+//                            }
+//                        }
+//
+//                        if (normal_bond) {
+//
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 0));
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 1));
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 2));
+//                            new_c_bond_setA.add(cTab1Copy.get(a * 4 + 0));
+//                            new_c_bond_setA.add(cTab1Copy.get(a * 4 + 1));
+//                            new_c_bond_setA.add("X");
+//                            new_c_bond_setA.add("X");
+//                            setBondNumA++;
+//
+//                        }
+//                        normal_bond = true;
+//                        bond_considered = true;
+//                    }
+//                    if (unMappedAtomIndex.equals(i_bond_setA.get(a * 3 + 1))) {
+//                        for (int c = 0; c < new_MAPPING_size; c++) {
+//
+//                            if (new_MAPPING.get(c * 2 + 0).equals(i_bond_setA.get(a * 3 + 0))) {
+//
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 0));
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 1));
+//                                new_i_neighborsA.add(i_bond_setA.get(a * 3 + 2));
+//                                if (cTab1Copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
+//
+//                                    new_c_neighborsA.add(SignArray[counter]);
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 1));
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 0));
+//                                    new_c_neighborsA.add("X");
+//                                    changeCharBonds(i_bond_setA.get(a * 3 + 0), SignArray[counter], set_num_A, i_bond_setA, cTab1Copy);
+//                                    int cor_atom = McGregorChecks.searchCorrespondingAtom(new_MAPPING_size, i_bond_setA.get(a * 3 + 0), 1, new_MAPPING);
+//                                    changeCharBonds(cor_atom, SignArray[counter], set_num_B, i_bond_setB, cTab2Copy);
+//                                    counter++;
+//
+//                                } else {
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 0));
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 1));
+//                                    new_c_neighborsA.add(cTab1Copy.get(a * 4 + 2));
+//                                    new_c_neighborsA.add("X");
+//                                }
+//
+//                                normal_bond = false;
+//                                new_neighbor_numA++;
+//
+//                            }
+//
+//
+//                        }
+//                        if (normal_bond) {
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 0));
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 1));
+//                            new_i_bond_setA.add(i_bond_setA.get(a * 3 + 2));
+//                            new_c_bond_setA.add(cTab1Copy.get(a * 4 + 0));
+//                            new_c_bond_setA.add(cTab1Copy.get(a * 4 + 1));
+//                            new_c_bond_setA.add("X");
+//                            new_c_bond_setA.add("X");
+//                            setBondNumA++;
+//                        }
+//
+//                        normal_bond = true;
+//                        bond_considered = true;
+//                    }
+//
+//                    if (bond_considered) {
+//                        break;
+//                    }
+//                }
+//                bond_considered = false;
+//            }
+//    }
 
     private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
 
