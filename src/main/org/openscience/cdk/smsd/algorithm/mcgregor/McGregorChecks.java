@@ -91,8 +91,6 @@ public class McGregorChecks {
                         IAtom P2_B = target.getAtom(Index_JPlus1);
                         IBond ProductBond = target.getBond(P1_B, P2_B);
 
-
-
                         if (bondTypeFlag && bondMatch(ReactantBond, ProductBond)) {
                             moreMappingPossible = true;
                             break;
