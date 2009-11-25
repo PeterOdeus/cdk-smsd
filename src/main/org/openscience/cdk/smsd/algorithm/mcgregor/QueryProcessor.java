@@ -40,6 +40,15 @@ public class QueryProcessor {
     private List<Integer> iBondSetA=null;
     private List<String> cBondSetA=null;
 
+    /**
+     * 
+     * @param neighborBondNumA
+     * @param cBondNeighborsA
+     * @param iBondNeighborsA
+     * @param cBondSetA
+     * @param iBondSetA
+     * @param setBondNumA
+     */
     protected QueryProcessor(
             int neighborBondNumA,
             List<String> cBondNeighborsA,
