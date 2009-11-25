@@ -33,9 +33,6 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class TargetProcessor {
 
-    private List<String> cTab1 = null;
-    private List<String> cTab2 = null;
-    private String[] SignArray;
     private int neighborBondNumB = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int setBondNumB = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
     private int neighborBondNumA = 0;
@@ -50,9 +47,6 @@ public class TargetProcessor {
      * @param c_bond_neighborsB
      * @param iBondSetB
      * @param c_bond_setB
-     * @param cTab1
-     * @param cTab2
-     * @param SignArray
      * @param neighbor_bondnum_B
      * @param set_bondnum_B
      * @param neighbor_bondnum_A
@@ -63,9 +57,6 @@ public class TargetProcessor {
             List<String> c_bond_neighborsB,
             List<Integer> iBondSetB,
             List<String> c_bond_setB,
-            List<String> cTab1,
-            List<String> cTab2,
-            String[] SignArray,
             int neighbor_bondnum_B,
             int set_bondnum_B,
             int neighbor_bondnum_A,
@@ -73,32 +64,28 @@ public class TargetProcessor {
             List<String> c_bond_neighborsA) {
 
 
-        this.SignArray = SignArray;
         this.neighborBondNumB = neighbor_bondnum_B;
         this.setBondNumB = set_bondnum_B;
         this.c_bond_neighborsA = c_bond_neighborsA;
         this.i_bond_neighborsA = i_bond_neighborsA;
         this.neighborBondNumA = neighbor_bondnum_A;
-//        this.cBondNeighborsB = new ArrayList<String>(c_bond_neighborsB);
-//        this.iBondSetB = new ArrayList<Integer>(iBondSetB);
-//        this.cBondSetB = new ArrayList<String>(c_bond_setB);
-//        this.cTab1 = new ArrayList<String>(cTab1);
-//        this.cTab2 = new ArrayList<String>(cTab2);
         this.cBondNeighborsB = c_bond_neighborsB;
         this.iBondSetB = iBondSetB;
         this.cBondSetB = c_bond_setB;
-        this.cTab1 = cTab1;
-        this.cTab2 = cTab2;
+
     }
 
     protected void process(IAtomContainer target,
-            List<Integer> unmapped_atoms_molB,
+            List<Integer> unmappedAtomMolB,
             int mappingSize,
-            List<Integer> i_bond_neighborsB,
+            List<Integer> iBondNeighborsB,
             List<Integer> mappedAtoms,
-            int counter) {
+            int counter,
+            List<String> cTab1,
+            List<String> cTab2,
+            String[] SignArray) {
 
-        int unmapped_numB = unmapped_atoms_molB.size();
+        int unmapped_numB = unmappedAtomMolB.size();
         boolean bond_considered = false;
         boolean normal_bond = true;
 
@@ -111,12 +98,12 @@ public class TargetProcessor {
             Integer order = target.getBond(a).getOrder().ordinal() + 1;
 
             for (int b = 0; b < unmapped_numB; b++) {
-                if (unmapped_atoms_molB.get(b).equals(indexI)) {
+                if (unmappedAtomMolB.get(b).equals(indexI)) {
                     for (int c = 0; c < mappingSize; c++) {
                         if (mappedAtoms.get(c * 2 + 1).equals(indexJ)) {
-                            i_bond_neighborsB.add(indexI);
-                            i_bond_neighborsB.add(indexJ);
-                            i_bond_neighborsB.add(order);
+                            iBondNeighborsB.add(indexI);
+                            iBondNeighborsB.add(indexJ);
+                            iBondNeighborsB.add(order);
                             if (cTab2.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
                                 cBondNeighborsB.add(cTab2.get(a * 4 + 0));
                                 cBondNeighborsB.add(SignArray[counter]);
@@ -151,12 +138,12 @@ public class TargetProcessor {
                     normal_bond = true;
                     bond_considered = true;
                 }
-                if (unmapped_atoms_molB.get(b) == indexJ) {
+                if (unmappedAtomMolB.get(b) == indexJ) {
                     for (int c = 0; c < mappingSize; c++) {
                         if (mappedAtoms.get(c * 2 + 1).equals(indexI)) {
-                            i_bond_neighborsB.add(indexI);
-                            i_bond_neighborsB.add(indexJ);
-                            i_bond_neighborsB.add(order);
+                            iBondNeighborsB.add(indexI);
+                            iBondNeighborsB.add(indexJ);
+                            iBondNeighborsB.add(order);
                             if (cTab2.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
                                 cBondNeighborsB.add(SignArray[counter]);
                                 cBondNeighborsB.add(cTab2.get(a * 4 + 1));
@@ -205,26 +192,32 @@ public class TargetProcessor {
     /**
      * 
      * @param set_num_B
-     * @param unmapped_atoms_molB
+     * @param unmappedAtomMolB
      * @param mappingSize
      * @param iBondNeighborsB
      * @param mappedAtoms
      * @param counter
+     * @param cTab1
+     * @param cTab2
+     * @param SignArray
      */
     protected void process(int set_num_B,
-            List<Integer> unmapped_atoms_molB,
+            List<Integer> unmappedAtomMolB,
             int mappingSize,
             List<Integer> iBondNeighborsB,
             List<Integer> mappedAtoms,
-            int counter) {
+            int counter,
+            List<String> cTab1,
+            List<String> cTab2,
+            String[] SignArray) {
 
-        int unmapped_numB = unmapped_atoms_molB.size();
+        int unmapped_numB = unmappedAtomMolB.size();
         boolean bond_considered = false;
         boolean normal_bond = true;
 
         for (int a = 0; a < set_num_B; a++) {
             for (int b = 0; b < unmapped_numB; b++) {
-                if (unmapped_atoms_molB.get(b).equals(iBondSetB.get(a * 3 + 0))) {
+                if (unmappedAtomMolB.get(b).equals(iBondSetB.get(a * 3 + 0))) {
                     for (int c = 0; c < mappingSize; c++) {
                         if (mappedAtoms.get(c * 2 + 1).equals(iBondSetB.get(a * 3 + 1))) {
                             iBondNeighborsB.add(iBondSetB.get(a * 3 + 0));
@@ -264,7 +257,7 @@ public class TargetProcessor {
                     normal_bond = true;
                     bond_considered = true;
                 }
-                if (unmapped_atoms_molB.get(b).equals(iBondSetB.get(a * 3 + 1))) {
+                if (unmappedAtomMolB.get(b).equals(iBondSetB.get(a * 3 + 1))) {
                     for (int c = 0; c < mappingSize; c++) {
 
                         if (mappedAtoms.get(c * 2 + 1).equals(iBondSetB.get(a * 3 + 0))) {
@@ -372,22 +365,6 @@ public class TargetProcessor {
         }
 
         return 0;
-    }
-
-    /**
-     *
-     * @return
-     */
-    protected List<String> getCTab1() {
-        return this.cTab1;
-    }
-
-    /**
-     *
-     * @return
-     */
-    protected List<String> getCTab2() {
-        return this.cTab2;
     }
 
     /**
