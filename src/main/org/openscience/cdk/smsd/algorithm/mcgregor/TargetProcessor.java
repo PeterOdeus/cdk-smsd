@@ -394,10 +394,18 @@ public class TargetProcessor {
         return this.cBondNeighborsB;
     }
 
+    /**
+     *
+     * @return
+     */
     protected List<Integer> getIBondSetB() {
         return iBondSetB;
     }
 
+    /**
+     * 
+     * @return
+     */
     protected List<String> getCBondSetB() {
         return cBondSetB;
     }

@@ -35,10 +35,10 @@ public class QueryProcessor {
 
     private int neighborBondNumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int setBondNumA = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
-    private List<Integer> iBondNeighborsA=null;
-    private List<String> cBondNeighborsA=null;
-    private List<Integer> iBondSetA=null;
-    private List<String> cBondSetA=null;
+    private List<Integer> iBondNeighborsA = null;
+    private List<String> cBondNeighborsA = null;
+    private List<Integer> iBondSetA = null;
+    private List<String> cBondSetA = null;
 
     /**
      * 
@@ -424,11 +424,19 @@ public class QueryProcessor {
         return this.setBondNumA;
     }
 
-    List<Integer> getIBondNeighboursA() {
+    /**
+     * 
+     * @return
+     */
+    protected List<Integer> getIBondNeighboursA() {
         return this.iBondNeighborsA;
     }
 
-    List<String> getCBondNeighborsA() {
+    /**
+     * 
+     * @return
+     */
+    protected List<String> getCBondNeighborsA() {
         return this.cBondNeighborsA;
     }
 }
