@@ -8,3 +8,5 @@ cdk-extra.jar
 cdk-test.jar
 cdk-smiles.jar
 cdk-valencycheck.jar
+cdk-io.jar
+cdk-isomorphism.jar
