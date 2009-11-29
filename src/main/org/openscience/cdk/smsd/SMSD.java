@@ -50,15 +50,49 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  count, stereo & bond match) to sort the reported MCS solutions in a chemically
  *  relevant manner. Each comparison can be made with or without using the bond
  *  sensitive mode and with implicit or explicit hydrogens.</p>
- *
- *  <p>SMSD algorithm is described in the Rahman <i>et.al.</i> paper{@cdk.cite SMSD2009}.
- *  </p>
  *  
  *  <p>If you are using <font color="#FF0000">SMSD, please cite Rahman <i>et.al. 2009</i></font>
- *  {@cdk.cite SMSD2009}
+ *  {@cdk.cite SMSD2009}. The SMSD algorithm is described in this paper.
  *  </p>
  *
- *  <p>An example for MCS search:</p>
+ *
+ * <p>An example for <b>Substructure search</b>:</p>
+ *  <font color="#003366">
+ *  <pre>
+ *  SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+ *  // Benzene
+ *  IAtomContainer A1 = sp.parseSmiles("C1=CC=CC=C1");
+ *  // Napthalene
+ *  IAtomContainer A2 = sp.parseSmiles("C1=CC2=C(C=C1)C=CC=C2");
+ *  //Turbo mode search
+ *  //Bond Sensitive is set true
+ *  SMSD comparison = new SMSD(true, true);
+ *  // set molecules and remove hydrogens
+ *  comparison.init(A1, A2, true);
+ *  // set chemical filter true
+ *  comparison.setChemFilters(false, false, false);
+ *
+ *  //Get similarity score
+ *  System.out.println("Tanimoto coefficient:  " + comparison.getTanimotoSimilarity());
+ *  System.out.println("A1 is a subgraph of A2:  " + comparison.isSubgraph());
+ *  //Get Modified AtomContainer
+ *  IAtomContainer Mol1 = comparison.getReactantMolecule();
+ *  IAtomContainer Mol2 = comparison.getProductMolecule();
+ *  // Print the mapping between molecules
+ *  System.out.println(" Mappings: ");
+ *  for (Map.Entry <Integer, Integer> mapping : comparison.getFirstMapping().entrySet()) {
+ *      System.out.println((mapping.getKey() + 1) + " " + (mapping.getValue() + 1));
+ *
+ *      IAtom eAtom = Mol1.getAtom(mapping.getKey());
+ *      IAtom pAtom = Mol2.getAtom(mapping.getValue());
+ *      System.out.println(eAtom.getSymbol() + " " + pAtom.getSymbol());
+ *  }
+ *  System.out.println("");
+ *
+ *  </pre>
+ *  </font>
+ *
+ * <p>An example for <b>MCS search</b>:</p>
  *  <font color="#003366">
  *  <pre>
  *  SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
@@ -90,7 +124,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  *      System.out.println(eAtom.getSymbol() + " " + pAtom.getSymbol());
  *  }
  *  System.out.println("");
- * 
+ *
  *  </pre>
  *  </font>
  *
