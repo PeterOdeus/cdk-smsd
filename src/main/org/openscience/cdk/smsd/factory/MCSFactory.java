@@ -24,8 +24,8 @@
  */
 package org.openscience.cdk.smsd.factory;
 
-import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
 import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
@@ -54,7 +54,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 /**
  * @cdk.module smsd
  */
-public class MCSFactory implements IMCSAlgorithm {
+public class MCSFactory implements IMCS {
 
     private List<TreeMap<Integer, Integer>> allMCS = null;
     private TreeMap<Integer, Integer> firstSolution = null;
@@ -67,7 +67,7 @@ public class MCSFactory implements IMCSAlgorithm {
     private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
-    private IMCS mcs = null;
+    private IMCSAlgorithm mcs = null;
     private Algorithm algorithmType;
     private boolean removeHydrogen = false;
 

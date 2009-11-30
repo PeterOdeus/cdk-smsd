@@ -35,12 +35,12 @@ import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 
 /**
  * @cdk.module smsd
  */
-public class CDKMCSHandler implements IMCS {
+public class CDKMCSHandler implements IMCSAlgorithm {
 
 //    //~--- fields -------------------------------------------------------------
     private IAtomContainer source;

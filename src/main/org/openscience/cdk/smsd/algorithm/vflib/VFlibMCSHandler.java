@@ -39,14 +39,14 @@ import org.openscience.cdk.smsd.algorithm.vflib.interfaces.IQuery;
 import org.openscience.cdk.smsd.algorithm.vflib.map.VFMCSMapper;
 import org.openscience.cdk.smsd.algorithm.vflib.query.TemplateCompiler;
 import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * @cdk.module smsd
  */
-public class VFlibMCSHandler implements IMCS {
+public class VFlibMCSHandler implements IMCSAlgorithm {
 
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;

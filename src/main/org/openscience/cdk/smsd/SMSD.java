@@ -30,7 +30,7 @@ import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
-import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -132,9 +132,9 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  
  */
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
-public class SMSD implements IMCSAlgorithm {
+public class SMSD implements IMCS {
 
-    IMCSAlgorithm comparison;
+    IMCS comparison;
 
     /**
      *

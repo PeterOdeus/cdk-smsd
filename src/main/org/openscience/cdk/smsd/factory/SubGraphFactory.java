@@ -48,13 +48,13 @@ import org.openscience.cdk.smsd.filters.ChemicalFilters;
 import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.global.TimeOut;
 import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
+import org.openscience.cdk.smsd.interfaces.IMCS;
 
 /**
  * @cdk.module smsd
  */
 @TestClass("org.openscience.cdk.smsd.SMSDTest")
-public class SubGraphFactory implements IMCSAlgorithm {
+public class SubGraphFactory implements IMCS {
 
     private List<TreeMap<Integer, Integer>> allMCS = null;
     private TreeMap<Integer, Integer> firstSolution = null;

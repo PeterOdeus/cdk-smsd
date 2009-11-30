@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.openscience.cdk.smsd.helper.FinalMappings;
 import org.openscience.cdk.smsd.helper.MolHandler;
-import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 /**
  * @cdk.module smsd
  */
-public class SingleMappingHandler implements IMCS {
+public class SingleMappingHandler implements IMCSAlgorithm {
 
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
