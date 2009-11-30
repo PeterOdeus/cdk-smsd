@@ -97,7 +97,7 @@ public class SubGraphFactory implements IMCSAlgorithm {
 //             if bonds are less than 2
 
         if (rBondCount > 1 && pBondCount > 1) {
-            vfLibMCS();
+            vfTurboHandler();
         } else {
             singleMapping();
         }
@@ -181,6 +181,83 @@ public class SubGraphFactory implements IMCSAlgorithm {
             this.fragmentSize = chemFilter.getSortedFragment();
             this.bEnergies = chemFilter.getSortedEnergy();
         }
+    }
+
+    private void vfTurboHandler() {
+
+        VFlibTurboHandler mcs = new VFlibTurboHandler();
+        mcs.set(RMol, PMol);
+        this.subGraphFlag = mcs.isSubgraph();
+
+        firstSolution.clear();
+        allMCS.clear();
+        allAtomMCS.clear();
+        firstAtomMCS.clear();
+
+        if (subGraphFlag) {
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+        }
+    }
+
+    private void singleMapping() {
+        try {
+
+            SingleMappingHandler mcs = new SingleMappingHandler(removeHydrogen);
+            mcs.set(RMol, PMol);
+            mcs.searchMCS();
+
+            firstSolution.clear();
+            allMCS.clear();
+            allAtomMCS.clear();
+            firstAtomMCS.clear();
+
+            firstSolution.putAll(mcs.getFirstMapping());
+            allMCS.addAll(mcs.getAllMapping());
+
+            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
+            allAtomMCS.addAll(mcs.getAllAtomMapping());
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CDKException ex) {
+            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private int getHCount(IAtomContainer molecule) {
+        int count = 0;
+        for (IAtom atom : molecule.atoms()) {
+            if (atom.getSymbol().equalsIgnoreCase("H")) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+
+    private int getBondMatchScore(IBond RBond, IBond PBond, BondType bondType) {
+        int score = 0;
+        if (RBond != null && PBond != null) {
+            if (bondType.getBondSensitiveFlag()) {
+                int RBondType = RBond.getOrder().ordinal();
+                int PBondType = PBond.getOrder().ordinal();
+
+                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+                    score++;
+                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
+                    score++;
+                }
+            } else {
+                score++;
+            }
+        }
+        return score;
     }
 
     @Override
@@ -370,82 +447,5 @@ public class SubGraphFactory implements IMCSAlgorithm {
         dist = dist.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
         euclidean = dist.doubleValue();
         return euclidean;
-    }
-
-    private void vfLibMCS() {
-
-        VFlibTurboHandler mcs = new VFlibTurboHandler();
-        mcs.set(RMol, PMol);
-        this.subGraphFlag = mcs.isSubgraph();
-
-        firstSolution.clear();
-        allMCS.clear();
-        allAtomMCS.clear();
-        firstAtomMCS.clear();
-
-        if (subGraphFlag) {
-            firstSolution.putAll(mcs.getFirstMapping());
-            allMCS.addAll(mcs.getAllMapping());
-
-
-            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
-            allAtomMCS.addAll(mcs.getAllAtomMapping());
-        }
-    }
-
-    private void singleMapping() {
-        try {
-
-            SingleMappingHandler mcs = new SingleMappingHandler(removeHydrogen);
-            mcs.set(RMol, PMol);
-            mcs.searchMCS();
-
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
-
-            firstSolution.putAll(mcs.getFirstMapping());
-            allMCS.addAll(mcs.getAllMapping());
-
-            firstAtomMCS.putAll(mcs.getFirstAtomMapping());
-            allAtomMCS.addAll(mcs.getAllAtomMapping());
-
-
-        } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CDKException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private int getHCount(IAtomContainer molecule) {
-        int count = 0;
-        for (IAtom atom : molecule.atoms()) {
-            if (atom.getSymbol().equalsIgnoreCase("H")) {
-                ++count;
-            }
-        }
-
-        return count;
-    }
-
-    private int getBondMatchScore(IBond RBond, IBond PBond, BondType bondType) {
-        int score = 0;
-        if (RBond != null && PBond != null) {
-            if (bondType.getBondSensitiveFlag()) {
-                int RBondType = RBond.getOrder().ordinal();
-                int PBondType = PBond.getOrder().ordinal();
-
-                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
-                    score++;
-                } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
-                    score++;
-                }
-            } else {
-                score++;
-            }
-        }
-        return score;
     }
 }
