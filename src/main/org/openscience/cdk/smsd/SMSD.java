@@ -66,7 +66,7 @@ import org.openscience.cdk.interfaces.IMolecule;
  *  IAtomContainer A2 = sp.parseSmiles("C1=CC2=C(C=C1)C=CC=C2");
  *  //Turbo mode search
  *  //Bond Sensitive is set true
- *  SMSD comparison = new SMSD(true, true);
+ *  SMSD comparison = new SMSD(Algorithm.SubStructure, true);
  *  // set molecules and remove hydrogens
  *  comparison.init(A1, A2, true);
  *  // set chemical filter true
@@ -138,28 +138,16 @@ public class SMSD implements IMCSAlgorithm {
     IMCSAlgorithm comparison;
 
     /**
-     * 
-     * @param turboStructureSearchMode true for fast substructure search without
-     * exhaustive MCS else false
-     * @param bondSensitiveFlag true will activate bond order match else false
-     */
-    public SMSD(boolean turboStructureSearchMode, boolean bondSensitiveFlag) {
-        if (turboStructureSearchMode) {
-            comparison = new SubGraphFactory(bondSensitiveFlag);
-        } else {
-            comparison = new MCSFactory(bondSensitiveFlag);
-        }
-        System.gc();
-
-    }
-
-    /**
      *
-     * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
+     * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS, 4: SubStructure Mode
      * @param bondSensitiveFlag true will activate bond order match else false
      */
     public SMSD(Algorithm algorithmType, boolean bondSensitiveFlag) {
-        comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
+        if (algorithmType.equals(Algorithm.SubStructure)) {
+            comparison = new SubGraphFactory(bondSensitiveFlag);
+        } else {
+            comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
+        }
         System.gc();
     }
 
