@@ -26,7 +26,6 @@ import java.io.IOException;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smsd.helper.MolHandler;
 
 /**
  * @cdk.module smsd
@@ -34,7 +33,7 @@ import org.openscience.cdk.smsd.helper.MolHandler;
 public interface IMCSAlgorithm extends IMCSBase {
 
     /**
-     * 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS
+     * 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS, 4: SubStructure
      */
     public enum Algorithm {
 
