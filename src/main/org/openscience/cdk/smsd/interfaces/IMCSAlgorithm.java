@@ -41,7 +41,8 @@ public interface IMCSAlgorithm extends IMCSBase {
         DEFAULT(0, "Default SMSD algorithm"),
         MCSPlus(1, "MCS Plus algorithm"),
         VFLibMCS(2, "VF Lib based MCS algorithm"),
-        CDKMCS(3, "CDK UIT MCS");
+        CDKMCS(3, "CDK UIT MCS"),
+        SubStructure(4, "Turbo Mode based Substructure search");
         private final int type;
         private final String description;
 
