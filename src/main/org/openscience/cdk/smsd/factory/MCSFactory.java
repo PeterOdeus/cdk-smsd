@@ -130,7 +130,8 @@ public class MCSFactory implements IMCSAlgorithm {
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
         } else if (algorithmType.equals(Algorithm.DEFAULT)) {
-            mcsPlus();
+//            mcsPlus();
+            cdkMCS();
             if (getFirstMapping() == null) {
                 mcs = null;
                 System.gc();
