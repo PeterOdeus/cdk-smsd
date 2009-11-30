@@ -33,7 +33,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
-import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm.Algorithm;
+import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
