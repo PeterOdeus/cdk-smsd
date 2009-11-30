@@ -96,30 +96,6 @@ public class MCSFactory implements IMCSAlgorithm {
         bondType.setBondSensitiveFlag(bondTypeFlag);
     }
 
-    /**
-     *
-     * @param bondTypeFlag
-     */
-    public MCSFactory(boolean bondTypeFlag) {
-        firstSolution = new TreeMap<Integer, Integer>();
-        allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-        allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
-        firstAtomMCS = new HashMap<IAtom, IAtom>();
-
-        if (bondTypeFlag) {
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.10);
-        } else {
-
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.15);
-        }
-
-        BondType bondType = BondType.getInstance();
-        bondType.reset();
-        bondType.setBondSensitiveFlag(bondTypeFlag);
-    }
-
     private synchronized void mcsBuilder() {
 
         int rBondCount = RMol.getMolecule().getBondCount();
@@ -130,8 +106,11 @@ public class MCSFactory implements IMCSAlgorithm {
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
         } else if (algorithmType.equals(Algorithm.DEFAULT)) {
-//            mcsPlus();
-            cdkMCS();
+            if (BondType.getInstance().getBondSensitiveFlag()) {
+                cdkMCS();
+            } else {
+                mcsPlus();
+            }
             if (getFirstMapping() == null) {
                 mcs = null;
                 System.gc();

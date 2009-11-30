@@ -91,11 +91,7 @@ public class McGregorChecks {
                         IAtom P2_B = target.getAtom(Index_JPlus1);
                         IBond ProductBond = target.getBond(P1_B, P2_B);
 
-                        if (bondTypeFlag && bondMatch(ReactantBond, ProductBond)) {
-                            moreMappingPossible = true;
-                            break;
-
-                        } else if (!bondTypeFlag) {
+                        if (bondTypeFlag && bondMatch(ReactantBond, ProductBond) || !bondTypeFlag) {
                             moreMappingPossible = true;
                             break;
                         }
@@ -390,9 +386,7 @@ public class McGregorChecks {
                     IAtom P2_B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
                     boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
-                    if (bondTypeFlag && bMatch) {
-                        modifiedARCS.set(row * neighborBondNumB + column, 1);
-                    } else if (!bondTypeFlag) {
+                    if ((bondTypeFlag && bMatch) || !bondTypeFlag) {
                         modifiedARCS.set(row * neighborBondNumB + column, 1);
                     }
                 }
