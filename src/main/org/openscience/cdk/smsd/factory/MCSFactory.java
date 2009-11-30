@@ -73,7 +73,7 @@ public class MCSFactory implements IMCSAlgorithm {
 
     /**
      * 
-     * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 cdkMCS
+     * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 CDKMCS 4 SubStructure
      * @param bondTypeFlag
      */
     public MCSFactory(Algorithm algorithmType, boolean bondTypeFlag) {
@@ -239,10 +239,10 @@ public class MCSFactory implements IMCSAlgorithm {
      *
      * @param Reactant
      * @param Product
+     * @param removeHydrogen
      *
      */
-    @Override
-    public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
+    private void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
         this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
         this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);

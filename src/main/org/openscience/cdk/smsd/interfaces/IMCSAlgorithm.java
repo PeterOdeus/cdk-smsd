@@ -80,16 +80,6 @@ public interface IMCSAlgorithm extends IMCSBase {
      * @param target
      * @param removeHydrogen true if remove H before mapping
      * @throws CDKException
-     *
-     */
-    void init(MolHandler source, MolHandler target, boolean removeHydrogen) throws CDKException;
-
-    /**
-     *
-     * @param source
-     * @param target
-     * @param removeHydrogen true if remove H before mapping
-     * @throws CDKException
      */
     void init(IMolecule source, IMolecule target, boolean removeHydrogen) throws CDKException;
 
@@ -104,15 +94,6 @@ public interface IMCSAlgorithm extends IMCSBase {
 
     /**
      *
-     * @param sourceMolFileName
-     * @param targetMolFileName
-     * @param removeHydrogen true if remove H before mapping
-     * @throws CDKException
-     */
-    void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException;
-
-    /**
-     *
      * @param stereoFilter
      * @param fragmentFilter
      * @param energyFilter
@@ -121,15 +102,15 @@ public interface IMCSAlgorithm extends IMCSBase {
 
     /**
      * 
-     * @param Key get total bond breaking energy of the match
-     * @return
+     * @param Key Index of the mapping solution
+     * @return Total bond breaking energy required to remove the mapped part
      */
     Double getEnergyScore(int Key);
 
     /**
      *
-     * @param Key get total fragment count of the match
-     * @return
+     * @param Key Index of the mapping solution
+     * @return Fragment count(s) generated after removing the mapped parts
      */
     Integer getFragmentSize(int Key);
 
@@ -147,8 +128,9 @@ public interface IMCSAlgorithm extends IMCSBase {
 
     /**
      *
-     * @param Key
-     * @return
+     * @param Key Index of the mapping solution
+     * @return true if no stereo mismatch occures
+     * else false if stereo mismatch occures
      */
     Integer getStereoScore(int Key);
 

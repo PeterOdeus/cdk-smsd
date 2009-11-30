@@ -110,10 +110,10 @@ public class SubGraphFactory implements IMCSAlgorithm {
      *
      * @param Reactant
      * @param Product
+     * @param removeHydrogen 
      *
      */
-    @Override
-    public void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
+    private void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
         this.removeHydrogen = removeHydrogen;
         this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
         this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);

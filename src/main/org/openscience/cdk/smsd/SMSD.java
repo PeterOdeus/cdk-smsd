@@ -30,7 +30,6 @@ import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
-import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -156,23 +155,6 @@ public class SMSD implements IMCSAlgorithm {
      * @param Query
      * @param Target
      * @throws CDKException
-     * 
-     */
-    @Override
-    public void init(MolHandler Query, MolHandler Target, boolean removeHydrogen) throws CDKException {
-
-        if (Query.getMolecule().getAtomCount() > 0 && Target.getMolecule().getAtomCount() > 0) {
-            comparison.init(Query, Target, removeHydrogen);
-        } else {
-            throw new CDKException("Each molecule should have atleast one atom to compare");
-        }
-    }
-
-    /**
-     * 
-     * @param Query
-     * @param Target
-     * @throws CDKException
      */
     @Override
     public synchronized void init(IMolecule Query, IMolecule Target, boolean removeHydrogen) throws CDKException {
@@ -198,13 +180,6 @@ public class SMSD implements IMCSAlgorithm {
         } else {
             throw new CDKException("Each molecule should have atleast one atom to compare");
         }
-    }
-
-    public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
-        MolHandler Query = new MolHandler(sourceMolFileName, false);
-        MolHandler Target = new MolHandler(targetMolFileName, false);
-
-        init(Query, Target, removeHydrogen);
     }
 
     /*
