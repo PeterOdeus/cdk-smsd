@@ -65,6 +65,14 @@ public class SMSDTest extends CDKTestCase {
     }
 
     @Test
+    public void testSubgraph() throws Exception {
+        SMSD sbf = new SMSD(Algorithm.SubStructure, false);
+        sbf.init(Benzene, Benzene, true);
+        sbf.setChemFilters(false, false, false);
+        Assert.assertEquals(true, sbf.isSubgraph());
+    }
+
+    @Test
     public void testCDKMCS() throws Exception {
         SMSD ebimcs = new SMSD(Algorithm.CDKMCS, false);
         ebimcs.init(Cyclohexane, Benzene, true);
