@@ -55,22 +55,21 @@ public class SingleMapping {
 
         int minOrder = 9999;
 
-        if (removeHydrogen) {
-            mapWithoutH(_mappings, connectedBondOrder, minOrder);
-        } else {
-            mapWithH(_mappings, connectedBondOrder, minOrder);
+        if (source.getAtomCount() == 1) {
+            setSourceSingleAtomMap(removeHydrogen, _mappings, connectedBondOrder, minOrder);
         }
-
-
+        if (target.getAtomCount() == 1) {
+            setTargetSingleAtomMap(removeHydrogen, _mappings, connectedBondOrder, minOrder);
+        }
         postFilter(_mappings, connectedBondOrder, minOrder);
 
         _mappings.clear();
     }
 
-    private void mapWithoutH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private void setSourceSingleAtomMap(boolean removeHydrogen, List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
-        if ((source.getAtomCount() == 1) && (!source.getAtom(0).getSymbol().equals("H"))) {
+        if ((removeHydrogen && !source.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < target.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
@@ -96,73 +95,15 @@ public class SingleMapping {
 
                 //System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
-        } else if ((target.getAtomCount() == 1) && (!target.getAtom(0).getSymbol().equals("H"))) {
-            //System.out.println("Hello in Single getOverlaps-> Cond2");
-
-
-            for (int i = 0; i < source.getAtomCount(); i++) {
-                TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
-
-                if (target.getAtom(0).getSymbol().equalsIgnoreCase(source.getAtom(i).getSymbol())) {
-                    mapAtoms.put(i, 0);
-
-                    IAtom atom = source.getAtom(i);
-                    List<IBond> Bonds = source.getConnectedBondsList(atom);
-
-                    int totalOrder = 0;
-                    for (IBond bond : Bonds) {
-
-                        Order bondOrder = bond.getOrder();
-                        totalOrder += bondOrder.ordinal();
-                    }
-                    if (totalOrder < minOrder) {
-                        minOrder = totalOrder;
-                    }
-
-                    BondOrder.put(counter, totalOrder);
-                    _mappings.add(counter++, mapAtoms);
-                }
-            }
-
         } else {
-            System.err.println("skippping Hydrogen mapping");
+            System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
         }
     }
 
-    private void mapWithH(List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private void setTargetSingleAtomMap(boolean removeHydrogen, List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
         int counter = 0;
 
-        if (source.getAtomCount() == 1) {
-            for (int i = 0; i < target.getAtomCount(); i++) {
-
-
-                TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
-
-                if (source.getAtom(0).getSymbol().equalsIgnoreCase(target.getAtom(i).getSymbol())) {
-                    mapAtoms.put(0, i);
-                    IAtom atom = target.getAtom(i);
-                    List<IBond> Bonds = target.getConnectedBondsList(atom);
-
-                    int totalOrder = 0;
-                    for (IBond bond : Bonds) {
-
-                        Order bondOrder = bond.getOrder();
-                        totalOrder += bondOrder.ordinal();
-                    }
-
-                    if (totalOrder < minOrder) {
-                        minOrder = totalOrder;
-                    }
-
-                    BondOrder.put(counter, totalOrder);
-                    _mappings.add(counter++, mapAtoms);
-
-                }
-
-//                System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
-            }
-        } else if (target.getAtomCount() == 1) {
-
+        if ((removeHydrogen && !target.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < source.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
 
@@ -190,7 +131,7 @@ public class SingleMapping {
             }
 
         } else {
-            System.err.println("This is not a single mapping case!");
+            System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
 
         }
     }
@@ -202,7 +143,6 @@ public class SingleMapping {
             if (map.getValue() > minOrder) {
                 removedMap(_mapping, map.getKey());
             }
-
         }
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
 
