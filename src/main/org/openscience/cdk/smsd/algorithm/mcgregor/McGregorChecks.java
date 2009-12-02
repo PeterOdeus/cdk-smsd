@@ -223,6 +223,54 @@ public class McGregorChecks {
         return temp_map;
     }
 
+   
+    /**
+     * The function is called in function partsearch. The function is given a temporary matrix and a position (row/column)
+     * within this matrix. First the function sets all entries to zero, which can be exlcuded in respect to the current
+     * atom by atom matching. After this the function replaces all entries in the same row and column of the current
+     * position by zeros. Only the entry of the current position is set to one.
+     * Return value "count_arcsleft" counts the number of arcs, which are still in the matrix.
+     * @param row
+     * @param column
+     * @param MARCS
+     * @param iBondNeighborAtomsA
+     * @param iBondNeighborAtomsB
+     * @param neighborBondNumA
+     * @param neighborBondNumB
+     */
+    protected static void removeRedundantArcs(int row, int column, List<Integer> MARCS, List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
+
+        int G1_atom = iBondNeighborAtomsA.get(row * 3 + 0);
+        int G2_atom = iBondNeighborAtomsA.get(row * 3 + 1);
+        int G3_atom = iBondNeighborAtomsB.get(column * 3 + 0);
+        int G4_atom = iBondNeighborAtomsB.get(column * 3 + 1);
+
+        for (int x = 0; x < neighborBondNumA; x++) {
+            int row_atom1 = iBondNeighborAtomsA.get(x * 3 + 0);
+            int row_atom2 = iBondNeighborAtomsA.get(x * 3 + 1);
+
+            for (int y = 0; y < neighborBondNumB; y++) {
+                int column_atom3 = iBondNeighborAtomsB.get(y * 3 + 0);
+                int column_atom4 = iBondNeighborAtomsB.get(y * 3 + 1);
+
+                if (McGregorChecks.cases(G1_atom, G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
+                    MARCS.set(x * neighborBondNumB + y, 0);
+                }
+
+            }
+        }
+
+        for (int v = 0; v < neighborBondNumA; v++) {
+            MARCS.set(v * neighborBondNumB + column, 0);
+        }
+
+        for (int w = 0; w < neighborBondNumB; w++) {
+            MARCS.set(row * neighborBondNumB + w, 0);
+        }
+
+        MARCS.set(row * neighborBondNumB + column, 1);
+    }
+
     /**
      *
      * @param bond_number
