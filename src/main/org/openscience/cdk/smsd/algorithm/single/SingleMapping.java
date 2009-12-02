@@ -23,6 +23,11 @@
 package org.openscience.cdk.smsd.algorithm.single;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,22 +61,18 @@ public class SingleMapping {
         this.source = source;
         this.target = target;
 
-        int minOrder = 9999;
-
         if (source.getAtomCount() == 1) {
-            minOrder = setSourceSingleAtomMap(removeHydrogen);
+            setSourceSingleAtomMap(removeHydrogen);
         }
         if (target.getAtomCount() == 1) {
-            minOrder = setTargetSingleAtomMap(removeHydrogen);
+            setTargetSingleAtomMap(removeHydrogen);
         }
-        postFilter(minOrder);
-
+        postFilter();
         _mappings.clear();
     }
 
-    private int setSourceSingleAtomMap(boolean removeHydrogen) {
+    private void setSourceSingleAtomMap(boolean removeHydrogen) {
         int counter = 0;
-        int minOrder = 9999;
         if ((removeHydrogen && !source.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < target.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
@@ -85,29 +86,20 @@ public class SingleMapping {
                     for (IBond bond : Bonds) {
 
                         Order bondOrder = bond.getOrder();
-                        totalOrder += bondOrder.ordinal();
-                    }
-
-                    if (totalOrder < minOrder) {
-                        minOrder = totalOrder;
+                        totalOrder += bondOrder.ordinal() + 1;
                     }
 
                     connectedBondOrder.put(counter, totalOrder);
                     _mappings.add(counter++, mapAtoms);
                 }
-
-                //System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
         } else {
             System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
         }
-
-        return minOrder;
     }
 
-    private int setTargetSingleAtomMap(boolean removeHydrogen) {
+    private void setTargetSingleAtomMap(boolean removeHydrogen) {
         int counter = 0;
-        int minOrder = 9999;
         if ((removeHydrogen && !target.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < source.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
@@ -122,41 +114,44 @@ public class SingleMapping {
                     for (IBond bond : Bonds) {
 
                         Order bondOrder = bond.getOrder();
-                        totalOrder += bondOrder.ordinal();
+                        totalOrder += bondOrder.ordinal() + 1;
                     }
-                    if (totalOrder < minOrder) {
-                        minOrder = totalOrder;
-                    }
-
                     connectedBondOrder.put(counter, totalOrder);
                     _mappings.add(counter++, mapAtoms);
                 }
-
-//                System.out.println("Hello in Single getOverlaps Mapping Size: " + mapAtoms.size());
             }
 
         } else {
             System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
         }
-        return minOrder;
     }
 
-    private void postFilter(int minOrder) {
+    private void postFilter() {
+        List<TreeMap<Integer, Integer>> SortedMap = new ArrayList<TreeMap<Integer, Integer>>();
+        connectedBondOrder = sortByValue(connectedBondOrder);
         for (Map.Entry<Integer, Integer> map : connectedBondOrder.entrySet()) {
-            if (map.getValue() > minOrder) {
-                removedMap(map.getKey());
-            }
+
+            TreeMap<Integer, Integer> mapToBeMoved = _mappings.get(map.getKey());
+            SortedMap.add(mapToBeMoved);
+
         }
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
-        final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>(_mappings));
+        final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>(SortedMap));
     }
 
-    private void removedMap(Integer Key) {
-        List<TreeMap<Integer, Integer>> nonRedundantMap = new ArrayList<TreeMap<Integer, Integer>>(_mappings);
-        for (TreeMap<Integer, Integer> map : nonRedundantMap) {
-            if (map.containsKey(Key)) {
-                _mappings.remove(map);
+    private <K, V> Map<K, V> sortByValue(Map<K, V> map) {
+        List list = new LinkedList(map.entrySet());
+        Collections.sort(list, new Comparator() {
+
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry<K, V>) (o1)).getValue()).compareTo(((Map.Entry<K, V>) (o2)).getValue());
             }
+        });
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry<K, V> entry = (Map.Entry<K, V>) it.next();
+            result.put(entry.getKey(), entry.getValue());
         }
+        return result;
     }
 }
