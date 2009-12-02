@@ -1,42 +1,42 @@
-/* Copyright (C) 2009 Syed Asad Rahman {asad@ebi.ac.uk}
- *
- * Contact: cdk-devel@lists.sourceforge.net
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- * All we ask is that proper credit is given for our work, which includes
- * - but is not limited to - adding the above copyright notice to the beginning
- * of your source code files, and to any copyright notice that you may distribute
- * with programs based on this work.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-package org.openscience.cdk.smsd.algorithm.mcgregor;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.smsd.global.BondType;
-import org.openscience.cdk.smsd.helper.BinaryTree;
-
-/**
- * @cdk.module smsd
- */
+///* Copyright (C) 2009 Syed Asad Rahman {asad@ebi.ac.uk}
+// *
+// * Contact: cdk-devel@lists.sourceforge.net
+// *
+// * This program is free software; you can redistribute it and/or
+// * modify it under the terms of the GNU Lesser General Public License
+// * as published by the Free Software Foundation; either version 2.1
+// * of the License, or (at your option) any later version.
+// * All we ask is that proper credit is given for our work, which includes
+// * - but is not limited to - adding the above copyright notice to the beginning
+// * of your source code files, and to any copyright notice that you may distribute
+// * with programs based on this work.
+// *
+// * This program is distributed in the hope that it will be useful,
+// * but WITHOUT ANY WARRANTY; without even the implied warranty of
+// * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// * GNU Lesser General Public License for more details.
+// *
+// * You should have received a copy of the GNU Lesser General Public License
+// * along with this program; if not, write to the Free Software
+// * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+// */
+//package org.openscience.cdk.smsd.algorithm.mcgregor;
+//
+//import java.io.IOException;
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.Stack;
+//import org.openscience.cdk.CDKConstants;
+//import org.openscience.cdk.interfaces.IAtom;
+//import org.openscience.cdk.interfaces.IAtomContainer;
+//import org.openscience.cdk.interfaces.IBond;
+//import org.openscience.cdk.smsd.global.BondType;
+//import org.openscience.cdk.smsd.helper.BinaryTree;
+//
+///**
+// * @cdk.module smsd
+// */
 //public class McGregor {
 //
 //    private IAtomContainer source = null;
@@ -93,19 +93,19 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //     */
 //    public void startMcGregorIteration(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
 //
-//        int neighborBondnumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
+//        int i_bond_neighbor_atoms_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
 //        int setBondNumA = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
 //        int neighborBondNumB = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
 //        int setBondNumB = 0; //number of remaining molecule B bonds after the clique search, which aren't neighbors
 //
 //        List<Integer> i_bond_neighborsA = new ArrayList<Integer>();
 //        List<Integer> i_bond_setA = new ArrayList<Integer>();
-//        List<String> c_bond_neighborsA = new ArrayList<String>();
+//        List<String> cBondNeighborsA = new ArrayList<String>();
 //        List<String> c_bond_setA = new ArrayList<String>();
 //
 //        List<Integer> i_bond_neighborsB = new ArrayList<Integer>();
 //        List<Integer> i_bond_setB = new ArrayList<Integer>();
-//        List<String> c_bond_neighborsB = new ArrayList<String>();
+//        List<String> cBondNeighborsB = new ArrayList<String>();
 //        List<String> c_bond_setB = new ArrayList<String>();
 //
 //        this.globalMCSSize = (best_Mapping_size / 2);
@@ -150,7 +150,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //        QueryProcessor queryProcess = new QueryProcessor
 //                (neighborBondNumB,
-//                c_bond_neighborsA,
+//                cBondNeighborsA,
 //                i_bond_neighborsA,
 //                c_bond_setA,
 //                i_bond_setA,
@@ -168,9 +168,9 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        i_bond_setA = queryProcess.getIBondSetA();
 //        c_bond_setA = queryProcess.getCBondSetA();
 //        setBondNumA = queryProcess.getBondNumA();
-//        neighborBondnumA = queryProcess.getNeighborBondNumA();
+//        i_bond_neighbor_atoms_A = queryProcess.getNeighborBondNumA();
 //        i_bond_neighborsA = queryProcess.getIBondNeighboursA();
-//        c_bond_neighborsA = queryProcess.getCBondNeighborsA();
+//        cBondNeighborsA = queryProcess.getCBondNeighborsA();
 //
 //        //find unmapped atoms of molecule B
 //        List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
@@ -201,14 +201,14 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //
 //        TargetProcessor targetProcess = new TargetProcessor(
-//                c_bond_neighborsB,
+//                cBondNeighborsB,
 //                i_bond_setB,
 //                c_bond_setB,
 //                neighborBondNumB,
 //                setBondNumB,
-//                neighborBondnumA,
+//                i_bond_neighbor_atoms_A,
 //                i_bond_neighborsA,
-//                c_bond_neighborsA);
+//                cBondNeighborsA);
 //
 //        targetProcess.process(target, unmapped_atoms_molB,
 //                mapping_size,
@@ -221,13 +221,13 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //        setBondNumB = targetProcess.getBondNumB();
 //        neighborBondNumB = targetProcess.getNeighborBondNumB();
-//        c_bond_neighborsB = targetProcess.getCBondNeighborsB();
+//        cBondNeighborsB = targetProcess.getCBondNeighborsB();
 //        i_bond_setB = targetProcess.getIBondSetB();
 //        c_bond_setB = targetProcess.getCBondSetB();
 //
 //        boolean dummy = false;
 //
-//        iterator(dummy, present_Mapping.size(), mapped_atoms, neighborBondnumA, neighborBondNumB, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, setBondNumA, setBondNumB, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
+//        iterator(dummy, present_Mapping.size(), mapped_atoms, i_bond_neighbor_atoms_A, neighborBondNumB, i_bond_neighborsA, i_bond_neighborsB, cBondNeighborsA, cBondNeighborsB, setBondNumA, setBondNumB, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 //
 //    }
 //
@@ -241,19 +241,19 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //    public void startMcGregorIteration(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
 //
 //
-//        int neighborBondnumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
+//        int i_bond_neighbor_atoms_A = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
 //        int setBondNumA = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
 //        int neighborBondNumB = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
 //        int setBondNumB = 0; //number of remaining molecule B bonds after the clique search, which aren't neighbors
 //
 //        List<Integer> i_bond_neighborsA = new ArrayList<Integer>();
 //        List<Integer> i_bond_setA = new ArrayList<Integer>();
-//        List<String> c_bond_neighborsA = new ArrayList<String>();
+//        List<String> cBondNeighborsA = new ArrayList<String>();
 //        List<String> c_bond_setA = new ArrayList<String>();
 //
 //        List<Integer> i_bond_neighborsB = new ArrayList<Integer>();
 //        List<Integer> i_bond_setB = new ArrayList<Integer>();
-//        List<String> c_bond_neighborsB = new ArrayList<String>();
+//        List<String> cBondNeighborsB = new ArrayList<String>();
 //        List<String> c_bond_setB = new ArrayList<String>();
 //
 //        this.globalMCSSize = (best_Mapping_size / 2);
@@ -320,7 +320,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //       QueryProcessor queryProcess = new QueryProcessor
 //                (neighborBondNumB,
-//                c_bond_neighborsA,
+//                cBondNeighborsA,
 //                i_bond_neighborsA,
 //                c_bond_setA,
 //                i_bond_setA,
@@ -338,15 +338,15 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        i_bond_setA = queryProcess.getIBondSetA();
 //        c_bond_setA = queryProcess.getCBondSetA();
 //        setBondNumA = queryProcess.getBondNumA();
-//        neighborBondnumA = queryProcess.getNeighborBondNumA();
+//        i_bond_neighbor_atoms_A = queryProcess.getNeighborBondNumA();
 //        i_bond_neighborsA = queryProcess.getIBondNeighboursA();
-//        c_bond_neighborsA = queryProcess.getCBondNeighborsA();
+//        cBondNeighborsA = queryProcess.getCBondNeighborsA();
 //        //find unmapped atoms of molecule B
 //        List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
 //        int unmapped_numB = 0;
 //        boolean atomB_is_unmapped = true;
 //
-////        System.out.println("neighborBondnumA After:" + neighborBondnumA);
+////        System.out.println("i_bond_neighbor_atoms_A After:" + i_bond_neighbor_atoms_A);
 //
 //        for (int a = 0; a < target.getAtomCount(); a++) {
 //            for (int b = 0; b < clique_siz; b++) {
@@ -370,14 +370,14 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //
 //        TargetProcessor targetProcess = new TargetProcessor(
-//                c_bond_neighborsB,
+//                cBondNeighborsB,
 //                i_bond_setB,
 //                c_bond_setB,
 //                neighborBondNumB,
 //                setBondNumB,
-//                neighborBondnumA,
+//                i_bond_neighbor_atoms_A,
 //                i_bond_neighborsA,
-//                c_bond_neighborsA);
+//                cBondNeighborsA);
 //
 //
 //        targetProcess.process(target,
@@ -392,20 +392,20 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //
 //        setBondNumB = targetProcess.getBondNumB();
 //        neighborBondNumB = targetProcess.getNeighborBondNumB();
-//        c_bond_neighborsB = targetProcess.getCBondNeighborsB();
+//        cBondNeighborsB = targetProcess.getCBondNeighborsB();
 //        i_bond_setB = targetProcess.getIBondSetB();
 //        c_bond_setB = targetProcess.getCBondSetB();
 //
 //        boolean dummy = false;
 //
-//        iterator(dummy, mapped_atom_number, mapped_atoms, neighborBondnumA, neighborBondNumB, i_bond_neighborsA, i_bond_neighborsB, c_bond_neighborsA, c_bond_neighborsB, setBondNumA, setBondNumB, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
+//        iterator(dummy, mapped_atom_number, mapped_atoms, i_bond_neighbor_atoms_A, neighborBondNumB, i_bond_neighborsA, i_bond_neighborsB, cBondNeighborsA, cBondNeighborsB, setBondNumA, setBondNumB, i_bond_setA, i_bond_setB, c_bond_setA, c_bond_setB);
 //
 //    }
 //
 //    private int iterator(boolean mappingCheckFlag,
 //            int mappedAtomCount,
 //            List<Integer> mapped_atoms,
-//            int neighborBondNumA,
+//            int i_bond_neighbor_atoms_A,
 //            int neighborBondNumB,
 //            List<Integer> iBondNeighborAtomsA,
 //            List<Integer> iBondNeighborAtomsB,
@@ -420,14 +420,14 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        boolean moreMappingPossible = McGregorChecks.isFurtherMappingPossible(
 //                source,
 //                target,
-//                neighborBondNumA,
+//                i_bond_neighbor_atoms_A,
 //                neighborBondNumB,
 //                iBondNeighborAtomsA,
 //                iBondNeighborAtomsB,
 //                cBondNeighborsA,
 //                cBondNeighborsB);
 //
-//        if (neighborBondNumA == 0 || neighborBondNumB == 0 || mappingCheckFlag || !moreMappingPossible) {
+//        if (i_bond_neighbor_atoms_A == 0 || neighborBondNumB == 0 || mappingCheckFlag || !moreMappingPossible) {
 //            try {
 //                if (mappedAtomCount >= globalMCSSize) {
 ////                    System.out.println("Hello-1");
@@ -446,7 +446,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //            return 0;
 //        }
 //        List<Integer> modifiedARCS = new ArrayList<Integer>();
-//        int size = neighborBondNumA * neighborBondNumB;
+//        int size = i_bond_neighbor_atoms_A * neighborBondNumB;
 //        for (int i = 0; i < size; i++) {
 //            modifiedARCS.add(i, 0);
 //        }
@@ -454,7 +454,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        modifiedARCS = McGregorChecks.setArcs(
 //                source,
 //                target,
-//                neighborBondNumA,
+//                i_bond_neighbor_atoms_A,
 //                neighborBondNumB,
 //                iBondNeighborAtomsA,
 //                iBondNeighborAtomsB,
@@ -467,7 +467,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        last.not_equal = null;
 //        bestarcsleft = 0;
 //
-//        startsearch(neighborBondNumA, neighborBondNumB, iBondNeighborAtomsA, iBondNeighborAtomsB, modifiedARCS);
+//        startsearch(i_bond_neighbor_atoms_A, neighborBondNumB, iBondNeighborAtomsA, iBondNeighborAtomsB, modifiedARCS);
 //        Stack<List<Integer>> BESTARCS_copy = new Stack<List<Integer>>();
 //
 //        BESTARCS_copy.addAll(bestARCS);
@@ -477,7 +477,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        while (!BESTARCS_copy.empty()) {
 //
 //            List<Integer> MARCS_vector = new ArrayList<Integer>(BESTARCS_copy.peek());
-//            List<Integer> localMAPPING = findMcGregorMapping(MARCS_vector, mappedAtomCount, mapped_atoms, neighborBondNumA, iBondNeighborAtomsA, neighborBondNumB, iBondNeighborAtomsB);
+//            List<Integer> localMAPPING = findMcGregorMapping(MARCS_vector, mappedAtomCount, mapped_atoms, i_bond_neighbor_atoms_A, iBondNeighborAtomsA, neighborBondNumB, iBondNeighborAtomsB);
 //
 //            int localMappingSize = localMAPPING.size() / 2;
 //            boolean no_further_MAPPINGS = false;
@@ -486,7 +486,7 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //            }
 //
 //
-//            int newNeighborNumA = 0; //instead of neighborBondnumA
+//            int newNeighborNumA = 0; //instead of i_bond_neighbor_atoms_A
 //            int newNeighborNumB = 0; //instead of neighborBondNumB
 //
 //            List<Integer> localIBondNeighborsA = new ArrayList<Integer>(); //instead of iBondNeighborAtomsA
@@ -955,8 +955,6 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
 //        return this.globalMCSSize;
 //    }
 //}
-
-
 /* Copyright (C) 2005-2006 Markus Leber
  *               2006-2009 Syed Asad Rahman {asad@ebi.ac.uk}
  *
@@ -980,6 +978,18 @@ import org.openscience.cdk.smsd.helper.BinaryTree;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+package org.openscience.cdk.smsd.algorithm.mcgregor;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.smsd.global.BondType;
+import org.openscience.cdk.smsd.helper.BinaryTree;
 
 /**
  * @cdk.module smsd
@@ -996,10 +1006,6 @@ public class McGregor {
     private List<Integer> i_globalB = null;
     private List<String> c_globalA = null;
     private List<String> c_globalB = null;
-    private List<String> c_tab1_copy = null;
-    private List<String> c_tab2_copy = null;
-    private List<Integer> i_bond_neighborsA = null;
-    private List<String> c_bond_neighborsA = null;
     private int nNumGlobalA = 0;
     private int nNumGlobalB = 0;
     private int bestarcsleft = 0;
@@ -1050,9 +1056,6 @@ public class McGregor {
         c_globalA = new ArrayList<String>();
         c_globalB = new ArrayList<String>();
 
-        c_tab1_copy = new ArrayList<String>();
-        c_tab2_copy = new ArrayList<String>();
-
         newMatrix = false;
     }
 
@@ -1065,12 +1068,9 @@ public class McGregor {
     public void startMcGregorIteration(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
 
         this.globalMCSSize = (best_Mapping_size / 2);
-        c_tab1_copy.clear();
-        generateCTab1Copy();
+        List<String> c_tab1_copy = McGregorChecks.generateCTabCopy(source);
 
-
-        c_tab2_copy.clear();
-        generateCTab2Copy();
+        List<String> c_tab2_copy = McGregorChecks.generateCTabCopy(target);
 
 
         //find mapped atoms of both molecules and store these in mapped_atoms
@@ -1084,9 +1084,10 @@ public class McGregor {
         int mapping_size = present_Mapping.size();
 
 
-        i_bond_neighborsA = new ArrayList<Integer>();
+        List<Integer> i_bond_neighborsA = new ArrayList<Integer>();
+        List<String> c_bond_neighborsA = new ArrayList<String>();
+
         List<Integer> i_bond_setA = new ArrayList<Integer>();
-        c_bond_neighborsA = new ArrayList<String>();
         List<String> c_bond_setA = new ArrayList<String>();
 
         List<Integer> i_bond_neighborsB = new ArrayList<Integer>();
@@ -1127,12 +1128,12 @@ public class McGregor {
                 c_bond_neighborsA, c_bond_setA,
                 mapped_atoms, counter);
 
-        this.c_tab1_copy = queryProcess.getCTab1();
-        this.c_tab2_copy = queryProcess.getCTab2();
+        c_tab1_copy = queryProcess.getCTab1();
+        c_tab2_copy = queryProcess.getCTab2();
         this.setBondNumA = queryProcess.getBondNumA();
         this.neighborBondnumA = queryProcess.getNeighborBondNumA();
-        this.i_bond_neighborsA = queryProcess.getIBondNeighboursA();
-        this.c_bond_neighborsA = queryProcess.getCBondNeighborsA();
+        i_bond_neighborsA = queryProcess.getIBondNeighboursA();
+        c_bond_neighborsA = queryProcess.getCBondNeighborsA();
 
         //find unmapped atoms of molecule B
         List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
@@ -1174,8 +1175,8 @@ public class McGregor {
                 mapped_atoms,
                 counter);
 
-        this.c_tab1_copy = targetProcess.getCTab1();
-        this.c_tab2_copy = targetProcess.getCTab2();
+        c_tab1_copy = targetProcess.getCTab1();
+        c_tab2_copy = targetProcess.getCTab2();
         this.setBondNumB = targetProcess.getBondNumB();
         this.neighborBondNumB = targetProcess.getNeighborBondNumB();
 
@@ -1195,24 +1196,20 @@ public class McGregor {
     public void startMcGregorIteration(int best_Mapping_size, List<Integer> clique_vector, List<Integer> comp_graph_nodes) throws IOException {
         this.globalMCSSize = (best_Mapping_size / 2);
         int SR_count = 0;
+        List<String> c_tab1_copy = McGregorChecks.generateCTabCopy(source);
 
-
-        c_tab1_copy.clear();
-        generateCTab1Copy();
-
-
-        c_tab2_copy.clear();
-        generateCTab2Copy();
+        List<String> c_tab2_copy = McGregorChecks.generateCTabCopy(target);
 
         //find mapped atoms of both molecules and store these in mapped_atoms
         List<Integer> mapped_atoms = new ArrayList<Integer>();
 
         int mapped_atom_number = 0;
-//
 
-        i_bond_neighborsA = new ArrayList<Integer>();
+
+        List<Integer> i_bond_neighborsA = new ArrayList<Integer>();
+        List<String> c_bond_neighborsA = new ArrayList<String>();
+
         List<Integer> i_bond_setA = new ArrayList<Integer>();
-        c_bond_neighborsA = new ArrayList<String>();
         List<String> c_bond_setA = new ArrayList<String>();
 
         List<Integer> i_bond_neighborsB = new ArrayList<Integer>();
@@ -1278,12 +1275,12 @@ public class McGregor {
                 c_bond_neighborsA, c_bond_setA,
                 mapped_atoms, SR_count);
 
-        this.c_tab1_copy = queryProcess.getCTab1();
-        this.c_tab2_copy = queryProcess.getCTab2();
+        c_tab1_copy = queryProcess.getCTab1();
+        c_tab2_copy = queryProcess.getCTab2();
         this.setBondNumA = queryProcess.getBondNumA();
         this.neighborBondnumA = queryProcess.getNeighborBondNumA();
-        this.i_bond_neighborsA = queryProcess.getIBondNeighboursA();
-        this.c_bond_neighborsA = queryProcess.getCBondNeighborsA();
+        i_bond_neighborsA = queryProcess.getIBondNeighboursA();
+        c_bond_neighborsA = queryProcess.getCBondNeighborsA();
 
         //find unmapped atoms of molecule B
         List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
@@ -1325,8 +1322,8 @@ public class McGregor {
                 mapped_atoms,
                 SR_count);
 
-        this.c_tab1_copy = targetProcess.getCTab1();
-        this.c_tab2_copy = targetProcess.getCTab2();
+        c_tab1_copy = targetProcess.getCTab1();
+        c_tab2_copy = targetProcess.getCTab2();
         this.setBondNumB = targetProcess.getBondNumB();
         this.neighborBondNumB = targetProcess.getNeighborBondNumB();
 
@@ -1339,8 +1336,8 @@ public class McGregor {
     private int iterator(boolean mappingCheckFlag,
             int mapped_atom_num,
             List<Integer> mapped_atoms_org,
-            int neighbor_bondnum_A,
-            int neighbor_bondnum_B,
+            int neighborBondNumA,
+            int neighborBondNumB,
             List<Integer> i_bond_neighbor_atoms_A,
             List<Integer> i_bond_neighbor_atoms_B,
             List<String> c_bond_neighborsA,
@@ -1353,50 +1350,9 @@ public class McGregor {
 
         List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
 
-        //check possible mappings:
-        boolean no_further_mapping_possible = true;
-
-        for (int row = 0; row < neighbor_bondnum_A; row++) {
-
-            for (int column = 0; column < neighbor_bondnum_B; column++) {
-                String G1A = c_bond_neighborsA.get(row * 4 + 0);
-                String G2A = c_bond_neighborsA.get(row * 4 + 1);
-                String G1B = c_bond_neighborsB.get(column * 4 + 0);
-                String G2B = c_bond_neighborsB.get(column * 4 + 1);
-
-                //Get the atom index from the i_bond neighbor vactor
-
-                int Index_I = i_bond_neighbor_atoms_A.get(row * 3 + 0);
-                int Index_IPlus1 = i_bond_neighbor_atoms_A.get(row * 3 + 1);
-
-                //Get the atoms
-                IAtom R1_A = source.getAtom(Index_I);
-                IAtom R2_A = source.getAtom(Index_IPlus1);
-                IBond ReactantBond = source.getBond(R1_A, R2_A);
-
-                //Get the atom index from the i_bond neighbor vactor
-                int Index_J = i_bond_neighbor_atoms_B.get(column * 3 + 0);
-                int Index_JPlus1 = i_bond_neighbor_atoms_B.get(column * 3 + 1);
-
-                //Get the atoms
-                IAtom P1_B = target.getAtom(Index_J);
-                IAtom P2_B = target.getAtom(Index_JPlus1);
-                IBond ProductBond = target.getBond(P1_B, P2_B);
-
-
-                if (bondTypeFlag && bondMatch(ReactantBond, ProductBond)) {
-                    if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0) || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
-
-                        no_further_mapping_possible = false;
-                    }
-//
-                } else if ((!bondTypeFlag) &&
-                        (((G1A.compareToIgnoreCase(G1B) == 0) && (G2A.compareToIgnoreCase(G2B) == 0)) || ((G1A.compareToIgnoreCase(G2B) == 0) && (G2A.compareToIgnoreCase(G1B) == 0)))) {
-                    no_further_mapping_possible = false;
-                }
-            }
-        }
-        if (neighbor_bondnum_A == 0 || neighbor_bondnum_B == 0 || mappingCheckFlag || no_further_mapping_possible) {
+//        //check possible mappings:
+        boolean furtherMappingFlag = McGregorChecks.isFurtherMappingPossible(source, target, neighborBondNumA, neighborBondNumB, i_bond_neighbor_atoms_A, i_bond_neighbor_atoms_B, c_bond_neighborsA, c_bond_neighborsB);
+        if (neighborBondNumA == 0 || neighborBondNumB == 0 || mappingCheckFlag || !furtherMappingFlag) {
             try {
                 if (mapped_atom_num >= globalMCSSize) {
 //                    System.out.println("Hello-1");
@@ -1420,8 +1376,8 @@ public class McGregor {
         c_globalA.clear();
         c_globalB.clear();
         //redefining of global vectors and variables
-        nNumGlobalA = neighbor_bondnum_A; //N global variable defined
-        nNumGlobalB = neighbor_bondnum_B; //N global variable defined
+        nNumGlobalA = neighborBondNumA; //N global variable defined
+        nNumGlobalB = neighborBondNumB; //N global variable defined
 
         i_globalA.addAll(i_bond_neighbor_atoms_A);
         i_globalB.addAll(i_bond_neighbor_atoms_B);
@@ -1429,13 +1385,13 @@ public class McGregor {
         c_globalB.addAll(c_bond_neighborsB);
 
         modifiedARCS.clear();
-        int size = neighbor_bondnum_A * neighbor_bondnum_B;
+        int size = neighborBondNumA * neighborBondNumB;
 //        modifiedARCS.setSize(size);
         for (int i = 0; i < size; i++) {
             modifiedARCS.add(i, 0);
         }
-        for (int row = 0; row < neighbor_bondnum_A; row++) {
-            for (int column = 0; column < neighbor_bondnum_B; column++) {
+        for (int row = 0; row < neighborBondNumA; row++) {
+            for (int column = 0; column < neighborBondNumB; column++) {
 
                 String G1A = c_bond_neighborsA.get(row * 4 + 0);
                 String G2A = c_bond_neighborsA.get(row * 4 + 1);
@@ -1459,10 +1415,8 @@ public class McGregor {
                     IAtom P1_B = target.getAtom(Index_J);
                     IAtom P2_B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
-                    if (bondTypeFlag && bondMatch(ReactantBond, ProductBond)) {
-                        modifiedARCS.set(row * neighbor_bondnum_B + column, 1);
-                    } else if (!bondTypeFlag) {
-                        modifiedARCS.set(row * neighbor_bondnum_B + column, 1);
+                    if ((bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
+                        modifiedARCS.set(row * neighborBondNumB + column, 1);
                     }
                 }
 
@@ -1484,7 +1438,7 @@ public class McGregor {
         while (!BESTARCS_copy.empty()) {
 
             List<Integer> MARCS_vector = new ArrayList<Integer>(BESTARCS_copy.peek());
-            List<Integer> new_MAPPING = findMcGregorMapping(MARCS_vector, mapped_atom_num, mapped_atoms, neighbor_bondnum_A, i_bond_neighbor_atoms_A, neighbor_bondnum_B, i_bond_neighbor_atoms_B);
+            List<Integer> new_MAPPING = findMcGregorMapping(MARCS_vector, mapped_atom_num, mapped_atoms, neighborBondNumA, i_bond_neighbor_atoms_A, neighborBondNumB, i_bond_neighbor_atoms_B);
 
             int new_MAPPING_size = new_MAPPING.size() / 2;
             boolean no_further_MAPPINGS = false;
@@ -1786,42 +1740,13 @@ public class McGregor {
             iterator(no_further_MAPPINGS, new_MAPPING_size, new_MAPPING, new_neighbor_numA, new_neighbor_numB, new_i_neighborsA, new_i_neighborsB, new_c_neighborsA, new_c_neighborsB,
                     setBondNumA, setBondNumB, new_i_bond_setA, new_i_bond_setB, new_c_bond_setA, new_c_bond_setB);
             BESTARCS_copy.pop();
-//            System.out.println("Schleife beendet in iterator!!!!");
+//            System.out.println("End of the iterator!!!!");
         }
         //}
         //System.out.println("In the iterator Termination");
         //System.out.println("============+++++++++==============");
         //System.out.println("Mapped Atoms before iterator Over: " + mapped_atoms);
         return 0;
-    }
-
-    private int generateCTab1Copy() throws IOException {
-        IAtomContainer reactant = source;
-        for (int a = 0; a < reactant.getBondCount(); a++) {
-            String AtomI = reactant.getBond(a).getAtom(0).getSymbol();
-            String AtomJ = reactant.getBond(a).getAtom(1).getSymbol();
-            c_tab1_copy.add(AtomI);
-            c_tab1_copy.add(AtomJ);
-            c_tab1_copy.add("X");
-            c_tab1_copy.add("X");
-        }
-
-        return 0;
-    }
-
-    private int generateCTab2Copy() throws IOException {
-        IAtomContainer product = target;
-        for (int a = 0; a < product.getBondCount(); a++) {
-            String AtomI = product.getBond(a).getAtom(0).getSymbol();
-            String AtomJ = product.getBond(a).getAtom(1).getSymbol();
-            c_tab2_copy.add(AtomI);
-            c_tab2_copy.add(AtomJ);
-            c_tab2_copy.add("X");
-            c_tab2_copy.add("X");
-        }
-
-        return 0;
-
     }
 
     private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
@@ -1840,29 +1765,6 @@ public class McGregor {
         }
 
         return 0;
-    }
-
-    /**
-     *
-     * @param ReactantBond
-     * @param ProductBond
-     * @return
-     */
-    public boolean bondMatch(IBond ReactantBond, IBond ProductBond) {
-        boolean Flag = false;
-        int ReactantBondType = ReactantBond.getOrder().ordinal();
-        int ProductBondType = ProductBond.getOrder().ordinal();
-        if (bondTypeFlag) {
-            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType == ProductBondType)) {
-                Flag = true;
-            }
-
-            if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
-                Flag = true;
-            }
-
-        }
-        return Flag;
     }
 
     private List<Integer> findMcGregorMapping(List<Integer> MARCS, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
@@ -1896,7 +1798,7 @@ public class McGregor {
 
 //                  Bond Order Check Introduced by Asad
 
-                    boolean bMatch = bondMatch(ReactantBond, ProductBond);
+                    boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
 
                     if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
 
@@ -1940,38 +1842,9 @@ public class McGregor {
         }
 //        remove recurring mappings from currentMapping
 
-        List<Integer> unique_MAPPING = removeRecurringMappings(currentMapping);
+        List<Integer> unique_MAPPING = McGregorChecks.removeRecurringMappings(currentMapping);
 
         return unique_MAPPING;
-    }
-
-//Function compaires a structure array with itself. Sometimes a mapping occurs several times within the array.
-//The function eliminates these recurring mappings. Function is called in function best_solution.
-//The function is called by itself as long as the last list element is processed.
-    private List<Integer> removeRecurringMappings(List<Integer> atom_mapping) {
-
-
-        boolean exist = true;
-        List<Integer> temp_map = new ArrayList<Integer>();
-        int temp_counter = 0;
-        int atom_mapping_size = atom_mapping.size();
-        for (int x = 0; x < atom_mapping_size; x = x + 2) {
-            int atom = atom_mapping.get(x);
-            for (int y = x + 2; y < atom_mapping_size; y = y + 2) {
-                if (atom == atom_mapping.get(y)) {
-                    exist = false;
-                }
-            }
-            if (exist == true) {
-                temp_map.add(atom_mapping.get(x + 0));
-                temp_map.add(atom_mapping.get(x + 1));
-                temp_counter = temp_counter + 2;
-            }
-
-            exist = true;
-        }
-
-        return temp_map;
     }
 
     private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG) {
@@ -2012,7 +1885,7 @@ public class McGregor {
 
                 } else {
                     if (arcsleft > bestarcsleft) {
-                        removeTreeStructure(first);
+                        McGregorChecks.removeTreeStructure(first);
                         first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
@@ -2057,7 +1930,7 @@ public class McGregor {
                 }
                 if (arcsleft >= bestarcsleft) {
                     if (arcsleft > bestarcsleft) {
-                        removeTreeStructure(first);
+                        McGregorChecks.removeTreeStructure(first);
                         first = last = new BinaryTree(-1);
                         last.equal = null;
                         last.not_equal = null;
@@ -2096,7 +1969,7 @@ public class McGregor {
                 int column_atom3 = i_globalB.get(y * 3 + 0);
                 int column_atom4 = i_globalB.get(y * 3 + 1);
 
-                if (cases(G1_atom, G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
+                if (McGregorChecks.cases(G1_atom, G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
                     MARCS.set(x * nNumGlobalB + y, 0);
                 }
 
@@ -2112,67 +1985,6 @@ public class McGregor {
         }
 
         MARCS.set(row * nNumGlobalB + column, 1);
-    }
-
-    private boolean case1(int G1_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G1_atom == row_atom1) || (G1_atom == row_atom2)) &&
-                (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean case2(int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G2_atom == row_atom1) ||
-                (G2_atom == row_atom2)) &&
-                (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean case3(int G1_atom, int G3_atom, int G2_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G3_atom == column_atom3) || (G3_atom == column_atom4)) &&
-                (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean case4(int G1_atom, int G2_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G4_atom == column_atom3) || (G4_atom == column_atom4)) &&
-                (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean cases(int G1_atom, int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (case1(G1_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case2(G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case3(G1_atom, G3_atom, G2_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case4(G1_atom, G2_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
-            return true;
-        }
-        return false;
-    }
-
-    /*
-     * Modified function call by ASAD in Java have to check
-     *
-     */
-    private int removeTreeStructure(BinaryTree cur_struc) {
-
-        BinaryTree equal_struc = cur_struc.equal;
-        BinaryTree not_equal_struc = cur_struc.not_equal;
-        cur_struc = null;
-
-        if (equal_struc != null) {
-            removeTreeStructure(equal_struc);
-        }
-
-        if (not_equal_struc != null) {
-            removeTreeStructure(not_equal_struc);
-        }
-
-        return 0;
     }
 
 //The function is called in function partsearch. The function is given z temporary matrix.
