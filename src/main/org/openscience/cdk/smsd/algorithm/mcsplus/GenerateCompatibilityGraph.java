@@ -27,9 +27,11 @@ package org.openscience.cdk.smsd.algorithm.mcsplus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.helper.LabelContainer;
 
 /**
@@ -45,6 +47,7 @@ public class GenerateCompatibilityGraph {
     private int dEdgesSize = 0;
     private IAtomContainer source = null;
     private IAtomContainer target = null;
+    private static boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
      * 
@@ -56,8 +59,12 @@ public class GenerateCompatibilityGraph {
         this.source = source;
         this.target = target;
 
-        compatibilityGraphNodes();
-        compatibilityGraph();
+//        compatibilityGraphNodes();
+//        compatibilityGraph();
+//
+
+        compatibilityGraphNodesIfCEdgeIsZero();
+        compatibilityGraphCEdgeZero();
 
 
         if (getCEdgesSize() == 0) {
@@ -213,13 +220,8 @@ public class GenerateCompatibilityGraph {
 
                     ReactantBond = source.getBond(source.getAtom(index_a), source.getAtom(index_b));
                     ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
-
                     if (ReactantBond != null && ProductBond != null) {
-                        cEdges.add((a / 3) + 1);
-                        cEdges.add((b / 3) + 1);
-                    } else if (ReactantBond == null && ProductBond == null) {
-                        dEdges.add((a / 3) + 1);
-                        dEdges.add((b / 3) + 1);
+                        addEdges(ReactantBond, ProductBond, a, b);
                     }
                 }
                 cEdgesSize = cEdges.size();
@@ -227,6 +229,16 @@ public class GenerateCompatibilityGraph {
             }
         }
         return 0;
+    }
+
+    private void addEdges(IBond ReactantBond, IBond ProductBond, int a, int b) {
+        if ((bondTypeFlag && bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
+            cEdges.add((a / 3) + 1);
+            cEdges.add((b / 3) + 1);
+        } else if (ReactantBond == null && ProductBond == null) {
+            dEdges.add((a / 3) + 1);
+            dEdges.add((b / 3) + 1);
+        }
     }
 
     /**
@@ -298,12 +310,9 @@ public class GenerateCompatibilityGraph {
                     ProductBond = target.getBond(target.getAtom(index_aPlus1), target.getAtom(index_bPlus1));
 
                     if (ReactantBond != null && ProductBond != null) {
-                        cEdges.add((a / 4) + 1);
-                        cEdges.add((b / 4) + 1);
-                    } else {
-                        dEdges.add((a / 4) + 1);
-                        dEdges.add((b / 4) + 1);
+                        addCZeroEdges(ReactantBond, ProductBond, a, b);
                     }
+
                 }
             }
         }
@@ -314,6 +323,39 @@ public class GenerateCompatibilityGraph {
 
 
         return 0;
+    }
+
+    private void addCZeroEdges(IBond ReactantBond, IBond ProductBond, int a, int b) {
+        if ((bondTypeFlag && bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
+            cEdges.add((a / 4) + 1);
+            cEdges.add((b / 4) + 1);
+        } else {
+            dEdges.add((a / 4) + 1);
+            dEdges.add((b / 4) + 1);
+        }
+    }
+
+    /**
+     *
+     * @param ReactantBond
+     * @param ProductBond
+     * @return
+     */
+    private boolean bondMatch(IBond ReactantBond, IBond ProductBond) {
+        boolean Flag = false;
+        int ReactantBondType = ReactantBond.getOrder().ordinal();
+        int ProductBondType = ProductBond.getOrder().ordinal();
+
+        if (bondTypeFlag) {
+            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType == ProductBondType)) {
+                Flag = true;
+            }
+
+            if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
+                Flag = true;
+            }
+        }
+        return Flag;
     }
 
     protected List<Integer> getCEgdes() {
