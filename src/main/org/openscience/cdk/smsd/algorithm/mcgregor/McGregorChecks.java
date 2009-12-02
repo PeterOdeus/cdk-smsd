@@ -190,8 +190,8 @@ public class McGregorChecks {
     }
 
     //Function compaires a structure array with itself. Sometimes a mapping occurs several times within the array.
-//The function eliminates these recurring mappings. Function is called in function best_solution.
-//The function is called by itself as long as the last list element is processed.
+    //The function eliminates these recurring mappings. Function is called in function best_solution.
+    //The function is called by itself as long as the last list element is processed.
     /**
      *
      * @param atom_mapping
