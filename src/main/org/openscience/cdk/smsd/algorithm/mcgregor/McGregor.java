@@ -416,16 +416,6 @@ public class McGregor {
             return 0;
         }
 
-//        i_globalA.clear();
-//        i_globalB.clear();
-//        c_globalA.clear();
-//        c_globalB.clear();
-//
-//        i_globalA.addAll(iBondNeighborAtomsA);
-//        i_globalB.addAll(iBondNeighborAtomsB);
-//        c_globalA.addAll(cBondNeighborsA);
-//        c_globalB.addAll(cBondNeighborsB);
-
         i_globalA = new ArrayList<Integer>(iBondNeighborAtomsA);
         i_globalB = new ArrayList<Integer>(iBondNeighborAtomsB);
         c_globalA = new ArrayList<String>(cBondNeighborsA);
@@ -498,16 +488,6 @@ public class McGregor {
 
             int new_neighbor_numA = 0; //instead of neighborBondnumA
             int new_neighbor_numB = 0; //instead of neighborBondNumB
-
-//            iBondNeighborAtomsA.clear();
-//            iBondNeighborAtomsB.clear();
-//            cBondNeighborsA.clear();
-//            cBondNeighborsB.clear();
-
-//            i_bond_setA.clear();
-//            i_bond_setB.clear();
-//            c_bond_setA.clear();
-//            c_bond_setB.clear();
 
             List<Integer> new_i_neighborsA = new ArrayList<Integer>(); //instead of iBondNeighborAtomsA
             List<Integer> new_i_neighborsB = new ArrayList<Integer>(); //instead of iBondNeighborAtomsB
