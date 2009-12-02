@@ -808,11 +808,9 @@ public class McGregor {
         return 0;
     }
 
-    private List<Integer> findMcGregorMapping(List<Integer> MARCS, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A_org, int bondnum_B, List<Integer> i_bonds_B_org) {
+    private List<Integer> findMcGregorMapping(List<Integer> MARCS, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A, int bondnum_B, List<Integer> i_bonds_B) {
 
         List<Integer> currentMapping = new ArrayList<Integer>(current_MAPPING_org);
-        List<Integer> i_bonds_A = new ArrayList<Integer>(i_bonds_A_org);
-        List<Integer> i_bonds_B = new ArrayList<Integer>(i_bonds_B_org);
         List<Integer> additional_mapping = new ArrayList<Integer>();
 
 
