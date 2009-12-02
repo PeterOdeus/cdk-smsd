@@ -38,6 +38,9 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainerCreator;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.smsd.factory.SubGraphFactory;
 import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
 import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
@@ -62,6 +65,35 @@ public class SMSDTest extends CDKTestCase {
         Benzene = createBenzene();
     }
 
+    @Test
+    public void testSingleMappingTesting() throws Exception {
+
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        IAtomContainer atomContainer = sp.parseSmiles("N");
+        QueryAtomContainer query = QueryAtomContainerCreator.createBasicQueryContainer(atomContainer);
+        String file2 = "data/mdl/het5.mol";
+        Molecule mol2 = new Molecule();
+        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
+        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
+        IAtomContainer target = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol2);
+        CDKHueckelAromaticityDetector.detectAromaticity(target);
+
+        boolean bondSensitive = false;
+        boolean removeHydrogen = true;
+        boolean stereoMatch = true;
+        boolean fragmentMinimization = true;
+        boolean energyMinimization = true;
+
+        SMSD comparison = new SMSD(Algorithm.DEFAULT, bondSensitive);
+        comparison.init(query, target, removeHydrogen);
+        comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
+
+        Assert.assertEquals(true, comparison.isSubgraph());
+        Assert.assertEquals(3, comparison.getAllMapping().size());
+
+
+    }
 
     @Test
     public void testSMSDFragSubgraph() throws Exception {
@@ -107,7 +139,7 @@ public class SMSDTest extends CDKTestCase {
 
     }
 
-     @Test
+    @Test
     public void testSMSDSubgraph() throws Exception {
 
         String file1 = "data/mdl/ADP.mol";
@@ -245,7 +277,6 @@ public class SMSDTest extends CDKTestCase {
         ebimcs.setChemFilters(true, true, true);
         Assert.assertEquals(Cyclohexane.getAtomCount(), ebimcs.getFirstMapping().size());
     }
-
 
     private IMolecule create4Toluene() throws CDKException {
         IMolecule result = DefaultChemObjectBuilder.getInstance().newMolecule();
