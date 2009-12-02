@@ -1471,11 +1471,8 @@ public class McGregor {
             List<Integer> new_i_bond_setB = new ArrayList<Integer>(); //instead of i_bond_setB
             List<String> new_c_bond_setA = new ArrayList<String>(); //instead of c_bond_setA
             List<String> new_c_bond_setB = new ArrayList<String>(); //instead of c_bond_setB
-            List<String> c_setB_copy = new ArrayList<String>();
-            List<String> c_setA_copy = new ArrayList<String>();
-
-            generateCSetACopy(set_num_A, c_bond_setA, c_setA_copy);
-            generateCSetBCopy(set_num_B, c_bond_setB, c_setB_copy);
+            List<String> c_setA_copy = McGregorChecks.generateCSetCopy(set_num_A, c_bond_setA);
+            List<String> c_setB_copy = McGregorChecks.generateCSetCopy(set_num_B, c_bond_setB);
 
             //find unmapped atoms of molecule A
             List<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
@@ -2069,30 +2066,6 @@ public class McGregor {
             }
         }
         return corresponding_atom;
-    }
-
-    private int generateCSetBCopy(int bond_number, List<String> c_setB, List<String> c_setB_copy) {
-
-        for (int a = 0; a < bond_number; a++) {
-            c_setB_copy.add(c_setB.get(a * 4 + 0));
-            c_setB_copy.add(c_setB.get(a * 4 + 1));
-            c_setB_copy.add("X");
-            c_setB_copy.add("X");
-        }
-
-        return 0;
-    }
-
-    private int generateCSetACopy(int bond_number, List<String> c_setA, List<String> c_setA_copy) {
-
-        for (int a = 0; a < bond_number; a++) {
-            c_setA_copy.add(c_setA.get(a * 4 + 0));
-            c_setA_copy.add(c_setA.get(a * 4 + 1));
-            c_setA_copy.add("X");
-            c_setA_copy.add("X");
-        }
-
-        return 0;
     }
 
     private void startsearch() {
