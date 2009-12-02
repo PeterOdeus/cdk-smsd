@@ -520,8 +520,7 @@ public class McGregor {
 
                 }
                 if (atomA_is_unmapped) {
-                    unmapped_atoms_molA.add(a);
-                    unmapped_numA++;
+                    unmapped_atoms_molA.add(unmapped_numA++, a);
                 }
                 atomA_is_unmapped = true;
             }
@@ -651,8 +650,7 @@ public class McGregor {
                     }
                 }
                 if (atomB_is_unmapped) {
-                    unmapped_atoms_molB.add(a);
-                    unmapped_numB++;
+                    unmapped_atoms_molB.add(unmapped_numB++, a);
                 }
                 atomB_is_unmapped = true;
             }
