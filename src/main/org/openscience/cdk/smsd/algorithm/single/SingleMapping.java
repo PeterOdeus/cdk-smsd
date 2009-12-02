@@ -39,6 +39,8 @@ public class SingleMapping {
 
     private IAtomContainer source = null;
     private IAtomContainer target = null;
+    private List<TreeMap<Integer, Integer>> _mappings = null;
+    private Map<Integer, Integer> connectedBondOrder = null;
 
     /**
      *
@@ -48,27 +50,28 @@ public class SingleMapping {
      */
     protected void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
+
+        _mappings = new ArrayList<TreeMap<Integer, Integer>>();
+        connectedBondOrder = new TreeMap<Integer, Integer>();
         this.source = source;
         this.target = target;
-        List<TreeMap<Integer, Integer>> _mappings = new ArrayList<TreeMap<Integer, Integer>>();
-        Map<Integer, Integer> connectedBondOrder = new TreeMap<Integer, Integer>();
 
         int minOrder = 9999;
 
         if (source.getAtomCount() == 1) {
-            setSourceSingleAtomMap(removeHydrogen, _mappings, connectedBondOrder, minOrder);
+            minOrder = setSourceSingleAtomMap(removeHydrogen);
         }
         if (target.getAtomCount() == 1) {
-            setTargetSingleAtomMap(removeHydrogen, _mappings, connectedBondOrder, minOrder);
+            minOrder = setTargetSingleAtomMap(removeHydrogen);
         }
-        postFilter(_mappings, connectedBondOrder, minOrder);
+        postFilter(minOrder);
 
         _mappings.clear();
     }
 
-    private void setSourceSingleAtomMap(boolean removeHydrogen, List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private int setSourceSingleAtomMap(boolean removeHydrogen) {
         int counter = 0;
-
+        int minOrder = 9999;
         if ((removeHydrogen && !source.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < target.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
@@ -89,7 +92,7 @@ public class SingleMapping {
                         minOrder = totalOrder;
                     }
 
-                    BondOrder.put(counter, totalOrder);
+                    connectedBondOrder.put(counter, totalOrder);
                     _mappings.add(counter++, mapAtoms);
                 }
 
@@ -98,11 +101,13 @@ public class SingleMapping {
         } else {
             System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
         }
+
+        return minOrder;
     }
 
-    private void setTargetSingleAtomMap(boolean removeHydrogen, List<TreeMap<Integer, Integer>> _mappings, Map<Integer, Integer> BondOrder, int minOrder) {
+    private int setTargetSingleAtomMap(boolean removeHydrogen) {
         int counter = 0;
-
+        int minOrder = 9999;
         if ((removeHydrogen && !target.getAtom(0).getSymbol().equals("H")) || (!removeHydrogen)) {
             for (int i = 0; i < source.getAtomCount(); i++) {
                 TreeMap<Integer, Integer> mapAtoms = new TreeMap<Integer, Integer>();
@@ -123,7 +128,7 @@ public class SingleMapping {
                         minOrder = totalOrder;
                     }
 
-                    BondOrder.put(counter, totalOrder);
+                    connectedBondOrder.put(counter, totalOrder);
                     _mappings.add(counter++, mapAtoms);
                 }
 
@@ -132,32 +137,26 @@ public class SingleMapping {
 
         } else {
             System.err.println("Skippping Hydrogen mapping or This is not a single mapping case!");
-
         }
+        return minOrder;
     }
 
-    private void postFilter(List<TreeMap<Integer, Integer>> _mapping, Map<Integer, Integer> BondOrder, int minOrder) {
-
-        for (Map.Entry<Integer, Integer> map : BondOrder.entrySet()) {
-
+    private void postFilter(int minOrder) {
+        for (Map.Entry<Integer, Integer> map : connectedBondOrder.entrySet()) {
             if (map.getValue() > minOrder) {
-                removedMap(_mapping, map.getKey());
+                removedMap(map.getKey());
             }
         }
         FinalMappings final_MAPPINGS = FinalMappings.getInstance();
-
-        final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>(_mapping));
+        final_MAPPINGS.set(new ArrayList<TreeMap<Integer, Integer>>(_mappings));
     }
 
-    private boolean removedMap(List<TreeMap<Integer, Integer>> maps, Integer Key) {
-        boolean flag = false;
-        for (TreeMap<Integer, Integer> map : maps) {
-
+    private void removedMap(Integer Key) {
+        List<TreeMap<Integer, Integer>> nonRedundantMap = new ArrayList<TreeMap<Integer, Integer>>(_mappings);
+        for (TreeMap<Integer, Integer> map : nonRedundantMap) {
             if (map.containsKey(Key)) {
-
-                flag = maps.remove(map);
+                _mappings.remove(map);
             }
         }
-        return flag;
     }
 }
