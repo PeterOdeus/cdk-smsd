@@ -72,7 +72,7 @@
 //     * @param target
 //     * @param c_tab1_copy
 //     * @param c_tab2_copy
-//     * @param SignROW
+//     * @param SignArray
 //     * @param unmappedAtomsMolA
 //     * @param mappingSize
 //     * @param mapped_atoms
@@ -83,7 +83,7 @@
 //            IAtomContainer target,
 //            List<String> c_tab1_copy,
 //            List<String> c_tab2_copy,
-//            String[] SignROW,
+//            String[] SignArray,
 //            List<Integer> unmappedAtomsMolA,
 //            int mappingSize,
 //            List<Integer> mapped_atoms,
@@ -116,14 +116,14 @@
 //                            if (c_tab1_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
 //
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 0));
-//                                cBondNeighborsA.add(SignROW[counter]);
+//                                cBondNeighborsA.add(SignArray[counter]);
 //                                cBondNeighborsA.add("X");
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 1));
 //
-//                                changeCharBonds(indexJ, SignROW[counter], query.getBondCount(), query, c_tab1_copy);
+//                                changeCharBonds(indexJ, SignArray[counter], query.getBondCount(), query, c_tab1_copy);
 //
 //                                int cor_atom = searchCorrespondingAtom(mappingSize, indexJ, 1, mapped_atoms);
-//                                changeCharBonds(cor_atom, SignROW[counter], target.getBondCount(), target, c_tab2_copy);
+//                                changeCharBonds(cor_atom, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
 //                                counter++;
 //                            } else {
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 0));
@@ -157,15 +157,15 @@
 //                            iBondNeighborsA.add(order);
 //
 //                            if (c_tab1_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
-//                                cBondNeighborsA.add(SignROW[counter]);
+//                                cBondNeighborsA.add(SignArray[counter]);
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 1));
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 0));
 //                                cBondNeighborsA.add("X");
-//                                changeCharBonds(indexI, SignROW[counter],
+//                                changeCharBonds(indexI, SignArray[counter],
 //                                        query.getBondCount(), query, c_tab1_copy);
 //
 //                                int cor_atom = searchCorrespondingAtom(mappingSize, indexI, 1, mapped_atoms);
-//                                changeCharBonds(cor_atom, SignROW[counter], target.getBondCount(), target, c_tab2_copy);
+//                                changeCharBonds(cor_atom, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
 //                                counter++;
 //                            } else {
 //                                cBondNeighborsA.add(c_tab1_copy.get(a * 4 + 0));
@@ -440,8 +440,6 @@
 //        return this.cBondNeighborsA;
 //    }
 //}
-
-
 /* Copyright (C) 2005-2006 Markus Leber
  *               2006-2009 Syed Asad Rahman {asad@ebi.atomContainer.uk}
  *
@@ -479,38 +477,32 @@ public class QueryProcessor {
 
     private List<String> c_tab1_copy;
     private List<String> c_tab2_copy;
-    private String[] SignROW;
+    private String[] SignArray;
     private int neighborBondNumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
     private int setBondNumA = 0; //number of remaining molecule A bonds after the clique search, which aren't neighbors
-    private IAtomContainer query;
-    private IAtomContainer target;
     private List<Integer> i_bond_neighborsA;
     private List<String> c_bond_neighborsA;
 
     /**
-     *
-     * @param query
-     * @param target
      * @param c_tab1_copy
      * @param c_tab2_copy
-     * @param SignROW
+     * @param SignArray
      * @param neighbor_bondnum_A
      * @param set_bondnum_A
      */
-    protected QueryProcessor(IAtomContainer query, IAtomContainer target, List<String> c_tab1_copy, List<String> c_tab2_copy, String[] SignROW, int neighbor_bondnum_A, int set_bondnum_A) {
-
-        this.query = query;
-        this.target = target;
+    protected QueryProcessor(List<String> c_tab1_copy, List<String> c_tab2_copy, String[] SignArray, int neighbor_bondnum_A, int set_bondnum_A) {
 
         this.c_tab1_copy = c_tab1_copy;
         this.c_tab2_copy = c_tab2_copy;
-        this.SignROW = SignROW;
+        this.SignArray = SignArray;
         this.neighborBondNumA = neighbor_bondnum_A;
         this.setBondNumA = set_bondnum_A;
     }
 
     /**
      *
+     * @param query
+     * @param target 
      * @param unmapped_atoms_molA
      * @param mappingSize
      * @param i_bond_neighborsA
@@ -518,9 +510,11 @@ public class QueryProcessor {
      * @param c_bond_neighborsA
      * @param c_bond_setA
      * @param mapped_atoms
-     * @param SR_count
+     * @param counter
      */
     protected void process(
+            IAtomContainer query,
+            IAtomContainer target,
             List<Integer> unmapped_atoms_molA,
             int mappingSize,
             List<Integer> i_bond_neighborsA,
@@ -528,7 +522,7 @@ public class QueryProcessor {
             List<String> c_bond_neighborsA,
             List<String> c_bond_setA,
             List<Integer> mapped_atoms,
-            int SR_count) {
+            int counter) {
 
         this.i_bond_neighborsA = i_bond_neighborsA;
         this.c_bond_neighborsA = c_bond_neighborsA;
@@ -553,8 +547,6 @@ public class QueryProcessor {
 //            System.out.println(AtomI + "= , =" + AtomJ );
             for (Integer unMappedAtomIndex : unmapped_atoms_molA) {
 
-
-
                 if (unMappedAtomIndex.equals(indexI)) {
 //                    System.out.println("Unmapped Atom is equal to Reaction Bond table");
 //                    System.out.println("unMappedAtomIndex " + unMappedAtomIndex + " " + "indexI: " + indexI);
@@ -571,15 +563,15 @@ public class QueryProcessor {
 
 
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
-                                c_bond_neighborsA.add(SignROW[SR_count]);
+                                c_bond_neighborsA.add(SignArray[counter]);
                                 c_bond_neighborsA.add("X");
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
 
-                                changeCharBonds(indexJ, SignROW[SR_count], query.getBondCount(), query, c_tab1_copy);
+                                changeCharBonds(indexJ, SignArray[counter], query.getBondCount(), query, c_tab1_copy);
 
                                 int cor_atom = searchCorrespondingAtom(mappingSize, indexJ, 1, mapped_atoms);
-                                changeCharBonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
-                                SR_count++;
+                                changeCharBonds(cor_atom, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
+                                counter++;
                             } else {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
@@ -619,16 +611,16 @@ public class QueryProcessor {
                             if (c_tab1_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
 
 
-                                c_bond_neighborsA.add(SignROW[SR_count]);
+                                c_bond_neighborsA.add(SignArray[counter]);
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
                                 c_bond_neighborsA.add("X");
-                                changeCharBonds(indexI, SignROW[SR_count],
+                                changeCharBonds(indexI, SignArray[counter],
                                         query.getBondCount(), query, c_tab1_copy);
 
                                 int cor_atom = searchCorrespondingAtom(mappingSize, indexI, 1, mapped_atoms);
-                                changeCharBonds(cor_atom, SignROW[SR_count], target.getBondCount(), target, c_tab2_copy);
-                                SR_count++;
+                                changeCharBonds(cor_atom, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
+                                counter++;
                             } else {
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
                                 c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
@@ -661,7 +653,150 @@ public class QueryProcessor {
             bond_considered = false;
         }
 
-        /*******************************************************************************///        System.out.println("Neighbor A & B");
+        /*******************************************************************************///
+    }
+
+    /**
+     * 
+     * @param setNumA
+     * @param setNumB
+     * @param i_bond_setA
+     * @param i_bond_setB
+     * @param unmapped_atoms_molA
+     * @param newMapingSize
+     * @param new_i_neighborsA
+     * @param new_i_bond_setA
+     * @param new_c_neighborsA
+     * @param new_c_bond_setA
+     * @param new_Mapping
+     * @param counter
+     */
+    protected void process(
+            int setNumA,
+            int setNumB,
+            List<Integer> i_bond_setA,
+            List<Integer> i_bond_setB,
+            List<Integer> unmapped_atoms_molA,
+            int newMapingSize,
+            List<Integer> new_i_neighborsA,
+            List<Integer> new_i_bond_setA,
+            List<String> new_c_neighborsA,
+            List<String> new_c_bond_setA,
+            List<Integer> new_Mapping,
+            int counter) {
+
+
+        this.i_bond_neighborsA = new_i_neighborsA;
+        this.c_bond_neighborsA = new_c_neighborsA;
+
+
+        boolean bond_considered = false;
+        boolean normal_bond = true;
+
+
+        for (int a = 0; a < setNumA; a++) {
+
+            Integer _elementAt_a = i_bond_setA.get(a * 3 + 0);
+            for (Integer unMappedAtomIndex : unmapped_atoms_molA) {
+                if (unMappedAtomIndex.equals(_elementAt_a)) {
+                    for (int c = 0; c < newMapingSize; c++) {
+
+                        if (new_Mapping.get(c * 2 + 0).equals(i_bond_setA.get(a * 3 + 1))) {
+
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 0));
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 1));
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 2));
+                            c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
+                            if (c_tab1_copy.get(a * 4 + 3).compareToIgnoreCase("X") == 0) {
+
+                                c_bond_neighborsA.add(SignArray[counter]);
+                                c_bond_neighborsA.add("X");
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
+                                changeCharBonds(i_bond_setA.get(a * 3 + 1), SignArray[counter], setNumA, i_bond_setA, c_tab1_copy);
+                                int cor_atom = McGregorChecks.searchCorrespondingAtom(newMapingSize, i_bond_setA.get(a * 3 + 1), 1, new_Mapping);
+                                changeCharBonds(cor_atom, SignArray[counter], setNumB, i_bond_setB, c_tab2_copy);
+                                counter++;
+
+                            } else {
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
+                                c_bond_neighborsA.add("X");
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 3));
+
+                            }
+                            normal_bond = false;
+                            neighborBondNumA++;
+
+                        }
+                    }
+
+                    if (normal_bond) {
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 0));
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 1));
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 2));
+                        new_c_bond_setA.add(c_tab1_copy.get(a * 4 + 0));
+                        new_c_bond_setA.add(c_tab1_copy.get(a * 4 + 1));
+                        new_c_bond_setA.add("X");
+                        new_c_bond_setA.add("X");
+                        setBondNumA++;
+
+                    }
+                    normal_bond = true;
+                    bond_considered = true;
+                }
+                if (unMappedAtomIndex.equals(i_bond_setA.get(a * 3 + 1))) {
+                    for (int c = 0; c < newMapingSize; c++) {
+
+                        if (new_Mapping.get(c * 2 + 0).equals(i_bond_setA.get(a * 3 + 0))) {
+
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 0));
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 1));
+                            i_bond_neighborsA.add(i_bond_setA.get(a * 3 + 2));
+                            if (c_tab1_copy.get(a * 4 + 2).compareToIgnoreCase("X") == 0) {
+
+                                c_bond_neighborsA.add(SignArray[counter]);
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
+                                c_bond_neighborsA.add("X");
+                                changeCharBonds(i_bond_setA.get(a * 3 + 0), SignArray[counter], setNumA, i_bond_setA, c_tab1_copy);
+                                int cor_atom = McGregorChecks.searchCorrespondingAtom(newMapingSize, i_bond_setA.get(a * 3 + 0), 1, new_Mapping);
+                                changeCharBonds(cor_atom, SignArray[counter], setNumB, i_bond_setB, c_tab2_copy);
+                                counter++;
+
+                            } else {
+
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 0));
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 1));
+                                c_bond_neighborsA.add(c_tab1_copy.get(a * 4 + 2));
+                                c_bond_neighborsA.add("X");
+                            }
+
+                            normal_bond = false;
+                            neighborBondNumA++;
+
+                        }
+                    }
+                    if (normal_bond) {
+
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 0));
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 1));
+                        new_i_bond_setA.add(i_bond_setA.get(a * 3 + 2));
+                        new_c_bond_setA.add(c_tab1_copy.get(a * 4 + 0));
+                        new_c_bond_setA.add(c_tab1_copy.get(a * 4 + 1));
+                        new_c_bond_setA.add("X");
+                        new_c_bond_setA.add("X");
+                        setBondNumA++;
+                    }
+
+                    normal_bond = true;
+                    bond_considered = true;
+                }
+
+                if (bond_considered) {
+                    break;
+                }
+            }
+            bond_considered = false;
+        }
     }
 
     private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
@@ -695,6 +830,24 @@ public class QueryProcessor {
             }
 
             if ((atomContainer.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
+                c_bond_neighbors.set(a * 4 + 1, new_symbol);
+            }
+
+        }
+
+        return 0;
+    }
+
+    private int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
+
+        for (int a = 0; a < neighbor_bondnum; a++) {
+            if ((i_bond_neighbors.get(a * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.get(a * 4 + 2).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(a * 4 + 2, c_bond_neighbors.get(a * 4 + 0));
+                c_bond_neighbors.set(a * 4 + 0, new_symbol);
+            }
+
+            if ((i_bond_neighbors.get(a * 3 + 1) == (corresponding_atom)) && (c_bond_neighbors.get(a * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(a * 4 + 3, c_bond_neighbors.get(a * 4 + 1));
                 c_bond_neighbors.set(a * 4 + 1, new_symbol);
             }
