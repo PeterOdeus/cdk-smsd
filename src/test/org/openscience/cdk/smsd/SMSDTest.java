@@ -41,7 +41,6 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainerCreator;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.smsd.factory.SubGraphFactory;
 import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
 import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -67,7 +66,7 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testVFLib() throws Exception {
-        SubGraphFactory sbf = new SubGraphFactory(false);
+        SMSD sbf = new SMSD(Algorithm.SubStructure, false);
         sbf.init(Benzene, Benzene, true);
         sbf.setChemFilters(true, true, true);
         Assert.assertEquals(true, sbf.isSubgraph());
