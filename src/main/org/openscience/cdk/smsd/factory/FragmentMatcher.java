@@ -133,7 +133,7 @@ public class FragmentMatcher {
             }
             System.gc();
         } catch (Exception ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -148,7 +148,7 @@ public class FragmentMatcher {
             atomsMCS = mcs.getFirstAtomMapping();
 
         } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -166,9 +166,9 @@ public class FragmentMatcher {
             atomsMCS = mcs.getFirstAtomMapping();
 
         } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CDKException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -203,9 +203,9 @@ public class FragmentMatcher {
 
 
         } catch (IOException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CDKException ex) {
-            Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
