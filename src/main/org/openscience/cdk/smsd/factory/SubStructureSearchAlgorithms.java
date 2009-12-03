@@ -68,7 +68,6 @@ public class SubStructureSearchAlgorithms implements IMCS {
     private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
-    private IMCSAlgorithm mcs = null;
     private Algorithm algorithmType;
     private boolean removeHydrogen = false;
 
@@ -111,9 +110,6 @@ public class SubStructureSearchAlgorithms implements IMCS {
             switch (algorithmType) {
                 case CDKMCS:
                     cdkMCS();
-                    if (getFirstMapping() == null) {
-                        mcs = null;
-                    }
                     break;
                 case DEFAULT:
                     if (BondType.getInstance().getBondSensitiveFlag()) {
@@ -122,23 +118,16 @@ public class SubStructureSearchAlgorithms implements IMCS {
                         mcsPlus();
                     }
                     if (getFirstMapping() == null) {
-                        mcs = null;
                         System.gc();
                         vfLibMCS();
                     }
                     break;
                 case MCSPlus:
                     mcsPlus();
-                    if (getFirstMapping() == null) {
-                        mcs = null;
-                    }
                     break;
                 case SubStructure:
                     if (rBondCount > 1 && pBondCount > 1) {
                         vfTurboHandler();
-                        if (getFirstMapping() == null) {
-                            mcs = null;
-                        }
                     } else {
                         singleMapping();
                     }
@@ -146,15 +135,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
                 case VFLibMCS:
                     if (rBondCount >= 6 && rBondCount >= 6) {
                         vfLibMCS();
-                        if (getFirstMapping() == null) {
-                            mcs = null;
-                        }
                     } else {
                         mcsPlus();
                     }
                     break;
             }
-
         }
         System.gc();
 
@@ -178,6 +163,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
     }
 
     private synchronized void cdkMCS() {
+        IMCSAlgorithm mcs = null;
         try {
             mcs = new CDKMCSHandler();
 
@@ -205,7 +191,9 @@ public class SubStructureSearchAlgorithms implements IMCS {
     }
 
     private synchronized void mcsPlus() {
+        IMCSAlgorithm mcs = null;
         try {
+
             mcs = new MCSPlusHandler();
 
             mcs.set(RMol, PMol);
@@ -232,8 +220,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
     }
 
     private void vfTurboHandler() {
-
-        VFlibTurboHandler subGraphTurboSearch = new VFlibTurboHandler();
+        VFlibTurboHandler subGraphTurboSearch = null;
+        subGraphTurboSearch = new VFlibTurboHandler();
         subGraphTurboSearch.set(RMol, PMol);
 
         firstSolution.clear();
@@ -498,8 +486,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
     }
 
     private void vfLibMCS() {
+        IMCSAlgorithm mcs = null;
         try {
-
             mcs = new VFlibMCSHandler();
             mcs.set(RMol, PMol);
             mcs.searchMCS();
@@ -525,8 +513,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
     }
 
     private void singleMapping() {
+        IMCSAlgorithm mcs = null;
         try {
-
             mcs = new SingleMappingHandler(removeHydrogen);
             mcs.set(RMol, PMol);
             mcs.searchMCS();
