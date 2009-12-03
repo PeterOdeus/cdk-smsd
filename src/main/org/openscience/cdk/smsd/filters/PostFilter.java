@@ -65,7 +65,12 @@ public class PostFilter {
         return flag;
     }
 
-    private static List<TreeMap<Integer, Integer>> removeRedundantMapping(List<List<Integer>> mapping_org) {
+    /**
+     *
+     * @param mapping_org
+     * @return
+     */
+    public static List<TreeMap<Integer, Integer>> removeRedundantMapping(List<List<Integer>> mapping_org) {
 
         List<TreeMap<Integer, Integer>> nonRedundantMapping = new ArrayList<TreeMap<Integer, Integer>>();
         for (List<Integer> M : mapping_org) {
