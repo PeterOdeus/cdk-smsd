@@ -379,48 +379,27 @@ public class SubGraphFactory implements IMCS {
     @Override
     @TestMethod("testVFLib")
     public boolean isSubgraph() {
+
         IAtomContainer Reactant = RMol.getMolecule();
         IAtomContainer Product = PMol.getMolecule();
         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
             return false;
         }
-        BondType bondType = BondType.getInstance();
-        int score = 0;
-        for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
-            IAtom indexI = mappingI.getKey();
-            IAtom indexJ = mappingI.getValue();
-            for (Map.Entry<IAtom, IAtom> mappingJ : firstAtomMCS.entrySet()) {
-
-                IAtom indexIPlus = mappingJ.getKey();
-                IAtom indexJPlus = mappingJ.getValue();
-                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
-
-                    IAtom sourceAtom1 = indexI;
-                    IAtom sourceAtom2 = indexIPlus;
-                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
-
-                    IAtom targetAtom1 = indexJ;
-                    IAtom targetAtom2 = indexJPlus;
-                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
-
-                    score += getBondMatchScore(RBond, PBond, bondType);
-                }
-            }
-        }
+        int score = getBondMatchScore(Reactant, Product);
 
         boolean flag = false;
         float size = firstSolution.size();
         int source = 0;
         int target = 0;
         if (!removeHydrogen) {
-            source = RMol.getMolecule().getAtomCount();
-            target = PMol.getMolecule().getAtomCount();
+            source = Reactant.getAtomCount();
+            target = Product.getAtomCount();
         } else {
-            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = Reactant.getAtomCount() - getHCount(Reactant);
+            target = Product.getAtomCount() - getHCount(Product);
         }
-        if ((size == source && score / 2 == RMol.getMolecule().getBondCount()) &&
-                (target >= size && PMol.getMolecule().getBondCount() >= score / 2)) {
+        if ((size == source && score / 2 == Reactant.getBondCount()) &&
+                (target >= size && Product.getBondCount() >= score / 2)) {
             flag = true;
         }
         return flag;
@@ -447,5 +426,33 @@ public class SubGraphFactory implements IMCS {
         dist = dist.setScale(decimalPlaces, BigDecimal.ROUND_HALF_UP);
         euclidean = dist.doubleValue();
         return euclidean;
+    }
+
+    private int getBondMatchScore(IAtomContainer Reactant, IAtomContainer Product) {
+        int score = 0;
+
+        BondType bondType = BondType.getInstance();
+        for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
+            IAtom indexI = mappingI.getKey();
+            IAtom indexJ = mappingI.getValue();
+            for (Map.Entry<IAtom, IAtom> mappingJ : firstAtomMCS.entrySet()) {
+
+                IAtom indexIPlus = mappingJ.getKey();
+                IAtom indexJPlus = mappingJ.getValue();
+                if (!indexI.equals(indexIPlus) && !indexJ.equals(indexJPlus)) {
+
+                    IAtom sourceAtom1 = indexI;
+                    IAtom sourceAtom2 = indexIPlus;
+                    IBond RBond = Reactant.getBond(sourceAtom1, sourceAtom2);
+
+                    IAtom targetAtom1 = indexJ;
+                    IAtom targetAtom2 = indexJPlus;
+                    IBond PBond = Product.getBond(targetAtom1, targetAtom2);
+
+                    score += getBondMatchScore(RBond, PBond, bondType);
+                }
+            }
+        }
+        return score;
     }
 }

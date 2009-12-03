@@ -76,7 +76,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
      * @return true if Query/Reactant is commonAtomList subgraph of Target/Product
      * else false
      * @throws java.io.IOException
-     * @throws CDKException 
+     * @throws CDKException
      */
     @Override
     public int searchMCS() throws IOException, CDKException {
@@ -118,25 +118,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
             TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
-            for (int index = 0; index < mapping.size(); index += 2) {
-                IAtom qAtom = null;
-                IAtom tAtom = null;
-
-                qAtom = source.getAtom(mapping.get(index));
-                tAtom = target.getAtom(mapping.get(index + 1));
-
-
-                Integer qIndex = mapping.get(index);
-                Integer tIndex = mapping.get(index + 1);
-
-
-                if (qIndex != null && tIndex != null) {
-                    atomatomMapping.put(qAtom, tAtom);
-                    indexindexMapping.put(qIndex, tIndex);
-                } else {
-                    throw new CDKException("Atom index pointing to NULL");
-                }
-            }
+            setMapping(mapping, atomatomMapping, indexindexMapping);
 
             if ((!atomatomMapping.isEmpty()) &&
                     (!hasMap(indexindexMapping, allMCS))) {
@@ -214,10 +196,9 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
         this.target = target.getMolecule();
     }
 
-    private void matchVFLibMCS() {
-        IQuery query = null;
-        IMapper mapper = null;
+    private boolean getRONPFlag(IQuery query, IMapper mapper) {
         boolean RONP = false;
+
         if (source.getAtomCount() <= target.getAtomCount()) {
 
             query = TemplateCompiler.compile(source);
@@ -231,40 +212,20 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
             vfLibSolutions = new ArrayList<Map<INode, IAtom>>(mapper.getMaps(source));
             RONP = false;
         }
+        return RONP;
+    }
 
+    private void matchVFLibMCS() throws CDKException {
+
+        IQuery query = null;
+        IMapper mapper = null;
+        boolean reactOnProd = getRONPFlag(query, mapper);
         int counter = 0;
         for (Map<INode, IAtom> solution : vfLibSolutions) {
 
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
             TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
-
-            for (Map.Entry<INode, IAtom> mapping : solution.entrySet()) {
-                IAtom qAtom = null;
-                IAtom tAtom = null;
-                if (RONP) {
-                    qAtom = query.getAtom(mapping.getKey());
-                    tAtom = mapping.getValue();
-
-                } else {
-                    tAtom = query.getAtom(mapping.getKey());
-                    qAtom = mapping.getValue();
-                }
-
-                Integer qIndex = Integer.valueOf(source.getAtomNumber(qAtom));
-                Integer tIndex = Integer.valueOf(target.getAtomNumber(tAtom));
-
-                if (qIndex != null && tIndex != null) {
-                    atomatomMapping.put(qAtom, tAtom);
-                    indexindexMapping.put(qIndex, tIndex);
-                } else {
-                    try {
-                        throw new CDKException("Atom index pointing to NULL");
-                    } catch (CDKException ex) {
-                        Logger.getLogger(VFlibMCSHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
+            setMapping(query, reactOnProd, solution, atomatomMapping, indexindexMapping);
             if (!atomatomMapping.isEmpty() && !hasMap(indexindexMapping, allMCS_copy)) {
                 allAtomMCS_copy.add(counter, atomatomMapping);
                 allMCS_copy.add(counter, indexindexMapping);
@@ -312,12 +273,61 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
         int common = 0;
         for (int i = 0; i < productMolecule.getAtomCount(); i++) {
-
-            if (commonAtomList.contains(productMolecule.getAtom(i).getSymbol())) {
-                commonAtomList.remove(productMolecule.getAtom(i).getSymbol());
+            String symbol = productMolecule.getAtom(i).getSymbol();
+            if (commonAtomList.contains(symbol)) {
+                commonAtomList.remove(symbol);
                 common++;
             }
         }
         return common;
+    }
+
+    private void addMappings(IAtom qAtom, Integer qIndex, IAtom tAtom, Integer tIndex, Map<IAtom, IAtom> atomatomMapping, TreeMap<Integer, Integer> indexindexMapping) throws CDKException {
+
+        if (qIndex != null && tIndex != null) {
+            atomatomMapping.put(qAtom, tAtom);
+            indexindexMapping.put(qIndex, tIndex);
+        } else {
+            throw new CDKException("Atom index pointing to NULL");
+        }
+    }
+
+    private void setMapping(IQuery query, boolean reactOnProd, Map<INode, IAtom> solution, Map<IAtom, IAtom> atomatomMapping, TreeMap<Integer, Integer> indexindexMapping) {
+        for (Map.Entry<INode, IAtom> mapping : solution.entrySet()) {
+            try {
+                IAtom qAtom = null;
+                IAtom tAtom = null;
+                if (reactOnProd) {
+                    qAtom = query.getAtom(mapping.getKey());
+                    tAtom = mapping.getValue();
+                } else {
+                    tAtom = query.getAtom(mapping.getKey());
+                    qAtom = mapping.getValue();
+                }
+                Integer qIndex = Integer.valueOf(source.getAtomNumber(qAtom));
+                Integer tIndex = Integer.valueOf(target.getAtomNumber(tAtom));
+                addMappings(qAtom, qIndex, tAtom, tIndex, atomatomMapping, indexindexMapping);
+            } catch (CDKException ex) {
+                Logger.getLogger(VFlibMCSHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    private void setMapping(List<Integer> mapping, Map<IAtom, IAtom> atomatomMapping, TreeMap<Integer, Integer> indexindexMapping) {
+        for (int index = 0; index < mapping.size(); index += 2) {
+            try {
+                IAtom qAtom = null;
+                IAtom tAtom = null;
+                qAtom = source.getAtom(mapping.get(index));
+                tAtom = target.getAtom(mapping.get(index + 1));
+                Integer qIndex = mapping.get(index);
+                Integer tIndex = mapping.get(index + 1);
+                addMappings(qAtom, qIndex, tAtom, tIndex, atomatomMapping, indexindexMapping);
+            } catch (CDKException ex) {
+                Logger.getLogger(VFlibMCSHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
     }
 }

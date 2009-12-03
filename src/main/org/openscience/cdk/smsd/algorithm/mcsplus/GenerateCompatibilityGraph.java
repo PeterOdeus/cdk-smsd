@@ -50,7 +50,7 @@ public class GenerateCompatibilityGraph {
     private static boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
-     * 
+     *
      * @param source
      * @param target
      * @throws java.io.IOException
@@ -153,7 +153,7 @@ public class GenerateCompatibilityGraph {
      * Generate Compatibility Graph Nodes
      *
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected int compatibilityGraphNodes() throws IOException {
 
@@ -325,13 +325,13 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    private void addCZeroEdges(IBond ReactantBond, IBond ProductBond, int a, int b) {
+    private void addCZeroEdges(IBond ReactantBond, IBond ProductBond, int indexI, int indexJ) {
         if ((bondTypeFlag && bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
-            cEdges.add((a / 4) + 1);
-            cEdges.add((b / 4) + 1);
+            cEdges.add((indexI / 4) + 1);
+            cEdges.add((indexJ / 4) + 1);
         } else {
-            dEdges.add((a / 4) + 1);
-            dEdges.add((b / 4) + 1);
+            dEdges.add((indexI / 4) + 1);
+            dEdges.add((indexJ / 4) + 1);
         }
     }
 

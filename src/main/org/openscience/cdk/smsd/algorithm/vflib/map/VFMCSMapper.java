@@ -109,26 +109,26 @@ public class VFMCSMapper implements IMapper {
         return maps.size();
     }
 
+    private void addMapping(IState state, boolean isGoal) {
+
+        Map<INode, IAtom> map = state.getMap();
+        if ((isGoal && !hasMap(map) && isMCS(map)) ||
+                (!isGoal && !map.isEmpty() && !hasMap(map) && isMCS(map))) {
+            maps.add(map);
+        }
+    }
+
     private void mapAll(IState state) {
         if (state.isDead()) {
             return;
         }
 
         if (state.isGoal()) {
-
-            Map<INode, IAtom> map = state.getMap();
-            if (!hasMap(map) && isMCS(map)) {
-                maps.add(state.getMap());
-            }
+            addMapping(state, true);
             return;
         } else {
-
-            Map<INode, IAtom> map = state.getMap();
-            if (!map.isEmpty() && !hasMap(map) && isMCS(map)) {
-                maps.add(state.getMap());
-            }
+            addMapping(state, false);
         }
-
 
         while (state.hasNextCandidate()) {
             VFMatch candidate = state.nextCandidate();
@@ -151,11 +151,7 @@ public class VFMCSMapper implements IMapper {
             maps.add(state.getMap());
             return true;
         } else {
-
-            Map<INode, IAtom> map = state.getMap();
-            if (!map.isEmpty() && isMCS(map) && !hasMap(map)) {//!hasSubGraph(map)) {
-                maps.add(state.getMap());
-            }
+            addMapping(state, false);
         }
 
         boolean found = false;
@@ -173,27 +169,6 @@ public class VFMCSMapper implements IMapper {
         return found;
     }
 
-//    //Method added by Asad
-//    private boolean hasSubGraph(Map<INode, IAtom> map) {
-//
-//        for (Map<INode, IAtom> storedMappings : maps) {
-//            boolean MatchFlag = true;
-//            for (Map.Entry<INode, IAtom> mapping : storedMappings.entrySet()) {
-//                if (!map.containsKey(mapping.getKey()) && !map.containsValue(mapping.getValue())) {
-//                    MatchFlag = false;
-//                    break;
-//                }
-//            }
-//
-//            if (MatchFlag) {
-//
-//                return true;
-//            }
-//
-//        }
-//
-//        return false;
-//    }
     //Method added by Asad
     private boolean isMCS(Map<INode, IAtom> map) {
 
@@ -206,7 +181,6 @@ public class VFMCSMapper implements IMapper {
         }
         //Comment this if to get all the subgraphs
         if (mapSize > currentMCSSize) {
-
             currentMCSSize = mapSize;
             maps.clear();
         }
@@ -215,8 +189,8 @@ public class VFMCSMapper implements IMapper {
     }
 
     private boolean hasMap(Map<INode, IAtom> map) {
-        for (Map<INode, IAtom> test : maps) {
-            if (test.equals(map)) {
+        for (Map<INode, IAtom> storedMap : maps) {
+            if (storedMap.equals(map)) {
                 return true;
             }
         }

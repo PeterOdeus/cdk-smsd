@@ -60,7 +60,7 @@ public class MCSPlusHandler implements IMCSAlgorithm {
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
-     /**
+    /**
      * @param source
      * @param target
      */
@@ -108,7 +108,6 @@ public class MCSPlusHandler implements IMCSAlgorithm {
 
 
     }
-
 
     /**
      * @param source
@@ -215,13 +214,13 @@ public class MCSPlusHandler implements IMCSAlgorithm {
     }
 
     private final synchronized void setFirstMapping() {
-        if (allMCS.size() > 0) {
+        if (!allMCS.isEmpty()) {
             firstMCS = new TreeMap<Integer, Integer>(allMCS.get(0));
         }
     }
 
     private final synchronized void setFirstAtomMapping() {
-        if (allAtomMCS.size() > 0) {
+        if (!allAtomMCS.isEmpty()) {
             atomsMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 
