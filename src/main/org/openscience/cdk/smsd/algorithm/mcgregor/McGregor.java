@@ -807,7 +807,7 @@ public class McGregor {
                 }
             }
 
-            //test Bestarcsleft and skip rest if needed
+            //test Best arcs left and skip rest if needed
             if (arcsleft >= bestarcsleft) {
                 do {
                     yIndex++;
