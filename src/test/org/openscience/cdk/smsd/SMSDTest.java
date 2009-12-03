@@ -155,13 +155,10 @@ public class SMSDTest extends CDKTestCase {
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
 
-        IAtomContainer source = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol1);
-        IAtomContainer target = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol2);
-
 //	Calling the main algorithm to perform MCS cearch
 
-        CDKHueckelAromaticityDetector.detectAromaticity(source);
-        CDKHueckelAromaticityDetector.detectAromaticity(target);
+        CDKHueckelAromaticityDetector.detectAromaticity(mol1);
+        CDKHueckelAromaticityDetector.detectAromaticity(mol2);
 
         boolean bondSensitive = false;
         boolean removeHydrogen = true;
@@ -170,13 +167,10 @@ public class SMSDTest extends CDKTestCase {
         boolean energyMinimization = true;
 
         SMSD comparison = new SMSD(Algorithm.DEFAULT, bondSensitive);
-        comparison.init(source, target, removeHydrogen);
+        comparison.init(mol1, mol2, removeHydrogen);
         comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
 
 //      Get modified Query and Target Molecules as Mappings will correspond to these molecules
-        source = comparison.getReactantMolecule();
-        target = comparison.getProductMolecule();
-
         Assert.assertEquals(true, comparison.isSubgraph());
         Assert.assertEquals(27, comparison.getFirstMapping().size());
 
