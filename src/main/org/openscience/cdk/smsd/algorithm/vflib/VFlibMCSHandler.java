@@ -113,16 +113,16 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
         return 0;
 
     }
-    
+
     private void setMappings() throws CDKException {
         int counter = 0;
-        List<TreeMap<Integer, Integer>>_mappings=FinalMappings.getInstance().getFinalMapping();
+        List<TreeMap<Integer, Integer>> _mappings = FinalMappings.getInstance().getFinalMapping();
         for (TreeMap<Integer, Integer> mapping : _mappings) {
 
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
             TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
-            for (Map.Entry<Integer, Integer>mappedAtomAtomPair:mapping.entrySet()) {
+            for (Map.Entry<Integer, Integer> mappedAtomAtomPair : mapping.entrySet()) {
                 IAtom qAtom = null;
                 IAtom tAtom = null;
 
@@ -236,6 +236,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
             RONP = false;
         }
 
+        int counter = 0;
         for (Map<INode, IAtom> solution : vfLibSolutions) {
 
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
@@ -268,18 +269,18 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
                 }
 
             }
-            if (!atomatomMapping.isEmpty()) {
-                allAtomMCS_copy.add(atomatomMapping);
-                allMCS_copy.add(indexindexMapping);
-                this.vfMCSSize = atomatomMapping.size();
+            if (!atomatomMapping.isEmpty() && !hasMap(indexindexMapping, allMCS_copy)) {
+                allAtomMCS_copy.add(counter, atomatomMapping);
+                allMCS_copy.add(counter, indexindexMapping);
+                counter++;
             }
         }
+
+        this.vfMCSSize = allMCS_copy.isEmpty() ? 0 : allMCS_copy.get(0).size();
     }
 
     private boolean hasMap(Map<Integer, Integer> map, List<TreeMap<Integer, Integer>> mapGlobal) {
-
         for (Map<Integer, Integer> test : mapGlobal) {
-
             if (test.equals(map)) {
                 return true;
             }
