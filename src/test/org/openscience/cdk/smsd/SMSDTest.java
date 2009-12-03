@@ -161,17 +161,17 @@ public class SMSDTest extends CDKTestCase {
     }
 
     @Test
-    public void testSingleMappingTesting() throws Exception {
+    public void testCyclopropaneNotASubgraphOfIsoButane() throws Exception {
+        IMolecule cycloPropane = createCyclopropane();
+        IMolecule isobutane = createIsobutane();
 
-        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        IAtomContainer atomContainer = sp.parseSmiles("N");
-        QueryAtomContainer query = QueryAtomContainerCreator.createBasicQueryContainer(atomContainer);
-        String file2 = "data/mdl/het5.mol";
-        Molecule mol2 = new Molecule();
-        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
-        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
-        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
-        IAtomContainer target = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol2);
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(cycloPropane);
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(isobutane);
+
+        IAtomContainer source = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(cycloPropane);
+        IAtomContainer target = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(isobutane);
+
+        CDKHueckelAromaticityDetector.detectAromaticity(source);
         CDKHueckelAromaticityDetector.detectAromaticity(target);
 
         boolean bondSensitive = false;
@@ -180,12 +180,56 @@ public class SMSDTest extends CDKTestCase {
         boolean fragmentMinimization = true;
         boolean energyMinimization = true;
 
+
+//	Calling the main algorithm to perform MCS cearch
         SMSD comparison = new SMSD(Algorithm.DEFAULT, bondSensitive);
-        comparison.init(query, target, removeHydrogen);
+        comparison.init(source, target, removeHydrogen);
+        comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
+
+//        Cyclopropane is not a subgraph of Isobutane
+        Assert.assertEquals(false, comparison.isSubgraph());
+        Assert.assertEquals(new Double(0.75), new Double(comparison.getTanimotoSimilarity()));
+        Assert.assertEquals(3, comparison.getFirstMapping().size());
+        Assert.assertEquals(18, comparison.getAllMapping().size());
+    }
+
+    @Test
+    public void testSingleMappingTesting() throws Exception {
+
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        IAtomContainer atomContainer = sp.parseSmiles("C");
+        QueryAtomContainer query = QueryAtomContainerCreator.createBasicQueryContainer(atomContainer);
+
+        IMolecule mol2 = create4Toluene();
+
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
+        CDKHueckelAromaticityDetector.detectAromaticity(mol2);
+
+        boolean bondSensitive = false;
+        boolean removeHydrogen = true;
+        boolean stereoMatch = false;
+        boolean fragmentMinimization = false;
+        boolean energyMinimization = false;
+
+        SMSD comparison = new SMSD(Algorithm.DEFAULT, bondSensitive);
+        comparison.init(query, mol2, removeHydrogen);
         comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
 
         Assert.assertEquals(true, comparison.isSubgraph());
-        Assert.assertEquals(3, comparison.getAllMapping().size());
+        Assert.assertEquals(7, comparison.getAllMapping().size());
+
+        bondSensitive = true;
+        removeHydrogen = true;
+        stereoMatch = true;
+        fragmentMinimization = true;
+        energyMinimization = true;
+
+        SMSD comparison1 = new SMSD(Algorithm.DEFAULT, bondSensitive);
+        comparison1.init(query, mol2, removeHydrogen);
+        comparison1.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
+
+        Assert.assertEquals(true, comparison1.isSubgraph());
+        Assert.assertEquals(1, comparison1.getAllMapping().size());
 
 
     }
@@ -228,7 +272,7 @@ public class SMSDTest extends CDKTestCase {
         source = comparison.getReactantMolecule();
         target = comparison.getProductMolecule();
 
-//        Assert.assertEquals(true, comparison.isSubgraph());
+        Assert.assertEquals(true, comparison.isSubgraph());
         Assert.assertEquals(13, comparison.getFirstMapping().size());
 
 
@@ -267,6 +311,7 @@ public class SMSDTest extends CDKTestCase {
 
 //      Get modified Query and Target Molecules as Mappings will correspond to these molecules
         Assert.assertEquals(true, comparison.isSubgraph());
+        Assert.assertEquals(2, comparison.getAllMapping().size());
         Assert.assertEquals(27, comparison.getFirstMapping().size());
 
 
@@ -714,17 +759,52 @@ public class SMSDTest extends CDKTestCase {
         return result;
 
     }
-//
-    //    public static Molecule createCyclopropane() {
-//        Molecule result = new DefaultMolecule();
-//        Atom c0 = result.addAtom("C");
-//        Atom c1 = result.addAtom("C");
-//        Atom c2 = result.addAtom("C");
-//
-//        result.connect(c0, c1, 1);
-//        result.connect(c1, c2, 1);
-//        result.connect(c2, c0, 1);
-//
-//        return result;
-//    }
+
+    public static IMolecule createCyclopropane() {
+        IMolecule result = DefaultChemObjectBuilder.getInstance().newMolecule();
+
+        IAtom c1 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+        IAtom c2 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+        IAtom c3 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+
+        result.addAtom(c1);
+        result.addAtom(c2);
+        result.addAtom(c3);
+
+
+        IBond bond1 = new Bond(c1, c2, IBond.Order.SINGLE);
+        IBond bond2 = new Bond(c2, c3, IBond.Order.SINGLE);
+        IBond bond3 = new Bond(c3, c1, IBond.Order.SINGLE);
+
+        result.addBond(bond1);
+        result.addBond(bond2);
+        result.addBond(bond3);
+
+        return result;
+    }
+
+    public static IMolecule createIsobutane() {
+        IMolecule result = DefaultChemObjectBuilder.getInstance().newMolecule();
+
+        IAtom c1 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+        IAtom c2 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+        IAtom c3 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+        IAtom c4 = DefaultChemObjectBuilder.getInstance().newAtom("C");
+
+        result.addAtom(c1);
+        result.addAtom(c2);
+        result.addAtom(c3);
+        result.addAtom(c4);
+
+
+        IBond bond1 = new Bond(c1, c2, IBond.Order.SINGLE);
+        IBond bond2 = new Bond(c2, c3, IBond.Order.SINGLE);
+        IBond bond3 = new Bond(c2, c4, IBond.Order.SINGLE);
+
+        result.addBond(bond1);
+        result.addBond(bond2);
+        result.addBond(bond3);
+
+        return result;
+    }
 }
