@@ -113,7 +113,6 @@ public class SubStructureSearchAlgorithms implements IMCS {
                     cdkMCS();
                     if (getFirstMapping() == null) {
                         mcs = null;
-                        System.gc();
                     }
                     break;
                 case DEFAULT:
@@ -139,25 +138,21 @@ public class SubStructureSearchAlgorithms implements IMCS {
                         vfTurboHandler();
                         if (getFirstMapping() == null) {
                             mcs = null;
-                            System.gc();
                         }
                     } else {
                         singleMapping();
                     }
-                    System.gc();
                     break;
                 case VFLibMCS:
                     if (rBondCount >= 6 && rBondCount >= 6) {
                         vfLibMCS();
                         if (getFirstMapping() == null) {
                             mcs = null;
-                            System.gc();
                         }
                     } else {
                         mcsPlus();
                     }
                     break;
-
             }
 
         }
