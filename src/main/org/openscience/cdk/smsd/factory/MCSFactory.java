@@ -50,6 +50,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smsd.algorithm.vflib.VFlibTurboHandler;
 
 /**
  * @cdk.module smsd
@@ -105,38 +106,58 @@ public class MCSFactory implements IMCS {
         int pAtomCount = PMol.getMolecule().getAtomCount();
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
-        } else if (algorithmType.equals(Algorithm.DEFAULT)) {
-            if (BondType.getInstance().getBondSensitiveFlag()) {
-                cdkMCS();
-            } else {
-                mcsPlus();
-            }
-            if (getFirstMapping() == null) {
-                mcs = null;
-                System.gc();
-                vfLibMCS();
-            }
-        } else if (algorithmType.equals(Algorithm.MCSPlus)) {
-            mcsPlus();
-            if (getFirstMapping() == null) {
-                mcs = null;
-            }
+        } else {
 
-        } else if (algorithmType.equals(Algorithm.VFLibMCS)) {
-            if (rBondCount >= 6 && rBondCount >= 6) {
-                vfLibMCS();
-                if (getFirstMapping() == null) {
-                    mcs = null;
+            switch (algorithmType) {
+                case CDKMCS:
+                    cdkMCS();
+                    if (getFirstMapping() == null) {
+                        mcs = null;
+                        System.gc();
+                    }
+                    break;
+                case DEFAULT:
+                    if (BondType.getInstance().getBondSensitiveFlag()) {
+                        cdkMCS();
+                    } else {
+                        mcsPlus();
+                    }
+                    if (getFirstMapping() == null) {
+                        mcs = null;
+                        System.gc();
+                        vfLibMCS();
+                    }
+                    break;
+                case MCSPlus:
+                    mcsPlus();
+                    if (getFirstMapping() == null) {
+                        mcs = null;
+                    }
+                    break;
+                case SubStructure:
+                    if (rBondCount > 1 && pBondCount > 1) {
+                        vfTurboHandler();
+                        if (getFirstMapping() == null) {
+                            mcs = null;
+                            System.gc();
+                        }
+                    } else {
+                        singleMapping();
+                    }
                     System.gc();
-                }
-            } else {
-                mcsPlus();
-            }
-        } else if (algorithmType.equals(Algorithm.CDKMCS)) {
-            cdkMCS();
-            if (getFirstMapping() == null) {
-                mcs = null;
-                System.gc();
+                    break;
+                case VFLibMCS:
+                    if (rBondCount >= 6 && rBondCount >= 6) {
+                        vfLibMCS();
+                        if (getFirstMapping() == null) {
+                            mcs = null;
+                            System.gc();
+                        }
+                    } else {
+                        mcsPlus();
+                    }
+                    break;
+
             }
 
         }
@@ -213,6 +234,24 @@ public class MCSFactory implements IMCS {
             Logger.getLogger(MCSFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void vfTurboHandler() {
+
+        VFlibTurboHandler subGraphTurboSearch = new VFlibTurboHandler();
+        subGraphTurboSearch.set(RMol, PMol);
+
+        firstSolution.clear();
+        allMCS.clear();
+        allAtomMCS.clear();
+        firstAtomMCS.clear();
+
+        if (subGraphTurboSearch.isSubgraph()) {
+            firstSolution.putAll(subGraphTurboSearch.getFirstMapping());
+            allMCS.addAll(subGraphTurboSearch.getAllMapping());
+            firstAtomMCS.putAll(subGraphTurboSearch.getFirstAtomMapping());
+            allAtomMCS.addAll(subGraphTurboSearch.getAllAtomMapping());
+        }
     }
 
     /**

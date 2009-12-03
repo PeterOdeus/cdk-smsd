@@ -29,7 +29,6 @@ import java.util.TreeMap;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smsd.factory.MCSFactory;
-import org.openscience.cdk.smsd.factory.SubGraphFactory;
 import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -142,11 +141,7 @@ public class SMSD implements IMCS {
      * @param bondSensitiveFlag true will activate bond order match else false
      */
     public SMSD(Algorithm algorithmType, boolean bondSensitiveFlag) {
-        if (algorithmType.equals(Algorithm.SubStructure)) {
-            comparison = new SubGraphFactory(bondSensitiveFlag);
-        } else {
-            comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
-        }
+        comparison = new MCSFactory(algorithmType, bondSensitiveFlag);
         System.gc();
     }
 
