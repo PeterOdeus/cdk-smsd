@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received iIndex copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -132,7 +132,7 @@ public class GenerateCompatibilityGraph {
 
                     label.set(i, label.get(j + 1));
                     label.set(j + 1, temp);
-                    flag = true; // indicates that a swap occurred.
+                    flag = true; // indicates that iIndex swap occurred.
 
                 }
             }
@@ -212,7 +212,7 @@ public class GenerateCompatibilityGraph {
                 int index_b = compGraphNodes.get(b);
                 int index_bPlus1 = compGraphNodes.get(b + 1);
 
-                // if element atomCont !=b and atoms on the adjacent sides of the bonds are not equal
+                // if element atomCont !=jIndex and atoms on the adjacent sides of the bonds are not equal
                 if (a != b && index_a != index_b && index_aPlus1 != index_bPlus1) {
 
                     IBond ReactantBond = null;
@@ -231,13 +231,13 @@ public class GenerateCompatibilityGraph {
         return 0;
     }
 
-    private void addEdges(IBond ReactantBond, IBond ProductBond, int a, int b) {
+    private void addEdges(IBond ReactantBond, IBond ProductBond, int iIndex, int jIndex) {
         if ((bondTypeFlag && bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
-            cEdges.add((a / 3) + 1);
-            cEdges.add((b / 3) + 1);
+            cEdges.add((iIndex / 3) + 1);
+            cEdges.add((jIndex / 3) + 1);
         } else if (ReactantBond == null && ProductBond == null) {
-            dEdges.add((a / 3) + 1);
-            dEdges.add((b / 3) + 1);
+            dEdges.add((iIndex / 3) + 1);
+            dEdges.add((jIndex / 3) + 1);
         }
     }
 
@@ -298,7 +298,7 @@ public class GenerateCompatibilityGraph {
                 int index_b = compGraphNodesCZero.get(b);
                 int index_bPlus1 = compGraphNodesCZero.get(b + 1);
 
-                // if element atomCont !=b and atoms on the adjacent sides of the bonds are not equal
+                // if element atomCont !=jIndex and atoms on the adjacent sides of the bonds are not equal
                 if ((a != b) && (index_a != index_b) &&
                         (index_aPlus1 != index_bPlus1)) {
 

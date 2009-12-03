@@ -143,8 +143,8 @@ public class SingleMapping {
         List list = new LinkedList(map.entrySet());
         Collections.sort(list, new Comparator() {
 
-            public int compare(Object o1, Object o2) {
-                return ((Comparable) ((Map.Entry<K, V>) (o1)).getValue()).compareTo(((Map.Entry<K, V>) (o2)).getValue());
+            public int compare(Object object1, Object object2) {
+                return ((Comparable) ((Map.Entry<K, V>) (object1)).getValue()).compareTo(((Map.Entry<K, V>) (object2)).getValue());
             }
         });
         Map<K, V> result = new LinkedHashMap<K, V>();
