@@ -42,8 +42,6 @@ import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.smsd.filters.PostFilter;
-import org.openscience.cdk.smsd.helper.FinalMappings;
 
 /**
  * @cdk.module smsd
@@ -98,8 +96,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
                 _mappings = mgit.getMappings();
                 mgit = null;
             }
-            PostFilter.filter(_mappings);
-            setMappings();
+            setMappings(_mappings);
 
         } else if (!allAtomMCS_copy.isEmpty()) {
             allAtomMCS.addAll(allAtomMCS_copy);
@@ -114,24 +111,23 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
     }
 
-    private void setMappings() throws CDKException {
+    private void setMappings(List<List<Integer>> _mappings) throws CDKException {
         int counter = 0;
-        List<TreeMap<Integer, Integer>> _mappings = FinalMappings.getInstance().getFinalMapping();
-        for (TreeMap<Integer, Integer> mapping : _mappings) {
+        for (List<Integer> mapping : _mappings) {
 
             Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
             TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
-            for (Map.Entry<Integer, Integer> mappedAtomAtomPair : mapping.entrySet()) {
+            for (int index = 0; index < mapping.size(); index += 2) {
                 IAtom qAtom = null;
                 IAtom tAtom = null;
 
-                qAtom = source.getAtom(mapping.get(mappedAtomAtomPair.getKey()));
-                tAtom = target.getAtom(mapping.get(mappedAtomAtomPair.getValue()));
+                qAtom = source.getAtom(mapping.get(index));
+                tAtom = target.getAtom(mapping.get(index + 1));
 
 
-                Integer qIndex = mapping.get(mappedAtomAtomPair.getKey());
-                Integer tIndex = mapping.get(mappedAtomAtomPair.getValue());
+                Integer qIndex = mapping.get(index);
+                Integer tIndex = mapping.get(index + 1);
 
 
                 if (qIndex != null && tIndex != null) {
