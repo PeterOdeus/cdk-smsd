@@ -992,7 +992,7 @@ public class McGregor {
     }
 
     /**
-     * @return
+     * @return mappings
      */
     public List<List<Integer>> getMappings() {
 
@@ -1000,7 +1000,7 @@ public class McGregor {
     }
 
     /**
-     * @return
+     * @return MCS size
      */
     public int getMCSSize() {
 
