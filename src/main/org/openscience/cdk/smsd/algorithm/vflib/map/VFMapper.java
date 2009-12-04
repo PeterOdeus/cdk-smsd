@@ -162,7 +162,6 @@ public class VFMapper implements IMapper {
 
         if (state.isGoal()) {
             Map<INode, IAtom> map = state.getMap();
-
             if (!hasMap(map)) {
                 maps.add(state.getMap());
             }

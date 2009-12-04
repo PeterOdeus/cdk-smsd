@@ -276,10 +276,7 @@ public class VFState implements IState {
     }
 
     private boolean matchBond(IEdge edge, IBond targetBond) {
-
-
         return edge.getBondMatcher().matches(targetBond);
-
     }
 
     private boolean isHeadMapped() {

@@ -190,7 +190,7 @@ public class VFMCSState implements IState {
         if (match.getQueryNode().countNeighbors() > target.getConnectedAtomsCount(atom)) {
             return false;
         }
-        return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
+        return match.getQueryNode().getAtomMatcher().matches(atom);
     }
 
     private boolean matchBonds(VFMatch match) {

@@ -73,14 +73,16 @@ public class VFlibTurboHandler implements ISubGraph {
 
         IMapper mapper = new VFMapper(query);
 
-        Map<INode, IAtom> vfLibSolutions = mapper.getFirstMap(target);
+        Map<INode, IAtom> vfLibSolution = mapper.getFirstMap(target);
+
+//        System.out.println("Size of the Mapping: " + vfLibSolution.size());
 
         Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
         TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
         int counter = 0;
 
-        for (Map.Entry<INode, IAtom> mapping : vfLibSolutions.entrySet()) {
+        for (Map.Entry<INode, IAtom> mapping : vfLibSolution.entrySet()) {
 
             IAtom qAtom = query.getAtom(mapping.getKey());
             IAtom tAtom = mapping.getValue();
@@ -90,7 +92,6 @@ public class VFlibTurboHandler implements ISubGraph {
 
             atomatomMapping.put(qAtom, tAtom);
             indexindexMapping.put(qIndex, tIndex);
-
 
         }
         if (atomatomMapping.size() > 0) {
