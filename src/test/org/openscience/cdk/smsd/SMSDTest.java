@@ -267,9 +267,6 @@ public class SMSDTest extends CDKTestCase {
         comparison.init(source, target, removeHydrogen);
         comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
 
-//      Get modified Query and Target Molecules as Mappings will correspond to these molecules
-        source = comparison.getReactantMolecule();
-        target = comparison.getProductMolecule();
 
         Assert.assertEquals(true, comparison.isSubgraph());
         Assert.assertEquals(13, comparison.getFirstMapping().size());
@@ -298,7 +295,7 @@ public class SMSDTest extends CDKTestCase {
         CDKHueckelAromaticityDetector.detectAromaticity(mol1);
         CDKHueckelAromaticityDetector.detectAromaticity(mol2);
 
-        boolean bondSensitive = false;
+        boolean bondSensitive = true;
         boolean removeHydrogen = true;
         boolean stereoMatch = true;
         boolean fragmentMinimization = true;
@@ -312,6 +309,55 @@ public class SMSDTest extends CDKTestCase {
         Assert.assertEquals(true, comparison.isSubgraph());
         Assert.assertEquals(2, comparison.getAllMapping().size());
         Assert.assertEquals(27, comparison.getFirstMapping().size());
+
+
+    }
+
+    @Test
+    public void testSMSDLargeSubgraph() throws Exception {
+
+        String file1 = "data/mdl/C03374.mol";
+        String file2 = "data/mdl/C05787.mol";
+        Molecule mol1 = new Molecule();
+        Molecule mol2 = new Molecule();
+
+        InputStream ins1 = this.getClass().getClassLoader().getResourceAsStream(file1);
+        new MDLV2000Reader(ins1, Mode.RELAXED).read(mol1);
+        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
+        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
+
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
+        ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
+
+        IAtomContainer source = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol1);
+        IAtomContainer target = (IMolecule) ExtAtomContainerManipulator.removeHydrogensAndPreserveAtomID(mol2);
+
+//	Calling the main algorithm to perform MCS cearch
+
+        CDKHueckelAromaticityDetector.detectAromaticity(source);
+        CDKHueckelAromaticityDetector.detectAromaticity(target);
+
+        boolean bondSensitive = true;
+        boolean removeHydrogen = true;
+        boolean stereoMatch = true;
+        boolean fragmentMinimization = true;
+        boolean energyMinimization = true;
+
+        SMSD comparison = new SMSD(Algorithm.SubStructure, bondSensitive);
+        comparison.init(source, target, removeHydrogen);
+        comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
+
+
+        Assert.assertEquals(true, comparison.isSubgraph());
+        Assert.assertEquals(55, comparison.getFirstMapping().size());
+
+        SMSD comparison1 = new SMSD(Algorithm.DEFAULT, bondSensitive);
+        comparison1.init(source, target, removeHydrogen);
+        comparison1.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
+
+        Assert.assertEquals(true, comparison1.isSubgraph());
+        Assert.assertEquals(55, comparison1.getFirstMapping().size());
+        Assert.assertEquals(1, comparison1.getAllAtomMapping().size());
 
 
     }
