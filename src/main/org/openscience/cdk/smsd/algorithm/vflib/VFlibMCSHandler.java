@@ -57,7 +57,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
     private List<Map<INode, IAtom>> vfLibSolutions = null;
-    private int VFMCSSize = 0;
+    private int vfMCSSize = 0;
 
     public VFlibMCSHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
@@ -79,7 +79,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
         searchVFMCSMappings();
         boolean flag = mcgregorFlag();
         if (flag) {
-           searchMcGregorMapping();
+            searchMcGregorMapping();
         } else if (!allAtomMCS_copy.isEmpty()) {
             allAtomMCS.addAll(allAtomMCS_copy);
             allMCS.addAll(allMCS_copy);
@@ -99,7 +99,7 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
     private boolean mcgregorFlag() {
         int commonAtomCount = checkCommonAtomCount(ac1, ac2);
-        if (commonAtomCount > VFMCSSize && commonAtomCount > VFMCSSize) {
+        if (commonAtomCount > vfMCSSize && commonAtomCount > vfMCSSize) {
             return true;
 
         } else {
@@ -240,6 +240,23 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
             RONP = false;
         }
 
+        setVFMCSMappings(RONP, query);
+        this.vfMCSSize = allMCS_copy.isEmpty() ? 0 : allMCS_copy.get(0).size();
+    }
+
+    private void searchMcGregorMapping() throws CDKException, IOException {
+        List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
+
+        for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
+            McGregor mgit = new McGregor(ac1, ac2, _mappings);
+            mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
+            _mappings = mgit.getMappings();
+            mgit = null;
+        }
+        setMcGregorMappings(_mappings);
+    }
+
+    private void setVFMCSMappings(boolean RONP, IQuery query) {
         int counter = 0;
 
         for (Map<INode, IAtom> solution : vfLibSolutions) {
@@ -259,8 +276,8 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
                     qAtom = mapping.getValue();
                 }
 
-                Integer qIndex = new Integer(ac1.getAtomNumber(qAtom));
-                Integer tIndex = new Integer(ac2.getAtomNumber(tAtom));
+                Integer qIndex = Integer.valueOf(ac1.getAtomNumber(qAtom));
+                Integer tIndex = Integer.valueOf(ac2.getAtomNumber(tAtom));
                 if (qIndex != null && tIndex != null) {
                     atomatomMapping.put(qAtom, tAtom);
                     indexindexMapping.put(qIndex, tIndex);
@@ -279,52 +296,40 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
                 counter++;
             }
         }
-        this.VFMCSSize = allMCS_copy.isEmpty() ? 0 : allMCS_copy.get(0).size();
     }
 
-    private void searchMcGregorMapping() throws CDKException, IOException {
-         List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
+    private void setMcGregorMappings(List<List<Integer>> _mappings) throws CDKException {
+        int counter = 0;
+        for (List<Integer> mapping : _mappings) {
 
-            for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
-                McGregor mgit = new McGregor(ac1, ac2, _mappings);
-                mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
-                _mappings = mgit.getMappings();
-                mgit = null;
-            }
-            int counter = 0;
-            for (List<Integer> mapping : _mappings) {
+            Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
+            TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
 
-                Map<IAtom, IAtom> atomatomMapping = new HashMap<IAtom, IAtom>();
-                TreeMap<Integer, Integer> indexindexMapping = new TreeMap<Integer, Integer>();
+            for (int index = 0; index < mapping.size(); index += 2) {
+                IAtom qAtom = null;
+                IAtom tAtom = null;
 
-                for (int index = 0; index < mapping.size(); index += 2) {
-                    IAtom qAtom = null;
-                    IAtom tAtom = null;
-
-                    qAtom = ac1.getAtom(mapping.get(index));
-                    tAtom = ac2.getAtom(mapping.get(index + 1));
+                qAtom = ac1.getAtom(mapping.get(index));
+                tAtom = ac2.getAtom(mapping.get(index + 1));
 
 
-                    Integer qIndex = mapping.get(index);
-                    Integer tIndex = mapping.get(index + 1);
+                Integer qIndex = mapping.get(index);
+                Integer tIndex = mapping.get(index + 1);
 
 
-                    if (qIndex != null && tIndex != null) {
-                        atomatomMapping.put(qAtom, tAtom);
-                        indexindexMapping.put(qIndex, tIndex);
-                    } else {
-                        throw new CDKException("Atom index pointing to NULL");
-                    }
+                if (qIndex != null && tIndex != null) {
+                    atomatomMapping.put(qAtom, tAtom);
+                    indexindexMapping.put(qIndex, tIndex);
+                } else {
+                    throw new CDKException("Atom index pointing to NULL");
                 }
-
-                if (!atomatomMapping.isEmpty()) {
-                    if (!hasMap(indexindexMapping, allMCS)) {
-                        allAtomMCS.add(counter, atomatomMapping);
-                        allMCS.add(counter, indexindexMapping);
-                        counter++;
-                    }
-                }
-
             }
+
+            if (!atomatomMapping.isEmpty() && !hasMap(indexindexMapping, allMCS)) {
+                allAtomMCS.add(counter, atomatomMapping);
+                allMCS.add(counter, indexindexMapping);
+                counter++;
+            }
+        }
     }
 }
