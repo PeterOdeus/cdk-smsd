@@ -1,15 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.openscience.cdk.smsd.tools;
-
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-
-/**
- *
- * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
+/* Copyright (C) 2006-2009  Syed Asad Rahman <asad@ebi.ac.uk>
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -31,6 +20,11 @@ import java.util.TimeZone;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+package org.openscience.cdk.smsd.tools;
+
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 /**
  * @cdk.module smsd
  */
