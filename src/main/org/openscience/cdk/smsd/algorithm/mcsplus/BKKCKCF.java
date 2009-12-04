@@ -264,7 +264,6 @@ public class BKKCKCF {
     }
 
     private int enumerateCliques(List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
-        List<Integer> neighbourVertex = new ArrayList<Integer>(); ////Initialization ArrayList neighbourVertex
         Stack<Integer> potentialVertex = new Stack<Integer>();//Defined as potentialCVertex' in the paper
 
 
@@ -294,9 +293,65 @@ public class BKKCKCF {
             return 0;
 
         }
+        findCliques(
+                potentialVertex,
+                vertexOfCurrentClique,
+                potentialCVertex,
+                potentialDVertex,
+                excludedVertex,
+                excludedCVertex);
+        return 0;
+    }
 
+    private List<Integer> findNeighbors(int central_node) {
 
+        List<Integer> neighborVertex = new ArrayList<Integer>();
+
+        for (int a = 0; a < cEdgeIterationSize; a++) {
+            if (cEdges.get(a * 2 + 0) == central_node) {
+                //          System.out.println( cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
+                neighborVertex.add(cEdges.get(a * 2 + 1));
+                neighborVertex.add(1); // 1 means: is connected via C-edge
+            }
+
+            if (cEdges.get(a * 2 + 1) == central_node) {
+                //           System.out.println(cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
+                neighborVertex.add(cEdges.get(a * 2 + 0));
+                neighborVertex.add(1); // 1 means: is connected via C-edge
+            }
+
+        }
+        for (int a = 0; a < dEdgeIterationSize; a++) {
+            if (dEdges.get(a * 2 + 0) == central_node) {
+                //       System.out.println( dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
+                neighborVertex.add(dEdges.get(a * 2 + 1));
+                neighborVertex.add(2); // 2 means: is connected via D-edge
+            }
+
+            if (dEdges.get(a * 2 + 1) == central_node) {
+                //        System.out.println(dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
+                neighborVertex.add(dEdges.get(a * 2 + 0));
+                neighborVertex.add(2); // 2 means: is connected via D-edge
+            }
+
+        }
+
+        return neighborVertex;
+    }
+
+    protected int getBestCliqueSize() {
+        return bestCliqueSize;
+    }
+
+    protected Stack<List<Integer>> getMaxCliqueSet() {
+        Stack<List<Integer>> solution = new Stack<List<Integer>>();
+        solution.addAll(maxCliquesSet);
+        return solution;
+    }
+
+    private void findCliques(Stack<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
         int index = 0;
+        List<Integer> neighbourVertex = new ArrayList<Integer>(); ////Initialization ArrayList neighbourVertex
 
         while (potentialVertex.elementAt(index) != 0) {
 
@@ -327,7 +382,7 @@ public class BKKCKCF {
             neighbourVertex = findNeighbors(potentialVertexIndex);
 
             int N_size = neighbourVertex.size();
-            
+
             //System.out.println("Neighbors: ");
 
             for (int b = 0; b < N_size; b = b + 2) {
@@ -397,52 +452,5 @@ public class BKKCKCF {
             excludedVertex.add(potentialVertexIndex);
             index++;
         }
-        return 0;
-    }
-
-    private List<Integer> findNeighbors(int central_node) {
-
-        List<Integer> neighborVertex = new ArrayList<Integer>();
-
-        for (int a = 0; a < cEdgeIterationSize; a++) {
-            if (cEdges.get(a * 2 + 0) == central_node) {
-                //          System.out.println( cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
-                neighborVertex.add(cEdges.get(a * 2 + 1));
-                neighborVertex.add(1); // 1 means: is connected via C-edge
-            }
-
-            if (cEdges.get(a * 2 + 1) == central_node) {
-                //           System.out.println(cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
-                neighborVertex.add(cEdges.get(a * 2 + 0));
-                neighborVertex.add(1); // 1 means: is connected via C-edge
-            }
-
-        }
-        for (int a = 0; a < dEdgeIterationSize; a++) {
-            if (dEdges.get(a * 2 + 0) == central_node) {
-                //       System.out.println( dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
-                neighborVertex.add(dEdges.get(a * 2 + 1));
-                neighborVertex.add(2); // 2 means: is connected via D-edge
-            }
-
-            if (dEdges.get(a * 2 + 1) == central_node) {
-                //        System.out.println(dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
-                neighborVertex.add(dEdges.get(a * 2 + 0));
-                neighborVertex.add(2); // 2 means: is connected via D-edge
-            }
-
-        }
-
-        return neighborVertex;
-    }
-
-    protected int getBestCliqueSize() {
-        return bestCliqueSize;
-    }
-
-    protected Stack<List<Integer>> getMaxCliqueSet() {
-        Stack<List<Integer>> solution = new Stack<List<Integer>>();
-        solution.addAll(maxCliquesSet);
-        return solution;
     }
 }
