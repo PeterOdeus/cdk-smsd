@@ -24,12 +24,6 @@
  */
 package org.openscience.cdk.smsd.factory;
 
-import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
-import org.openscience.cdk.smsd.interfaces.IMCS;
-import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
-import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
-import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
-import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,10 +33,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.openscience.cdk.smsd.filters.ChemicalFilters;
-import org.openscience.cdk.smsd.global.BondType;
-import org.openscience.cdk.smsd.global.TimeOut;
-import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -50,7 +40,18 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandler;
+import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandler;
+import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
+import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibTurboHandler;
+import org.openscience.cdk.smsd.filters.ChemicalFilters;
+import org.openscience.cdk.smsd.global.BondType;
+import org.openscience.cdk.smsd.global.TimeOut;
+import org.openscience.cdk.smsd.helper.MolHandler;
+import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
+import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 
 /**
  * @cdk.module smsd

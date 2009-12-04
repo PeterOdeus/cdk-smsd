@@ -28,11 +28,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.smsd.factory.SubStructureSearchAlgorithms;
-import org.openscience.cdk.smsd.interfaces.IMCS;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smsd.factory.SubStructureSearchAlgorithms;
+import org.openscience.cdk.smsd.interfaces.IMCS;
+import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
 
 /**
  *  <p>This class implements the SMSD- a multipurpose structure comparison tool.
