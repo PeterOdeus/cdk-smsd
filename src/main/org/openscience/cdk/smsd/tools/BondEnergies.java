@@ -22,9 +22,12 @@
  */
 package org.openscience.cdk.smsd.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.ArrayList;
+
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond.Order;
@@ -32,6 +35,7 @@ import org.openscience.cdk.interfaces.IBond.Order;
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.tools.BondEnergiesTest")
 public class BondEnergies {
 
     private static TreeMap<Integer, List<Object>> bondEngergies = null;
@@ -43,6 +47,7 @@ public class BondEnergies {
      * @return
      * @throws CDKException 
      */
+    @TestMethod("testGetInstance")
     public synchronized static BondEnergies getInstance()
             throws CDKException {
         if (null == _instance) {

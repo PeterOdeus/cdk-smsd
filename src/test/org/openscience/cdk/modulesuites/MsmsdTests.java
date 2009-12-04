@@ -25,6 +25,7 @@ import org.openscience.cdk.coverage.SmsdCoverageTest;
 import org.openscience.cdk.smsd.SMSDTest;
 import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest;
 import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
+import org.openscience.cdk.smsd.tools.BondEnergiesTest;
 import org.openscience.cdk.smsd.tools.TimeManagerTest;
 
 /**
@@ -36,6 +37,7 @@ import org.openscience.cdk.smsd.tools.TimeManagerTest;
 @SuiteClasses(value={
     SmsdCoverageTest.class,
 
+    BondEnergiesTest.class,
     CDKMCSTest.class,
     SMSDTest.class,
     TimeManagerTest.class,
