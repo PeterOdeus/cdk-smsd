@@ -23,6 +23,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 import org.openscience.cdk.coverage.SmsdCoverageTest;
 import org.openscience.cdk.smsd.SMSDTest;
+import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest;
 import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
 
 /**
@@ -33,7 +34,8 @@ import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
 @RunWith(value=Suite.class)
 @SuiteClasses(value={
     SmsdCoverageTest.class,
-    
+
+    CDKMCSTest.class,
     SMSDTest.class,
     VFLibTest.class
 })
