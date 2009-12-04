@@ -25,6 +25,7 @@ import org.openscience.cdk.coverage.SmsdCoverageTest;
 import org.openscience.cdk.smsd.SMSDTest;
 import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest;
 import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
+import org.openscience.cdk.smsd.tools.TimeManagerTest;
 
 /**
  * TestSuite that runs all the unit tests for the smsd module.
@@ -37,6 +38,7 @@ import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
 
     CDKMCSTest.class,
     SMSDTest.class,
+    TimeManagerTest.class,
     VFLibTest.class
 })
 public class MsmsdTests {}

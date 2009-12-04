@@ -25,9 +25,13 @@ package org.openscience.cdk.smsd.tools;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
+
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.tools.TimeManagerTest")
 public class TimeManager {
 
     /**
@@ -41,6 +45,7 @@ public class TimeManager {
     /**
      * Constructor
      */
+    @TestMethod("testTimeManager")
     public TimeManager() {
 
         dateFormat = new SimpleDateFormat("HH:mm:ss");
