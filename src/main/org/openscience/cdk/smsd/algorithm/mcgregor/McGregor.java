@@ -90,9 +90,9 @@ public class McGregor {
      * @param present_Mapping
      * @throws IOException
      */
-    public void startMcGregorIteration(int best_Mapping_size, Map<Integer, Integer> present_Mapping) throws IOException {
+    public void startMcGregorIteration(int largestMappingSize, Map<Integer, Integer> present_Mapping) throws IOException {
 
-        this.globalMCSSize = (best_Mapping_size / 2);
+        this.globalMCSSize = (largestMappingSize / 2);
         List<String> c_tab1_copy = McGregorChecks.generateCTabCopy(source);
 
         List<String> c_tab2_copy = McGregorChecks.generateCTabCopy(target);
@@ -640,50 +640,11 @@ public class McGregor {
         if (TEMPMARCS.get(xstart * neighborBondNumB + ystart) == 1) {
 
             McGregorChecks.removeRedundantArcs(xstart, ystart, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-            int arcsleft = 0;
-
-            for (int a = 0; a < neighborBondNumA; a++) {
-                for (int b = 0; b < neighborBondNumB; b++) {
-
-                    if (TEMPMARCS.get(a * neighborBondNumB + b) == (1)) {
-                        arcsleft++;
-                    }
-                }
-            }
+            int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
 
             //test Best arcs left and skip rest if needed
             if (arcsleft >= bestarcsleft) {
-                do {
-                    yIndex++;
-                    if (yIndex == neighborBondNumB) {
-                        yIndex = 0;
-                        xIndex++;
-
-                    }
-                } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
-                if (xIndex < neighborBondNumA) {
-
-                    partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-                    TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-                    partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-
-                } else {
-                    if (arcsleft > bestarcsleft) {
-                        McGregorChecks.removeTreeStructure(first);
-                        first = last = new BinaryTree(-1);
-                        last.equal = null;
-                        last.not_equal = null;
-
-                        while (!bestARCS.empty()) {
-                            bestARCS.pop();
-                        }
-                    }
-                    bestarcsleft = arcsleft;
-
-                    if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
-                        bestARCS.push(TEMPMARCS);
-                    }
-                }
+                setArcs(xIndex, yIndex, arcsleft, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
             }
         } else {
             do {
@@ -701,28 +662,9 @@ public class McGregor {
                 TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
                 partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
             } else {
-                int arcsleft = 0;
-                for (int a = 0; a <
-                        neighborBondNumA; a++) {
-                    for (int b = 0; b <
-                            neighborBondNumB; b++) {
-                        if (TEMPMARCS.get(a * neighborBondNumB + b) == 1) {
-                            arcsleft++;
-                        }
-
-                    }
-                }
+                int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
                 if (arcsleft >= bestarcsleft) {
-                    if (arcsleft > bestarcsleft) {
-                        McGregorChecks.removeTreeStructure(first);
-                        first = last = new BinaryTree(-1);
-                        last.equal = null;
-                        last.not_equal = null;
-                        while (!bestARCS.empty()) {
-                            bestARCS.pop();
-                        }
-                    }
-                    bestarcsleft = arcsleft;
+                    popBestArcs(arcsleft);
 
                     if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
                         bestARCS.push(TEMPMARCS);
@@ -1039,5 +981,43 @@ public class McGregor {
             BESTARCS_copy.pop();
 //            System.out.println("End of the iterator!!!!");
         }
+    }
+
+    private void setArcs(int xIndex, int yIndex, int arcsleft, List<Integer> TEMPMARCS, List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
+        do {
+            yIndex++;
+            if (yIndex == neighborBondNumB) {
+                yIndex = 0;
+                xIndex++;
+
+            }
+        } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
+        if (xIndex < neighborBondNumA) {
+
+            partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
+            TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
+            partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
+
+        } else {
+            popBestArcs(arcsleft);
+
+
+            if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
+                bestARCS.push(TEMPMARCS);
+            }
+        }
+    }
+
+    private void popBestArcs(int arcsleft) {
+        if (arcsleft > bestarcsleft) {
+            McGregorChecks.removeTreeStructure(first);
+            first = last = new BinaryTree(-1);
+            last.equal = null;
+            last.not_equal = null;
+            while (!bestARCS.empty()) {
+                bestARCS.pop();
+            }
+        }
+        bestarcsleft = arcsleft;
     }
 }

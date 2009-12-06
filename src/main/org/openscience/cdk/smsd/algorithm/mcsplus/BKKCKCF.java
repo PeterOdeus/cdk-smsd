@@ -264,7 +264,7 @@ public class BKKCKCF {
     }
 
     private int enumerateCliques(List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
-        Stack<Integer> potentialVertex = new Stack<Integer>();//Defined as potentialCVertex' in the paper
+        List<Integer> potentialVertex = new ArrayList<Integer>();//Defined as potentialCVertex' in the paper
 
 
         for (Integer I : potentialCVertex) {
@@ -349,11 +349,11 @@ public class BKKCKCF {
         return solution;
     }
 
-    private void findCliques(Stack<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
+    private void findCliques(List<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
         int index = 0;
         List<Integer> neighbourVertex = new ArrayList<Integer>(); ////Initialization ArrayList neighbourVertex
 
-        while (potentialVertex.elementAt(index) != 0) {
+        while (potentialVertex.get(index) != 0) {
 
             int potentialVertexIndex = potentialVertex.get(index);
 
@@ -361,7 +361,7 @@ public class BKKCKCF {
 
             List<Integer> R_copy = new ArrayList<Integer>(vertexOfCurrentClique);
             Stack<Integer> P_copy = new Stack<Integer>();
-            Stack<Integer> Q_copy = new Stack<Integer>();
+            List<Integer> Q_copy = new ArrayList<Integer>();
             List<Integer> X_copy = new ArrayList<Integer>(excludedVertex);
             List<Integer> Y_copy = new ArrayList<Integer>(excludedCVertex);
 
@@ -380,6 +380,64 @@ public class BKKCKCF {
             //System.out.println("potentialVertex.elementAt(index): " + potentialVertex.elementAt(index));
 
             neighbourVertex = findNeighbors(potentialVertexIndex);
+            groupNeighbors(index,
+                    P_copy,
+                    Q_copy,
+                    X_copy,
+                    Y_copy,
+                    neighbourVertex,
+                    potentialDVertex,
+                    potentialVertex,
+                    excludedVertex,
+                    excludedCVertex);
+            Stack<Integer> P_copy_N_intersec = new Stack<Integer>();
+            List<Integer> Q_copy_N_intersec = new ArrayList<Integer>();
+            List<Integer> X_copy_N_intersec = new ArrayList<Integer>();
+            List<Integer> Y_copy_N_intersec = new ArrayList<Integer>();
+
+            copyVertex(neighbourVertex,
+                    P_copy_N_intersec,
+                    P_copy,
+                    Q_copy_N_intersec,
+                    Q_copy,
+                    X_copy_N_intersec,
+                    X_copy,
+                    Y_copy_N_intersec,
+                    Y_copy);
+
+            P_copy_N_intersec.push(0);
+            R_copy.add(potentialVertexIndex);
+            enumerateCliques(R_copy, P_copy_N_intersec, Q_copy_N_intersec, X_copy_N_intersec, Y_copy_N_intersec);
+            excludedVertex.add(potentialVertexIndex);
+            index++;
+        }
+    }
+
+    private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy, List<Integer> Q_copy_N_intersec, List<Integer> Q_copy, List<Integer> X_copy_N_intersec, List<Integer> X_copy, List<Integer> Y_copy_N_intersec, List<Integer> Y_copy) {
+       int nElement = -1;
+       int N_size = neighbourVertex.size();
+
+        for (int sec = 0; sec < N_size; sec = sec + 2) {
+
+            nElement = neighbourVertex.get(sec);
+
+            if (P_copy.contains(nElement)) {
+                P_copy_N_intersec.push(nElement);
+            }
+            if (Q_copy.contains(nElement)) {
+                Q_copy_N_intersec.add(nElement);
+            }
+            if (X_copy.contains(nElement)) {
+                X_copy_N_intersec.add(nElement);
+            }
+            if (Y_copy.contains(nElement)) {
+                Y_copy_N_intersec.add(nElement);
+            }
+        }
+
+    }
+
+    private void groupNeighbors(int index, Stack<Integer> P_copy, List<Integer> Q_copy, List<Integer> X_copy, List<Integer> Y_copy, List<Integer> neighbourVertex, List<Integer> potentialDVertex, List<Integer> potentialVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
 
             int N_size = neighbourVertex.size();
 
@@ -390,7 +448,7 @@ public class BKKCKCF {
                 //Grouping of the neighbors:
 
 
-                int Nelement_at_b = neighbourVertex.get(b);
+                Integer Nelement_at_b = neighbourVertex.get(b);
 
                 if (neighbourVertex.get(b + 1) == 1) {
                     //u and v are adjacent via index C-edge
@@ -399,7 +457,7 @@ public class BKKCKCF {
 
                         P_copy.push(Nelement_at_b);
                         //delete neighbourVertex[index] bzw. potentialDVertex[c] from set Q_copy, remove C-edges
-                        Q_copy.removeElement(Nelement_at_b);
+                        Q_copy.remove(Nelement_at_b);
 
                     }
                     if (excludedCVertex.contains(Nelement_at_b)) {
@@ -416,41 +474,8 @@ public class BKKCKCF {
                     --index;
                 }
 
-                potentialVertex.removeElement(Nelement_at_b);
+                potentialVertex.remove(Nelement_at_b);
 
             }
-            Stack<Integer> P_copy_N_intersec = new Stack<Integer>();
-            List<Integer> Q_copy_N_intersec = new ArrayList<Integer>();
-            List<Integer> X_copy_N_intersec = new ArrayList<Integer>();
-            List<Integer> Y_copy_N_intersec = new ArrayList<Integer>();
-
-            int nElement = -1;
-
-
-            for (int sec = 0; sec < N_size; sec = sec + 2) {
-
-                nElement = neighbourVertex.get(sec);
-
-                if (P_copy.contains(nElement)) {
-                    P_copy_N_intersec.push(nElement);
-                }
-                if (Q_copy.contains(nElement)) {
-                    Q_copy_N_intersec.add(nElement);
-                }
-                if (X_copy.contains(nElement)) {
-                    X_copy_N_intersec.add(nElement);
-                }
-                if (Y_copy.contains(nElement)) {
-                    Y_copy_N_intersec.add(nElement);
-                }
-            }
-
-
-            P_copy_N_intersec.push(0);
-            R_copy.add(potentialVertexIndex);
-            enumerateCliques(R_copy, P_copy_N_intersec, Q_copy_N_intersec, X_copy_N_intersec, Y_copy_N_intersec);
-            excludedVertex.add(potentialVertexIndex);
-            index++;
-        }
     }
 }

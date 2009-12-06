@@ -223,7 +223,6 @@ public class McGregorChecks {
         return temp_map;
     }
 
-   
     /**
      * The function is called in function partsearch. The function is given a temporary matrix and a position (row/column)
      * within this matrix. First the function sets all entries to zero, which can be exlcuded in respect to the current
@@ -461,5 +460,26 @@ public class McGregorChecks {
         }
 
         return c_tab_copy;
+    }
+
+    /**
+     *
+     * @param TEMPMARCS
+     * @param neighborBondNumA
+     * @param neighborBondNumB
+     * @return
+     */
+    protected static int countArcsLeft(List<Integer> TEMPMARCS, int neighborBondNumA, int neighborBondNumB) {
+        int arcsleft = 0;
+
+        for (int a = 0; a < neighborBondNumA; a++) {
+            for (int b = 0; b < neighborBondNumB; b++) {
+
+                if (TEMPMARCS.get(a * neighborBondNumB + b) == (1)) {
+                    arcsleft++;
+                }
+            }
+        }
+        return arcsleft;
     }
 }
