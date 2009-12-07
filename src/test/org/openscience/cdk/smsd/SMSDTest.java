@@ -308,15 +308,19 @@ public class SMSDTest extends CDKTestCase {
     @Test
     public void testSMSDLargeSubgraph() throws Exception {
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        String c03374 = "CC1=C(C=C)\\C(NC1=O)=C\\C1=C(C)C(CCC(=O)O[C@@H]2O[C@@H]" +
-                "([C@@H](O)[C@H](O)[C@H]2O)C(O)=O)=C(CC2=C(CCC(O)=O)C(C)=C(N2)" +
+        String c03374 = "CC1=C(C=C)\\C(NC1=O)=C" +
+                "\\C1=C(C)C(CCC(=O)O[C@@H]2O[C@@H]" +
+                "([C@@H](O)[C@H](O)[C@H]2O)C(O)=O)" +
+                "=C(CC2=C(CCC(O)=O)C(C)=C(N2)" +
                 "\\C=C2NC(=O)C(C=C)=C/2C)N1";
+
         String c05787 = "CC1=C(C=C)\\C(NC1=O)=C" +
                 "\\C1=C(C)C(CCC(=O)O[C@@H]2O[C@@H]" +
                 "([C@@H](O)[C@H](O)[C@H]2O)C(O)=O)" +
                 "=C(CC2=C(CCC(=O)O[C@@H]3O[C@@H]" +
                 "([C@@H](O)[C@H](O)[C@H]3O)C(O)=O)" +
-                "C(C)=C(N2)\\C=C2NC(=O)C(C=C)=C/2C)N1";
+                "C(C)=C(N2)" +
+                "\\C=C2NC(=O)C(C=C)=C/2C)N1";
 
         IAtomContainer mol1 = sp.parseSmiles(c03374);
         IAtomContainer mol2 = sp.parseSmiles(c05787);
