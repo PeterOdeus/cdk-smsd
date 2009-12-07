@@ -22,22 +22,18 @@
  */
 package org.openscience.cdk.smsd;
 
-import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKTestCase;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainerCreator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -233,18 +229,19 @@ public class SMSDTest extends CDKTestCase {
 
     }
 
+    /**
+     * frag is a subgraph of the het mol
+     * @throws Exception
+     */
     @Test
-    public void testSMSDFragSubgraph() throws Exception {
+    public void testSMSDFragHetSubgraph() throws Exception {
 
-        String file1 = "data/mdl/frag5.mol";
-        String file2 = "data/mdl/het5.mol";
-        Molecule mol1 = new Molecule();
-        Molecule mol2 = new Molecule();
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        String file1 = "O=C1NC(=O)C2=C(N1)NC(=O)C=N2";
+        String file2 = "OC[C@@H](O)[C@@H](O)[C@@H](O)CN1C(O)C(CCC(O)O)NC2C(O)NC(O)NC12";
 
-        InputStream ins1 = this.getClass().getClassLoader().getResourceAsStream(file1);
-        new MDLV2000Reader(ins1, Mode.RELAXED).read(mol1);
-        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
-        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
+        IAtomContainer mol1 = sp.parseSmiles(file1);
+        IAtomContainer mol2 = sp.parseSmiles(file2);
 
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
@@ -275,17 +272,12 @@ public class SMSDTest extends CDKTestCase {
     }
 
     @Test
-    public void testSMSDSubgraph() throws Exception {
-
-        String file1 = "data/mdl/ADP.mol";
-        String file2 = "data/mdl/ATP.mol";
-        Molecule mol1 = new Molecule();
-        Molecule mol2 = new Molecule();
-
-        InputStream ins1 = this.getClass().getClassLoader().getResourceAsStream(file1);
-        new MDLV2000Reader(ins1, Mode.RELAXED).read(mol1);
-        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
-        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
+    public void testSMSDAdpAtpSubgraph() throws Exception {
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        String adp = "NC1=NC=NC2=C1N=CN2[C@@H]1O[C@H](COP(O)(=O)OP(O)(O)=O)[C@@H](O)[C@H]1O";
+        String atp = "NC1=NC=NC2=C1N=CN2[C@@H]1O[C@H](COP(O)(=O)OP(O)(=O)OP(O)(O)=O)[C@@H](O)[C@H]1O";
+        IAtomContainer mol1 = sp.parseSmiles(adp);
+        IAtomContainer mol2 = sp.parseSmiles(atp);
 
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
@@ -315,16 +307,19 @@ public class SMSDTest extends CDKTestCase {
 
     @Test
     public void testSMSDLargeSubgraph() throws Exception {
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        String c03374 = "CC1=C(C=C)\\C(NC1=O)=C\\C1=C(C)C(CCC(=O)O[C@@H]2O[C@@H]" +
+                "([C@@H](O)[C@H](O)[C@H]2O)C(O)=O)=C(CC2=C(CCC(O)=O)C(C)=C(N2)" +
+                "\\C=C2NC(=O)C(C=C)=C/2C)N1";
+        String c05787 = "CC1=C(C=C)\\C(NC1=O)=C" +
+                "\\C1=C(C)C(CCC(=O)O[C@@H]2O[C@@H]" +
+                "([C@@H](O)[C@H](O)[C@H]2O)C(O)=O)" +
+                "=C(CC2=C(CCC(=O)O[C@@H]3O[C@@H]" +
+                "([C@@H](O)[C@H](O)[C@H]3O)C(O)=O)" +
+                "C(C)=C(N2)\\C=C2NC(=O)C(C=C)=C/2C)N1";
 
-        String file1 = "data/mdl/C03374.mol";
-        String file2 = "data/mdl/C05787.mol";
-        Molecule mol1 = new Molecule();
-        Molecule mol2 = new Molecule();
-
-        InputStream ins1 = this.getClass().getClassLoader().getResourceAsStream(file1);
-        new MDLV2000Reader(ins1, Mode.RELAXED).read(mol1);
-        InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
-        new MDLV2000Reader(ins2, Mode.RELAXED).read(mol2);
+        IAtomContainer mol1 = sp.parseSmiles(c03374);
+        IAtomContainer mol2 = sp.parseSmiles(c05787);
 
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol1);
         ExtAtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
