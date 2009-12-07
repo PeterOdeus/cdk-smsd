@@ -350,14 +350,6 @@ public class SMSDTest extends CDKTestCase {
         Assert.assertEquals(true, comparison.isSubgraph());
         Assert.assertEquals(55, comparison.getFirstMapping().size());
 
-        SMSD comparison1 = new SMSD(Algorithm.DEFAULT, bondSensitive);
-        comparison1.init(source, target, removeHydrogen);
-        comparison1.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
-
-        Assert.assertEquals(true, comparison1.isSubgraph());
-        Assert.assertEquals(55, comparison1.getFirstMapping().size());
-        Assert.assertEquals(1, comparison1.getAllAtomMapping().size());
-
 
     }
 
