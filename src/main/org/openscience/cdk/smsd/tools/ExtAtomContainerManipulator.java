@@ -549,35 +549,14 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 atoms[f] = new Atom(container.getAtom(f));
             }
 
-            if ((container.getAtom(f)).getPoint2d() != null) {
-                atoms[f].setPoint2d(new Point2d(container.getAtom(f).getPoint2d()));
-            }
-            if ((container.getAtom(f)).getPoint3d() != null) {
-                atoms[f].setPoint3d(new Point3d(container.getAtom(f).getPoint3d()));
-            }
-            if ((container.getAtom(f)).getFractionalPoint3d() != null) {
-                atoms[f].setFractionalPoint3d(new Point3d(container.getAtom(f).getFractionalPoint3d()));
-            }
-
-            if (container.getAtom(f).getID() != null) {
-                atoms[f].setID(new String(container.getAtom(f).getID()));
-            }
-            if (container.getAtom(f).getHydrogenCount() != null) {
-                atoms[f].setHydrogenCount(Integer.valueOf(container.getAtom(f).getHydrogenCount()));
-            }
-            if (container.getAtom(f).getCharge() != null) {
-                atoms[f].setCharge(new Double(container.getAtom(f).getCharge()));
-            }
-            if (container.getAtom(f).getStereoParity() != null) {
-                atoms[f].setStereoParity(Integer.valueOf(container.getAtom(f).getStereoParity()));
-            }
-
+            set2D(container, f, atoms);
+            set3D(container, f, atoms);
+            setFractionalPoint3d(container, f, atoms);
+            setHydrogenCount(container, f, atoms);
+            setCharge(container, f, atoms);
+            setStereoParity(container, f, atoms);
             newAtomContainer.addAtom(atoms[f]);
-
-            if (container.getAtomParity(container.getAtom(f)) != null) {
-                IAtomParity atomParity = container.getAtomParity(container.getAtom(f));
-                newAtomContainer.addAtomParity(atomParity);
-            }
+            setAtomParity(container, f, newAtomContainer);
 
         }
 
@@ -685,6 +664,56 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
         }
 
         return mol;
+    }
+
+    private static void set2D(IAtomContainer container, int f, IAtom[] atoms) {
+        if ((container.getAtom(f)).getPoint2d() != null) {
+            atoms[f].setPoint2d(new Point2d(container.getAtom(f).getPoint2d()));
+        }
+    }
+
+    private static void set3D(IAtomContainer container, int f, IAtom[] atoms) {
+        if ((container.getAtom(f)).getPoint3d() != null) {
+            atoms[f].setPoint3d(new Point3d(container.getAtom(f).getPoint3d()));
+        }
+    }
+
+    private static void setFractionalPoint3d(IAtomContainer container, int f, IAtom[] atoms) {
+        if ((container.getAtom(f)).getFractionalPoint3d() != null) {
+            atoms[f].setFractionalPoint3d(new Point3d(container.getAtom(f).getFractionalPoint3d()));
+        }
+    }
+
+    private static void setID(IAtomContainer container, int f, IAtom[] atoms) {
+
+        if (container.getAtom(f).getID() != null) {
+            atoms[f].setID(new String(container.getAtom(f).getID()));
+        }
+    }
+
+    private static void setHydrogenCount(IAtomContainer container, int f, IAtom[] atoms) {
+        if (container.getAtom(f).getHydrogenCount() != null) {
+            atoms[f].setHydrogenCount(Integer.valueOf(container.getAtom(f).getHydrogenCount()));
+        }
+    }
+
+    private static void setCharge(IAtomContainer container, int f, IAtom[] atoms) {
+        if (container.getAtom(f).getCharge() != null) {
+            atoms[f].setCharge(new Double(container.getAtom(f).getCharge()));
+        }
+    }
+
+    private static void setStereoParity(IAtomContainer container, int f, IAtom[] atoms) {
+        if (container.getAtom(f).getStereoParity() != null) {
+            atoms[f].setStereoParity(Integer.valueOf(container.getAtom(f).getStereoParity()));
+        }
+    }
+
+    private static void setAtomParity(IAtomContainer container, int f, IAtomContainer newAtomContainer) {
+        if (container.getAtomParity(container.getAtom(f)) != null) {
+            IAtomParity atomParity = container.getAtomParity(container.getAtom(f));
+            newAtomContainer.addAtomParity(atomParity);
+        }
     }
 }
 
