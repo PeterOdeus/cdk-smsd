@@ -709,35 +709,36 @@ public class McGregor {
     }
 
     private boolean verifyNodes(List<Integer> matrix, BinaryTree currentStructure, int index, int fieldLength) {
-
-        if (((matrix.get(index) == currentStructure.getValue()) && (index < fieldLength)) && (currentStructure.equal != null)) {
-            newMatrix = false;
-            verifyNodes(matrix, currentStructure.equal, index + 1, fieldLength);
-        }
-        if (matrix.get(index) != currentStructure.getValue()) {
-            if (currentStructure.not_equal != null) {
-                verifyNodes(matrix, currentStructure.not_equal, index, fieldLength);
+        if (index < fieldLength) {
+            if (matrix.get(index) == currentStructure.getValue() && currentStructure.equal != null) {
+                newMatrix = false;
+                verifyNodes(matrix, currentStructure.equal, index + 1, fieldLength);
             }
-
-            if (currentStructure.not_equal == null) {
-                currentStructure.not_equal = new BinaryTree(matrix.get(index));
-                currentStructure.not_equal.not_equal = null;
-                int yIndex = 0;
-
-
-                BinaryTree last_one = currentStructure.not_equal;
-
-                while ((yIndex + index + 1) < fieldLength) {
-                    last_one.equal = new BinaryTree(matrix.get(yIndex + index + 1));
-                    last_one = last_one.equal;
-                    last_one.not_equal = null;
-                    yIndex++;
-
+            if (matrix.get(index) != currentStructure.getValue()) {
+                if (currentStructure.not_equal != null) {
+                    verifyNodes(matrix, currentStructure.not_equal, index, fieldLength);
                 }
-                last_one.equal = null;
-                newMatrix = true;
-            }
 
+                if (currentStructure.not_equal == null) {
+                    currentStructure.not_equal = new BinaryTree(matrix.get(index));
+                    currentStructure.not_equal.not_equal = null;
+                    int yIndex = 0;
+
+
+                    BinaryTree last_one = currentStructure.not_equal;
+
+                    while ((yIndex + index + 1) < fieldLength) {
+                        last_one.equal = new BinaryTree(matrix.get(yIndex + index + 1));
+                        last_one = last_one.equal;
+                        last_one.not_equal = null;
+                        yIndex++;
+
+                    }
+                    last_one.equal = null;
+                    newMatrix = true;
+                }
+
+            }
         }
         return true;
     }
