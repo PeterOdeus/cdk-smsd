@@ -106,11 +106,18 @@ public class VFBondMatcher extends Bond implements IQueryBond {
         return false;
     }
 
-    private int getUnsaturation(IBond bond) {
+    private Integer getUnsaturation(IBond bond) {
         return getUnsaturation(bond.getAtom(0)) + getUnsaturation(bond.getAtom(1));
     }
 
-    private int getUnsaturation(IAtom atom) {
-        return atom.getValency() - atom.getFormalNeighbourCount();
+    private Integer getUnsaturation(IAtom atom) {
+        Integer value = 0;
+        try {
+            value = atom.getValency() - atom.getFormalNeighbourCount();
+        } catch (NullPointerException nep) {
+            value = -1;
+        }
+
+        return value;
     }
 }
