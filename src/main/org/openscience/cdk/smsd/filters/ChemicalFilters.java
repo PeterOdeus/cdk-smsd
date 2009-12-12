@@ -259,7 +259,11 @@ public class ChemicalFilters {
         Map<Integer, Integer> fragmentScoreMap = new TreeMap<Integer, Integer>();
 
 
-        initializeMaps(allFragmentMCS, allFragmentAtomMCS, stereoScoreMap, fragmentScoreMap, energyScoreMap);
+        initializeMaps(allFragmentMCS,
+                allFragmentAtomMCS,
+                stereoScoreMap,
+                fragmentScoreMap,
+                energyScoreMap);
 
 
         int _minFragmentScore = 9999;

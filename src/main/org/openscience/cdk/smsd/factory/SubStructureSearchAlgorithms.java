@@ -107,43 +107,47 @@ public class SubStructureSearchAlgorithms implements IMCS {
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
         } else {
-
-            switch (algorithmType) {
-                case CDKMCS:
-                    cdkMCS();
-                    break;
-                case DEFAULT:
-                    if (BondType.getInstance().getBondSensitiveFlag()) {
-                        cdkMCS();
-                    } else {
-                        mcsPlus();
-                    }
-                    if (getFirstMapping() == null) {
-                        System.gc();
-                        vfLibMCS();
-                    }
-                    break;
-                case MCSPlus:
-                    mcsPlus();
-                    break;
-                case SubStructure:
-                    if (rBondCount > 1 && pBondCount > 1) {
-                        vfTurboHandler();
-                    } else {
-                        singleMapping();
-                    }
-                    break;
-                case VFLibMCS:
-                    if (rBondCount >= 6 && rBondCount >= 6) {
-                        vfLibMCS();
-                    } else {
-                        mcsPlus();
-                    }
-                    break;
-            }
+            chooseAlgorithm(rBondCount, pBondCount);
         }
         System.gc();
 
+    }
+
+    private void chooseAlgorithm(int rBondCount, int pBondCount) {
+
+        switch (algorithmType) {
+            case CDKMCS:
+                cdkMCS();
+                break;
+            case DEFAULT:
+                if (BondType.getInstance().getBondSensitiveFlag()) {
+                    cdkMCS();
+                } else {
+                    mcsPlus();
+                }
+                if (getFirstMapping() == null) {
+                    System.gc();
+                    vfLibMCS();
+                }
+                break;
+            case MCSPlus:
+                mcsPlus();
+                break;
+            case SubStructure:
+                if (rBondCount > 1 && pBondCount > 1) {
+                    vfTurboHandler();
+                } else {
+                    singleMapping();
+                }
+                break;
+            case VFLibMCS:
+                if (rBondCount >= 6 && rBondCount >= 6) {
+                    vfLibMCS();
+                } else {
+                    mcsPlus();
+                }
+                break;
+        }
     }
 
     private synchronized void fragmentBuilder() {
