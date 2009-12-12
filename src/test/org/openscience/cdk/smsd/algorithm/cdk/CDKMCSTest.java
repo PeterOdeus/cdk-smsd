@@ -1,7 +1,4 @@
-/* $RCSfile$
- * $Author$
- * $Date$
- * $Revision$
+/*
  *
  * Copyright (C) 1997-2007  The Chemistry Development Kit (CKD) project
  *
