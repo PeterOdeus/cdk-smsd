@@ -198,36 +198,11 @@ public class ChemicalFilters {
                 fragmentScoreMap,
                 energyScoreMap);
 
-        IAtomContainer Reactant = RMol.getMolecule();
-        IAtomContainer Product = PMol.getMolecule();
-        try {
-            CDKHueckelAromaticityDetector.detectAromaticity(Reactant);
-            CDKHueckelAromaticityDetector.detectAromaticity(Product);
-        } catch (CDKException ex) {
-            Logger.getLogger(ChemicalFilters.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        boolean stereoMatchFlag = false;
 
-        for (Integer Key : allStereoMCS.keySet()) {
-            double score = 0.0;
-//            System.out.println("\nStart score " + score);
-            TreeMap<Integer, Integer> atomsMCS = allStereoMCS.get(Key);
-            Map<IAtom, IAtom> atomMapMCS = allStereoAtomMCS.get(Key);
-
-            score = getAtomScore(score, atomMapMCS, Reactant, Product);
-            Map<IBond, IBond> bondMaps = makeBondMapsOfAtomMaps(RMol.getMolecule(), PMol.getMolecule(), atomsMCS);
-            IAtomContainer subgraphRContainer = getMappedFragment(RMol.getMolecule(), atomMapMCS, 1);
-            IAtomContainer subgraphPContainer = getMappedFragment(PMol.getMolecule(), atomMapMCS, 2);
-
-            score = getBondScore(score, bondMaps);
-
-            if (!stereoMatchFlag && score > 0) {
-                stereoMatchFlag = true;
-            }
-//            System.out.println("\nStart score1 " + score);
-            score = getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
-            stereoScoreMap.put(Key, score);
-        }
+        boolean stereoMatchFlag = getStereoMatch(
+                stereoScoreMap,
+                allStereoMCS,
+                allStereoAtomMCS);
 
         boolean flag = false;
         if (stereoMatchFlag) {
@@ -650,40 +625,36 @@ public class ChemicalFilters {
 
             IBond RBond = matchedBonds.getKey();
             IBond PBond = matchedBonds.getValue();
-            int RBondType = RBond.getOrder().ordinal();
-            int PBondType = PBond.getOrder().ordinal();
 
 
-            if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
-                score += 2;
-            } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
-                score += 4;
-            }
-            if (RBond.getStereo() != PBond.getStereo()) {
-                score -= 2;
-            } else {
-                score += 2;
-            }
-            if (RBondType != PBondType) {
-                score = score - Math.abs(RBondType - PBondType);
-            } else {
-                score = score + Math.abs(RBondType - PBondType);
-            }
-            if (RBond.getAtom(0).getFormalCharge() == PBond.getAtom(0).getFormalCharge()) {
-                score = score + Math.abs(RBond.getAtom(0).getFormalCharge() - PBond.getAtom(0).getFormalCharge());
+            score += getBondFormalChargeMatches(RBond, PBond);
+            score += getBondTypeMatches(RBond, PBond);
 
-            } else {
-                score = score - Math.abs(RBond.getAtom(0).getFormalCharge() - PBond.getAtom(0).getFormalCharge());
-
-            }
-            if (RBond.getAtom(1).getFormalCharge() == PBond.getAtom(1).getFormalCharge()) {
-                score = score + Math.abs(RBond.getAtom(1).getFormalCharge() - PBond.getAtom(1).getFormalCharge());
-
-            } else {
-                score = score - Math.abs(RBond.getAtom(1).getFormalCharge() - PBond.getAtom(1).getFormalCharge());
-            }
         }
         return score;
+    }
+
+    private double getBondFormalChargeMatches(IBond RBond, IBond PBond) {
+
+        double score = 0.0;
+        if (RBond.getAtom(0).getFormalCharge() == PBond.getAtom(0).getFormalCharge()) {
+            score = score + Math.abs(RBond.getAtom(0).getFormalCharge() - PBond.getAtom(0).getFormalCharge());
+
+        } else {
+            score = score - Math.abs(RBond.getAtom(0).getFormalCharge() - PBond.getAtom(0).getFormalCharge());
+
+        }
+
+
+        if (RBond.getAtom(1).getFormalCharge() == PBond.getAtom(1).getFormalCharge()) {
+            score = score + Math.abs(RBond.getAtom(1).getFormalCharge() - PBond.getAtom(1).getFormalCharge());
+
+        } else {
+            score = score - Math.abs(RBond.getAtom(1).getFormalCharge() - PBond.getAtom(1).getFormalCharge());
+        }
+
+        return score;
+
     }
 
     private double getRingMatchScore(double score, IAtomContainer subgraphRContainer, IAtomContainer subgraphPContainer) {
@@ -755,6 +726,64 @@ public class ChemicalFilters {
             if (flag) {
                 score += 10;
             }
+        }
+        return score;
+    }
+
+    private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap, Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
+
+        boolean stereoMatchFlag = false;
+        IAtomContainer Reactant = RMol.getMolecule();
+        IAtomContainer Product = PMol.getMolecule();
+        try {
+            CDKHueckelAromaticityDetector.detectAromaticity(Reactant);
+            CDKHueckelAromaticityDetector.detectAromaticity(Product);
+        } catch (CDKException ex) {
+            Logger.getLogger(ChemicalFilters.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (Integer Key : allStereoMCS.keySet()) {
+            double score = 0.0;
+//            System.out.println("\nStart score " + score);
+            TreeMap<Integer, Integer> atomsMCS = allStereoMCS.get(Key);
+            Map<IAtom, IAtom> atomMapMCS = allStereoAtomMCS.get(Key);
+
+            score = getAtomScore(score, atomMapMCS, Reactant, Product);
+            Map<IBond, IBond> bondMaps = makeBondMapsOfAtomMaps(RMol.getMolecule(), PMol.getMolecule(), atomsMCS);
+            IAtomContainer subgraphRContainer = getMappedFragment(RMol.getMolecule(), atomMapMCS, 1);
+            IAtomContainer subgraphPContainer = getMappedFragment(PMol.getMolecule(), atomMapMCS, 2);
+
+            score = getBondScore(score, bondMaps);
+
+            if (!stereoMatchFlag && score > 0) {
+                stereoMatchFlag = true;
+            }
+//            System.out.println("\nStart score1 " + score);
+            score = getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
+            stereoScoreMap.put(Key, score);
+        }
+        return stereoMatchFlag;
+    }
+
+    private double getBondTypeMatches(IBond RBond, IBond PBond) {
+        double score = 0;
+        int RBondType = RBond.getOrder().ordinal();
+        int PBondType = PBond.getOrder().ordinal();
+
+
+        if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+            score += 2;
+        } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
+            score += 4;
+        }
+        if (RBond.getStereo() != PBond.getStereo()) {
+            score -= 2;
+        } else {
+            score += 2;
+        }
+        if (RBondType != PBondType) {
+            score = score - Math.abs(RBondType - PBondType);
+        } else {
+            score = score + Math.abs(RBondType - PBondType);
         }
         return score;
     }
