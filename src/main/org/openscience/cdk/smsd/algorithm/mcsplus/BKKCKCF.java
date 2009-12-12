@@ -69,44 +69,8 @@ public class BKKCKCF {
         //Orignal assignment as per paper
         cEdgeIterationSize = cEdges.size() / 2;
 
-
-        boolean d_edgeFlag = false;
-
-        if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && cEdges.size() > 100000) {
-            dEdgeIterationSize = (float) dEdges.size() * 0.000001;
-            d_edgeFlag = true;
-
-        } else if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && 5000 < cEdges.size()) {
-            dEdgeIterationSize = (float) dEdges.size() * 0.001;
-            d_edgeFlag = true;
-
-        }
-//        else if (dEdges.size() > 5000000 && dEdges.size() > cEdges.size()) {
-//            dEdgeIterationSize = (float) dEdges.size() * 0.0001;
-//            d_edgeFlag = true;
-//
-//        } else if (dEdges.size() > 100000 && dEdges.size() > cEdges.size()) {
-//            dEdgeIterationSize = (float) dEdges.size() * 0.1;
-//            d_edgeFlag = true;
-//        }
-
-//        } else if (dEdges.size() >= 10000 && 500 >= cEdges.size()) {
-//            dEdgeIterationSize = (float) dEdges.size() * 0.1;
-//            d_edgeFlag = true;
-//
-//        }
-//
-//
-//
-        if (dEdgeIterationSize < 1 && d_edgeFlag && cEdges.size() <= 5000) {
-
-            dEdgeIterationSize = 2;
-        }
-
-        if (dEdgeIterationSize < 1 && d_edgeFlag) {
-
-            dEdgeIterationSize = 1;
-        }
+        //reset Degdes and Cedges if required
+        setEdges();
 
         //Initialization maxCliquesSet
 
@@ -125,16 +89,10 @@ public class BKKCKCF {
 
         /********************************************************************/
         /*
-         *processedVertex: is index set of vertices which have already been used
-         */
-        List<Integer> processedVertex = new ArrayList<Integer>(); //Initialize the processedVertex ArrayList;
-
-        /*
          *vertex: stored all the vertices for the Graph G
          * vertex[G]
          *nodes of vector compGraphNodes are stored in vertex
          */
-
         List<Integer> vertex = new ArrayList<Integer>(); //Initialization of ArrayList vertex
 
         int vertexCount = compGraphNodes.size() / 3;
@@ -150,115 +108,15 @@ public class BKKCKCF {
         // System.out.println("ArrayList vertex :" + vertex);
 
         /*
-         * vertexOfCurrentClique: set of vertices belonging to the current clique
+         *processedVertex: is index set of vertices which have already been used
          */
-        List<Integer> vertexOfCurrentClique = new ArrayList<Integer>();
-        /*
-         *potentialCVertex: is index set of vertices which <index>can</index> be added
-         *to vertexOfCurrentClique, because they are
-         * neighbours of vertex u via <i>c-edges</i>
-         */
-        Stack<Integer> potentialCVertex = new Stack<Integer>();
-        /*
-         *potentialDVertex: is index set of vertices which <index>cannot</index> be added to
-         *vertexOfCurrentClique, because they are
-         * neighbours of vertex u via <i>d-edges</i>
-         */
-
-        List<Integer> potentialDVertex = new ArrayList<Integer>();
-        /*
-         *excludedVertex: set of vertices which are not allowed to be added
-         * to vertexOfCurrentClique
-         */
-        List<Integer> excludedVertex = new ArrayList<Integer>();
-
-
-        /*
-         *excludedCVertex: set of vertices which are not allowed to be added
-         * to C
-         */
-
-        List<Integer> excludedCVertex = new ArrayList<Integer>();
-
-        /*
-         * neighbourVertex[u]: set of neighbours of vertex u in Graph G
-         *
-         */
-
-        List<Integer> neighbourVertex = new ArrayList<Integer>();
-
-        int index = 0;
-
+        List<Integer> processedVertex = new ArrayList<Integer>();
         /*
          * Let processedVertex be the set of Nodes already been used in the initialization
          *
          */
-
+        initIterator(vertex, processedVertex);
         processedVertex.clear();
-
-        while (vertex.get(index) != 0) {
-
-
-            int central_node = vertex.get(index);
-
-
-            potentialCVertex.clear();
-            potentialDVertex.clear();
-            excludedVertex.clear();
-            vertexOfCurrentClique.clear();
-
-            //find the neighbors of the central node from vertex
-            neighbourVertex = findNeighbors(central_node);
-
-            for (int c = 0; c < neighbourVertex.size(); c = c + 2) {
-
-                /*
-                 * u and v are adjacent via index vertexOfCurrentClique-edge
-                 */
-                Integer neighbourVertexOfC = neighbourVertex.get(c);
-
-
-                //find respective neighbor position in potentialCVertex, which is needed for the deletion from vertex
-                //delete neighbor from set vertex
-
-
-                if (neighbourVertex.get(c + 1) == 1) {
-
-
-                    if (processedVertex.contains(neighbourVertexOfC)) {
-                        excludedVertex.add(neighbourVertexOfC);
-                    } else {
-                        potentialCVertex.push(neighbourVertexOfC);
-                    }
-
-                } else if (neighbourVertex.get(c + 1) == 2) {
-                    // u and v are adjacent via index potentialDVertex-edge
-                    //System.out.println("u and v are adjacent via index potentialDVertex-edge: " + neighbourVertex.elementAt(c));
-
-                    if (processedVertex.contains(neighbourVertexOfC)) {
-                        excludedCVertex.add(neighbourVertexOfC);
-                    } else {
-                        potentialDVertex.add(neighbourVertexOfC);
-                    }
-                }
-
-                if (vertex.indexOf(neighbourVertexOfC) <= index && vertex.indexOf(neighbourVertexOfC) > -1) {
-                    --index;
-
-                }
-                vertex.remove(neighbourVertexOfC);
-                //System.out.println("Elements Removed from vertex:" + neighbourVertexOfC);
-            }
-
-            potentialCVertex.add(0);
-            vertexOfCurrentClique.add(central_node);
-
-            enumerateCliques(vertexOfCurrentClique, potentialCVertex, potentialDVertex, excludedVertex, excludedCVertex);
-            //enumerateCliques(vertexOfCurrentClique, potentialCVertex, potentialDVertex, excludedVertex);
-            processedVertex.add(central_node);
-
-            index++;
-        }
         //System.out.println("maxCliquesSet: " + maxCliquesSet);
 
     }
@@ -414,8 +272,8 @@ public class BKKCKCF {
     }
 
     private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy, List<Integer> Q_copy_N_intersec, List<Integer> Q_copy, List<Integer> X_copy_N_intersec, List<Integer> X_copy, List<Integer> Y_copy_N_intersec, List<Integer> Y_copy) {
-       int nElement = -1;
-       int N_size = neighbourVertex.size();
+        int nElement = -1;
+        int N_size = neighbourVertex.size();
 
         for (int sec = 0; sec < N_size; sec = sec + 2) {
 
@@ -439,43 +297,188 @@ public class BKKCKCF {
 
     private void groupNeighbors(int index, Stack<Integer> P_copy, List<Integer> Q_copy, List<Integer> X_copy, List<Integer> Y_copy, List<Integer> neighbourVertex, List<Integer> potentialDVertex, List<Integer> potentialVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
 
-            int N_size = neighbourVertex.size();
+        int N_size = neighbourVertex.size();
 
-            //System.out.println("Neighbors: ");
+        //System.out.println("Neighbors: ");
 
-            for (int b = 0; b < N_size; b = b + 2) {
-                // neighbourVertex[index] is node v
-                //Grouping of the neighbors:
+        for (int b = 0; b < N_size; b = b + 2) {
+            // neighbourVertex[index] is node v
+            //Grouping of the neighbors:
 
 
-                Integer Nelement_at_b = neighbourVertex.get(b);
+            Integer Nelement_at_b = neighbourVertex.get(b);
 
-                if (neighbourVertex.get(b + 1) == 1) {
-                    //u and v are adjacent via index C-edge
+            if (neighbourVertex.get(b + 1) == 1) {
+                //u and v are adjacent via index C-edge
 
-                    if (potentialDVertex.contains(Nelement_at_b)) {
+                if (potentialDVertex.contains(Nelement_at_b)) {
 
-                        P_copy.push(Nelement_at_b);
-                        //delete neighbourVertex[index] bzw. potentialDVertex[c] from set Q_copy, remove C-edges
-                        Q_copy.remove(Nelement_at_b);
+                    P_copy.push(Nelement_at_b);
+                    //delete neighbourVertex[index] bzw. potentialDVertex[c] from set Q_copy, remove C-edges
+                    Q_copy.remove(Nelement_at_b);
 
-                    }
-                    if (excludedCVertex.contains(Nelement_at_b)) {
-                        if (excludedVertex.contains(Nelement_at_b)) {
-                            X_copy.add(Nelement_at_b);
-                        }
-                        Y_copy.remove(Nelement_at_b);
-                    }
                 }
-
-                //find respective neighbor position in potentialVertex, which is needed for the deletion from potentialVertex
-
-                if (potentialVertex.indexOf(Nelement_at_b) <= index && potentialVertex.indexOf(Nelement_at_b) > -1) {
-                    --index;
+                if (excludedCVertex.contains(Nelement_at_b)) {
+                    if (excludedVertex.contains(Nelement_at_b)) {
+                        X_copy.add(Nelement_at_b);
+                    }
+                    Y_copy.remove(Nelement_at_b);
                 }
-
-                potentialVertex.remove(Nelement_at_b);
-
             }
+
+            //find respective neighbor position in potentialVertex, which is needed for the deletion from potentialVertex
+
+            if (potentialVertex.indexOf(Nelement_at_b) <= index && potentialVertex.indexOf(Nelement_at_b) > -1) {
+                --index;
+            }
+
+            potentialVertex.remove(Nelement_at_b);
+
+        }
+    }
+
+    private void setEdges() {
+
+
+        boolean d_edgeFlag = false;
+
+        if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && cEdges.size() > 100000) {
+            dEdgeIterationSize = (float) dEdges.size() * 0.000001;
+            d_edgeFlag = true;
+
+        } else if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && 5000 < cEdges.size()) {
+            dEdgeIterationSize = (float) dEdges.size() * 0.001;
+            d_edgeFlag = true;
+
+        }
+//        else if (dEdges.size() > 5000000 && dEdges.size() > cEdges.size()) {
+//            dEdgeIterationSize = (float) dEdges.size() * 0.0001;
+//            d_edgeFlag = true;
+//
+//        } else if (dEdges.size() > 100000 && dEdges.size() > cEdges.size()) {
+//            dEdgeIterationSize = (float) dEdges.size() * 0.1;
+//            d_edgeFlag = true;
+//        }
+
+//        } else if (dEdges.size() >= 10000 && 500 >= cEdges.size()) {
+//            dEdgeIterationSize = (float) dEdges.size() * 0.1;
+//            d_edgeFlag = true;
+//
+//        }
+//
+//
+//
+        if (dEdgeIterationSize < 1 && d_edgeFlag && cEdges.size() <= 5000) {
+
+            dEdgeIterationSize = 2;
+        } else if (dEdgeIterationSize < 1 && d_edgeFlag) {
+
+            dEdgeIterationSize = 1;
+        }
+    }
+
+    private void initIterator(List<Integer> vertex, List<Integer> processedVertex) {
+        /*
+         * vertexOfCurrentClique: set of vertices belonging to the current clique
+         */
+        List<Integer> vertexOfCurrentClique = new ArrayList<Integer>();
+        /*
+         *potentialCVertex: is index set of vertices which <index>can</index> be added
+         *to vertexOfCurrentClique, because they are
+         * neighbours of vertex u via <i>c-edges</i>
+         */
+        Stack<Integer> potentialCVertex = new Stack<Integer>();
+        /*
+         *potentialDVertex: is index set of vertices which <index>cannot</index> be added to
+         *vertexOfCurrentClique, because they are
+         * neighbours of vertex u via <i>d-edges</i>
+         */
+
+        List<Integer> potentialDVertex = new ArrayList<Integer>();
+        /*
+         *excludedVertex: set of vertices which are not allowed to be added
+         * to vertexOfCurrentClique
+         */
+        List<Integer> excludedVertex = new ArrayList<Integer>();
+
+
+        /*
+         *excludedCVertex: set of vertices which are not allowed to be added
+         * to C
+         */
+
+        List<Integer> excludedCVertex = new ArrayList<Integer>();
+
+        /*
+         * neighbourVertex[u]: set of neighbours of vertex u in Graph G
+         *
+         */
+
+        List<Integer> neighbourVertex = new ArrayList<Integer>();
+
+        int index = 0;
+        while (vertex.get(index) != 0) {
+
+
+            int central_node = vertex.get(index);
+
+
+            potentialCVertex.clear();
+            potentialDVertex.clear();
+            excludedVertex.clear();
+            vertexOfCurrentClique.clear();
+
+            //find the neighbors of the central node from vertex
+            neighbourVertex = findNeighbors(central_node);
+
+            for (int c = 0; c < neighbourVertex.size(); c = c + 2) {
+
+                /*
+                 * u and v are adjacent via index vertexOfCurrentClique-edge
+                 */
+                Integer neighbourVertexOfC = neighbourVertex.get(c);
+
+
+                //find respective neighbor position in potentialCVertex, which is needed for the deletion from vertex
+                //delete neighbor from set vertex
+
+
+                if (neighbourVertex.get(c + 1) == 1) {
+
+
+                    if (processedVertex.contains(neighbourVertexOfC)) {
+                        excludedVertex.add(neighbourVertexOfC);
+                    } else {
+                        potentialCVertex.push(neighbourVertexOfC);
+                    }
+
+                } else if (neighbourVertex.get(c + 1) == 2) {
+                    // u and v are adjacent via index potentialDVertex-edge
+                    //System.out.println("u and v are adjacent via index potentialDVertex-edge: " + neighbourVertex.elementAt(c));
+
+                    if (processedVertex.contains(neighbourVertexOfC)) {
+                        excludedCVertex.add(neighbourVertexOfC);
+                    } else {
+                        potentialDVertex.add(neighbourVertexOfC);
+                    }
+                }
+
+                if (vertex.indexOf(neighbourVertexOfC) <= index && vertex.indexOf(neighbourVertexOfC) > -1) {
+                    --index;
+
+                }
+                vertex.remove(neighbourVertexOfC);
+                //System.out.println("Elements Removed from vertex:" + neighbourVertexOfC);
+            }
+
+            potentialCVertex.add(0);
+            vertexOfCurrentClique.add(central_node);
+
+            enumerateCliques(vertexOfCurrentClique, potentialCVertex, potentialDVertex, excludedVertex, excludedCVertex);
+            //enumerateCliques(vertexOfCurrentClique, potentialCVertex, potentialDVertex, excludedVertex);
+            processedVertex.add(central_node);
+
+            index++;
+        }
     }
 }
