@@ -92,13 +92,10 @@ import org.openscience.cdk.smsd.global.TimeOut;
  *
  *  <p>This algorithm derives from the algorithm described in
  *  {@cdk.cite HAN90} and modified in the thesis of T. Hanser {@cdk.cite HAN93}.
- *
- * @author      Stephane Werner from IXELIS mail@ixelis.net
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
- * @cdk.created 2002-07-17
- * @cdk.require java1.4+
- * @cdk.module  smsd
- * @cdk.svnrev  $Revision$
+ */
+
+/**
+ * @cdk.module smsd
  */
 public class CDKRGraph {
     // an CDKRGraph is a list of CDKRGraph nodes

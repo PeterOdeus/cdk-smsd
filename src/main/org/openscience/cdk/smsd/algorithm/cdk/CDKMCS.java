@@ -114,13 +114,9 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  *    It is possible to add atom special treatment for this special query.
  *    Be reminded that this algorithm matches bonds only.
  * </p>
- *
- * @author      Stephane Werner from IXELIS mail@ixelis.net
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ebi.uk> (modified the orignal code)
- * @cdk.created 2002-07-17
- * @cdk.require java1.5+
- * @cdk.module  smsd
- * @cdk.svnrev  $Revision$
+ */
+/**
+ * @cdk.module smsd
  */
 @TestClass("org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest")
 public class CDKMCS {

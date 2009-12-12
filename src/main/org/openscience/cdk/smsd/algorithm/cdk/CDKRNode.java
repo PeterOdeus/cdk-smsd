@@ -39,10 +39,10 @@ import java.util.BitSet;
  *  to and of the set of incompatible nodes (nodes that may not be along with
  *  this node in the same solution)
  *
- * @author      Stephane Werner from IXELIS mail@ixelis.net
- * @cdk.created 2002-07-17
- * @cdk.module  smsd
- * @cdk.svnrev  $Revision$
+ */
+
+/**
+ * @cdk.module smsd
  */
 public class CDKRNode {
     // G1/G2 mapping
