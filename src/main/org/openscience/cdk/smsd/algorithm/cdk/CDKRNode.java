@@ -1,4 +1,4 @@
-/* $Revision$ $Author$ $Date$
+/* 
  *
  * Copyright (C) 2002-2007  Stephane Werner <mail@ixelis.net>
  *               2007-2009  Syed Asad Rahman <asad@ebi.ac.uk>
@@ -32,7 +32,7 @@ import java.util.BitSet;
 
 /**
  *  Node of the resolution graphe (RGraph) An CDKRNode represents an association
- *  betwwen two edges of the source graphs G1 and G2 that are compared. Two
+ *  between two edges of the source graphs G1 and G2 that are compared. Two
  *  edges may be associated if they have at least one common feature. The
  *  association is defined outside this class. The node keeps tracks of the ID
  *  of the mapped edges (in an CDKRMap), of its neighbours in the RGraph it belongs

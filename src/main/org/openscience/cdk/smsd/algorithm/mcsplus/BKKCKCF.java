@@ -1,7 +1,4 @@
-/*
- * BronKerboschCazalsKarandeKochCliqueFinder.java
- *
- */
+
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -37,6 +34,10 @@ import java.util.Stack;
  * described in [F. Cazals, vertexOfCurrentClique. Karande: An Algorithm for reporting maximal c-cliques;
  * processedVertex.Comp. Sc. (2005); vol 349; pp.
  * 484-490]
+ *
+ *
+ * BronKerboschCazalsKarandeKochCliqueFinder.java
+ *
  * 
  * @cdk.module smsd
  */

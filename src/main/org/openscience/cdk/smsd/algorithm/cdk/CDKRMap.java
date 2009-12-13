@@ -1,5 +1,5 @@
 
-/* $Revision$ $Author$ $Date$
+/*
  *
  * Copyright (C) 2002-2007  Stephane Werner <mail@ixelis.net>
  *               2007-2009  Syed Asad Rahman <asad@ebi.ac.uk>
@@ -32,11 +32,8 @@ package org.openscience.cdk.smsd.algorithm.cdk;
 /**
  *  An CDKRMap implements the association between an edge (bond) in G1 and an edge
  *  (bond) in G2, G1 and G2 being the compared graphs in a RGraph context.
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
- * @author      Stephane Werner, IXELIS <mail@ixelis.net>
- * @cdk.created 2002-07-24
+ * 
  * @cdk.module  smsd
- * @cdk.svnrev  $Revision$
  */
 public class CDKRMap {
 

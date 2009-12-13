@@ -25,14 +25,16 @@
  */
 package org.openscience.cdk.smsd.helper;
 
-//the second part of the program extents the mapping by the McGregor algorithm in case
-//that not all atoms of molecule A and molecule B are mapped by the clique approach
+
 /**
  * @cdk.module smsd
  */
 public class BinaryTree {
 
-    /** Creates a new instance of BinaryTree
+    /**
+     * Creates a new instance of BinaryTree
+     * the second part of the program extents the mapping by the McGregor algorithm in case
+     * that not all atoms of molecule A and molecule B are mapped by the clique approach
      * @param value
      */
     public BinaryTree(int value) {

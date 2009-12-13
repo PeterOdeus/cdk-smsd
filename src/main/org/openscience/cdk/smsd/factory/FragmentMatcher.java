@@ -24,7 +24,6 @@
  */
 package org.openscience.cdk.smsd.factory;
 
-//~--- non-JDK imports --------------------------------------------------------
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

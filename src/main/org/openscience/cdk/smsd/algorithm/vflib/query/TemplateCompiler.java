@@ -59,9 +59,6 @@ import org.openscience.cdk.smsd.algorithm.vflib.validator.VFAtomMatcher;
 import org.openscience.cdk.smsd.algorithm.vflib.validator.VFBondMatcher;
 
 /**
- * @author Richard L. Apodaca <rapodaca at metamolecular.com>
- * @Copyright (C)   2009  Syed Asad Rahman <asad@ebi.ac.uk> (modified the orignal code)
- * 
  * @cdk.module smsd
  */
 @TestClass("org.openscience.cdk.smsd.algorithm.vflib.VFLibTest")

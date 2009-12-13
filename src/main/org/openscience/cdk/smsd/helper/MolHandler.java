@@ -25,15 +25,14 @@
 package org.openscience.cdk.smsd.helper;
 
 //~--- JDK imports ------------------------------------------------------------
-import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
-import org.openscience.cdk.smsd.tools.MoleculeSanityCheck;
 import java.io.FileInputStream;
 import java.io.IOException;
-//~--- non-JDK imports --------------------------------------------------------
-
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+//~--- non-JDK imports --------------------------------------------------------
+import org.openscience.cdk.smsd.tools.ExtAtomContainerManipulator;
+import org.openscience.cdk.smsd.tools.MoleculeSanityCheck;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -46,8 +45,6 @@ import org.openscience.cdk.io.MDLReader;
 
 /**
  *
- * @author Syed Asad Rahman, EMBL-EBI, Cambridge, UK
- * @contact asad@ebi.ac.uk
  * @cdk.module smsd
  */
 public class MolHandler {
