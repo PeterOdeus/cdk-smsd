@@ -1,4 +1,3 @@
-
 /**
  *
  * Copyright (C) 2006-2009  Syed Asad Rahman {asad@ebi.ac.uk}
@@ -171,9 +170,7 @@ public class BKKCKCF {
                 //          System.out.println( cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
                 neighborVertex.add(cEdges.get(a * 2 + 1));
                 neighborVertex.add(1); // 1 means: is connected via C-edge
-            }
-
-            if (cEdges.get(a * 2 + 1) == central_node) {
+            } else if (cEdges.get(a * 2 + 1) == central_node) {
                 //           System.out.println(cEdges.get(index*2+0) + " " + cEdges.get(index*2+1));
                 neighborVertex.add(cEdges.get(a * 2 + 0));
                 neighborVertex.add(1); // 1 means: is connected via C-edge
@@ -185,9 +182,7 @@ public class BKKCKCF {
                 //       System.out.println( dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
                 neighborVertex.add(dEdges.get(a * 2 + 1));
                 neighborVertex.add(2); // 2 means: is connected via D-edge
-            }
-
-            if (dEdges.get(a * 2 + 1) == central_node) {
+            } else if (dEdges.get(a * 2 + 1) == central_node) {
                 //        System.out.println(dEdges.get(index*2+0) + " " + dEdges.get(index*2+1));
                 neighborVertex.add(dEdges.get(a * 2 + 0));
                 neighborVertex.add(2); // 2 means: is connected via D-edge
