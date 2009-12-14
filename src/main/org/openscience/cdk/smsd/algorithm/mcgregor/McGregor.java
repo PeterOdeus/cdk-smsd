@@ -213,7 +213,10 @@ public class McGregor {
                 gNeighborBondNumB,
                 gSetBondNumB,
                 i_bond_neighborsB,
-                c_bond_neighborsB);
+                c_bond_neighborsB,
+                gNeighborBondnumA,
+                i_bond_neighborsA,
+                c_bond_neighborsA);
 
 
         targetProcess.process(
@@ -223,10 +226,7 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setB,
                 mapped_atoms,
-                counter,
-                gNeighborBondnumA,
-                i_bond_neighborsA,
-                c_bond_neighborsA);
+                counter);
 
         c_tab1_copy = targetProcess.getCTab1();
         c_tab2_copy = targetProcess.getCTab2();
@@ -404,7 +404,10 @@ public class McGregor {
                 localNeighborBondNumB,
                 setNumB,
                 iBondNeighborAtomsB,
-                cBondNeighborsB);
+                cBondNeighborsB,
+                localNeighborBondnumA,
+                iBondNeighborAtomsA,
+                cBondNeighborsA);
 
 
         targetProcess.process(
@@ -414,10 +417,7 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setB,
                 mapped_atoms,
-                counter,
-                localNeighborBondnumA,
-                iBondNeighborAtomsA,
-                cBondNeighborsA);
+                counter);
 
         c_tab1_copy = targetProcess.getCTab1();
         c_tab2_copy = targetProcess.getCTab2();
@@ -938,7 +938,10 @@ public class McGregor {
                     newNeighborNumB,
                     newSetBondNumB,
                     new_i_neighborsB,
-                    new_c_neighborsB);
+                    new_c_neighborsB,
+                    newNeighborNumA,
+                    new_i_neighborsA,
+                    new_c_neighborsA);
 
 
             targetProcess.process(
@@ -950,10 +953,7 @@ public class McGregor {
                     new_Mapping,
                     counter,
                     new_i_bond_setB,
-                    new_c_bond_setB,
-                    newNeighborNumA,
-                    new_i_neighborsA,
-                    new_c_neighborsA);
+                    new_c_bond_setB);
 
             c_setA_copy = targetProcess.getCTab1();
             c_setB_copy = targetProcess.getCTab2();

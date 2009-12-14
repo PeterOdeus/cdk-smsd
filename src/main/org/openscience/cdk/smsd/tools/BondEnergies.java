@@ -187,20 +187,14 @@ import org.openscience.cdk.smsd.helper.BondEnergy;
  * Xe-F	130	195
  *
  */
-
-
-
-
 /**
  * @cdk.module smsd
  */
-
 @TestClass("org.openscience.cdk.smsd.tools.BondEnergiesTest")
 public class BondEnergies {
 
     private static TreeMap<Integer, BondEnergy> bondEngergies = null;
     private static BondEnergies _instance = null;
-    private Integer key = null;
 
     /**
      * 
@@ -218,164 +212,26 @@ public class BondEnergies {
     }
 
     protected BondEnergies() {
-        key = 1;
+
+        Integer key = 1;
         bondEngergies = new TreeMap<Integer, BondEnergy>();
 
-//         =========Hydrogen Block==============
-
-
-        bondEngergies.put(key++, new BondEnergy("H", "H", Order.SINGLE, 432));
-        bondEngergies.put(key++, new BondEnergy("H", "B", Order.SINGLE, 389));
-        bondEngergies.put(key++, new BondEnergy("H", "C", Order.SINGLE, 411));
-        bondEngergies.put(key++, new BondEnergy("H", "Si", Order.SINGLE, 318));
-        bondEngergies.put(key++, new BondEnergy("H", "Ge", Order.SINGLE, 288));
-        bondEngergies.put(key++, new BondEnergy("H", "Sn", Order.SINGLE, 251));
-        bondEngergies.put(key++, new BondEnergy("H", "N", Order.SINGLE, 386));
-        bondEngergies.put(key++, new BondEnergy("H", "P", Order.SINGLE, 322));
-        bondEngergies.put(key++, new BondEnergy("H", "As", Order.SINGLE, 247));
-        bondEngergies.put(key++, new BondEnergy("H", "O", Order.SINGLE, 459));
-        bondEngergies.put(key++, new BondEnergy("H", "S", Order.SINGLE, 363));
-        bondEngergies.put(key++, new BondEnergy("H", "Se", Order.SINGLE, 276));
-        bondEngergies.put(key++, new BondEnergy("H", "Te", Order.SINGLE, 238));
-        bondEngergies.put(key++, new BondEnergy("H", "F", Order.SINGLE, 565));
-        bondEngergies.put(key++, new BondEnergy("H", "Cl", Order.SINGLE, 428));
-        bondEngergies.put(key++, new BondEnergy("H", "Br", Order.SINGLE, 362));
-        bondEngergies.put(key++, new BondEnergy("H", "I", Order.SINGLE, 295));
-
-//        ==================Group 13=================
-
-
-        bondEngergies.put(key++, new BondEnergy("B", "B", Order.SINGLE, 293));
-        bondEngergies.put(key++, new BondEnergy("B", "O", Order.SINGLE, 536));
-        bondEngergies.put(key++, new BondEnergy("B", "F", Order.SINGLE, 613));
-        bondEngergies.put(key++, new BondEnergy("B", "Cl", Order.SINGLE, 456));
-        bondEngergies.put(key++, new BondEnergy("B", "Br", Order.SINGLE, 377));
-
-//        ===================Group 14 Part 1=================
-
-
-        bondEngergies.put(key++, new BondEnergy("C", "C", Order.SINGLE, 346));
-        bondEngergies.put(key++, new BondEnergy("C", "C", Order.DOUBLE, 602));
-        bondEngergies.put(key++, new BondEnergy("C", "C", Order.TRIPLE, 835));
-        bondEngergies.put(key++, new BondEnergy("C", "Si", Order.SINGLE, 318));
-        bondEngergies.put(key++, new BondEnergy("C", "Ge", Order.SINGLE, 238));
-        bondEngergies.put(key++, new BondEnergy("C", "Sn", Order.SINGLE, 192));
-        bondEngergies.put(key++, new BondEnergy("C", "Pb", Order.SINGLE, 130));
-        bondEngergies.put(key++, new BondEnergy("C", "N", Order.SINGLE, 305));
-        bondEngergies.put(key++, new BondEnergy("C", "N", Order.DOUBLE, 615));
-        bondEngergies.put(key++, new BondEnergy("C", "N", Order.TRIPLE, 887));
-        bondEngergies.put(key++, new BondEnergy("C", "P", Order.SINGLE, 264));
-        bondEngergies.put(key++, new BondEnergy("C", "O", Order.SINGLE, 358));
-        bondEngergies.put(key++, new BondEnergy("C", "O", Order.DOUBLE, 799));
-        bondEngergies.put(key++, new BondEnergy("C", "O", Order.TRIPLE, 1072));
-        bondEngergies.put(key++, new BondEnergy("C", "B", Order.SINGLE, 356));
-        bondEngergies.put(key++, new BondEnergy("C", "S", Order.SINGLE, 272));
-        bondEngergies.put(key++, new BondEnergy("C", "S", Order.DOUBLE, 573));
-        bondEngergies.put(key++, new BondEnergy("C", "F", Order.SINGLE, 485));
-        bondEngergies.put(key++, new BondEnergy("C", "Cl", Order.SINGLE, 327));
-        bondEngergies.put(key++, new BondEnergy("C", "Br", Order.SINGLE, 285));
-        bondEngergies.put(key++, new BondEnergy("C", "I", Order.SINGLE, 213));
-
-
-//        ===================Group 14 Part 2=================
-
-
-        bondEngergies.put(key++, new BondEnergy("Si", "Si", Order.SINGLE, 222));
-        bondEngergies.put(key++, new BondEnergy("Si", "N", Order.SINGLE, 355));
-        bondEngergies.put(key++, new BondEnergy("Si", "O", Order.SINGLE, 452));
-        bondEngergies.put(key++, new BondEnergy("Si", "S", Order.SINGLE, 293));
-        bondEngergies.put(key++, new BondEnergy("Si", "F", Order.SINGLE, 565));
-        bondEngergies.put(key++, new BondEnergy("Si", "Cl", Order.SINGLE, 381));
-        bondEngergies.put(key++, new BondEnergy("Si", "Br", Order.SINGLE, 310));
-        bondEngergies.put(key++, new BondEnergy("Si", "I", Order.SINGLE, 234));
-
-        bondEngergies.put(key++, new BondEnergy("Ge", "Ge", Order.SINGLE, 188));
-        bondEngergies.put(key++, new BondEnergy("Ge", "N", Order.SINGLE, 257));
-        bondEngergies.put(key++, new BondEnergy("Ge", "F", Order.SINGLE, 470));
-        bondEngergies.put(key++, new BondEnergy("Ge", "Cl", Order.SINGLE, 349));
-        bondEngergies.put(key++, new BondEnergy("Ge", "Br", Order.SINGLE, 276));
-        bondEngergies.put(key++, new BondEnergy("Ge", "I", Order.SINGLE, 212));
-
-        bondEngergies.put(key++, new BondEnergy("Sn", "F", Order.SINGLE, 414));
-        bondEngergies.put(key++, new BondEnergy("Sn", "Cl", Order.SINGLE, 323));
-        bondEngergies.put(key++, new BondEnergy("Sn", "Br", Order.SINGLE, 273));
-        bondEngergies.put(key++, new BondEnergy("Sn", "I", Order.SINGLE, 205));
-
-        bondEngergies.put(key++, new BondEnergy("Pb", "F", Order.SINGLE, 313));
-        bondEngergies.put(key++, new BondEnergy("Pb", "Cl", Order.SINGLE, 243));
-        bondEngergies.put(key++, new BondEnergy("Pb", "Br", Order.SINGLE, 201));
-        bondEngergies.put(key++, new BondEnergy("Pb", "I", Order.SINGLE, 142));
-
-//        ===================Group 15=================
-
-        bondEngergies.put(key++, new BondEnergy("N", "N", Order.SINGLE, 167));
-        bondEngergies.put(key++, new BondEnergy("N", "N", Order.DOUBLE, 418));
-        bondEngergies.put(key++, new BondEnergy("N", "N", Order.TRIPLE, 942));
-        bondEngergies.put(key++, new BondEnergy("N", "O", Order.SINGLE, 201));
-        bondEngergies.put(key++, new BondEnergy("N", "O", Order.DOUBLE, 607));
-        bondEngergies.put(key++, new BondEnergy("N", "F", Order.SINGLE, 283));
-        bondEngergies.put(key++, new BondEnergy("N", "Cl", Order.SINGLE, 313));
-
-        bondEngergies.put(key++, new BondEnergy("P", "P", Order.SINGLE, 201));
-        bondEngergies.put(key++, new BondEnergy("P", "O", Order.SINGLE, 335));
-        bondEngergies.put(key++, new BondEnergy("P", "O", Order.DOUBLE, 544));
-        bondEngergies.put(key++, new BondEnergy("P", "S", Order.DOUBLE, 335));
-        bondEngergies.put(key++, new BondEnergy("P", "F", Order.SINGLE, 490));
-        bondEngergies.put(key++, new BondEnergy("P", "Cl", Order.SINGLE, 326));
-        bondEngergies.put(key++, new BondEnergy("P", "Br", Order.SINGLE, 264));
-        bondEngergies.put(key++, new BondEnergy("P", "I", Order.SINGLE, 184));
-
-
-        bondEngergies.put(key++, new BondEnergy("As", "As", Order.SINGLE, 146));
-        bondEngergies.put(key++, new BondEnergy("As", "O", Order.SINGLE, 301));
-        bondEngergies.put(key++, new BondEnergy("As", "F", Order.SINGLE, 484));
-        bondEngergies.put(key++, new BondEnergy("As", "Cl", Order.SINGLE, 322));
-        bondEngergies.put(key++, new BondEnergy("As", "Br", Order.SINGLE, 458));
-        bondEngergies.put(key++, new BondEnergy("As", "I", Order.SINGLE, 200));
-
-        
-        bondEngergies.put(key++, new BondEnergy("Sb", "Sb", Order.SINGLE, 121));
-        bondEngergies.put(key++, new BondEnergy("Sb", "F", Order.SINGLE, 440));
-//          Sb-Cl (SbCl 5)
-        bondEngergies.put(key++, new BondEnergy("Sb", "Cl", Order.SINGLE, 248));
-//          Sb-Cl (SbCl 3)
-        bondEngergies.put(key++, new BondEnergy("Sb", "Cl", Order.SINGLE, 315));
-
-
-//        ===================Group 16=================
-
-        bondEngergies.put(key++, new BondEnergy("O", "O", Order.SINGLE, 142));
-        bondEngergies.put(key++, new BondEnergy("O", "O", Order.DOUBLE, 494));
-        bondEngergies.put(key++, new BondEnergy("O", "F", Order.SINGLE, 190));
-        bondEngergies.put(key++, new BondEnergy("O", "S", Order.SINGLE, 365));
-        bondEngergies.put(key++, new BondEnergy("S", "O", Order.DOUBLE, 522));
-        bondEngergies.put(key++, new BondEnergy("S", "S", Order.SINGLE, 226));
-        bondEngergies.put(key++, new BondEnergy("S", "S", Order.DOUBLE, 425));
-        bondEngergies.put(key++, new BondEnergy("S", "F", Order.SINGLE, 284));
-        bondEngergies.put(key++, new BondEnergy("S", "Cl", Order.SINGLE, 255));
-        bondEngergies.put(key++, new BondEnergy("Se", "Se", Order.SINGLE, 172));
-        bondEngergies.put(key++, new BondEnergy("Se", "Se", Order.DOUBLE, 272));
-
-
-//        ===================Group 17=================
-
-        bondEngergies.put(key++, new BondEnergy("F", "F", Order.SINGLE, 155));
-        bondEngergies.put(key++, new BondEnergy("Cl", "Cl", Order.SINGLE, 240));
-        bondEngergies.put(key++, new BondEnergy("Br", "Br", Order.SINGLE, 190));
-        bondEngergies.put(key++, new BondEnergy("I", "I", Order.SINGLE, 148));
-        bondEngergies.put(key++, new BondEnergy("At", "At", Order.SINGLE, 116));
-        
-        bondEngergies.put(key++, new BondEnergy("I", "O", Order.SINGLE, 201));
-        bondEngergies.put(key++, new BondEnergy("I", "F", Order.SINGLE, 273));
-        bondEngergies.put(key++, new BondEnergy("I", "Cl", Order.SINGLE, 208));
-        bondEngergies.put(key++, new BondEnergy("I", "Br", Order.SINGLE, 175));
-
-//        ===================Group 18=================
-
-
-        bondEngergies.put(key++, new BondEnergy("Kr", "F", Order.SINGLE, 50));
-        bondEngergies.put(key++, new BondEnergy("Xe", "O", Order.SINGLE, 84));
-        bondEngergies.put(key++, new BondEnergy("Xe", "F", Order.SINGLE, 130));
+//      =========Hydrogen Block==============
+        key = setHydrogenBlock(key);
+//       ==================Group 13=================
+        key = setGroup13(key);
+//      ===================Group 14 Part 1=================
+        key = setGroup14Part1(key);
+//      ===================Group 14 Part 2=================
+        key = setGroup14Part2(key);
+//      ===================Group 15=================
+        key = setGroup15(key);
+//      ===================Group 16=================
+        key = setGroup16(key);
+//      ===================Group 17=================
+        key = setGroup17(key);
+//      ===================Group 18=================
+        key = setGroup18(key);
     }
 
     /**
@@ -405,5 +261,168 @@ public class BondEnergies {
 
         return D_kJ_per_mol;
 
+    }
+
+    private Integer setHydrogenBlock(Integer key) {
+        bondEngergies.put(key++, new BondEnergy("H", "H", Order.SINGLE, 432));
+        bondEngergies.put(key++, new BondEnergy("H", "B", Order.SINGLE, 389));
+        bondEngergies.put(key++, new BondEnergy("H", "C", Order.SINGLE, 411));
+        bondEngergies.put(key++, new BondEnergy("H", "Si", Order.SINGLE, 318));
+        bondEngergies.put(key++, new BondEnergy("H", "Ge", Order.SINGLE, 288));
+        bondEngergies.put(key++, new BondEnergy("H", "Sn", Order.SINGLE, 251));
+        bondEngergies.put(key++, new BondEnergy("H", "N", Order.SINGLE, 386));
+        bondEngergies.put(key++, new BondEnergy("H", "P", Order.SINGLE, 322));
+        bondEngergies.put(key++, new BondEnergy("H", "As", Order.SINGLE, 247));
+        bondEngergies.put(key++, new BondEnergy("H", "O", Order.SINGLE, 459));
+        bondEngergies.put(key++, new BondEnergy("H", "S", Order.SINGLE, 363));
+        bondEngergies.put(key++, new BondEnergy("H", "Se", Order.SINGLE, 276));
+        bondEngergies.put(key++, new BondEnergy("H", "Te", Order.SINGLE, 238));
+        bondEngergies.put(key++, new BondEnergy("H", "F", Order.SINGLE, 565));
+        bondEngergies.put(key++, new BondEnergy("H", "Cl", Order.SINGLE, 428));
+        bondEngergies.put(key++, new BondEnergy("H", "Br", Order.SINGLE, 362));
+        bondEngergies.put(key++, new BondEnergy("H", "I", Order.SINGLE, 295));
+        return key;
+    }
+
+    private Integer setGroup13(Integer key) {
+
+        bondEngergies.put(key++, new BondEnergy("B", "B", Order.SINGLE, 293));
+        bondEngergies.put(key++, new BondEnergy("B", "O", Order.SINGLE, 536));
+        bondEngergies.put(key++, new BondEnergy("B", "F", Order.SINGLE, 613));
+        bondEngergies.put(key++, new BondEnergy("B", "Cl", Order.SINGLE, 456));
+        bondEngergies.put(key++, new BondEnergy("B", "Br", Order.SINGLE, 377));
+        return key;
+    }
+
+    private Integer setGroup14Part1(Integer key) {
+        bondEngergies.put(key++, new BondEnergy("C", "C", Order.SINGLE, 346));
+        bondEngergies.put(key++, new BondEnergy("C", "C", Order.DOUBLE, 602));
+        bondEngergies.put(key++, new BondEnergy("C", "C", Order.TRIPLE, 835));
+        bondEngergies.put(key++, new BondEnergy("C", "Si", Order.SINGLE, 318));
+        bondEngergies.put(key++, new BondEnergy("C", "Ge", Order.SINGLE, 238));
+        bondEngergies.put(key++, new BondEnergy("C", "Sn", Order.SINGLE, 192));
+        bondEngergies.put(key++, new BondEnergy("C", "Pb", Order.SINGLE, 130));
+        bondEngergies.put(key++, new BondEnergy("C", "N", Order.SINGLE, 305));
+        bondEngergies.put(key++, new BondEnergy("C", "N", Order.DOUBLE, 615));
+        bondEngergies.put(key++, new BondEnergy("C", "N", Order.TRIPLE, 887));
+        bondEngergies.put(key++, new BondEnergy("C", "P", Order.SINGLE, 264));
+        bondEngergies.put(key++, new BondEnergy("C", "O", Order.SINGLE, 358));
+        bondEngergies.put(key++, new BondEnergy("C", "O", Order.DOUBLE, 799));
+        bondEngergies.put(key++, new BondEnergy("C", "O", Order.TRIPLE, 1072));
+        bondEngergies.put(key++, new BondEnergy("C", "B", Order.SINGLE, 356));
+        bondEngergies.put(key++, new BondEnergy("C", "S", Order.SINGLE, 272));
+        bondEngergies.put(key++, new BondEnergy("C", "S", Order.DOUBLE, 573));
+        bondEngergies.put(key++, new BondEnergy("C", "F", Order.SINGLE, 485));
+        bondEngergies.put(key++, new BondEnergy("C", "Cl", Order.SINGLE, 327));
+        bondEngergies.put(key++, new BondEnergy("C", "Br", Order.SINGLE, 285));
+        bondEngergies.put(key++, new BondEnergy("C", "I", Order.SINGLE, 213));
+        return key;
+    }
+
+    private Integer setGroup14Part2(Integer key) {
+
+        bondEngergies.put(key++, new BondEnergy("Si", "Si", Order.SINGLE, 222));
+        bondEngergies.put(key++, new BondEnergy("Si", "N", Order.SINGLE, 355));
+        bondEngergies.put(key++, new BondEnergy("Si", "O", Order.SINGLE, 452));
+        bondEngergies.put(key++, new BondEnergy("Si", "S", Order.SINGLE, 293));
+        bondEngergies.put(key++, new BondEnergy("Si", "F", Order.SINGLE, 565));
+        bondEngergies.put(key++, new BondEnergy("Si", "Cl", Order.SINGLE, 381));
+        bondEngergies.put(key++, new BondEnergy("Si", "Br", Order.SINGLE, 310));
+        bondEngergies.put(key++, new BondEnergy("Si", "I", Order.SINGLE, 234));
+
+        bondEngergies.put(key++, new BondEnergy("Ge", "Ge", Order.SINGLE, 188));
+        bondEngergies.put(key++, new BondEnergy("Ge", "N", Order.SINGLE, 257));
+        bondEngergies.put(key++, new BondEnergy("Ge", "F", Order.SINGLE, 470));
+        bondEngergies.put(key++, new BondEnergy("Ge", "Cl", Order.SINGLE, 349));
+        bondEngergies.put(key++, new BondEnergy("Ge", "Br", Order.SINGLE, 276));
+        bondEngergies.put(key++, new BondEnergy("Ge", "I", Order.SINGLE, 212));
+
+        bondEngergies.put(key++, new BondEnergy("Sn", "F", Order.SINGLE, 414));
+        bondEngergies.put(key++, new BondEnergy("Sn", "Cl", Order.SINGLE, 323));
+        bondEngergies.put(key++, new BondEnergy("Sn", "Br", Order.SINGLE, 273));
+        bondEngergies.put(key++, new BondEnergy("Sn", "I", Order.SINGLE, 205));
+
+        bondEngergies.put(key++, new BondEnergy("Pb", "F", Order.SINGLE, 313));
+        bondEngergies.put(key++, new BondEnergy("Pb", "Cl", Order.SINGLE, 243));
+        bondEngergies.put(key++, new BondEnergy("Pb", "Br", Order.SINGLE, 201));
+        bondEngergies.put(key++, new BondEnergy("Pb", "I", Order.SINGLE, 142));
+        return key;
+    }
+
+    private Integer setGroup15(Integer key) {
+        bondEngergies.put(key++, new BondEnergy("N", "N", Order.SINGLE, 167));
+        bondEngergies.put(key++, new BondEnergy("N", "N", Order.DOUBLE, 418));
+        bondEngergies.put(key++, new BondEnergy("N", "N", Order.TRIPLE, 942));
+        bondEngergies.put(key++, new BondEnergy("N", "O", Order.SINGLE, 201));
+        bondEngergies.put(key++, new BondEnergy("N", "O", Order.DOUBLE, 607));
+        bondEngergies.put(key++, new BondEnergy("N", "F", Order.SINGLE, 283));
+        bondEngergies.put(key++, new BondEnergy("N", "Cl", Order.SINGLE, 313));
+
+        bondEngergies.put(key++, new BondEnergy("P", "P", Order.SINGLE, 201));
+        bondEngergies.put(key++, new BondEnergy("P", "O", Order.SINGLE, 335));
+        bondEngergies.put(key++, new BondEnergy("P", "O", Order.DOUBLE, 544));
+        bondEngergies.put(key++, new BondEnergy("P", "S", Order.DOUBLE, 335));
+        bondEngergies.put(key++, new BondEnergy("P", "F", Order.SINGLE, 490));
+        bondEngergies.put(key++, new BondEnergy("P", "Cl", Order.SINGLE, 326));
+        bondEngergies.put(key++, new BondEnergy("P", "Br", Order.SINGLE, 264));
+        bondEngergies.put(key++, new BondEnergy("P", "I", Order.SINGLE, 184));
+
+
+        bondEngergies.put(key++, new BondEnergy("As", "As", Order.SINGLE, 146));
+        bondEngergies.put(key++, new BondEnergy("As", "O", Order.SINGLE, 301));
+        bondEngergies.put(key++, new BondEnergy("As", "F", Order.SINGLE, 484));
+        bondEngergies.put(key++, new BondEnergy("As", "Cl", Order.SINGLE, 322));
+        bondEngergies.put(key++, new BondEnergy("As", "Br", Order.SINGLE, 458));
+        bondEngergies.put(key++, new BondEnergy("As", "I", Order.SINGLE, 200));
+
+
+        bondEngergies.put(key++, new BondEnergy("Sb", "Sb", Order.SINGLE, 121));
+        bondEngergies.put(key++, new BondEnergy("Sb", "F", Order.SINGLE, 440));
+//          Sb-Cl (SbCl 5)
+        bondEngergies.put(key++, new BondEnergy("Sb", "Cl", Order.SINGLE, 248));
+//          Sb-Cl (SbCl 3)
+        bondEngergies.put(key++, new BondEnergy("Sb", "Cl", Order.SINGLE, 315));
+        return key;
+
+    }
+
+    private Integer setGroup16(Integer key) {
+
+        bondEngergies.put(key++, new BondEnergy("O", "O", Order.SINGLE, 142));
+        bondEngergies.put(key++, new BondEnergy("O", "O", Order.DOUBLE, 494));
+        bondEngergies.put(key++, new BondEnergy("O", "F", Order.SINGLE, 190));
+        bondEngergies.put(key++, new BondEnergy("O", "S", Order.SINGLE, 365));
+        bondEngergies.put(key++, new BondEnergy("S", "O", Order.DOUBLE, 522));
+        bondEngergies.put(key++, new BondEnergy("S", "S", Order.SINGLE, 226));
+        bondEngergies.put(key++, new BondEnergy("S", "S", Order.DOUBLE, 425));
+        bondEngergies.put(key++, new BondEnergy("S", "F", Order.SINGLE, 284));
+        bondEngergies.put(key++, new BondEnergy("S", "Cl", Order.SINGLE, 255));
+        bondEngergies.put(key++, new BondEnergy("Se", "Se", Order.SINGLE, 172));
+        bondEngergies.put(key++, new BondEnergy("Se", "Se", Order.DOUBLE, 272));
+        return key;
+
+    }
+
+    private Integer setGroup17(Integer key) {
+        bondEngergies.put(key++, new BondEnergy("F", "F", Order.SINGLE, 155));
+        bondEngergies.put(key++, new BondEnergy("Cl", "Cl", Order.SINGLE, 240));
+        bondEngergies.put(key++, new BondEnergy("Br", "Br", Order.SINGLE, 190));
+        bondEngergies.put(key++, new BondEnergy("I", "I", Order.SINGLE, 148));
+        bondEngergies.put(key++, new BondEnergy("At", "At", Order.SINGLE, 116));
+
+        bondEngergies.put(key++, new BondEnergy("I", "O", Order.SINGLE, 201));
+        bondEngergies.put(key++, new BondEnergy("I", "F", Order.SINGLE, 273));
+        bondEngergies.put(key++, new BondEnergy("I", "Cl", Order.SINGLE, 208));
+        bondEngergies.put(key++, new BondEnergy("I", "Br", Order.SINGLE, 175));
+        return key;
+
+    }
+
+    private Integer setGroup18(Integer key) {
+
+        bondEngergies.put(key++, new BondEnergy("Kr", "F", Order.SINGLE, 50));
+        bondEngergies.put(key++, new BondEnergy("Xe", "O", Order.SINGLE, 84));
+        bondEngergies.put(key++, new BondEnergy("Xe", "F", Order.SINGLE, 130));
+        return key;
     }
 }

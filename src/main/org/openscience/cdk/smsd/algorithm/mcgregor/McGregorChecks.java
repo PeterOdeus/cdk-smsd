@@ -482,4 +482,58 @@ public class McGregorChecks {
         }
         return arcsleft;
     }
+
+    /**
+     * 
+     * @param corresponding_atom
+     * @param new_symbol
+     * @param neighbor_bondnum
+     * @param atomContainer
+     * @param c_bond_neighbors
+     * @return
+     */
+    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer atomContainer, List<String> c_bond_neighbors) {
+        for (int atomIndex = 0; atomIndex < neighbor_bondnum; atomIndex++) {
+            IBond bond = atomContainer.getBond(atomIndex);
+            if ((atomContainer.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(atomIndex * 4 + 2, c_bond_neighbors.get(atomIndex * 4 + 0));
+                c_bond_neighbors.set(atomIndex * 4 + 0, new_symbol);
+            }
+
+            if ((atomContainer.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(atomIndex * 4 + 3, c_bond_neighbors.get(atomIndex * 4 + 1));
+                c_bond_neighbors.set(atomIndex * 4 + 1, new_symbol);
+            }
+
+        }
+
+        return 0;
+    }
+
+    /**
+     *
+     * @param corresponding_atom
+     * @param new_symbol
+     * @param neighbor_bondnum
+     * @param i_bond_neighbors
+     * @param c_bond_neighbors
+     * @return
+     */
+    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
+
+        for (int atomIndex = 0; atomIndex < neighbor_bondnum; atomIndex++) {
+            if ((i_bond_neighbors.get(atomIndex * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(atomIndex * 4 + 2, c_bond_neighbors.get(atomIndex * 4 + 0));
+                c_bond_neighbors.set(atomIndex * 4 + 0, new_symbol);
+            }
+
+            if ((i_bond_neighbors.get(atomIndex * 3 + 1) == (corresponding_atom)) && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
+                c_bond_neighbors.set(atomIndex * 4 + 3, c_bond_neighbors.get(atomIndex * 4 + 1));
+                c_bond_neighbors.set(atomIndex * 4 + 1, new_symbol);
+            }
+
+        }
+
+        return 0;
+    }
 }
