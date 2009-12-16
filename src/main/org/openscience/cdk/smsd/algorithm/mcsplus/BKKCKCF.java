@@ -441,20 +441,15 @@ public class BKKCKCF {
                  */
                 Integer neighbourVertexOfC = neighbourVertex.get(c);
 
-
                 //find respective neighbor position in potentialCVertex, which is needed for the deletion from vertex
                 //delete neighbor from set vertex
 
-
                 if (neighbourVertex.get(c + 1) == 1) {
-
-
                     if (processedVertex.contains(neighbourVertexOfC)) {
                         excludedVertex.add(neighbourVertexOfC);
                     } else {
                         potentialCVertex.push(neighbourVertexOfC);
                     }
-
                 } else if (neighbourVertex.get(c + 1) == 2) {
                     // u and v are adjacent via index potentialDVertex-edge
                     //System.out.println("u and v are adjacent via index potentialDVertex-edge: " + neighbourVertex.elementAt(c));
@@ -468,7 +463,6 @@ public class BKKCKCF {
 
                 if (vertex.indexOf(neighbourVertexOfC) <= index && vertex.indexOf(neighbourVertexOfC) > -1) {
                     --index;
-
                 }
                 vertex.remove(neighbourVertexOfC);
                 //System.out.println("Elements Removed from vertex:" + neighbourVertexOfC);

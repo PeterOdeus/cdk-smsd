@@ -555,19 +555,13 @@ public class McGregor {
                             if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
                                 additional_mapping.add(Atom2_moleculeA);
                                 additional_mapping.add(Atom2_moleculeB);
-                            }
-
-                            if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+                            } else if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
                                 additional_mapping.add(Atom2_moleculeA);
                                 additional_mapping.add(Atom1_moleculeB);
-                            }
-
-                            if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
+                            } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
                                 additional_mapping.add(Atom1_moleculeA);
                                 additional_mapping.add(Atom2_moleculeB);
-                            }
-
-                            if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+                            } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
                                 additional_mapping.add(Atom1_moleculeA);
                                 additional_mapping.add(Atom1_moleculeB);
                             }
@@ -806,7 +800,7 @@ public class McGregor {
                 }
                 mappings.add(mapped_atoms);
 //                    System.out.println("mappings " + mappings);
-                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
