@@ -237,7 +237,7 @@ public class McGregor {
 
         boolean dummy = false;
 
-        iterator(dummy,
+        McgregorHelper MH = new McgregorHelper(dummy,
                 present_Mapping.size(),
                 mapped_atoms,
                 gNeighborBondnumA,
@@ -252,6 +252,7 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setA,
                 c_bond_setB);
+        iterator(MH);
 
     }
 
@@ -428,7 +429,7 @@ public class McGregor {
 
         boolean dummy = false;
 
-        iterator(dummy,
+        McgregorHelper MH = new McgregorHelper(dummy,
                 mappedAtomCount,
                 mapped_atoms,
                 localNeighborBondnumA,
@@ -443,28 +444,21 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setA,
                 c_bond_setB);
+        iterator(MH);
 
     }
 
-    private int iterator(boolean mappingCheckFlag,
-            int mappedAtomCount,
-            List<Integer> mappedAtomsOrg,
-            int neighborBondNumA,
-            int neighborBondNumB,
-            List<Integer> iBondNeighborAtomsA,
-            List<Integer> iBondNeighborAtomsB,
-            List<String> cBondNeighborsA,
-            List<String> cBondNeighborsB,
-            int setNumA, int setNumB,
-            List<Integer> i_bond_setA,
-            List<Integer> i_bond_setB,
-            List<String> c_bond_setA,
-            List<String> c_bond_setB) throws IOException {
+    private int iterator(McgregorHelper MH) throws IOException {
 
-        List<Integer> mappedAtoms = new ArrayList<Integer>(mappedAtomsOrg);
+        boolean mappingCheckFlag = MH.isMappingCheckFlag();
+        int mappedAtomCount = MH.getMappedAtomCount();
+        List<Integer> mappedAtoms = new ArrayList<Integer>(MH.getMappedAtomsOrg());
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+
 
 //        //check possible mappings:
-        boolean furtherMappingFlag = McGregorChecks.isFurtherMappingPossible(source, target, neighborBondNumA, neighborBondNumB, iBondNeighborAtomsA, iBondNeighborAtomsB, cBondNeighborsA, cBondNeighborsB);
+        boolean furtherMappingFlag = McGregorChecks.isFurtherMappingPossible(source, target, MH);
 
         if (neighborBondNumA == 0 || neighborBondNumB == 0 || mappingCheckFlag || !furtherMappingFlag) {
             setFinalMappings(mappedAtoms, mappedAtomCount);
@@ -476,37 +470,20 @@ public class McGregor {
         for (int i = 0; i < size; i++) {
             modifiedARCS.add(i, 0);
         }
-        setModifedArcs(neighborBondNumA,
-                neighborBondNumB,
-                iBondNeighborAtomsA,
-                iBondNeighborAtomsB,
-                cBondNeighborsA,
-                cBondNeighborsB);
+        setModifedArcs(MH);
         first = last = new BinaryTree(-1);
         last.equal = null;
         last.not_equal = null;
         bestarcsleft = 0;
 
-        startsearch(iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
+        startsearch(MH);
         Stack<List<Integer>> BESTARCS_copy = new Stack<List<Integer>>();
 
         BESTARCS_copy.addAll(bestARCS);
         while (!bestARCS.empty()) {
             bestARCS.pop();
         }
-        searchAndExtendMappings(BESTARCS_copy,
-                mappedAtoms,
-                mappedAtomCount,
-                neighborBondNumA,
-                neighborBondNumB,
-                iBondNeighborAtomsA,
-                iBondNeighborAtomsB,
-                setNumA,
-                setNumB,
-                i_bond_setA,
-                i_bond_setB,
-                c_bond_setA,
-                c_bond_setB);
+        searchAndExtendMappings(BESTARCS_copy, MH);
 
         //System.out.println("In the iterator Termination");
         //System.out.println("============+++++++++==============");
@@ -514,316 +491,24 @@ public class McGregor {
         return 0;
     }
 
-    private List<Integer> findMcGregorMapping(List<Integer> MARCS, int mapped_atoms_num, List<Integer> current_MAPPING_org, int bondnum_A, List<Integer> i_bonds_A, int bondnum_B, List<Integer> i_bonds_B) {
-
-        List<Integer> currentMapping = new ArrayList<Integer>(current_MAPPING_org);
-        List<Integer> additional_mapping = new ArrayList<Integer>();
-
-
-
-        for (int x = 0; x < bondnum_A; x++) {
-            for (int y = 0; y < bondnum_B; y++) {
-
-
-                if (MARCS.get(x * bondnum_B + y) == 1) {
-
-
-                    int Atom1_moleculeA = i_bonds_A.get(x * 3 + 0);
-                    int Atom2_moleculeA = i_bonds_A.get(x * 3 + 1);
-                    int Atom1_moleculeB = i_bonds_B.get(y * 3 + 0);
-                    int Atom2_moleculeB = i_bonds_B.get(y * 3 + 1);
-
-                    IAtom R1_A = source.getAtom(Atom1_moleculeA);
-                    IAtom R2_A = source.getAtom(Atom2_moleculeA);
-                    IBond ReactantBond = source.getBond(R1_A, R2_A);
-
-                    IAtom P1_B = target.getAtom(Atom1_moleculeB);
-                    IAtom P2_B = target.getAtom(Atom2_moleculeB);
-                    IBond ProductBond = target.getBond(P1_B, P2_B);
-
-//                  Bond Order Check Introduced by Asad
-
-                    boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
-
-                    if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
-
-                        for (int z = 0; z < mapped_atoms_num; z++) {
-
-                            int Mapped_Atom_1 = currentMapping.get(z * 2 + 0);
-                            int Mapped_Atom_2 = currentMapping.get(z * 2 + 1);
-
-                            if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                                additional_mapping.add(Atom2_moleculeA);
-                                additional_mapping.add(Atom2_moleculeB);
-                            } else if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                                additional_mapping.add(Atom2_moleculeA);
-                                additional_mapping.add(Atom1_moleculeB);
-                            } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                                additional_mapping.add(Atom1_moleculeA);
-                                additional_mapping.add(Atom2_moleculeB);
-                            } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                                additional_mapping.add(Atom1_moleculeA);
-                                additional_mapping.add(Atom1_moleculeB);
-                            }
-                        }//for loop
-                    }
-                }
-            }
-        }
-
-
-        int additionalMappingSize = additional_mapping.size();
-
-        //add McGregorBondTypeInSensitive mapping to the Clique mapping
-        for (int a = 0; a < additionalMappingSize; a = a + 2) {
-            currentMapping.add(additional_mapping.get(a + 0));
-            currentMapping.add(additional_mapping.get(a + 1));
-        }
-//        remove recurring mappings from currentMapping
-
-        List<Integer> unique_MAPPING = McGregorChecks.removeRecurringMappings(currentMapping);
-
-        return unique_MAPPING;
-    }
-
-    private void setModifedArcs(int neighborBondNumA,
-            int neighborBondNumB,
-            List<Integer> iBondNeighborAtomsA,
-            List<Integer> iBondNeighborAtomsB,
-            List<String> cBondNeighborsA,
-            List<String> cBondNeighborsB) {
-        for (int row = 0; row < neighborBondNumA; row++) {
-            for (int column = 0; column < neighborBondNumB; column++) {
-
-                String G1A = cBondNeighborsA.get(row * 4 + 0);
-                String G2A = cBondNeighborsA.get(row * 4 + 1);
-                String G1B = cBondNeighborsB.get(column * 4 + 0);
-                String G2B = cBondNeighborsB.get(column * 4 + 1);
-
-
-                if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0) || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
-
-
-                    int Index_I = iBondNeighborAtomsA.get(row * 3 + 0);
-                    int Index_IPlus1 = iBondNeighborAtomsA.get(row * 3 + 1);
-
-                    IAtom R1_A = source.getAtom(Index_I);
-                    IAtom R2_A = source.getAtom(Index_IPlus1);
-                    IBond ReactantBond = source.getBond(R1_A, R2_A);
-
-                    int Index_J = iBondNeighborAtomsB.get(column * 3 + 0);
-                    int Index_JPlus1 = iBondNeighborAtomsB.get(column * 3 + 1);
-
-                    IAtom P1_B = target.getAtom(Index_J);
-                    IAtom P2_B = target.getAtom(Index_JPlus1);
-                    IBond ProductBond = target.getBond(P1_B, P2_B);
-                    if ((bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
-                        modifiedARCS.set(row * neighborBondNumB + column, 1);
-                    }
-                }
-            }
-        }
-    }
-
-    private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG, List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
-        int xIndex = xstart;
-        int yIndex = ystart;
-
-        List<Integer> TEMPMARCS = new ArrayList<Integer>(TEMPMARCS_ORG);
-
-        if (TEMPMARCS.get(xstart * neighborBondNumB + ystart) == 1) {
-
-            McGregorChecks.removeRedundantArcs(xstart, ystart, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-            int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
-
-            //test Best arcs left and skip rest if needed
-            if (arcsleft >= bestarcsleft) {
-                setArcs(xIndex, yIndex, arcsleft, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-            }
-        } else {
-            do {
-                yIndex++;
-                if (yIndex == neighborBondNumB) {
-                    yIndex = 0;
-                    xIndex++;
-                }
-
-            } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
-
-            if (xIndex < neighborBondNumA) {
-
-                partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-                TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-                partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-            } else {
-                int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
-                if (arcsleft >= bestarcsleft) {
-                    popBestArcs(arcsleft);
-
-                    if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
-                        bestARCS.push(TEMPMARCS);
-                    }
-
-                }
-            }
-        }
-    }
-
-//The function is called in function partsearch. The function is given z temporary matrix.
-//The function checks whether the temporary matrix is already found by calling the function
-//"verifyNodes". If the matrix already exists the function returns false which means that
-//the matrix will not be stored. Otherwise the function returns true which means that the
-//matrix will be stored in function partsearch.
-    private boolean checkMARCS(List<Integer> MARCS_T, int neighborBondNumA, int neighborBondNumB) {
-
-        int size = neighborBondNumA * neighborBondNumA;
-        List<Integer> posnum_list = new ArrayList<Integer>(size);
-
-        for (int i = 0; i < posnum_list.size(); i++) {
-            posnum_list.add(i, 0);
-        }
-
-        int yCounter = 0;
-        int count_entries = 0;
-        for (int x = 0; x < (neighborBondNumA * neighborBondNumB); x++) {
-            if (MARCS_T.get(x) == 1) {
-                posnum_list.add(yCounter++, x);
-                count_entries++;
-            }
-        }
-        boolean flag = false;
-
-        verifyNodes(posnum_list, first, 0, count_entries);
-        if (newMatrix) {
-            flag = true;
-        }
-
-        return flag;
-
-    }
-
-    private boolean verifyNodes(List<Integer> matrix, BinaryTree currentStructure, int index, int fieldLength) {
-        if (index < fieldLength) {
-            if (matrix.get(index) == currentStructure.getValue() && currentStructure.equal != null) {
-                newMatrix = false;
-                verifyNodes(matrix, currentStructure.equal, index + 1, fieldLength);
-            }
-            if (matrix.get(index) != currentStructure.getValue()) {
-                if (currentStructure.not_equal != null) {
-                    verifyNodes(matrix, currentStructure.not_equal, index, fieldLength);
-                }
-
-                if (currentStructure.not_equal == null) {
-                    currentStructure.not_equal = new BinaryTree(matrix.get(index));
-                    currentStructure.not_equal.not_equal = null;
-                    int yIndex = 0;
-
-
-                    BinaryTree last_one = currentStructure.not_equal;
-
-                    while ((yIndex + index + 1) < fieldLength) {
-                        last_one.equal = new BinaryTree(matrix.get(yIndex + index + 1));
-                        last_one = last_one.equal;
-                        last_one.not_equal = null;
-                        yIndex++;
-
-                    }
-                    last_one.equal = null;
-                    newMatrix = true;
-                }
-
-            }
-        }
-        return true;
-    }
-
-    private void startsearch(List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
-        int size = neighborBondNumA * neighborBondNumB;
-        List<Integer> FIXARCS = new ArrayList<Integer>(size);//  Initialize FIXARCS with 0
-        for (int i = 0; i < size; i++) {
-            FIXARCS.add(i, 0);
-        }
-
-        int xIndex = 0;
-        int yIndex = 0;
-
-        while ((xIndex < neighborBondNumA) && (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) != 1)) {
-            yIndex++;
-            if (yIndex == neighborBondNumB) {
-                yIndex = 0;
-                xIndex++;
-            }
-        }
-
-        if (xIndex == neighborBondNumA) {
-            yIndex = neighborBondNumB - 1;
-            xIndex = xIndex - 1;
-        }
-
-        if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) == 0) {
-            partsearch(xIndex, yIndex, modifiedARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-        }
-
-        if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) != 0) {
-            partsearch(xIndex, yIndex, modifiedARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-            modifiedARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-            partsearch(xIndex, yIndex, modifiedARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
-        }
-
-    }
-
-    /**
-     * @return mappings
-     */
-    public List<List<Integer>> getMappings() {
-
-        return this.mappings;
-    }
-
-    /**
-     * @return MCS size
-     */
-    public int getMCSSize() {
-
-        return this.globalMCSSize;
-    }
-
-    private void setFinalMappings(List<Integer> mapped_atoms, int mappedAtomCount) {
-        try {
-            if (mappedAtomCount >= globalMCSSize) {
-//                    System.out.println("Hello-1");
-                if (mappedAtomCount > globalMCSSize) {
-//                        System.out.println("Hello-2");
-                    this.globalMCSSize = mappedAtomCount;
-//                        System.out.println("best_MAPPING_size: " + globalMCSSize);
-                    mappings.clear();
-                }
-                mappings.add(mapped_atoms);
-//                    System.out.println("mappings " + mappings);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void searchAndExtendMappings(
             Stack<List<Integer>> BESTARCS_copy,
-            List<Integer> mappedAtoms,
-            int mappedAtomCount,
-            int neighborBondNumA,
-            int neighborBondNumB,
-            List<Integer> iBondNeighborAtomsA,
-            List<Integer> iBondNeighborAtomsB,
-            int setNumA, int setNumB,
-            List<Integer> i_bond_setA,
-            List<Integer> i_bond_setB,
-            List<String> c_bond_setA,
-            List<String> c_bond_setB) throws IOException {
+            McgregorHelper MH) throws IOException {
+
+
+        int mappedAtomCount = MH.getMappedAtomCount();
+
+        int setNumA = MH.getSetNumA();
+        int setNumB = MH.getsetNumB();
+        List<Integer> i_bond_setA = MH.getI_bond_setA();
+        List<Integer> i_bond_setB = MH.getI_bond_setB();
+        List<String> c_bond_setA = MH.getC_bond_setA();
+        List<String> c_bond_setB = MH.getC_bond_setB();
 
         while (!BESTARCS_copy.empty()) {
 
             List<Integer> MARCS_vector = new ArrayList<Integer>(BESTARCS_copy.peek());
-            List<Integer> new_Mapping = findMcGregorMapping(MARCS_vector, mappedAtomCount, mappedAtoms, neighborBondNumA, iBondNeighborAtomsA, neighborBondNumB, iBondNeighborAtomsB);
+            List<Integer> new_Mapping = findMcGregorMapping(MARCS_vector, MH);
 
             int newMapingSize = new_Mapping.size() / 2;
             boolean no_further_MAPPINGS = false;
@@ -957,7 +642,7 @@ public class McGregor {
             new_c_neighborsB = targetProcess.getCBondNeighborsB();
 
 //             System.out.println("Mapped Atoms before Iterator2: " + mappedAtoms);
-            iterator(no_further_MAPPINGS,
+            McgregorHelper newMH = new McgregorHelper(no_further_MAPPINGS,
                     newMapingSize,
                     new_Mapping,
                     newNeighborNumA,
@@ -973,12 +658,271 @@ public class McGregor {
                     new_c_bond_setA,
                     new_c_bond_setB);
 
+            iterator(newMH);
             BESTARCS_copy.pop();
 //            System.out.println("End of the iterator!!!!");
         }
     }
 
-    private void setArcs(int xIndex, int yIndex, int arcsleft, List<Integer> TEMPMARCS, List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
+    private List<Integer> findMcGregorMapping(List<Integer> MARCS, McgregorHelper MH) {
+
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+        List<Integer> currentMapping = new ArrayList<Integer>(MH.getMappedAtomsOrg());
+        List<Integer> additional_mapping = new ArrayList<Integer>();
+
+        for (int x = 0; x < neighborBondNumA; x++) {
+            for (int y = 0; y < neighborBondNumB; y++) {
+                if (MARCS.get(x * neighborBondNumB + y) == 1) {
+                    extendMapping(x, y, MH, additional_mapping, currentMapping);
+                }
+            }
+        }
+
+
+        int additionalMappingSize = additional_mapping.size();
+        //add McGregorBondTypeInSensitive mapping to the Clique mapping
+        for (int a = 0; a < additionalMappingSize; a = a + 2) {
+            currentMapping.add(additional_mapping.get(a + 0));
+            currentMapping.add(additional_mapping.get(a + 1));
+        }
+
+//        remove recurring mappings from currentMapping
+
+        List<Integer> unique_MAPPING = McGregorChecks.removeRecurringMappings(currentMapping);
+        return unique_MAPPING;
+    }
+
+    private void setModifedArcs(McgregorHelper MH) {
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
+        List<String> cBondNeighborsA = MH.getcBondNeighborsA();
+        List<String> cBondNeighborsB = MH.getcBondNeighborsB();
+        for (int row = 0; row < neighborBondNumA; row++) {
+            for (int column = 0; column < neighborBondNumB; column++) {
+
+                String G1A = cBondNeighborsA.get(row * 4 + 0);
+                String G2A = cBondNeighborsA.get(row * 4 + 1);
+                String G1B = cBondNeighborsB.get(column * 4 + 0);
+                String G2B = cBondNeighborsB.get(column * 4 + 1);
+
+
+                if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0) || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
+
+
+                    int Index_I = iBondNeighborAtomsA.get(row * 3 + 0);
+                    int Index_IPlus1 = iBondNeighborAtomsA.get(row * 3 + 1);
+
+                    IAtom R1_A = source.getAtom(Index_I);
+                    IAtom R2_A = source.getAtom(Index_IPlus1);
+                    IBond ReactantBond = source.getBond(R1_A, R2_A);
+
+                    int Index_J = iBondNeighborAtomsB.get(column * 3 + 0);
+                    int Index_JPlus1 = iBondNeighborAtomsB.get(column * 3 + 1);
+
+                    IAtom P1_B = target.getAtom(Index_J);
+                    IAtom P2_B = target.getAtom(Index_JPlus1);
+                    IBond ProductBond = target.getBond(P1_B, P2_B);
+                    if ((bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
+                        modifiedARCS.set(row * neighborBondNumB + column, 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG, McgregorHelper MH) {
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+
+        int xIndex = xstart;
+        int yIndex = ystart;
+
+        List<Integer> TEMPMARCS = new ArrayList<Integer>(TEMPMARCS_ORG);
+
+        if (TEMPMARCS.get(xstart * neighborBondNumB + ystart) == 1) {
+
+            McGregorChecks.removeRedundantArcs(xstart, ystart, TEMPMARCS, MH);
+            int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
+
+            //test Best arcs left and skip rest if needed
+            if (arcsleft >= bestarcsleft) {
+                setArcs(xIndex, yIndex, arcsleft, TEMPMARCS, MH);
+            }
+        } else {
+            do {
+                yIndex++;
+                if (yIndex == neighborBondNumB) {
+                    yIndex = 0;
+                    xIndex++;
+                }
+
+            } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
+
+            if (xIndex < neighborBondNumA) {
+
+                partsearch(xIndex, yIndex, TEMPMARCS, MH);
+                TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
+                partsearch(xIndex, yIndex, TEMPMARCS, MH);
+            } else {
+                int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
+                if (arcsleft >= bestarcsleft) {
+                    popBestArcs(arcsleft);
+
+                    if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
+                        bestARCS.push(TEMPMARCS);
+                    }
+
+                }
+            }
+        }
+    }
+
+//The function is called in function partsearch. The function is given z temporary matrix.
+//The function checks whether the temporary matrix is already found by calling the function
+//"verifyNodes". If the matrix already exists the function returns false which means that
+//the matrix will not be stored. Otherwise the function returns true which means that the
+//matrix will be stored in function partsearch.
+    private boolean checkMARCS(List<Integer> MARCS_T, int neighborBondNumA, int neighborBondNumB) {
+
+        int size = neighborBondNumA * neighborBondNumA;
+        List<Integer> posnum_list = new ArrayList<Integer>(size);
+
+        for (int i = 0; i < posnum_list.size(); i++) {
+            posnum_list.add(i, 0);
+        }
+
+        int yCounter = 0;
+        int count_entries = 0;
+        for (int x = 0; x < (neighborBondNumA * neighborBondNumB); x++) {
+            if (MARCS_T.get(x) == 1) {
+                posnum_list.add(yCounter++, x);
+                count_entries++;
+            }
+        }
+        boolean flag = false;
+
+        verifyNodes(posnum_list, first, 0, count_entries);
+        if (newMatrix) {
+            flag = true;
+        }
+
+        return flag;
+
+    }
+
+    private boolean verifyNodes(List<Integer> matrix, BinaryTree currentStructure, int index, int fieldLength) {
+        if (index < fieldLength) {
+            if (matrix.get(index) == currentStructure.getValue() && currentStructure.equal != null) {
+                newMatrix = false;
+                verifyNodes(matrix, currentStructure.equal, index + 1, fieldLength);
+            }
+            if (matrix.get(index) != currentStructure.getValue()) {
+                if (currentStructure.not_equal != null) {
+                    verifyNodes(matrix, currentStructure.not_equal, index, fieldLength);
+                }
+
+                if (currentStructure.not_equal == null) {
+                    currentStructure.not_equal = new BinaryTree(matrix.get(index));
+                    currentStructure.not_equal.not_equal = null;
+                    int yIndex = 0;
+
+
+                    BinaryTree last_one = currentStructure.not_equal;
+
+                    while ((yIndex + index + 1) < fieldLength) {
+                        last_one.equal = new BinaryTree(matrix.get(yIndex + index + 1));
+                        last_one = last_one.equal;
+                        last_one.not_equal = null;
+                        yIndex++;
+
+                    }
+                    last_one.equal = null;
+                    newMatrix = true;
+                }
+
+            }
+        }
+        return true;
+    }
+
+    private void startsearch(McgregorHelper MH) {
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+
+        int size = neighborBondNumA * neighborBondNumB;
+        List<Integer> FIXARCS = new ArrayList<Integer>(size);//  Initialize FIXARCS with 0
+        for (int i = 0; i < size; i++) {
+            FIXARCS.add(i, 0);
+        }
+
+        int xIndex = 0;
+        int yIndex = 0;
+
+        while ((xIndex < neighborBondNumA) && (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) != 1)) {
+            yIndex++;
+            if (yIndex == neighborBondNumB) {
+                yIndex = 0;
+                xIndex++;
+            }
+        }
+
+        if (xIndex == neighborBondNumA) {
+            yIndex = neighborBondNumB - 1;
+            xIndex = xIndex - 1;
+        }
+
+        if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) == 0) {
+            partsearch(xIndex, yIndex, modifiedARCS, MH);
+        }
+
+        if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) != 0) {
+            partsearch(xIndex, yIndex, modifiedARCS, MH);
+            modifiedARCS.set(xIndex * neighborBondNumB + yIndex, 0);
+            partsearch(xIndex, yIndex, modifiedARCS, MH);
+        }
+
+    }
+
+    /**
+     * @return mappings
+     */
+    public List<List<Integer>> getMappings() {
+
+        return this.mappings;
+    }
+
+    /**
+     * @return MCS size
+     */
+    public int getMCSSize() {
+
+        return this.globalMCSSize;
+    }
+
+    private void setFinalMappings(List<Integer> mapped_atoms, int mappedAtomCount) {
+        try {
+            if (mappedAtomCount >= globalMCSSize) {
+//                    System.out.println("Hello-1");
+                if (mappedAtomCount > globalMCSSize) {
+//                        System.out.println("Hello-2");
+                    this.globalMCSSize = mappedAtomCount;
+//                        System.out.println("best_MAPPING_size: " + globalMCSSize);
+                    mappings.clear();
+                }
+                mappings.add(mapped_atoms);
+//                    System.out.println("mappings " + mappings);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setArcs(int xIndex, int yIndex, int arcsleft, List<Integer> TEMPMARCS, McgregorHelper MH) {
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
         do {
             yIndex++;
             if (yIndex == neighborBondNumB) {
@@ -989,14 +933,12 @@ public class McGregor {
         } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
         if (xIndex < neighborBondNumA) {
 
-            partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
+            partsearch(xIndex, yIndex, TEMPMARCS, MH);
             TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-            partsearch(xIndex, yIndex, TEMPMARCS, iBondNeighborAtomsA, iBondNeighborAtomsB, neighborBondNumA, neighborBondNumB);
+            partsearch(xIndex, yIndex, TEMPMARCS, MH);
 
         } else {
             popBestArcs(arcsleft);
-
-
             if (checkMARCS(TEMPMARCS, neighborBondNumA, neighborBondNumB)) {
                 bestARCS.push(TEMPMARCS);
             }
@@ -1014,5 +956,51 @@ public class McGregor {
             }
         }
         bestarcsleft = arcsleft;
+    }
+
+    private void extendMapping(int xIndex, int yIndex, McgregorHelper MH, List<Integer> additional_mapping, List<Integer> currentMapping) {
+        int mappedAtomCount = MH.getMappedAtomCount();
+        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
+
+        int Atom1_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 0);
+        int Atom2_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 1);
+        int Atom1_moleculeB = iBondNeighborAtomsB.get(yIndex * 3 + 0);
+        int Atom2_moleculeB = iBondNeighborAtomsB.get(yIndex * 3 + 1);
+
+        IAtom R1_A = source.getAtom(Atom1_moleculeA);
+        IAtom R2_A = source.getAtom(Atom2_moleculeA);
+        IBond ReactantBond = source.getBond(R1_A, R2_A);
+
+        IAtom P1_B = target.getAtom(Atom1_moleculeB);
+        IAtom P2_B = target.getAtom(Atom2_moleculeB);
+        IBond ProductBond = target.getBond(P1_B, P2_B);
+
+//      Bond Order Check Introduced by Asad
+
+        boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
+
+        if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
+
+            for (int z = 0; z < mappedAtomCount; z++) {
+
+                int Mapped_Atom_1 = currentMapping.get(z * 2 + 0);
+                int Mapped_Atom_2 = currentMapping.get(z * 2 + 1);
+
+                if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
+                    additional_mapping.add(Atom2_moleculeA);
+                    additional_mapping.add(Atom2_moleculeB);
+                } else if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+                    additional_mapping.add(Atom2_moleculeA);
+                    additional_mapping.add(Atom1_moleculeB);
+                } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
+                    additional_mapping.add(Atom1_moleculeA);
+                    additional_mapping.add(Atom2_moleculeB);
+                } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+                    additional_mapping.add(Atom1_moleculeA);
+                    additional_mapping.add(Atom1_moleculeB);
+                }
+            }//for loop
+        }
     }
 }

@@ -237,8 +237,11 @@ public class McGregorChecks {
      * @param neighborBondNumA
      * @param neighborBondNumB
      */
-    protected static void removeRedundantArcs(int row, int column, List<Integer> MARCS, List<Integer> iBondNeighborAtomsA, List<Integer> iBondNeighborAtomsB, int neighborBondNumA, int neighborBondNumB) {
-
+    protected static void removeRedundantArcs(int row, int column, List<Integer> MARCS, McgregorHelper MH) {
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
         int G1_atom = iBondNeighborAtomsA.get(row * 3 + 0);
         int G2_atom = iBondNeighborAtomsA.get(row * 3 + 1);
         int G3_atom = iBondNeighborAtomsB.get(column * 3 + 0);
@@ -300,8 +303,8 @@ public class McGregorChecks {
      * @return
      */
     protected static boolean case1(int G1_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G1_atom == row_atom1) || (G1_atom == row_atom2)) &&
-                (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
+        if (((G1_atom == row_atom1) || (G1_atom == row_atom2))
+                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
             return true;
         }
         return false;
@@ -319,9 +322,9 @@ public class McGregorChecks {
      * @return
      */
     protected static boolean case2(int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G2_atom == row_atom1) ||
-                (G2_atom == row_atom2)) &&
-                (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
+        if (((G2_atom == row_atom1)
+                || (G2_atom == row_atom2))
+                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
             return true;
         }
         return false;
@@ -339,8 +342,8 @@ public class McGregorChecks {
      * @return
      */
     protected static boolean case3(int G1_atom, int G3_atom, int G2_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G3_atom == column_atom3) || (G3_atom == column_atom4)) &&
-                (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
+        if (((G3_atom == column_atom3) || (G3_atom == column_atom4))
+                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
             return true;
         }
         return false;
@@ -358,8 +361,8 @@ public class McGregorChecks {
      * @return
      */
     protected static boolean case4(int G1_atom, int G2_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (((G4_atom == column_atom3) || (G4_atom == column_atom4)) &&
-                (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
+        if (((G4_atom == column_atom3) || (G4_atom == column_atom4))
+                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
             return true;
         }
         return false;
@@ -535,5 +538,58 @@ public class McGregorChecks {
         }
 
         return 0;
+    }
+
+    static boolean isFurtherMappingPossible(IAtomContainer source, IAtomContainer target, McgregorHelper MH) {
+
+        int neighborBondNumA = MH.getNeighborBondNumA();
+        int neighborBondNumB = MH.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
+        List<String> cBondNeighborsA = MH.getcBondNeighborsA();
+        List<String> cBondNeighborsB = MH.getcBondNeighborsB();
+
+        boolean moreMappingPossible = false;
+        for (int row = 0; row < neighborBondNumA; row++) {
+//            System.out.println("i " + row);
+            String G1A = cBondNeighborsA.get(row * 4 + 0);
+            String G2A = cBondNeighborsA.get(row * 4 + 1);
+
+
+            for (int column = 0; column < neighborBondNumB; column++) {
+
+                String G1B = cBondNeighborsB.get(column * 4 + 0);
+                String G2B = cBondNeighborsB.get(column * 4 + 1);
+
+                if (isAtomMatch(G1A, G2A, G1B, G2B)) {
+                    try {
+
+                        int Index_I = iBondNeighborAtomsA.get(row * 3 + 0);
+                        int Index_IPlus1 = iBondNeighborAtomsA.get(row * 3 + 1);
+
+
+                        int Index_J = iBondNeighborAtomsB.get(column * 3 + 0);
+                        int Index_JPlus1 = iBondNeighborAtomsB.get(column * 3 + 1);
+
+                        IAtom R1_A = source.getAtom(Index_I);
+                        IAtom R2_A = source.getAtom(Index_IPlus1);
+                        IBond ReactantBond = source.getBond(R1_A, R2_A);
+
+                        IAtom P1_B = target.getAtom(Index_J);
+                        IAtom P2_B = target.getAtom(Index_JPlus1);
+                        IBond ProductBond = target.getBond(P1_B, P2_B);
+
+                        if (bondTypeFlag && bondMatch(ReactantBond, ProductBond) || !bondTypeFlag) {
+                            moreMappingPossible = true;
+                            break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return moreMappingPossible;
     }
 }
