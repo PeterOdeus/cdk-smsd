@@ -84,13 +84,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         firstAtomMCS = new HashMap<IAtom, IAtom>();
 
-        if (bondTypeFlag) {
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.10);
-        } else {
-            TimeOut tmo = TimeOut.getInstance();
-            tmo.setTimeOut(0.15);
-        }
+        setTime(bondTypeFlag);
 
         BondType bondType = BondType.getInstance();
         bondType.reset();
@@ -120,32 +114,16 @@ public class SubStructureSearchAlgorithms implements IMCS {
                 cdkMCS();
                 break;
             case DEFAULT:
-                if (BondType.getInstance().getBondSensitiveFlag()) {
-                    cdkMCS();
-                } else {
-                    mcsPlus();
-                }
-                if (getFirstMapping() == null) {
-                    System.gc();
-                    vfLibMCS();
-                }
+                Default();
                 break;
             case MCSPlus:
                 mcsPlus();
                 break;
             case SubStructure:
-                if (rBondCount > 1 && pBondCount > 1) {
-                    vfTurboHandler();
-                } else {
-                    singleMapping();
-                }
+                SubStructure(rBondCount, pBondCount);
                 break;
             case VFLibMCS:
-                if (rBondCount >= 6 && rBondCount >= 6) {
-                    vfLibMCS();
-                } else {
-                    mcsPlus();
-                }
+                VFLibMCS(rBondCount, pBondCount);
                 break;
         }
     }
@@ -460,8 +438,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
             source = Reactant.getAtomCount() - getHCount(Reactant);
             target = Product.getAtomCount() - getHCount(Product);
         }
-        if ((size == source && score / 2 == Reactant.getBondCount()) &&
-                (target >= size && Product.getBondCount() >= score / 2)) {
+        if ((size == source && score / 2 == Reactant.getBondCount())
+                && (target >= size && Product.getBondCount() >= score / 2)) {
             flag = true;
         }
         return flag;
@@ -599,6 +577,44 @@ public class SubStructureSearchAlgorithms implements IMCS {
             }
         }
         return score;
+    }
+
+    private void Default() {
+        if (BondType.getInstance().getBondSensitiveFlag()) {
+            cdkMCS();
+        } else {
+            mcsPlus();
+        }
+        if (getFirstMapping() == null) {
+            System.gc();
+            vfLibMCS();
+        }
+    }
+
+    private void SubStructure(int rBondCount, int pBondCount) {
+        if (rBondCount > 1 && pBondCount > 1) {
+            vfTurboHandler();
+        } else {
+            singleMapping();
+        }
+    }
+
+    private void VFLibMCS(int rBondCount, int pBondCount) {
+        if (rBondCount >= 6 && rBondCount >= 6) {
+            vfLibMCS();
+        } else {
+            mcsPlus();
+        }
+    }
+
+    private void setTime(boolean bondTypeFlag) {
+        if (bondTypeFlag) {
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.10);
+        } else {
+            TimeOut tmo = TimeOut.getInstance();
+            tmo.setTimeOut(0.15);
+        }
     }
 }
 

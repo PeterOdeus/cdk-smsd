@@ -215,7 +215,7 @@ public class BKKCKCF {
 
             List<Integer> R_copy = new ArrayList<Integer>(vertexOfCurrentClique);
             Stack<Integer> P_copy = new Stack<Integer>();
-            List<Integer> Q_copy = new ArrayList<Integer>();
+            List<Integer> Q_copy = new ArrayList<Integer>(potentialDVertex);
             List<Integer> X_copy = new ArrayList<Integer>(excludedVertex);
             List<Integer> Y_copy = new ArrayList<Integer>(excludedCVertex);
 
@@ -224,9 +224,6 @@ public class BKKCKCF {
 
             for (Integer obj : potentialCVertex) {
                 P_copy.add(obj);
-            }
-            for (Integer obj : potentialDVertex) {
-                Q_copy.add(obj);
             }
 
             P_copy.pop();
@@ -291,7 +288,16 @@ public class BKKCKCF {
 
     }
 
-    private void groupNeighbors(int index, Stack<Integer> P_copy, List<Integer> Q_copy, List<Integer> X_copy, List<Integer> Y_copy, List<Integer> neighbourVertex, List<Integer> potentialDVertex, List<Integer> potentialVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
+    private void groupNeighbors(int index,
+            Stack<Integer> P_copy,
+            List<Integer> Q_copy,
+            List<Integer> X_copy,
+            List<Integer> Y_copy,
+            List<Integer> neighbourVertex,
+            List<Integer> potentialDVertex,
+            List<Integer> potentialVertex,
+            List<Integer> excludedVertex,
+            List<Integer> excludedCVertex) {
 
         int N_size = neighbourVertex.size();
 
@@ -338,14 +344,16 @@ public class BKKCKCF {
 
         boolean d_edgeFlag = false;
 
-        if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && cEdges.size() > 100000) {
-            dEdgeIterationSize = (float) dEdges.size() * 0.000001;
-            d_edgeFlag = true;
+        if (dEdges.size() > cEdges.size()) {
+            if (dEdges.size() > 10000000 && cEdges.size() > 100000) {
+                dEdgeIterationSize = (float) dEdges.size() * 0.000001;
+                d_edgeFlag = true;
 
-        } else if (dEdges.size() > 10000000 && dEdges.size() > cEdges.size() && 5000 < cEdges.size()) {
-            dEdgeIterationSize = (float) dEdges.size() * 0.001;
-            d_edgeFlag = true;
+            } else if (dEdges.size() > 10000000 && cEdges.size() > 5000) {
+                dEdgeIterationSize = (float) dEdges.size() * 0.001;
+                d_edgeFlag = true;
 
+            }
         }
 //        else if (dEdges.size() > 5000000 && dEdges.size() > cEdges.size()) {
 //            dEdgeIterationSize = (float) dEdges.size() * 0.0001;
