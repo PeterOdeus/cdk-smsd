@@ -354,7 +354,7 @@ public class BKKCKCF {
                 d_edgeFlag = true;
 
             }
-        }
+
 //        else if (dEdges.size() > 5000000 && dEdges.size() > cEdges.size()) {
 //            dEdgeIterationSize = (float) dEdges.size() * 0.0001;
 //            d_edgeFlag = true;
@@ -372,12 +372,11 @@ public class BKKCKCF {
 //
 //
 //
-        if (dEdgeIterationSize < 1 && d_edgeFlag && cEdges.size() <= 5000) {
 
-            dEdgeIterationSize = 2;
-        } else if (dEdgeIterationSize < 1 && d_edgeFlag) {
+        }
 
-            dEdgeIterationSize = 1;
+        if (d_edgeFlag) {
+            checkLowestEdgeCount();
         }
     }
 
@@ -483,6 +482,14 @@ public class BKKCKCF {
             processedVertex.add(central_node);
 
             index++;
+        }
+    }
+
+    private void checkLowestEdgeCount() {
+        if (dEdgeIterationSize < 1 && cEdges.size() <= 5000) {
+            dEdgeIterationSize = 2;
+        } else if (dEdgeIterationSize < 1) {
+            dEdgeIterationSize = 1;
         }
     }
 }
