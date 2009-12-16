@@ -237,7 +237,7 @@ public class McGregor {
 
         boolean dummy = false;
 
-        McgregorHelper MH = new McgregorHelper(dummy,
+        McgregorHelper mcGregorHelper = new McgregorHelper(dummy,
                 present_Mapping.size(),
                 mapped_atoms,
                 gNeighborBondnumA,
@@ -252,7 +252,7 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setA,
                 c_bond_setB);
-        iterator(MH);
+        iterator(mcGregorHelper);
 
     }
 
@@ -429,7 +429,7 @@ public class McGregor {
 
         boolean dummy = false;
 
-        McgregorHelper MH = new McgregorHelper(dummy,
+        McgregorHelper mcGregorHelper = new McgregorHelper(dummy,
                 mappedAtomCount,
                 mapped_atoms,
                 localNeighborBondnumA,
@@ -444,21 +444,21 @@ public class McGregor {
                 i_bond_setB,
                 c_bond_setA,
                 c_bond_setB);
-        iterator(MH);
+        iterator(mcGregorHelper);
 
     }
 
-    private int iterator(McgregorHelper MH) throws IOException {
+    private int iterator(McgregorHelper mcGregorHelper) throws IOException {
 
-        boolean mappingCheckFlag = MH.isMappingCheckFlag();
-        int mappedAtomCount = MH.getMappedAtomCount();
-        List<Integer> mappedAtoms = new ArrayList<Integer>(MH.getMappedAtomsOrg());
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
+        boolean mappingCheckFlag = mcGregorHelper.isMappingCheckFlag();
+        int mappedAtomCount = mcGregorHelper.getMappedAtomCount();
+        List<Integer> mappedAtoms = new ArrayList<Integer>(mcGregorHelper.getMappedAtomsOrg());
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
 
 
 //        //check possible mappings:
-        boolean furtherMappingFlag = McGregorChecks.isFurtherMappingPossible(source, target, MH);
+        boolean furtherMappingFlag = McGregorChecks.isFurtherMappingPossible(source, target, mcGregorHelper);
 
         if (neighborBondNumA == 0 || neighborBondNumB == 0 || mappingCheckFlag || !furtherMappingFlag) {
             setFinalMappings(mappedAtoms, mappedAtomCount);
@@ -470,20 +470,20 @@ public class McGregor {
         for (int i = 0; i < size; i++) {
             modifiedARCS.add(i, 0);
         }
-        setModifedArcs(MH);
+        setModifedArcs(mcGregorHelper);
         first = last = new BinaryTree(-1);
         last.equal = null;
         last.not_equal = null;
         bestarcsleft = 0;
 
-        startsearch(MH);
+        startsearch(mcGregorHelper);
         Stack<List<Integer>> BESTARCS_copy = new Stack<List<Integer>>();
 
         BESTARCS_copy.addAll(bestARCS);
         while (!bestARCS.empty()) {
             bestARCS.pop();
         }
-        searchAndExtendMappings(BESTARCS_copy, MH);
+        searchAndExtendMappings(BESTARCS_copy, mcGregorHelper);
 
         //System.out.println("In the iterator Termination");
         //System.out.println("============+++++++++==============");
@@ -493,22 +493,22 @@ public class McGregor {
 
     private void searchAndExtendMappings(
             Stack<List<Integer>> BESTARCS_copy,
-            McgregorHelper MH) throws IOException {
+            McgregorHelper mcGregorHelper) throws IOException {
 
 
-        int mappedAtomCount = MH.getMappedAtomCount();
+        int mappedAtomCount = mcGregorHelper.getMappedAtomCount();
 
-        int setNumA = MH.getSetNumA();
-        int setNumB = MH.getsetNumB();
-        List<Integer> i_bond_setA = MH.getI_bond_setA();
-        List<Integer> i_bond_setB = MH.getI_bond_setB();
-        List<String> c_bond_setA = MH.getC_bond_setA();
-        List<String> c_bond_setB = MH.getC_bond_setB();
+        int setNumA = mcGregorHelper.getSetNumA();
+        int setNumB = mcGregorHelper.getsetNumB();
+        List<Integer> i_bond_setA = mcGregorHelper.getI_bond_setA();
+        List<Integer> i_bond_setB = mcGregorHelper.getI_bond_setB();
+        List<String> c_bond_setA = mcGregorHelper.getC_bond_setA();
+        List<String> c_bond_setB = mcGregorHelper.getC_bond_setB();
 
         while (!BESTARCS_copy.empty()) {
 
             List<Integer> MARCS_vector = new ArrayList<Integer>(BESTARCS_copy.peek());
-            List<Integer> new_Mapping = findMcGregorMapping(MARCS_vector, MH);
+            List<Integer> new_Mapping = findMcGregorMapping(MARCS_vector, mcGregorHelper);
 
             int newMapingSize = new_Mapping.size() / 2;
             boolean no_further_MAPPINGS = false;
@@ -664,17 +664,17 @@ public class McGregor {
         }
     }
 
-    private List<Integer> findMcGregorMapping(List<Integer> MARCS, McgregorHelper MH) {
+    private List<Integer> findMcGregorMapping(List<Integer> MARCS, McgregorHelper mcGregorHelper) {
 
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
-        List<Integer> currentMapping = new ArrayList<Integer>(MH.getMappedAtomsOrg());
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
+        List<Integer> currentMapping = new ArrayList<Integer>(mcGregorHelper.getMappedAtomsOrg());
         List<Integer> additional_mapping = new ArrayList<Integer>();
 
         for (int x = 0; x < neighborBondNumA; x++) {
             for (int y = 0; y < neighborBondNumB; y++) {
                 if (MARCS.get(x * neighborBondNumB + y) == 1) {
-                    extendMapping(x, y, MH, additional_mapping, currentMapping);
+                    extendMapping(x, y, mcGregorHelper, additional_mapping, currentMapping);
                 }
             }
         }
@@ -693,13 +693,13 @@ public class McGregor {
         return unique_MAPPING;
     }
 
-    private void setModifedArcs(McgregorHelper MH) {
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
-        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
-        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
-        List<String> cBondNeighborsA = MH.getcBondNeighborsA();
-        List<String> cBondNeighborsB = MH.getcBondNeighborsB();
+    private void setModifedArcs(McgregorHelper mcGregorHelper) {
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = mcGregorHelper.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = mcGregorHelper.getiBondNeighborAtomsB();
+        List<String> cBondNeighborsA = mcGregorHelper.getcBondNeighborsA();
+        List<String> cBondNeighborsB = mcGregorHelper.getcBondNeighborsB();
         for (int row = 0; row < neighborBondNumA; row++) {
             for (int column = 0; column < neighborBondNumB; column++) {
 
@@ -733,9 +733,9 @@ public class McGregor {
         }
     }
 
-    private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG, McgregorHelper MH) {
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
+    private void partsearch(int xstart, int ystart, List<Integer> TEMPMARCS_ORG, McgregorHelper mcGregorHelper) {
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
 
         int xIndex = xstart;
         int yIndex = ystart;
@@ -744,12 +744,12 @@ public class McGregor {
 
         if (TEMPMARCS.get(xstart * neighborBondNumB + ystart) == 1) {
 
-            McGregorChecks.removeRedundantArcs(xstart, ystart, TEMPMARCS, MH);
+            McGregorChecks.removeRedundantArcs(xstart, ystart, TEMPMARCS, mcGregorHelper);
             int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
 
             //test Best arcs left and skip rest if needed
             if (arcsleft >= bestarcsleft) {
-                setArcs(xIndex, yIndex, arcsleft, TEMPMARCS, MH);
+                setArcs(xIndex, yIndex, arcsleft, TEMPMARCS, mcGregorHelper);
             }
         } else {
             do {
@@ -763,9 +763,9 @@ public class McGregor {
 
             if (xIndex < neighborBondNumA) {
 
-                partsearch(xIndex, yIndex, TEMPMARCS, MH);
+                partsearch(xIndex, yIndex, TEMPMARCS, mcGregorHelper);
                 TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-                partsearch(xIndex, yIndex, TEMPMARCS, MH);
+                partsearch(xIndex, yIndex, TEMPMARCS, mcGregorHelper);
             } else {
                 int arcsleft = McGregorChecks.countArcsLeft(TEMPMARCS, neighborBondNumA, neighborBondNumB);
                 if (arcsleft >= bestarcsleft) {
@@ -848,9 +848,9 @@ public class McGregor {
         return true;
     }
 
-    private void startsearch(McgregorHelper MH) {
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
+    private void startsearch(McgregorHelper mcGregorHelper) {
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
 
         int size = neighborBondNumA * neighborBondNumB;
         List<Integer> FIXARCS = new ArrayList<Integer>(size);//  Initialize FIXARCS with 0
@@ -875,13 +875,13 @@ public class McGregor {
         }
 
         if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) == 0) {
-            partsearch(xIndex, yIndex, modifiedARCS, MH);
+            partsearch(xIndex, yIndex, modifiedARCS, mcGregorHelper);
         }
 
         if (modifiedARCS.get(xIndex * neighborBondNumB + yIndex) != 0) {
-            partsearch(xIndex, yIndex, modifiedARCS, MH);
+            partsearch(xIndex, yIndex, modifiedARCS, mcGregorHelper);
             modifiedARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-            partsearch(xIndex, yIndex, modifiedARCS, MH);
+            partsearch(xIndex, yIndex, modifiedARCS, mcGregorHelper);
         }
 
     }
@@ -920,9 +920,9 @@ public class McGregor {
         }
     }
 
-    private void setArcs(int xIndex, int yIndex, int arcsleft, List<Integer> TEMPMARCS, McgregorHelper MH) {
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
+    private void setArcs(int xIndex, int yIndex, int arcsleft, List<Integer> TEMPMARCS, McgregorHelper mcGregorHelper) {
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
         do {
             yIndex++;
             if (yIndex == neighborBondNumB) {
@@ -933,9 +933,9 @@ public class McGregor {
         } while ((xIndex < neighborBondNumA) && (TEMPMARCS.get(xIndex * neighborBondNumB + yIndex) != 1)); //Correction by ASAD set value minus 1
         if (xIndex < neighborBondNumA) {
 
-            partsearch(xIndex, yIndex, TEMPMARCS, MH);
+            partsearch(xIndex, yIndex, TEMPMARCS, mcGregorHelper);
             TEMPMARCS.set(xIndex * neighborBondNumB + yIndex, 0);
-            partsearch(xIndex, yIndex, TEMPMARCS, MH);
+            partsearch(xIndex, yIndex, TEMPMARCS, mcGregorHelper);
 
         } else {
             popBestArcs(arcsleft);
@@ -958,10 +958,10 @@ public class McGregor {
         bestarcsleft = arcsleft;
     }
 
-    private void extendMapping(int xIndex, int yIndex, McgregorHelper MH, List<Integer> additional_mapping, List<Integer> currentMapping) {
-        int mappedAtomCount = MH.getMappedAtomCount();
-        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
-        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
+    private void extendMapping(int xIndex, int yIndex, McgregorHelper mcGregorHelper, List<Integer> additional_mapping, List<Integer> currentMapping) {
+        int mappedAtomCount = mcGregorHelper.getMappedAtomCount();
+        List<Integer> iBondNeighborAtomsA = mcGregorHelper.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = mcGregorHelper.getiBondNeighborAtomsB();
 
         int Atom1_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 0);
         int Atom2_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 1);
