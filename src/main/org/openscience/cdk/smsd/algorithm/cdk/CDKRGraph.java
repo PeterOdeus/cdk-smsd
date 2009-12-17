@@ -221,7 +221,6 @@ public class CDKRGraph {
         // initialize the list of solution
 
         this.timeManager = timeManager;
-        checkTimeOut();
         // initialize the list of solution
         solutionList.clear();
 
@@ -374,7 +373,7 @@ public class CDKRGraph {
      * @param       potentialNode  set of remaining potential nodes
      * @return      true if maxIterator is worse to continue the search
      */
-    private boolean mustContinue(BitSet potentialNode) {
+    private boolean mustContinue(BitSet potentialNode) throws CDKException {
         boolean result = true;
         boolean cancel = false;
         BitSet projG1 = projectG1(potentialNode);
@@ -395,7 +394,7 @@ public class CDKRGraph {
         // existing solution
         for (Iterator<BitSet> i = solutionList.iterator(); i.hasNext() && !cancel;) {
             BitSet sol = i.next();
-
+            checkTimeOut();
             // if we want every 'mappings' do not stop
             if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
                 // do nothing
@@ -428,9 +427,7 @@ public class CDKRGraph {
         // are allowed in the initial extension set : targetBitSet
         for (Iterator<CDKRNode> i = graph.iterator(); i.hasNext();) {
             CDKRNode rNode = i.next();
-
             checkTimeOut();
-
             if ((sourceBitSet.get(rNode.getRMap().id1) || sourceBitSet.isEmpty()) && (targetBitSet.get(rNode.getRMap().id2) || targetBitSet.isEmpty())) {
                 bistSet.set(graph.indexOf(rNode));
             }

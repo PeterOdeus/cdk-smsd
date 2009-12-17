@@ -66,7 +66,7 @@ public class CDKRMapHandler {
 
 
         if ((source.getAtomCount() == 1) || (target.getAtomCount() == 1)) {
-            List overlaps = CDKMCS.checkSingleAtomCases(source, target);
+            List<CDKRMap> overlaps = CDKMCS.checkSingleAtomCases(source, target);
             int nAtomsMatched = overlaps.size();
             nAtomsMatched = (nAtomsMatched > 0) ? 1 : 0;
             if (nAtomsMatched > 0) {
@@ -78,13 +78,13 @@ public class CDKRMapHandler {
             }
 
         } else {
-            List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
+            List<List<CDKRMap>> overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
 
-            List reducedList = removeSubGraph(overlaps);
-            Stack<List> allMaxOverlaps = getAllMaximum(reducedList);
+            List<List<CDKRMap>> reducedList = removeSubGraph(overlaps);
+            Stack<List<CDKRMap>> allMaxOverlaps = getAllMaximum(reducedList);
             while (!allMaxOverlaps.empty()) {
 //                System.out.println("source: " + source.getAtomCount() + ", target: " + target.getAtomCount() + ", overl: " + allMaxOverlaps.peek().size());
-                List maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
+                List<CDKRMap> maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
 //                System.out.println("size of maxOverlaps: " + maxOverlapsAtoms.size());
                 identifyMatchedParts(maxOverlapsAtoms, source, target);
 //                identifyMatchedParts(allMaxOverlaps.peek(), source, target);
@@ -116,7 +116,7 @@ public class CDKRMapHandler {
 
         if ((source.getAtomCount() == 1) || (target.getAtomCount() == 1)) {
 
-            List overlaps = CDKMCS.checkSingleAtomCases(source, target);
+            List<CDKRMap> overlaps = CDKMCS.checkSingleAtomCases(source, target);
             int nAtomsMatched = overlaps.size();
             nAtomsMatched = (nAtomsMatched > 0) ? 1 : 0;
             if (nAtomsMatched > 0) {
@@ -125,15 +125,14 @@ public class CDKRMapHandler {
 
         } else {
 
-            List overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
+            List<List<CDKRMap>> overlaps = CDKMCS.search(source, target, new BitSet(), new BitSet(), true, true);
 
-            List reducedList = removeSubGraph(overlaps);
-            Stack<List> allMaxOverlaps = getAllMaximum(reducedList);
+            List<List<CDKRMap>> reducedList = removeSubGraph(overlaps);
+            Stack<List<CDKRMap>> allMaxOverlaps = getAllMaximum(reducedList);
 
             while (!allMaxOverlaps.empty()) {
-                List maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
+                List<CDKRMap> maxOverlapsAtoms = makeAtomsMapOfBondsMap(allMaxOverlaps.peek(), source, target);
                 identifyMatchedParts(maxOverlapsAtoms, source, target);
-
                 allMaxOverlaps.pop();
             }
         }
@@ -145,16 +144,16 @@ public class CDKRMapHandler {
      * @param overlaps
      * @return
      */
-    protected List removeSubGraph(List overlaps) {
+    protected List<List<CDKRMap>> removeSubGraph(List<List<CDKRMap>> overlaps) {
 
-        List reducedList = new ArrayList(overlaps);
+        List<List<CDKRMap>> reducedList = new ArrayList<List<CDKRMap>>(overlaps);
 
         for (int i = 0; i < overlaps.size(); i++) {
-            List graphI = (List) overlaps.get(i);
+            List<CDKRMap> graphI = overlaps.get(i);
 
             for (int j = i + 1; j < overlaps.size(); j++) {
 
-                List graphJ = (List) overlaps.get(j);
+                List<CDKRMap> graphJ = overlaps.get(j);
 
                 // Gi included in Gj or Gj included in Gi then
                 // reduce the irrelevant solution
@@ -248,18 +247,16 @@ public class CDKRMapHandler {
      * @param overlaps
      * @return
      */
-    protected List getMaximum(List overlaps) {
+    protected List<CDKRMap> getMaximum(List<List<CDKRMap>> overlaps) {
 
 
-        ArrayList list = null;
+        List<CDKRMap> list = null;
         int count = 0;
-        for (Object o : overlaps) {
-            ArrayList arrayList = (ArrayList) o;
+        for (List<CDKRMap> arrayList : overlaps) {
             if (arrayList.size() > count) {
                 list = arrayList;
                 count = arrayList.size();
             }
-
         }
         return list;
     }
@@ -269,32 +266,30 @@ public class CDKRMapHandler {
      * @param overlaps
      * @return
      */
-    protected Stack<List> getAllMaximum(List overlaps) {
+    protected Stack<List<CDKRMap>> getAllMaximum(List<List<CDKRMap>> overlaps) {
 
-        Stack<List> allMaximumMappings = null;
+        Stack<List<CDKRMap>> allMaximumMappings = null;
 
         int count = -1;
 
-        for (Object o : overlaps) {
-
-            ArrayList arrayList = (ArrayList) o;
+        for (List<CDKRMap> arrayList : overlaps) {
 
             //System.out.println("O size" + sourceAtom.size());
 
             if (arrayList.size() > count) {
 
-                List list = new ArrayList(arrayList);
+                List<CDKRMap> list = new ArrayList<CDKRMap>(arrayList);
                 count = arrayList.size();
 
                 //System.out.println("List size" + list.size());
 
                 //Collection threadSafeList = Collections.synchronizedCollection( list );
-                allMaximumMappings = new Stack<List>();
+                allMaximumMappings = new Stack<List<CDKRMap>>();
                 //allMaximumMappings.clear();
                 allMaximumMappings.push(list);
             } else if (arrayList.size() == count) {
 
-                List list = new ArrayList(arrayList);
+                List<CDKRMap> list = new ArrayList<CDKRMap>(arrayList);
                 count = arrayList.size();
                 allMaximumMappings.push(list);
             }
@@ -309,7 +304,7 @@ public class CDKRMapHandler {
      * @param source
      * @param target
      */
-    protected void identifyMatchedParts(List list, IAtomContainer source, IAtomContainer target) {
+    protected void identifyMatchedParts(List<CDKRMap> list, IAtomContainer source, IAtomContainer target) {
 
         List<IAtom> array1 = new ArrayList<IAtom>();
         List<IAtom> array2 = new ArrayList<IAtom>();
@@ -325,8 +320,7 @@ public class CDKRMapHandler {
 
 
 
-        for (Object o : list) {
-            CDKRMap rmap = (CDKRMap) o;
+        for (CDKRMap rmap : list) {
             IAtom sourceAtom = source.getAtom(rmap.getId1());
             IAtom targetAtom = target.getAtom(rmap.getId2());
 
@@ -339,8 +333,7 @@ public class CDKRMapHandler {
 
             atomNumbersFromContainer.put(IndexI, IndexJ);
 
-            /*Added the Mapping Numbers to the FinalMapping*
-             */
+            /*Added the Mapping Numbers to the FinalMapping*/
             _mapping.add(atomNumbersFromContainer);
         }
     }
@@ -351,7 +344,7 @@ public class CDKRMapHandler {
      * @param source
      * @param target
      */
-    protected void identifyMatchedPartsforSingleAtoms(List list,
+    protected void identifyMatchedPartsforSingleAtoms(List<CDKRMap> list,
             IAtomContainer source,
             IAtomContainer target) {
 
@@ -370,9 +363,7 @@ public class CDKRMapHandler {
 
 
 
-        for (Object o : list) {
-            //System.err.print("Map " + o.getClass());
-            CDKRMap rmap = (CDKRMap) o;
+        for (CDKRMap rmap : list) {
 
             IAtom sAtom = source.getAtom(rmap.getId1());
             IAtom tAtom = target.getAtom(rmap.getId2());
@@ -387,8 +378,7 @@ public class CDKRMapHandler {
 
             atomNumbersFromContainer.put(IndexI, IndexJ);
 
-            /*Added the Mapping Numbers to the FinalMapping*
-             */
+            /*Added the Mapping Numbers to the FinalMapping*/
             _mapping.add(atomNumbersFromContainer);
 
 
@@ -401,19 +391,16 @@ public class CDKRMapHandler {
      * @param rmaps2
      * @return
      */
-    protected boolean isSubgraph(List rmaps1, List rmaps2) {
+    protected boolean isSubgraph(List<CDKRMap> rmaps1, List<CDKRMap> rmaps2) {
         //System.out.println("Entering isSubgraph.");
-        ArrayList rmaps2clone = (ArrayList) ((ArrayList) rmaps2).clone();
-        for (Object o : rmaps1) {
-            CDKRMap rmap1 = (CDKRMap) o;
+        List<CDKRMap> rmaps2clone = new ArrayList<CDKRMap>(rmaps2);
+        for (CDKRMap rmap1 : rmaps1) {
             boolean found = false;
-            for (int i = 0; i <
-                    rmaps2clone.size(); ++i) {
-                CDKRMap rmap2 = (CDKRMap) rmaps2clone.get(i);
+            for (int i = 0; i < rmaps2clone.size(); ++i) {
+                CDKRMap rmap2 = rmaps2clone.get(i);
                 if (isSameRMap(rmap1, rmap2)) {
                     rmaps2clone.remove(i);
-                    found =
-                            true;
+                    found = true;
                     break;
                 }
 

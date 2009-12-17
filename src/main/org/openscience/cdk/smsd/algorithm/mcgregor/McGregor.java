@@ -158,16 +158,16 @@ public class McGregor {
                 gNeighborBondnumA,
                 gSetBondNumA,
                 i_bond_neighborsA,
-                c_bond_neighborsA);
+                c_bond_neighborsA,
+                mapping_size,
+                i_bond_setA,
+                c_bond_setA);
 
 
         queryProcess.process(
                 source,
                 target,
                 unmapped_atoms_molA,
-                mapping_size,
-                i_bond_setA,
-                c_bond_setA,
                 mapped_atoms,
                 counter);
 
@@ -350,16 +350,16 @@ public class McGregor {
                 localNeighborBondnumA,
                 setNumA,
                 iBondNeighborAtomsA,
-                cBondNeighborsA);
+                cBondNeighborsA,
+                clique_siz,
+                i_bond_setA,
+                c_bond_setA);
 
 
         queryProcess.process(
                 source,
                 target,
                 unmapped_atoms_molA,
-                clique_siz,
-                i_bond_setA,
-                c_bond_setA,
                 mapped_atoms,
                 counter);
 
@@ -565,7 +565,10 @@ public class McGregor {
                     newNeighborNumA,
                     newSetBondNumA,
                     new_i_neighborsA,
-                    new_c_neighborsA);
+                    new_c_neighborsA,
+                    newMapingSize,
+                    new_i_bond_setA,
+                    new_c_bond_setA);
 
 
             queryProcess.process(
@@ -574,9 +577,6 @@ public class McGregor {
                     i_bond_setA,
                     i_bond_setB,
                     unmapped_atoms_molA,
-                    newMapingSize,
-                    new_i_bond_setA,
-                    new_c_bond_setA,
                     new_Mapping,
                     counter);
 
