@@ -190,7 +190,7 @@ public class TargetProcessor {
         boolean normal_bond = true;
         for (int c = 0; c < mappingSize; c++) {
             if (mapped_atoms.get(c * 2 + 1).equals(indexJ)) {
-                setIBondNeighbors(indexI, indexJ, order);
+                setBondNeighbors(indexI, indexJ, order);
                 if (c_tab2_copy.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0) {
                     step1(atomIndex, counter);
                     McGregorChecks.changeCharBonds(indexJ, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
@@ -220,7 +220,7 @@ public class TargetProcessor {
         boolean normal_bond = true;
         for (int c = 0; c < mappingSize; c++) {
             if (mapped_atoms.get(c * 2 + 1).equals(indexI)) {
-                setIBondNeighbors(indexI, indexJ, order);
+                setBondNeighbors(indexI, indexJ, order);
                 if (c_tab2_copy.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0) {
                     step3(atomIndex, counter);
                     McGregorChecks.changeCharBonds(indexI, SignArray[counter], target.getBondCount(), target, c_tab2_copy);
@@ -252,7 +252,7 @@ public class TargetProcessor {
         boolean normal_bond = true;
         for (int c = 0; c < newMappingSize; c++) {
             if (new_Mapping.get(c * 2 + 1).equals(indexJ)) {
-                setIBondNeighbors(indexI, indexJ, order);
+                setBondNeighbors(indexI, indexJ, order);
                 if (c_tab2_copy.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0) {
                     step1(atomIndex, counter);
                     McGregorChecks.changeCharBonds(indexJ, SignArray[counter], setNumB, i_bond_setB, c_tab2_copy);
@@ -284,7 +284,7 @@ public class TargetProcessor {
         boolean normal_bond = true;
         for (int c = 0; c < newMappingSize; c++) {
             if (new_Mapping.get(c * 2 + 1).equals(indexI)) {
-                setIBondNeighbors(indexI, indexJ, order);
+                setBondNeighbors(indexI, indexJ, order);
 
                 if (c_tab2_copy.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0) {
 
@@ -301,8 +301,6 @@ public class TargetProcessor {
                 neighborBondNumB++;
 
             }
-
-
         }
 
         return normal_bond;
@@ -325,7 +323,7 @@ public class TargetProcessor {
         setBondNumB++;
     }
 
-    private void setIBondNeighbors(Integer indexI,
+    private void setBondNeighbors(Integer indexI,
             Integer indexJ,
             Integer order) {
         iBondNeighborsB.add(indexI);
