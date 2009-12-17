@@ -138,7 +138,6 @@ public class McGregorChecks {
      */
     protected static int searchCorrespondingAtom(int mappedAtomsSize, int atomFromOtherMolecule, int molecule, List<Integer> mapped_atoms_org) {
 
-
         List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
 
         int corresponding_atom = 0;
@@ -198,7 +197,6 @@ public class McGregorChecks {
      * @return
      */
     protected static List<Integer> removeRecurringMappings(List<Integer> atom_mapping) {
-
 
         boolean exist = true;
         List<Integer> temp_map = new ArrayList<Integer>();
