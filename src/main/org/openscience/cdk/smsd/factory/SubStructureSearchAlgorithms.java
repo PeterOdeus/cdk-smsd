@@ -74,7 +74,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     /**
      * 
-     * @param algorithmType 0 default, 1 mcsPlus, 2 VFLib, 3 CDKMCS 4 SubStructure
+     * @param algorithmType 0 default, 1 mcsPlusAlgorithm, 2 VFLib, 3 CDKMCS 4 subStructureAlgorithm
      * @param bondTypeFlag
      */
     public SubStructureSearchAlgorithms(Algorithm algorithmType, boolean bondTypeFlag) {
@@ -111,19 +111,19 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
         switch (algorithmType) {
             case CDKMCS:
-                cdkMCS();
+                cdkMCSAlgorithm();
                 break;
             case DEFAULT:
-                Default();
+                defaultAlgorithm();
                 break;
             case MCSPlus:
-                mcsPlus();
+                mcsPlusAlgorithm();
                 break;
             case SubStructure:
-                SubStructure(rBondCount, pBondCount);
+                subStructureAlgorithm(rBondCount, pBondCount);
                 break;
             case VFLibMCS:
-                VFLibMCS(rBondCount, pBondCount);
+                vfLibMCSAlgorithm(rBondCount, pBondCount);
                 break;
         }
     }
@@ -145,7 +145,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     }
 
-    private synchronized void cdkMCS() {
+    private synchronized void cdkMCSAlgorithm() {
         IMCSAlgorithm mcs = null;
         try {
             mcs = new CDKMCSHandler();
@@ -173,7 +173,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     }
 
-    private synchronized void mcsPlus() {
+    private synchronized void mcsPlusAlgorithm() {
         IMCSAlgorithm mcs = null;
         try {
 
@@ -579,11 +579,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
         return score;
     }
 
-    private void Default() {
+    private void defaultAlgorithm() {
         if (BondType.getInstance().getBondSensitiveFlag()) {
-            cdkMCS();
+            cdkMCSAlgorithm();
         } else {
-            mcsPlus();
+            mcsPlusAlgorithm();
         }
         if (getFirstMapping() == null) {
             System.gc();
@@ -591,7 +591,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         }
     }
 
-    private void SubStructure(int rBondCount, int pBondCount) {
+    private void subStructureAlgorithm(int rBondCount, int pBondCount) {
         if (rBondCount > 1 && pBondCount > 1) {
             vfTurboHandler();
         } else {
@@ -599,11 +599,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
         }
     }
 
-    private void VFLibMCS(int rBondCount, int pBondCount) {
-        if (rBondCount >= 6 && rBondCount >= 6) {
+    private void vfLibMCSAlgorithm(int rBondCount, int pBondCount) {
+        if (rBondCount >= 6 && pBondCount >= 6) {
             vfLibMCS();
         } else {
-            mcsPlus();
+            mcsPlusAlgorithm();
         }
     }
 

@@ -232,16 +232,13 @@ public class McGregorChecks {
      * @param row
      * @param column
      * @param MARCS
-     * @param iBondNeighborAtomsA
-     * @param iBondNeighborAtomsB
-     * @param neighborBondNumA
-     * @param neighborBondNumB
+     * @param mcGregorHelper
      */
-    protected static void removeRedundantArcs(int row, int column, List<Integer> MARCS, McgregorHelper MH) {
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
-        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
-        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
+    protected static void removeRedundantArcs(int row, int column, List<Integer> MARCS, McgregorHelper mcGregorHelper) {
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = mcGregorHelper.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = mcGregorHelper.getiBondNeighborAtomsB();
         int G1_atom = iBondNeighborAtomsA.get(row * 3 + 0);
         int G2_atom = iBondNeighborAtomsA.get(row * 3 + 1);
         int G3_atom = iBondNeighborAtomsB.get(column * 3 + 0);
@@ -540,14 +537,14 @@ public class McGregorChecks {
         return 0;
     }
 
-    static boolean isFurtherMappingPossible(IAtomContainer source, IAtomContainer target, McgregorHelper MH) {
+    static boolean isFurtherMappingPossible(IAtomContainer source, IAtomContainer target, McgregorHelper mcGregorHelper) {
 
-        int neighborBondNumA = MH.getNeighborBondNumA();
-        int neighborBondNumB = MH.getNeighborBondNumB();
-        List<Integer> iBondNeighborAtomsA = MH.getiBondNeighborAtomsA();
-        List<Integer> iBondNeighborAtomsB = MH.getiBondNeighborAtomsB();
-        List<String> cBondNeighborsA = MH.getcBondNeighborsA();
-        List<String> cBondNeighborsB = MH.getcBondNeighborsB();
+        int neighborBondNumA = mcGregorHelper.getNeighborBondNumA();
+        int neighborBondNumB = mcGregorHelper.getNeighborBondNumB();
+        List<Integer> iBondNeighborAtomsA = mcGregorHelper.getiBondNeighborAtomsA();
+        List<Integer> iBondNeighborAtomsB = mcGregorHelper.getiBondNeighborAtomsB();
+        List<String> cBondNeighborsA = mcGregorHelper.getcBondNeighborsA();
+        List<String> cBondNeighborsB = mcGregorHelper.getcBondNeighborsB();
 
         boolean moreMappingPossible = false;
         for (int row = 0; row < neighborBondNumA; row++) {

@@ -500,10 +500,10 @@ public class McGregor {
 
         int setNumA = mcGregorHelper.getSetNumA();
         int setNumB = mcGregorHelper.getsetNumB();
-        List<Integer> i_bond_setA = mcGregorHelper.getI_bond_setA();
-        List<Integer> i_bond_setB = mcGregorHelper.getI_bond_setB();
-        List<String> c_bond_setA = mcGregorHelper.getC_bond_setA();
-        List<String> c_bond_setB = mcGregorHelper.getC_bond_setB();
+        List<Integer> i_bond_setA = mcGregorHelper.getIBondSetA();
+        List<Integer> i_bond_setB = mcGregorHelper.getIBondSetB();
+        List<String> c_bond_setA = mcGregorHelper.getCBondSetA();
+        List<String> c_bond_setB = mcGregorHelper.getCBondSetB();
 
         while (!BESTARCS_copy.empty()) {
 

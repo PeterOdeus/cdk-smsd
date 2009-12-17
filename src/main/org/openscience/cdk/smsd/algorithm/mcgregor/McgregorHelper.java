@@ -82,14 +82,14 @@ public class McgregorHelper {
     /**
      * @return the c_bond_setA
      */
-    public List<String> getC_bond_setA() {
+    public List<String> getCBondSetA() {
         return c_bond_setA;
     }
 
     /**
      * @return the c_bond_setB
      */
-    public List<String> getC_bond_setB() {
+    public List<String> getCBondSetB() {
         return c_bond_setB;
     }
 
@@ -166,14 +166,14 @@ public class McgregorHelper {
     /**
      * @return the i_bond_setA
      */
-    public List<Integer> getI_bond_setA() {
+    public List<Integer> getIBondSetA() {
         return i_bond_setA;
     }
 
     /**
      * @return the i_bond_setB
      */
-    public List<Integer> getI_bond_setB() {
+    public List<Integer> getIBondSetB() {
         return i_bond_setB;
     }
 
