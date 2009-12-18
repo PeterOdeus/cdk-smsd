@@ -76,10 +76,8 @@ public class CMLCoreModule implements ICMLModule {
     protected ILoggingTool logger;
     protected final String SYSTEMID = "CML-1999-05-15";
 //    protected IChemicalDocumentObject cdo;
-
     // data model to store things into
     protected IChemFile currentChemFile;
-	
     protected IAtomContainer currentMolecule;
     protected IMoleculeSet currentMoleculeSet;
     protected IChemModel currentChemModel;
@@ -92,7 +90,6 @@ public class CMLCoreModule implements ICMLModule {
     protected IMonomer currentMonomer;
     protected Map<String, IAtom> atomEnumeration;
     protected List<String> moleculeCustomProperty;
-    
     // helper fields    
     protected int formulaCounter;
     protected int atomCounter;
@@ -118,9 +115,7 @@ public class CMLCoreModule implements ICMLModule {
     protected List<String> atomDictRefs;
     protected List<String> spinMultiplicities;
     protected List<String> occupancies;
-    protected Map<Integer,List<String>> atomCustomProperty;
-
-
+    protected Map<Integer, List<String>> atomCustomProperty;
     protected int bondCounter;
     protected List<String> bondid;
     protected List<String> bondARef1;
@@ -130,7 +125,7 @@ public class CMLCoreModule implements ICMLModule {
     protected List<String> bondDictRefs;
     protected List<String> bondElid;
     protected List<Boolean> bondAromaticity;
-    protected Map<String,Map<String,String>> bondCustomProperty;
+    protected Map<String, Map<String, String>> bondCustomProperty;
     protected boolean stereoGiven;
     protected String inchi;
     protected int curRef;
@@ -139,29 +134,27 @@ public class CMLCoreModule implements ICMLModule {
     protected String DICTREF;
     protected String elementTitle;
     protected String currentChars;
-    
     protected double[] unitcellparams;
     protected int crystalScalar;
-
 //    private Vector3d aAxis;
 //    private Vector3d bAxis;
 //    private Vector3d cAxis;
     boolean cartesianAxesSet = false;
-    
+
     public CMLCoreModule(IChemFile chemFile) {
         logger = LoggingToolFactory.createLoggingTool(CMLCoreModule.class);
-		this.currentChemFile = chemFile;
+        this.currentChemFile = chemFile;
     }
-    
+
     public CMLCoreModule(ICMLModule conv) {
-    	logger = LoggingToolFactory.createLoggingTool(CMLCoreModule.class);
+        logger = LoggingToolFactory.createLoggingTool(CMLCoreModule.class);
         inherit(conv);
     }
 
     public void inherit(ICMLModule convention) {
         if (convention instanceof CMLCoreModule) {
-            CMLCoreModule conv = (CMLCoreModule)convention;
-            
+            CMLCoreModule conv = (CMLCoreModule) convention;
+
             // copy the data model
             this.currentChemFile = conv.currentChemFile;
             this.currentMolecule = conv.currentMolecule;
@@ -175,7 +168,7 @@ public class CMLCoreModule implements ICMLModule {
             this.currentMonomer = conv.currentMonomer;
             this.atomEnumeration = conv.atomEnumeration;
             this.moleculeCustomProperty = conv.moleculeCustomProperty;
-            
+
             // copy the intermediate fields
             this.logger = conv.logger;
             this.BUILTIN = conv.BUILTIN;
@@ -223,7 +216,7 @@ public class CMLCoreModule implements ICMLModule {
     public IChemFile returnChemFile() {
         return currentChemFile;
     }
-    
+
     /**
      * Clean all data about parsed data.
      */
@@ -234,7 +227,7 @@ public class CMLCoreModule implements ICMLModule {
         newCrystalData();
         newFormulaData();
     }
-    
+
     /**
      * Clean all data about the molecule itself.
      */
@@ -246,9 +239,10 @@ public class CMLCoreModule implements ICMLModule {
      * Clean all data about read formulas.
      */
     protected void newFormulaData() {
-    	formulaCounter = 0;
+        formulaCounter = 0;
         formula = new ArrayList<String>();
     }
+
     /**
      * Clean all data about read atoms.
      */
@@ -275,7 +269,7 @@ public class CMLCoreModule implements ICMLModule {
         atomDictRefs = new ArrayList<String>();
         spinMultiplicities = new ArrayList<String>();
         occupancies = new ArrayList<String>();
-        atomCustomProperty = new HashMap<Integer,List<String>>();
+        atomCustomProperty = new HashMap<Integer, List<String>>();
     }
 
     /**
@@ -288,7 +282,7 @@ public class CMLCoreModule implements ICMLModule {
         bondARef2 = new ArrayList<String>();
         order = new ArrayList<String>();
         bondStereo = new ArrayList<String>();
-        bondCustomProperty = new Hashtable<String,Map<String,String>>();
+        bondCustomProperty = new Hashtable<String, Map<String, String>>();
         bondDictRefs = new ArrayList<String>();
         bondElid = new ArrayList<String>();
         bondAromaticity = new ArrayList<Boolean>();
@@ -315,50 +309,50 @@ public class CMLCoreModule implements ICMLModule {
         currentMolecule = currentChemFile.getBuilder().newMolecule();
         atomEnumeration = new HashMap<String, IAtom>();
         moleculeCustomProperty = new ArrayList<String>();
-        
+
         newMolecule();
         BUILTIN = "";
         curRef = 0;
     }
-    
+
     public void endDocument() {
 //        cdo.endDocument();
-    	if (currentReactionSet != null && currentReactionSet.getReactionCount() == 0
-    			&& currentReaction != null) {
-    		logger.debug("Adding reaction to ReactionSet");
-    		currentReactionSet.addReaction(currentReaction);
-    	}
-    	if (currentReactionSet != null && currentChemModel.getReactionSet() == null) {
-    		logger.debug("Adding SOR to ChemModel");
-    		currentChemModel.setReactionSet(currentReactionSet);
-    	}
-    	if (currentMoleculeSet != null && currentMoleculeSet.getMoleculeCount() != 0) {
-    		logger.debug("Adding reaction to MoleculeSet");
-    		currentChemModel.setMoleculeSet(currentMoleculeSet);
-    	}
-    	if (currentChemSequence.getChemModelCount() == 0) {
-    		logger.debug("Adding ChemModel to ChemSequence");
-    		currentChemSequence.addChemModel(currentChemModel);
-    	}
-    	if (currentChemFile.getChemSequenceCount() == 0) {
-    		// assume there is one non-animation ChemSequence
+        if (currentReactionSet != null && currentReactionSet.getReactionCount() == 0
+                && currentReaction != null) {
+            logger.debug("Adding reaction to ReactionSet");
+            currentReactionSet.addReaction(currentReaction);
+        }
+        if (currentReactionSet != null && currentChemModel.getReactionSet() == null) {
+            logger.debug("Adding SOR to ChemModel");
+            currentChemModel.setReactionSet(currentReactionSet);
+        }
+        if (currentMoleculeSet != null && currentMoleculeSet.getMoleculeCount() != 0) {
+            logger.debug("Adding reaction to MoleculeSet");
+            currentChemModel.setMoleculeSet(currentMoleculeSet);
+        }
+        if (currentChemSequence.getChemModelCount() == 0) {
+            logger.debug("Adding ChemModel to ChemSequence");
+            currentChemSequence.addChemModel(currentChemModel);
+        }
+        if (currentChemFile.getChemSequenceCount() == 0) {
+            // assume there is one non-animation ChemSequence
 //    		addChemSequence(currentChemSequence);
-    		currentChemFile.addChemSequence(currentChemSequence);
-    	}
-    	
+            currentChemFile.addChemSequence(currentChemSequence);
+        }
+
         logger.info("End XML Doc");
     }
-    
-    public void startElement(CMLStack xpath, String uri, String local, String raw, 
-                              Attributes atts) {
+
+    public void startElement(CMLStack xpath, String uri, String local, String raw,
+            Attributes atts) {
         String name = local;
         logger.debug("StartElement");
         currentChars = "";
-        
+
         BUILTIN = "";
         DICTREF = "";
-        
-        for (int i=0; i<atts.getLength(); i++) {
+
+        for (int i = 0; i < atts.getLength(); i++) {
             String qname = atts.getQName(i);
             if (qname.equals("builtin")) {
                 BUILTIN = atts.getValue(i);
@@ -373,14 +367,14 @@ public class CMLCoreModule implements ICMLModule {
                 logger.debug("Qname: ", qname);
             }
         }
-        
+
         if ("atom".equals(name)) {
             atomCounter++;
             for (int i = 0; i < atts.getLength(); i++) {
-                
+
                 String att = atts.getQName(i);
                 String value = atts.getValue(i);
-                
+
                 if (att.equals("id")) { // this is supported in CML 1.x
                     elid.add(value);
                 } // this is supported in CML 2.0 
@@ -436,27 +430,21 @@ public class CMLCoreModule implements ICMLModule {
                 } // this is supported in CML 2.0 
                 else if (att.equals("hydrogenCount")) {
                     hCounts.add(value);
-                }
-                else if (att.equals("isotopeNumber")) {
+                } else if (att.equals("isotopeNumber")) {
                     isotope.add(value);
-                }
-                else if (att.equals("dictRef")) {                	
-                    logger.debug("ocupaccy: "+value);
+                } else if (att.equals("dictRef")) {
+                    logger.debug("ocupaccy: " + value);
                     atomDictRefs.add(value);
-                } 
-                else if (att.equals("spinMultiplicity")) {
+                } else if (att.equals("spinMultiplicity")) {
                     spinMultiplicities.add(value);
-                }
-                else if (att.equals("occupancy")) {
+                } else if (att.equals("occupancy")) {
                     occupancies.add(value);
-                } 
-                 
-                else {
+                } else {
                     logger.warn("Unparsed attribute: " + att);
                 }
             }
-        } else if ("atomArray".equals(name) &&
-        		   !xpath.endsWith("formula", "atomArray")) {
+        } else if ("atomArray".equals(name)
+                && !xpath.endsWith("formula", "atomArray")) {
             boolean atomsCounted = false;
             for (int i = 0; i < atts.getLength(); i++) {
                 String att = atts.getQName(i);
@@ -494,20 +482,19 @@ public class CMLCoreModule implements ICMLModule {
             for (int i = 0; i < atts.getLength(); i++) {
                 String att = atts.getQName(i);
                 logger.debug("B2 ", att, "=", atts.getValue(i));
-                
+
                 if (att.equals("id")) {
                     bondid.add(atts.getValue(i));
                     logger.debug("B3 ", bondid);
                 } else if (att.equals("atomRefs") || // this is CML 1.x support
-                           att.equals("atomRefs2")) { // this is CML 2.0 support
-                    
+                        att.equals("atomRefs2")) { // this is CML 2.0 support
+
                     // expect exactly two references
                     try {
                         StringTokenizer st = new StringTokenizer(
-                            atts.getValue(i)
-                        );
-                        bondARef1.add((String)st.nextElement());
-                        bondARef2.add((String)st.nextElement());
+                                atts.getValue(i));
+                        bondARef1.add((String) st.nextElement());
+                        bondARef2.add((String) st.nextElement());
                     } catch (Exception e) {
                         logger.error("Error in CML file: ", e.getMessage());
                         logger.debug(e);
@@ -518,7 +505,7 @@ public class CMLCoreModule implements ICMLModule {
                     bondDictRefs.add(atts.getValue(i).trim());
                 }
             }
-            
+
             stereoGiven = false;
             curRef = 0;
         } else if ("bondArray".equals(name)) {
@@ -550,32 +537,38 @@ public class CMLCoreModule implements ICMLModule {
         } else if ("bondStereo".equals(name)) {
             for (int i = 0; i < atts.getLength(); i++) {
                 if (atts.getQName(i).equals("dictRef")) {
-                	if (atts.getValue(i).startsWith("cml:"))
-                	bondStereo.add(atts.getValue(i).substring(4));
-                    stereoGiven=true;
+                    if (atts.getValue(i).startsWith("cml:")) {
+                        bondStereo.add(atts.getValue(i).substring(4));
+                    }
+                    stereoGiven = true;
                 }
             }
         } else if ("bondType".equals(name)) {
             for (int i = 0; i < atts.getLength(); i++) {
                 if (atts.getQName(i).equals("dictRef")) {
-                	if (atts.getValue(i).equals("cdk:aromaticBond"))
-                		bondAromaticity.add(Boolean.TRUE);
+                    if (atts.getValue(i).equals("cdk:aromaticBond")) {
+                        bondAromaticity.add(Boolean.TRUE);
+                    }
                 }
             }
         } else if ("molecule".equals(name)) {
             newMolecule();
             BUILTIN = "";
 //            cdo.startObject("Molecule");
-            if (currentChemModel == null) currentChemModel = currentChemFile.getBuilder().newChemModel();
-            if (currentMoleculeSet == null) currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
+            if (currentChemModel == null) {
+                currentChemModel = currentChemFile.getBuilder().newChemModel();
+            }
+            if (currentMoleculeSet == null) {
+                currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
+            }
             currentMolecule = currentChemFile.getBuilder().newMolecule();
             for (int i = 0; i < atts.getLength(); i++) {
                 if (atts.getQName(i).equals("id")) {
 //                    cdo.setObjectProperty("Molecule", "id", atts.getValue(i));
-                	currentMolecule.setID(atts.getValue(i));
+                    currentMolecule.setID(atts.getValue(i));
                 } else if (atts.getQName(i).equals("dictRef")) {
 //                	cdo.setObjectProperty("Molecule", "dictRef", atts.getValue(i));
-                	currentMolecule.setProperty(new DictRef(DICTREF, atts.getValue(i)), atts.getValue(i));
+                    currentMolecule.setProperty(new DictRef(DICTREF, atts.getValue(i)), atts.getValue(i));
                 }
             }
         } else if ("crystal".equals(name)) {
@@ -586,7 +579,7 @@ public class CMLCoreModule implements ICMLModule {
                 String att = atts.getQName(i);
                 if (att.equals("z")) {
 //                    cdo.setObjectProperty("Crystal", "z", atts.getValue(i));
-                	((ICrystal)currentMolecule).setZ(Integer.parseInt(atts.getValue(i)));
+                    ((ICrystal) currentMolecule).setZ(Integer.parseInt(atts.getValue(i)));
                 }
             }
         } else if ("symmetry".equals(name)) {
@@ -594,64 +587,65 @@ public class CMLCoreModule implements ICMLModule {
                 String att = atts.getQName(i);
                 if (att.equals("spaceGroup")) {
 //                    cdo.setObjectProperty("Crystal", "spacegroup", atts.getValue(i));
-                	((ICrystal)currentMolecule).setSpaceGroup(atts.getValue(i));
+                    ((ICrystal) currentMolecule).setSpaceGroup(atts.getValue(i));
                 }
             }
         } else if ("identifier".equals(name)) {
-        	if (atts.getValue("convention") != null && 
-        		atts.getValue("convention").equals("iupac:inchi") &&
-        		atts.getValue("value") != null) {
+            if (atts.getValue("convention") != null
+                    && atts.getValue("convention").equals("iupac:inchi")
+                    && atts.getValue("value") != null) {
 //                cdo.setObjectProperty("Molecule", "inchi", atts.getValue("value"));
-        		currentMolecule.setProperty(CDKConstants.INCHI, atts.getValue("value"));
+                currentMolecule.setProperty(CDKConstants.INCHI, atts.getValue("value"));
             }
         } else if ("scalar".equals(name)) {
-            if (xpath.endsWith("crystal", "scalar"))
+            if (xpath.endsWith("crystal", "scalar")) {
                 crystalScalar++;
+            }
         } else if ("label".equals(name)) {
             if (xpath.endsWith("atomType", "label")) {
 //            	cdo.setObjectProperty("Atom", "atomTypeLabel", atts.getValue("value"));
-            	currentAtom.setAtomTypeName(atts.getValue("value"));
+                currentAtom.setAtomTypeName(atts.getValue("value"));
             }
         } else if ("list".equals(name)) {
 //            cdo.startObject("MoleculeSet");
-        	if (DICTREF.equals("cdk:model")) {
-        		currentChemModel = currentChemFile.getBuilder().newChemModel();
-        		// see if there is an ID attribute
-        		for (int i = 0; i < atts.getLength(); i++) {
-        			String att = atts.getQName(i);
-        			if (att.equals("id")) {
-        				currentChemModel.setID(atts.getValue(i));
-        				}
-        			}
-        	} else if (DICTREF.equals("cdk:moleculeSet")) {
-        		currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
-        		// see if there is an ID attribute
-        		for (int i = 0; i < atts.getLength(); i++) {
-        			String att = atts.getQName(i);
-        			if (att.equals("id")) {
-        				currentMoleculeSet.setID(atts.getValue(i));
-        				}
-        			}
-        		currentMolecule = currentChemFile.getBuilder().newMolecule();
-        	} else {
-        		// the old default
-        		currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
-        		// see if there is an ID attribute
-        		for (int i = 0; i < atts.getLength(); i++) {
-        			String att = atts.getQName(i);
-        			if (att.equals("id")) {
-        				currentMoleculeSet.setID(atts.getValue(i));
-        				}
-        			}
-        		currentMolecule = currentChemFile.getBuilder().newMolecule();
-        	}
-        }else if ("formula".equals(name)){
-        	formulaCounter++;
+            if (DICTREF.equals("cdk:model")) {
+                currentChemModel = currentChemFile.getBuilder().newChemModel();
+                // see if there is an ID attribute
+                for (int i = 0; i < atts.getLength(); i++) {
+                    String att = atts.getQName(i);
+                    if (att.equals("id")) {
+                        currentChemModel.setID(atts.getValue(i));
+                    }
+                }
+            } else if (DICTREF.equals("cdk:moleculeSet")) {
+                currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
+                // see if there is an ID attribute
+                for (int i = 0; i < atts.getLength(); i++) {
+                    String att = atts.getQName(i);
+                    if (att.equals("id")) {
+                        currentMoleculeSet.setID(atts.getValue(i));
+                    }
+                }
+                currentMolecule = currentChemFile.getBuilder().newMolecule();
+            } else {
+                // the old default
+                currentMoleculeSet = currentChemFile.getBuilder().newMoleculeSet();
+                // see if there is an ID attribute
+                for (int i = 0; i < atts.getLength(); i++) {
+                    String att = atts.getQName(i);
+                    if (att.equals("id")) {
+                        currentMoleculeSet.setID(atts.getValue(i));
+                    }
+                }
+                currentMolecule = currentChemFile.getBuilder().newMolecule();
+            }
+        } else if ("formula".equals(name)) {
+            formulaCounter++;
             for (int i = 0; i < atts.getLength(); i++) {
                 String att = atts.getQName(i);
                 String value = atts.getValue(i);
                 if (att.equals("concise")) {
-                	formula.add(value);
+                    formula.add(value);
                 }
             }
         }
@@ -662,12 +656,15 @@ public class CMLCoreModule implements ICMLModule {
 
         String cData = currentChars;
         if ("bond".equals(name)) {
-        	if (!stereoGiven)
+            if (!stereoGiven) {
                 bondStereo.add("");
-            if (bondCounter > bondDictRefs.size())
+            }
+            if (bondCounter > bondDictRefs.size()) {
                 bondDictRefs.add(null);
-            if (bondCounter > bondAromaticity.size())
+            }
+            if (bondCounter > bondAromaticity.size()) {
                 bondAromaticity.add(null);
+            }
         } else if ("atom".equals(name)) {
             if (atomCounter > eltitles.size()) {
                 eltitles.add(null);
@@ -713,7 +710,7 @@ public class CMLCoreModule implements ICMLModule {
                 y3.add(null);
                 z3.add(null);
             }
-            
+
             if (atomCounter > xfract.size() && xfract.size() != 0) {
                 /* apparently, the previous atoms had atomic
                 coordinates, add 'null' for this atom */
@@ -726,20 +723,19 @@ public class CMLCoreModule implements ICMLModule {
 //            cdo.endObject("Molecule");
             if (currentMolecule instanceof IMolecule) {
                 logger.debug("Adding molecule to set");
-                currentMoleculeSet.addMolecule((IMolecule)currentMolecule);
+                currentMoleculeSet.addMolecule((IMolecule) currentMolecule);
                 logger.debug("#mols in set: " + currentMoleculeSet.getMoleculeCount());
             } else if (currentMolecule instanceof ICrystal) {
                 logger.debug("Adding crystal to chemModel");
-                currentChemModel.setCrystal((ICrystal)currentMolecule);
+                currentChemModel.setCrystal((ICrystal) currentMolecule);
                 currentChemSequence.addChemModel(currentChemModel);
             }
         } else if ("crystal".equals(name)) {
             if (crystalScalar > 0) {
                 // convert unit cell parameters to cartesians
                 Vector3d[] axes = CrystalGeometryTools.notionalToCartesian(
-                    unitcellparams[0], unitcellparams[1], unitcellparams[2],
-                    unitcellparams[3], unitcellparams[4], unitcellparams[5]
-                );
+                        unitcellparams[0], unitcellparams[1], unitcellparams[2],
+                        unitcellparams[3], unitcellparams[4], unitcellparams[5]);
                 cartesianAxesSet = true;
 //                cdo.startObject("a-axis");
 //                cdo.setObjectProperty("a-axis", "x", new Double(aAxis.x).toString());
@@ -756,29 +752,29 @@ public class CMLCoreModule implements ICMLModule {
 //                cdo.setObjectProperty("c-axis", "y", new Double(cAxis.y).toString());
 //                cdo.setObjectProperty("c-axis", "z", new Double(cAxis.z).toString());
 //                cdo.endObject("c-axis");
-                ((ICrystal)currentMolecule).setA(axes[0]);
-                ((ICrystal)currentMolecule).setB(axes[1]);
-                ((ICrystal)currentMolecule).setC(axes[2]);
+                ((ICrystal) currentMolecule).setA(axes[0]);
+                ((ICrystal) currentMolecule).setB(axes[1]);
+                ((ICrystal) currentMolecule).setC(axes[2]);
             } else {
                 logger.error("Could not find crystal unit cell parameters");
             }
 //            cdo.endObject("Crystal");
         } else if ("list".equals(name)) {
 //            cdo.endObject("MoleculeSet");
-        	// FIXME: I really should check the DICTREF, but there is currently
-        	// no mechanism for storing these for use with endTag() :(
-        	// So, instead, for now, just see if it already has done the setting
-        	// to work around duplication
-        	if (currentChemModel.getMoleculeSet() != currentMoleculeSet) {
-        		currentChemModel.setMoleculeSet(currentMoleculeSet);
-        		currentChemSequence.addChemModel(currentChemModel);
-        	}
+            // FIXME: I really should check the DICTREF, but there is currently
+            // no mechanism for storing these for use with endTag() :(
+            // So, instead, for now, just see if it already has done the setting
+            // to work around duplication
+            if (currentChemModel.getMoleculeSet() != currentMoleculeSet) {
+                currentChemModel.setMoleculeSet(currentMoleculeSet);
+                currentChemSequence.addChemModel(currentChemModel);
+            }
         } else if ("coordinate3".equals(name)) {
             if (BUILTIN.equals("xyz3")) {
                 logger.debug("New coord3 xyz3 found: ", currentChars);
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(currentChars);
                     x3.add(st.nextToken());
                     y3.add(st.nextToken());
@@ -788,7 +784,7 @@ public class CMLCoreModule implements ICMLModule {
                     logger.debug("coord3 z3.length: ", z3.size());
                 } catch (Exception exception) {
                     logger.error(
-                    "CMLParsing error while setting coordinate3!");
+                            "CMLParsing error while setting coordinate3!");
                     logger.debug(exception);
                 }
             } else {
@@ -801,7 +797,7 @@ public class CMLCoreModule implements ICMLModule {
             } else if (BUILTIN.equals("atomRef")) {
                 curRef++;
                 logger.debug("Bond: ref #", curRef);
-                
+
                 if (curRef == 1) {
                     bondARef1.add(cData.trim());
                 } else if (curRef == 2) {
@@ -844,9 +840,9 @@ public class CMLCoreModule implements ICMLModule {
         } else if ("coordinate2".equals(name)) {
             if (BUILTIN.equals("xy2")) {
                 logger.debug("New coord2 xy2 found.", cData);
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
                     x2.add(st.nextToken());
                     y2.add(st.nextToken());
@@ -856,14 +852,16 @@ public class CMLCoreModule implements ICMLModule {
             }
         } else if ("stringArray".equals(name)) {
             if (BUILTIN.equals("id") || BUILTIN.equals("atomId")
-                || BUILTIN.equals("atomID")) { // invalid according to CML1 DTD but found in OpenBabel 1.x output
-                
+                    || BUILTIN.equals("atomID")) { // invalid according to CML1 DTD but found in OpenBabel 1.x output
+
                 try {
                     boolean countAtoms = (atomCounter == 0) ? true : false;
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        if (countAtoms) { atomCounter++; }
+                        if (countAtoms) {
+                            atomCounter++;
+                        }
                         String token = st.nextToken();
                         logger.debug("StringArray (Token): ", token);
                         elid.add(token);
@@ -872,13 +870,15 @@ public class CMLCoreModule implements ICMLModule {
                     notify("CMLParsing error: " + e, SYSTEMID, 186, 1);
                 }
             } else if (BUILTIN.equals("elementType")) {
-                
+
                 try {
                     boolean countAtoms = (atomCounter == 0) ? true : false;
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        if (countAtoms) { atomCounter++; }
+                        if (countAtoms) {
+                            atomCounter++;
+                        }
                         elsym.add(st.nextToken());
                     }
                 } catch (Exception e) {
@@ -887,16 +887,18 @@ public class CMLCoreModule implements ICMLModule {
             } else if (BUILTIN.equals("atomRefs")) {
                 curRef++;
                 logger.debug("New atomRefs found: ", curRef);
-                
+
                 try {
                     boolean countBonds = (bondCounter == 0) ? true : false;
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        if (countBonds) { bondCounter++; }
+                        if (countBonds) {
+                            bondCounter++;
+                        }
                         String token = st.nextToken();
                         logger.debug("Token: ", token);
-                        
+
                         if (curRef == 1) {
                             bondARef1.add(token);
                         } else if (curRef == 2) {
@@ -910,22 +912,24 @@ public class CMLCoreModule implements ICMLModule {
                 curRef++;
                 logger.debug("New atomRef found: ", curRef); // this is CML1 stuff, we get things like:
                 /*
-                  <bondArray>
-                  <stringArray builtin="atomRef">a2 a2 a2 a2 a3 a3 a4 a4 a5 a6 a7 a9</stringArray>
-                  <stringArray builtin="atomRef">a9 a11 a12 a13 a5 a4 a6 a9 a7 a8 a8 a10</stringArray>
-                  <stringArray builtin="order">1 1 1 1 2 1 2 1 1 1 2 2</stringArray>
-                  </bondArray>
-                */
-                
+                <bondArray>
+                <stringArray builtin="atomRef">a2 a2 a2 a2 a3 a3 a4 a4 a5 a6 a7 a9</stringArray>
+                <stringArray builtin="atomRef">a9 a11 a12 a13 a5 a4 a6 a9 a7 a8 a8 a10</stringArray>
+                <stringArray builtin="order">1 1 1 1 2 1 2 1 1 1 2 2</stringArray>
+                </bondArray>
+                 */
+
                 try {
                     boolean countBonds = (bondCounter == 0) ? true : false;
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        if (countBonds) { bondCounter++; }
+                        if (countBonds) {
+                            bondCounter++;
+                        }
                         String token = st.nextToken();
                         logger.debug("Token: ", token);
-                        
+
                         if (curRef == 1) {
                             bondARef1.add(token);
                         } else if (curRef == 2) {
@@ -937,13 +941,13 @@ public class CMLCoreModule implements ICMLModule {
                 }
             } else if (BUILTIN.equals("order")) {
                 logger.debug("New bond order found.");
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        
+
                         String token = st.nextToken();
                         logger.debug("Token: ", token);
                         order.add(token);
@@ -954,15 +958,15 @@ public class CMLCoreModule implements ICMLModule {
             }
         } else if ("integerArray".equals(name)) {
             logger.debug("IntegerArray: builtin = ", BUILTIN);
-            
+
             if (BUILTIN.equals("formalCharge")) {
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
+
                     while (st.hasMoreTokens()) {
-                        
+
                         String token = st.nextToken();
                         logger.debug("Charge added: ", token);
                         formalCharges.add(token);
@@ -973,24 +977,24 @@ public class CMLCoreModule implements ICMLModule {
             }
         } else if ("scalar".equals(name)) {
             if (xpath.endsWith("crystal", "scalar")) {
-                logger.debug("Going to set a crystal parameter: " + crystalScalar, 
-                    " to ", cData);
+                logger.debug("Going to set a crystal parameter: " + crystalScalar,
+                        " to ", cData);
                 try {
-                    unitcellparams[crystalScalar-1] = Double.parseDouble(cData.trim());
+                    unitcellparams[crystalScalar - 1] = Double.parseDouble(cData.trim());
                 } catch (NumberFormatException exception) {
                     logger.error("Content must a float: " + cData);
                 }
             } else if (xpath.endsWith("bond", "scalar")) {
                 if (DICTREF.equals("mdl:stereo")) {
-                	bondStereo.add(cData.trim());
-                    stereoGiven=true;
-                }else{
-                	Map<String,String> bp = bondCustomProperty.get(bondid.get(bondid.size()-1));
-                	if (bp == null) {
-                		bp = new Hashtable<String, String>();
-                		bondCustomProperty.put(bondid.get(bondid.size()-1), bp);
-                	}
-                	bp.put(elementTitle, cData.trim());
+                    bondStereo.add(cData.trim());
+                    stereoGiven = true;
+                } else {
+                    Map<String, String> bp = bondCustomProperty.get(bondid.get(bondid.size() - 1));
+                    if (bp == null) {
+                        bp = new Hashtable<String, String>();
+                        bondCustomProperty.put(bondid.get(bondid.size() - 1), bp);
+                    }
+                    bp.put(elementTitle, cData.trim());
                 }
             } else if (xpath.endsWith("atom", "scalar")) {
                 if (DICTREF.equals("cdk:partialCharge")) {
@@ -999,96 +1003,103 @@ public class CMLCoreModule implements ICMLModule {
                     atomicNumbers.add(cData.trim());
                 } else if (DICTREF.equals("cdk:isotopicMass")) {
                     exactMasses.add(cData.trim());
-                }else {
-                	if(atomCustomProperty.get(Integer.valueOf(atomCounter-1))==null)
-                		atomCustomProperty.put(Integer.valueOf(atomCounter-1),new ArrayList<String>());
-                	atomCustomProperty.get(Integer.valueOf(atomCounter-1)).add(elementTitle);
-                	atomCustomProperty.get(Integer.valueOf(atomCounter-1)).add(cData.trim());
+                } else {
+                    if (atomCustomProperty.get(Integer.valueOf(atomCounter - 1)) == null) {
+                        atomCustomProperty.put(Integer.valueOf(atomCounter - 1), new ArrayList<String>());
+                    }
+                    atomCustomProperty.get(Integer.valueOf(atomCounter - 1)).add(elementTitle);
+                    atomCustomProperty.get(Integer.valueOf(atomCounter - 1)).add(cData.trim());
                 }
             } else if (xpath.endsWith("molecule", "scalar")) {
                 if (DICTREF.equals("pdb:id")) {
 //                	cdo.setObjectProperty("Molecule", DICTREF, cData);
-                	currentMolecule.setProperty(new DictRef(DICTREF, cData), cData);
+                    currentMolecule.setProperty(new DictRef(DICTREF, cData), cData);
                 } else if (DICTREF.equals("cdk:molecularProperty")) {
-                	currentMolecule.setProperty(elementTitle, cData);
-                }else{
-                	moleculeCustomProperty.add(elementTitle);
-                	moleculeCustomProperty.add(cData.trim());
+                    currentMolecule.setProperty(elementTitle, cData);
+                } else {
+                    moleculeCustomProperty.add(elementTitle);
+                    moleculeCustomProperty.add(cData.trim());
                 }
             } else if (xpath.endsWith("reaction", "scalar")) {
                 if (DICTREF.equals("cdk:reactionProperty")) {
-                	currentReaction.setProperty(elementTitle, cData);
+                    currentReaction.setProperty(elementTitle, cData);
                 }
             } else {
                 logger.warn("Ignoring scalar: " + xpath);
             }
         } else if ("floatArray".equals(name)) {
             if (BUILTIN.equals("x3")) {
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         x3.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 205, 1);
                 }
             } else if (BUILTIN.equals("y3")) {
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         y3.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 213, 1);
                 }
             } else if (BUILTIN.equals("z3")) {
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         z3.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 221, 1);
                 }
             } else if (BUILTIN.equals("x2")) {
                 logger.debug("New floatArray found.");
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         x2.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 205, 1);
                 }
             } else if (BUILTIN.equals("y2")) {
                 logger.debug("New floatArray found.");
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         y2.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 454, 1);
                 }
             } else if (BUILTIN.equals("partialCharge")) {
                 logger.debug("New floatArray with partial charges found.");
-                
+
                 try {
-                    
+
                     StringTokenizer st = new StringTokenizer(cData);
-                    
-                    while (st.hasMoreTokens())
+
+                    while (st.hasMoreTokens()) {
                         partialCharges.add(st.nextToken());
+                    }
                 } catch (Exception e) {
                     notify("CMLParsing error: " + e, SYSTEMID, 462, 1);
                 }
@@ -1098,19 +1109,19 @@ public class CMLCoreModule implements ICMLModule {
             this.inchi = cData;
         } else if ("name".equals(name)) {
             if (xpath.endsWith("molecule", "name")) {
-            	if (DICTREF.length() > 0) {
+                if (DICTREF.length() > 0) {
 //            		cdo.setObjectProperty("Molecule", DICTREF, cData);
-            		
-            		currentMolecule.setProperty(new DictRef(DICTREF, cData), cData);
-            	} else {
+
+                    currentMolecule.setProperty(new DictRef(DICTREF, cData), cData);
+                } else {
 //            		cdo.setObjectProperty("Molecule", "Name", cData);
-            		currentMolecule.setProperty(CDKConstants.TITLE, cData);
-            	}
+                    currentMolecule.setProperty(CDKConstants.TITLE, cData);
+                }
             }
-        }else if ("formula".equals(name)) {
-        	currentMolecule.setProperty(CDKConstants.FORMULA, cData);
-        }else {
-        
+        } else if ("formula".equals(name)) {
+            currentMolecule.setProperty(CDKConstants.FORMULA, cData);
+        } else {
+
             logger.warn("Skipping element: " + name);
         }
 
@@ -1124,8 +1135,8 @@ public class CMLCoreModule implements ICMLModule {
         logger.debug("CD: ", currentChars);
     }
 
-    protected void notify(String message, String systemId, int line, 
-                          int column) {
+    protected void notify(String message, String systemId, int line,
+            int column) {
         logger.debug("Message: ", message);
         logger.debug("SystemId: ", systemId);
         logger.debug("Line: ", line);
@@ -1135,16 +1146,16 @@ public class CMLCoreModule implements ICMLModule {
     protected void storeData() {
         if (inchi != null) {
 //            cdo.setObjectProperty("Molecule", "inchi", inchi);
-        	currentMolecule.setProperty(CDKConstants.INCHI, inchi);
+            currentMolecule.setProperty(CDKConstants.INCHI, inchi);
         }
-        if (formula != null){
-        	currentMolecule.setProperty(CDKConstants.FORMULA, formula);
+        if (formula != null) {
+            currentMolecule.setProperty(CDKConstants.FORMULA, formula);
         }
-        Iterator<String> customs=moleculeCustomProperty.iterator();
-        while(customs.hasNext()){
-        	String x = customs.next();
-        	String y = customs.next();
-       		currentMolecule.setProperty(x,y);
+        Iterator<String> customs = moleculeCustomProperty.iterator();
+        while (customs.hasNext()) {
+            String x = customs.next();
+            String y = customs.next();
+            currentMolecule.setProperty(x, y);
         }
         storeAtomData();
         storeBondData();
@@ -1160,9 +1171,9 @@ public class CMLCoreModule implements ICMLModule {
                 }
             }
         }
-	}
+    }
 
-	protected void storeAtomData() {
+    protected void storeAtomData() {
         logger.debug("No atoms: ", atomCounter);
         if (atomCounter == 0) {
             return;
@@ -1204,37 +1215,37 @@ public class CMLCoreModule implements ICMLModule {
                     "No atom titles: " + eltitles.size(), " != " + atomCounter);
         }
 
-        if ((x3.size() == atomCounter) && (y3.size() == atomCounter) && 
-            (z3.size() == atomCounter)) {
+        if ((x3.size() == atomCounter) && (y3.size() == atomCounter)
+                && (z3.size() == atomCounter)) {
             has3D = true;
         } else {
             logger.debug(
-                    "No 3D info: " + x3.size(), " " + y3.size(), " " + 
-                    z3.size(), " != " + atomCounter);
+                    "No 3D info: " + x3.size(), " " + y3.size(), " "
+                    + z3.size(), " != " + atomCounter);
         }
 
-        if ((xfract.size() == atomCounter) && (yfract.size() == atomCounter) && 
-            (zfract.size() == atomCounter)) {
+        if ((xfract.size() == atomCounter) && (yfract.size() == atomCounter)
+                && (zfract.size() == atomCounter)) {
             has3Dfract = true;
         } else {
             logger.debug(
-                    "No 3D fractional info: " + xfract.size(), " " + yfract.size(), " " + 
-                    zfract.size(), " != " + atomCounter);
+                    "No 3D fractional info: " + xfract.size(), " " + yfract.size(), " "
+                    + zfract.size(), " != " + atomCounter);
         }
 
         if ((x2.size() == atomCounter) && (y2.size() == atomCounter)) {
             has2D = true;
         } else {
             logger.debug(
-                    "No 2D info: " + x2.size(), " " + y2.size(), " != " + 
-                    atomCounter);
+                    "No 2D info: " + x2.size(), " " + y2.size(), " != "
+                    + atomCounter);
         }
 
         if (formalCharges.size() == atomCounter) {
             hasFormalCharge = true;
         } else {
             logger.debug(
-                    "No formal Charge info: " + formalCharges.size(), 
+                    "No formal Charge info: " + formalCharges.size(),
                     " != " + atomCounter);
         }
 
@@ -1250,7 +1261,7 @@ public class CMLCoreModule implements ICMLModule {
             hasHCounts = true;
         } else {
             logger.debug(
-                    "No hydrogen Count info: " + hCounts.size(), 
+                    "No hydrogen Count info: " + hCounts.size(),
                     " != " + atomCounter);
         }
 
@@ -1307,46 +1318,50 @@ public class CMLCoreModule implements ICMLModule {
             logger.debug("Atom # " + atomCounter);
             if (hasID) {
 //                cdo.setObjectProperty("Atom", "id", (String)elid.get(i));
-            	logger.debug("id: ", (String)elid.get(i));
-                currentAtom.setID((String)elid.get(i));
-                atomEnumeration.put((String)elid.get(i), currentAtom);
+                logger.debug("id: ", elid.get(i));
+                currentAtom.setID(elid.get(i));
+                atomEnumeration.put(elid.get(i), currentAtom);
             }
             if (hasTitles) {
                 if (hasSymbols) {
-                    String symbol = (String)elsym.get(i);
+                    String symbol = elsym.get(i);
                     if (symbol.equals("Du") || symbol.equals("Dummy")) {
 //                        cdo.setObjectProperty("PseudoAtom", "label", (String)eltitles.get(i));
-                    	if (!(currentAtom instanceof IPseudoAtom)) {
+                        if (!(currentAtom instanceof IPseudoAtom)) {
                             currentAtom = currentChemFile.getBuilder().newPseudoAtom(currentAtom);
-                            if (hasID)
-                            	atomEnumeration.put((String)elid.get(i), currentAtom);
+                            if (hasID) {
+                                atomEnumeration.put(elid.get(i), currentAtom);
+                            }
                         }
-                        ((IPseudoAtom)currentAtom).setLabel((String)eltitles.get(i));
+                        ((IPseudoAtom) currentAtom).setLabel(eltitles.get(i));
                     } else {
 //                        cdo.setObjectProperty("Atom", "title", (String)eltitles.get(i));
-                    	// FIXME: huh?
-                    	if (eltitles.get(i) != null)
-                    		currentAtom.setProperty(CDKConstants.TITLE, (String)eltitles.get(i));
+                        // FIXME: huh?
+                        if (eltitles.get(i) != null) {
+                            currentAtom.setProperty(CDKConstants.TITLE, eltitles.get(i));
+                        }
                     }
                 } else {
 //                    cdo.setObjectProperty("Atom", "title", (String)eltitles.get(i));
-                	// FIXME: huh?
-                	if (eltitles.get(i) != null)
-                		currentAtom.setProperty(CDKConstants.TITLE, (String)eltitles.get(i));
+                    // FIXME: huh?
+                    if (eltitles.get(i) != null) {
+                        currentAtom.setProperty(CDKConstants.TITLE, eltitles.get(i));
+                    }
                 }
             }
 
             // store optional atom properties
             if (hasSymbols) {
-                String symbol = (String)elsym.get(i);
+                String symbol = elsym.get(i);
                 if (symbol.equals("Du") || symbol.equals("Dummy")) {
                     symbol = "R";
                 }
 //                cdo.setObjectProperty("Atom", "type", symbol);
                 if (symbol.equals("R") && !(currentAtom instanceof IPseudoAtom)) {
                     currentAtom = currentChemFile.getBuilder().newPseudoAtom(currentAtom);
-                    if (hasID)
-                    	atomEnumeration.put((String)elid.get(i), currentAtom);
+                    if (hasID) {
+                        atomEnumeration.put(elid.get(i), currentAtom);
+                    }
                 }
                 currentAtom.setSymbol(symbol);
             }
@@ -1355,17 +1370,15 @@ public class CMLCoreModule implements ICMLModule {
 //                cdo.setObjectProperty("Atom", "x3", (String)x3.get(i));
 //                cdo.setObjectProperty("Atom", "y3", (String)y3.get(i));
 //                cdo.setObjectProperty("Atom", "z3", (String)z3.get(i));
-            	if (x3.get(i) != null &&
-            		y3.get(i) != null &&
-            		z3.get(i) != null) {
-            		currentAtom.setPoint3d(
-           				new Point3d(
-          					Double.parseDouble((String)x3.get(i)),
-          					Double.parseDouble((String)y3.get(i)),
-            				Double.parseDouble((String)z3.get(i))
-            			)
-            		);
-            	}
+                if (x3.get(i) != null
+                        && y3.get(i) != null
+                        && z3.get(i) != null) {
+                    currentAtom.setPoint3d(
+                            new Point3d(
+                            Double.parseDouble((String) x3.get(i)),
+                            Double.parseDouble((String) y3.get(i)),
+                            Double.parseDouble((String) z3.get(i))));
+                }
             }
 
             if (has3Dfract) {
@@ -1374,35 +1387,33 @@ public class CMLCoreModule implements ICMLModule {
 //                cdo.setObjectProperty("Atom", "yFract", (String)yfract.get(i));
 //                cdo.setObjectProperty("Atom", "zFract", (String)zfract.get(i));
                 currentAtom.setFractionalPoint3d(
-               		new Point3d(
-               			Double.parseDouble((String)xfract.get(i)),
-               			Double.parseDouble((String)yfract.get(i)),
-               			Double.parseDouble((String)zfract.get(i))
-               		)
-               	);
+                        new Point3d(
+                        Double.parseDouble((String) xfract.get(i)),
+                        Double.parseDouble((String) yfract.get(i)),
+                        Double.parseDouble((String) zfract.get(i))));
             }
 
             if (hasFormalCharge) {
 //                cdo.setObjectProperty("Atom", "formalCharge", 
 //                                      (String)formalCharges.get(i));
-                currentAtom.setFormalCharge(Integer.parseInt((String)formalCharges.get(i)));
+                currentAtom.setFormalCharge(Integer.parseInt(formalCharges.get(i)));
             }
 
             if (hasPartialCharge) {
                 logger.debug("Storing partial atomic charge...");
 //                cdo.setObjectProperty("Atom", "partialCharge", 
 //                                      (String)partialCharges.get(i));
-                currentAtom.setCharge(Double.parseDouble((String)partialCharges.get(i)));
+                currentAtom.setCharge(Double.parseDouble(partialCharges.get(i)));
             }
 
             if (hasHCounts) {
 //                cdo.setObjectProperty("Atom", "hydrogenCount", (String)hCounts.get(i));
-            	// FIXME: the hCount in CML is the total of implicit *and* explicit
+                // FIXME: the hCount in CML is the total of implicit *and* explicit
                 String hCount = hCounts.get(i);
                 if (hCount != null) {
                     currentAtom.setHydrogenCount(Integer.parseInt(hCount));
                 } else {
-                    currentAtom.setHydrogenCount((Integer)CDKConstants.UNSET);
+                    currentAtom.setHydrogenCount((Integer) CDKConstants.UNSET);
                 }
             }
 
@@ -1410,55 +1421,57 @@ public class CMLCoreModule implements ICMLModule {
                 if (x2.get(i) != null && y2.get(i) != null) {
 //                    cdo.setObjectProperty("Atom", "x2", (String)x2.get(i));
 //                    cdo.setObjectProperty("Atom", "y2", (String)y2.get(i));
-                	currentAtom.setPoint2d(
-                		new Point2d(
-                			Double.parseDouble((String)x2.get(i)),
-                			Double.parseDouble((String)y2.get(i))
-               			)
-                	);
+                    currentAtom.setPoint2d(
+                            new Point2d(
+                            Double.parseDouble(x2.get(i)),
+                            Double.parseDouble(y2.get(i))));
                 }
             }
-            
+
             if (hasDictRefs) {
 //                cdo.setObjectProperty("Atom", "dictRef", (String)atomDictRefs.get(i));
-            	if (atomDictRefs.get(i) != null)
-            		currentAtom.setProperty("org.openscience.cdk.dict", (String)atomDictRefs.get(i));
+                if (atomDictRefs.get(i) != null) {
+                    currentAtom.setProperty("org.openscience.cdk.dict", atomDictRefs.get(i));
+                }
             }
 
             if (hasSpinMultiplicities && spinMultiplicities.get(i) != null) {
 //                cdo.setObjectProperty("Atom", "spinMultiplicity", (String)spinMultiplicities.get(i));
-            	int unpairedElectrons = Integer.parseInt((String)spinMultiplicities.get(i))-1;
-                for (int sm=0; sm<unpairedElectrons; sm++) {
+                int unpairedElectrons = Integer.parseInt(spinMultiplicities.get(i)) - 1;
+                for (int sm = 0; sm < unpairedElectrons; sm++) {
                     currentMolecule.addSingleElectron(currentChemFile.getBuilder().newSingleElectron(currentAtom));
                 }
             }
 
             if (hasOccupancies && occupancies.get(i) != null) {
 //                cdo.setObjectProperty("Atom", "occupanciy", (String)occupancies.get(i));
-            	// FIXME: this has no ChemFileCDO equivalent, not even if spelled correctly
+                // FIXME: this has no ChemFileCDO equivalent, not even if spelled correctly
             }
 
             if (hasIsotopes) {
 //                cdo.setObjectProperty("Atom", "massNumber", (String)isotope.get(i));
-            	if (isotope.get(i) != null)
-            		currentAtom.setMassNumber((int)Double.parseDouble((String)isotope.get(i)));
+                if (isotope.get(i) != null) {
+                    currentAtom.setMassNumber((int) Double.parseDouble(isotope.get(i)));
+                }
             }
-            
+
             if (hasAtomicNumbers) {
-              if (atomicNumbers.get(i) != null)
-                currentAtom.setAtomicNumber(Integer.parseInt(atomicNumbers.get(i)));
+                if (atomicNumbers.get(i) != null) {
+                    currentAtom.setAtomicNumber(Integer.parseInt(atomicNumbers.get(i)));
+                }
             }
 
             if (hasExactMasses) {
-                if (exactMasses.get(i) != null)
-                  currentAtom.setExactMass(Double.parseDouble(exactMasses.get(i)));
-              }
+                if (exactMasses.get(i) != null) {
+                    currentAtom.setExactMass(Double.parseDouble(exactMasses.get(i)));
+                }
+            }
 
-            if(atomCustomProperty.get(Integer.valueOf(i))!=null){
-            	Iterator<String> it=atomCustomProperty.get(Integer.valueOf(i)).iterator();
-            	while(it.hasNext()){
-	            	currentAtom.setProperty(it.next(),it.next());
-            	}
+            if (atomCustomProperty.get(Integer.valueOf(i)) != null) {
+                Iterator<String> it = atomCustomProperty.get(Integer.valueOf(i)).iterator();
+                while (it.hasNext()) {
+                    currentAtom.setProperty(it.next(), it.next());
+                }
             }
 
 //            cdo.endObject("Atom");
@@ -1471,15 +1484,15 @@ public class CMLCoreModule implements ICMLModule {
         }
         newAtomData();
     }
-    
+
     protected void storeBondData() {
         logger.debug(
-                "Testing a1,a2,stereo,order = count: " + bondARef1.size(), "," + 
-                bondARef2.size(), "," + bondStereo.size(), "," + order.size(), "=" +
-                bondCounter);
+                "Testing a1,a2,stereo,order = count: " + bondARef1.size(), ","
+                + bondARef2.size(), "," + bondStereo.size(), "," + order.size(), "="
+                + bondCounter);
 
-        if ((bondARef1.size() == bondCounter) && 
-            (bondARef2.size() == bondCounter)) {
+        if ((bondARef1.size() == bondCounter)
+                && (bondARef2.size() == bondCounter)) {
             logger.debug("About to add bond info...");
 
             Iterator<String> orders = order.iterator();
@@ -1500,64 +1513,63 @@ public class CMLCoreModule implements ICMLModule {
 //                cdo.setObjectProperty("Bond", "atom2", 
 //                                      Integer.valueOf(bondElid.indexOf(
 //                                                          (String)bar2s.next())).toString());
-                IAtom a1 = (IAtom)atomEnumeration.get((String)bar1s.next());
-            	IAtom a2 = (IAtom)atomEnumeration.get((String)bar2s.next());
-            	currentBond = currentChemFile.getBuilder().newBond(a1, a2);
-            	if (ids.hasNext()) {
-            		currentBond.setID((String)ids.next());
-            	}
+                IAtom a1 = atomEnumeration.get(bar1s.next());
+                IAtom a2 = atomEnumeration.get(bar2s.next());
+                currentBond = currentChemFile.getBuilder().newBond(a1, a2);
+                if (ids.hasNext()) {
+                    currentBond.setID(ids.next());
+                }
 
                 if (orders.hasNext()) {
-                    String bondOrder = (String)orders.next();
-                    
+                    String bondOrder = orders.next();
+
                     if ("S".equals(bondOrder)) {
 //                        cdo.setObjectProperty("Bond", "order", "1");
-                    	currentBond.setOrder(CDKConstants.BONDORDER_SINGLE);
+                        currentBond.setOrder(CDKConstants.BONDORDER_SINGLE);
                     } else if ("D".equals(bondOrder)) {
 //                        cdo.setObjectProperty("Bond", "order", "2");
-                    	currentBond.setOrder(CDKConstants.BONDORDER_DOUBLE);
+                        currentBond.setOrder(CDKConstants.BONDORDER_DOUBLE);
                     } else if ("T".equals(bondOrder)) {
 //                        cdo.setObjectProperty("Bond", "order", "3");
-                    	currentBond.setOrder(CDKConstants.BONDORDER_TRIPLE);
+                        currentBond.setOrder(CDKConstants.BONDORDER_TRIPLE);
                     } else if ("A".equals(bondOrder)) {
 //                        cdo.setObjectProperty("Bond", "order", "1.5");
-                    	currentBond.setOrder(CDKConstants.BONDORDER_SINGLE);
-                    	currentBond.setFlag(CDKConstants.ISAROMATIC, true);
+                        currentBond.setOrder(CDKConstants.BONDORDER_SINGLE);
+                        currentBond.setFlag(CDKConstants.ISAROMATIC, true);
                     } else {
 //                        cdo.setObjectProperty("Bond", "order", bondOrder);
-                    	currentBond.setOrder(
-                    		BondManipulator.createBondOrder(Double.parseDouble(bondOrder))
-                    	);
+                        currentBond.setOrder(
+                                BondManipulator.createBondOrder(Double.parseDouble(bondOrder)));
                     }
                 }
 
                 if (stereos.hasNext()) {
 //                    cdo.setObjectProperty("Bond", "stereo", 
 //                                          (String)stereos.next());
-                	String nextStereo = (String)stereos.next();
+                    String nextStereo = stereos.next();
                     if ("H".equals(nextStereo)) {
-                    	currentBond.setStereo(IBond.Stereo.DOWN);
+                        currentBond.setStereo(IBond.Stereo.DOWN);
                     } else if ("W".equals(nextStereo)) {
-                    	currentBond.setStereo(IBond.Stereo.UP);
-                    } else if (nextStereo != null){
-                    	logger.warn("Cannot interpret stereo information: " + nextStereo);
+                        currentBond.setStereo(IBond.Stereo.UP);
+                    } else if (nextStereo != null) {
+                        logger.warn("Cannot interpret stereo information: " + nextStereo);
                     }
                 }
 
                 if (aroms.hasNext()) {
-                	Object nextArom = aroms.next();
-                	if (nextArom != null && nextArom == Boolean.TRUE) {
-                		currentBond.setFlag(CDKConstants.ISAROMATIC, true);
-                	}
+                    Object nextArom = aroms.next();
+                    if (nextArom != null && nextArom == Boolean.TRUE) {
+                        currentBond.setFlag(CDKConstants.ISAROMATIC, true);
+                    }
                 }
-                
+
                 if (currentBond.getID() != null) {
-                    Map<String,String> currentBondProperties = bondCustomProperty.get(currentBond.getID());
+                    Map<String, String> currentBondProperties = bondCustomProperty.get(currentBond.getID());
                     if (currentBondProperties != null) {
                         Iterator<String> keys = currentBondProperties.keySet().iterator();
                         while (keys.hasNext()) {
                             String key = keys.next();
-                            currentBond.setProperty(key,currentBondProperties.get(key));
+                            currentBond.setProperty(key, currentBondProperties.get(key));
                         }
                         bondCustomProperty.remove(currentBond.getID());
                     }
