@@ -122,10 +122,8 @@ public class CDKMCS {
 
     final static int ID1 = 0;
     final static int ID2 = 1;
-    //public static long timeout = -1;
     /**
-     * timeout : -1 for infinite search and one min is 1
-     * 
+     * timeout : -1 for infinite search and one min is 1 
      */
     public static double timeout = TimeOut.getInstance().getTimeOut();
     /**
@@ -178,10 +176,7 @@ public class CDKMCS {
      * of IQueryAtomContainer
      */
     public static boolean isIsomorph(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
-        if (sourceGraph instanceof IQueryAtomContainer) {
-            throw new CDKException(
-                    "The first IAtomContainer must not be an IQueryAtomContainer");
-        }
+        checkInstance(sourceGraph);
 
         if (targetGraph.getAtomCount() != sourceGraph.getAtomCount()) {
             return false;
@@ -213,10 +208,7 @@ public class CDKMCS {
      * @throws CDKException
      */
     public static List<CDKRMap> getIsomorphMap(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
-        if (sourceGraph instanceof IQueryAtomContainer) {
-            throw new CDKException(
-                    "The first IAtomContainer must not be an IQueryAtomContainer");
-        }
+        checkInstance(sourceGraph);
 
         List<CDKRMap> result = null;
 
@@ -240,10 +232,7 @@ public class CDKMCS {
      *  {@link org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer}
      */
     public static List<CDKRMap> getIsomorphAtomsMap(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
-        if (sourceGraph instanceof IQueryAtomContainer) {
-            throw new CDKException(
-                    "The first IAtomContainer must not be an IQueryAtomContainer");
-        }
+        checkInstance(sourceGraph);
 
         List<CDKRMap> list = checkSingleAtomCases(sourceGraph, targetGraph);
         if (list == null) {
@@ -622,10 +611,7 @@ public class CDKMCS {
      * of IQueryAtomContainer
      */
     public static List<CDKRMap> checkSingleAtomCases(IAtomContainer sourceGraph, IAtomContainer targetGraph) throws CDKException {
-        if (sourceGraph instanceof IQueryAtomContainer) {
-            throw new CDKException(
-                    "The first IAtomContainer must not be an IQueryAtomContainer");
-        }
+        checkInstance(sourceGraph);
 
         if (targetGraph.getAtomCount() == 1) {
             List<CDKRMap> arrayList = new ArrayList<CDKRMap>();
@@ -986,10 +972,7 @@ public class CDKMCS {
      */
     private static boolean testSubgraphHeuristics(IAtomContainer ac1, IAtomContainer ac2)
             throws CDKException {
-        if (ac1 instanceof IQueryAtomContainer) {
-            throw new CDKException(
-                    "The first IAtomContainer must not be an IQueryAtomContainer");
-        }
+        checkInstance(ac1);
 
         int ac1SingleBondCount = 0;
         int ac1DoubleBondCount = 0;
@@ -1129,30 +1112,37 @@ public class CDKMCS {
 
     }
 
-    private static boolean bondMatch(IAtomContainer ac1, IAtomContainer ac2, int i, int j) {
+    private static boolean bondMatch(IAtomContainer ac1, IAtomContainer ac2, int indexI, int indexJ) {
         // bond type conditions
         if (( // same bond order and same aromaticity flag (either both on or off)
-                ac1.getBond(i).getOrder() == ac2.getBond(j).getOrder()
-                && ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC)
-                == ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))
+                ac1.getBond(indexI).getOrder() == ac2.getBond(indexJ).getOrder()
+                && ac1.getBond(indexI).getFlag(CDKConstants.ISAROMATIC)
+                == ac2.getBond(indexJ).getFlag(CDKConstants.ISAROMATIC))
                 || ( // both bond are aromatic
-                ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC)
-                && ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))) {
+                ac1.getBond(indexI).getFlag(CDKConstants.ISAROMATIC)
+                && ac2.getBond(indexJ).getFlag(CDKConstants.ISAROMATIC))) {
             return true;
         }
         return false;
     }
 
-    private static boolean atomMatch(int i, int j, IAtomContainer ac1, IAtomContainer ac2) {
+    private static boolean atomMatch(int indexI, int indexJ, IAtomContainer ac1, IAtomContainer ac2) {
         if (( // sAtom = tAtom && g2Bond1 = g2Bond2
-                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol())
-                && ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()))
+                ac1.getBond(indexI).getAtom(0).getSymbol().equals(ac2.getBond(indexJ).getAtom(0).getSymbol())
+                && ac1.getBond(indexI).getAtom(1).getSymbol().equals(ac2.getBond(indexJ).getAtom(1).getSymbol()))
                 || ( // sAtom = g2Bond2 && g2Bond1 = tAtom
-                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())
-                && ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()))) {
+                ac1.getBond(indexI).getAtom(0).getSymbol().equals(ac2.getBond(indexJ).getAtom(1).getSymbol())
+                && ac1.getBond(indexI).getAtom(1).getSymbol().equals(ac2.getBond(indexJ).getAtom(0).getSymbol()))) {
             return true;
         }
         return false;
+    }
+
+    private static void checkInstance(IAtomContainer atomContainer) throws CDKException {
+        if (atomContainer instanceof IQueryAtomContainer) {
+            throw new CDKException(
+                    "The first IAtomContainer must not be an IQueryAtomContainer");
+        }
     }
 }
 
