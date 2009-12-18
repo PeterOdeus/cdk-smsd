@@ -22,7 +22,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 package org.openscience.cdk.smsd.tools;
 
 import java.util.ArrayList;
@@ -396,7 +395,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
             IAtom atom2 = atoms[IndexJ];
 
             Order order = container.getBond(index).getOrder();
-            int stereo = container.getBond(index).getStereo();
+            IBond.Stereo stereo = container.getBond(index).getStereo();
             bonds[index] = new Bond(atom1, atom2, order, stereo);
             if (container.getBond(index).getID() != null) {
                 bonds[index].setID(new String(container.getBond(index).getID()));
@@ -419,7 +418,7 @@ public class ExtAtomContainerManipulator extends AtomContainerManipulator {
                 final IAtom neighb = map.get(iAtom);
                 if (neighb == null) {
                     continue; // since for the case of H2, neight H has atom heavy atom neighbor
-                    }
+                }
                 //Added by Asad
                 if (!(neighb instanceof PseudoAtom)) {
                     neighb.setHydrogenCount(
