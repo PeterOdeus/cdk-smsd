@@ -8,7 +8,7 @@
  * of the License, or (at your option) any later version.
  * All we ask is that proper credit is given for our work, which includes
  * - but is not limited to - adding the above copyright notice to the beginning
- * of your source code files, and to any copyright notice that you may distribute
+ * of your container code files, and to any copyright notice that you may distribute
  * with programs based on this work.
  *
  * This program is distributed in the hope that it will be useful,
@@ -25,6 +25,7 @@ package org.openscience.cdk.smsd.algorithm.mcgregor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -41,7 +42,7 @@ public class McGregorChecks {
 
     /**
      * 
-     * @param source
+     * @param container
      * @param target
      * @param neighborBondNumA
      * @param neighborBondNumB
@@ -124,6 +125,8 @@ public class McGregorChecks {
             if (ReactantBond.getFlag(CDKConstants.ISAROMATIC) && ProductBond.getFlag(CDKConstants.ISAROMATIC)) {
                 Flag = true;
             }
+        } else {
+            Flag = true;
         }
         return Flag;
     }
@@ -384,7 +387,7 @@ public class McGregorChecks {
 
     /**
      *
-     * @param source
+     * @param container
      * @param target
      * @param neighborBondNumA
      * @param neighborBondNumB
@@ -586,5 +589,55 @@ public class McGregorChecks {
         }
 
         return moreMappingPossible;
+    }
+
+    static List<Integer> markUnMappedAtoms(IAtomContainer container, Map<Integer, Integer> present_Mapping) {
+        List<Integer> unmappedMolAtoms = new ArrayList<Integer>();
+
+        int unmapped_num = 0;
+        boolean atom_is_unmapped = true;
+
+        for (int a = 0; a < container.getAtomCount(); a++) {
+            //Atomic list are only numbers from 1 to atom_number1
+
+            for (Integer key : present_Mapping.keySet()) {
+                if (key == a) {
+                    atom_is_unmapped = false;
+                }
+            }
+
+
+            if (atom_is_unmapped) {
+                unmappedMolAtoms.add(unmapped_num, a);
+                unmapped_num++;
+            }
+            atom_is_unmapped = true;
+        }
+        return unmappedMolAtoms;
+    }
+
+    static List<Integer> markUnMappedAtoms(boolean flag, IAtomContainer source, List<Integer> mapped_atoms, int clique_siz) {
+        List<Integer> unmappedMolAtoms = new ArrayList<Integer>();
+        int unmapped_num = 0;
+        boolean atom_is_unmapped = true;
+
+//        System.out.println("Mapped Atoms: " + mappedAtoms);
+
+        for (int a = 0; a < source.getAtomCount(); a++) {
+            //Atomic list are only numbers from 1 to atom_number1
+
+            for (int b = 0; b < clique_siz; b++) {
+                //the number of nodes == number of assigned pairs
+                if ((flag && mapped_atoms.get(b * 2) == a)
+                        || (!flag && mapped_atoms.get(b * 2 + 1) == a)) {
+                    atom_is_unmapped = false;
+                }
+            }
+            if (atom_is_unmapped == true) {
+                unmappedMolAtoms.add(unmapped_num++, a);
+            }
+            atom_is_unmapped = true;
+        }
+        return unmappedMolAtoms;
     }
 }

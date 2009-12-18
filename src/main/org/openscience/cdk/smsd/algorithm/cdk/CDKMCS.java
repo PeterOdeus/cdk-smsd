@@ -532,7 +532,7 @@ public class CDKMCS {
             }
 
             atom = bond.getAtom(0);
-            atom1 = (IAtom) table.get(atom);
+            atom1 = table.get(atom);
 
             if (atom1 == null) {
                 try {
@@ -709,11 +709,11 @@ public class CDKMCS {
                 List<IBond> bondsConnectedToAtom1j = sourceGraph.getConnectedBondsList(atom1[j]);
                 for (int k = 0; k < bondsConnectedToAtom1j.size(); k++) {
                     if (bondsConnectedToAtom1j.get(k) != bond1) {
-                        IBond testBond = (IBond) bondsConnectedToAtom1j.get(k);
+                        IBond testBond = bondsConnectedToAtom1j.get(k);
                         for (int m = 0; m < list.size(); m++) {
                             IBond testBond2;
-                            if (((CDKRMap) list.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
-                                testBond2 = targetGraph.getBond(((CDKRMap) list.get(m)).getId2());
+                            if ((list.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
+                                testBond2 = targetGraph.getBond((list.get(m)).getId2());
                                 for (int n = 0; n < 2; n++) {
                                     List<IBond> bondsToTest = targetGraph.getConnectedBondsList(atom2[n]);
                                     if (bondsToTest.contains(testBond2)) {
@@ -776,43 +776,20 @@ public class CDKMCS {
                     IBond bond = ac1.getBond(i);
                     if (queryBond.matches(bond)) {
                         // ok, bonds match
-                        if (atom1.matches(bond.getAtom(0)) && atom2.matches(bond.getAtom(1)) ||
-                                atom1.matches(bond.getAtom(1)) && atom2.matches(bond.getAtom(0))) {
+                        if (atom1.matches(bond.getAtom(0)) && atom2.matches(bond.getAtom(1))
+                                || atom1.matches(bond.getAtom(1)) && atom2.matches(bond.getAtom(0))) {
                             // ok, atoms match in either order
                             graph.addNode(new CDKRNode(i, j));
                         }
                     }
                 } else {
-                    //Bond Insensitive searches
-
-                    if (bondTypeFlag) {
-                        // if both bonds are compatible then create an association node
-                        // in the resolution graph
-                        if (( // bond type conditions
-                                ( // same bond order and same aromaticity flag (either both on or off)
-                                ac1.getBond(i).getOrder() == ac2.getBond(j).getOrder() &&
-                                ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC) ==
-                                ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC)) ||
-                                ( // both bond are aromatic
-                                ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC) &&
-                                ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))) &&
-                                ( // atome type conditions
-                                ( // atom1 = atom2 && bondB1 = bondB2
-                                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()) &&
-                                ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())) ||
-                                ( // atom1 = bondB2 && bondB1 = atom2
-                                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()) &&
-                                ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol())))) {
-                            graph.addNode(new CDKRNode(i, j));
-                        }
-
+                    //searches modifed by Asad
+                    // if both bonds are compatible then create an association node
+                    // in the resolution graph
+                    if (bondTypeFlag && bondMatch(ac1, ac2, i, j) && atomMatch(i, j, ac1, ac2)) {
+                        graph.addNode(new CDKRNode(i, j));
                     } else {
-                        if (( // sAtom = tAtom && g2Bond1 = g2Bond2
-                                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()) &&
-                                ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())) ||
-                                ( // sAtom = g2Bond2 && g2Bond1 = tAtom
-                                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()) &&
-                                ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()))) {
+                        if (atomMatch(i, j, ac1, ac2)) {
                             graph.addNode(new CDKRNode(i, j));
                         }
                     }
@@ -835,7 +812,7 @@ public class CDKMCS {
     private static void arcConstructor(CDKRGraph graph, IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
         // each node is incompatible with itself
         for (int i = 0; i < graph.getGraph().size(); i++) {
-            CDKRNode rNodeX = (CDKRNode) graph.getGraph().get(i);
+            CDKRNode rNodeX = graph.getGraph().get(i);
             rNodeX.getForbidden().set(i);
         }
 
@@ -863,8 +840,8 @@ public class CDKMCS {
                 bondB2 = ac2.getBond(graph.getGraph().get(j).getRMap().getId2());
 
                 if (bondA2 instanceof IQueryBond) {
-                    if (bondA1.equals(bondB1) || bondA2.equals(bondB2) ||
-                            !queryAdjacencyAndOrder(bondA1, bondB1, bondA2, bondB2)) {
+                    if (bondA1.equals(bondB1) || bondA2.equals(bondB2)
+                            || !queryAdjacencyAndOrder(bondA1, bondB1, bondA2, bondB2)) {
                         rNodeX.getForbidden().set(j);
                         rNodeY.getForbidden().set(i);
                     } else if (hasCommonAtom(bondA1, bondB1)) {
@@ -872,8 +849,8 @@ public class CDKMCS {
                         rNodeY.getExtension().set(i);
                     }
                 } else {
-                    if (bondA1.equals(bondB1) || bondA2.equals(bondB2) ||
-                            (!getCommonSymbol(bondA1, bondB1).equals(getCommonSymbol(bondA2, bondB2)))) {
+                    if (bondA1.equals(bondB1) || bondA2.equals(bondB2)
+                            || (!getCommonSymbol(bondA1, bondB1).equals(getCommonSymbol(bondA2, bondB2)))) {
                         rNodeX.getForbidden().set(j);
                         rNodeY.getForbidden().set(i);
                     } else if (hasCommonAtom(bondA1, bondB1)) {
@@ -983,8 +960,8 @@ public class CDKMCS {
             IQueryAtom queryAtom2 = (IQueryAtom) queryBond2.getConnectedAtom(centralQueryAtom);
             IAtom atom1 = bond1.getConnectedAtom(centralAtom);
             IAtom atom2 = bond2.getConnectedAtom(centralAtom);
-            if (queryAtom1.matches(atom1) && queryAtom2.matches(atom2) ||
-                    queryAtom1.matches(atom2) && queryAtom2.matches(atom1)) {
+            if (queryAtom1.matches(atom1) && queryAtom2.matches(atom2)
+                    || queryAtom1.matches(atom2) && queryAtom2.matches(atom1)) {
                 return true;
             } else {
                 return false;
@@ -1150,6 +1127,32 @@ public class CDKMCS {
         }
         return ac1CCount >= ac2CCount;
 
+    }
+
+    private static boolean bondMatch(IAtomContainer ac1, IAtomContainer ac2, int i, int j) {
+        // bond type conditions
+        if (( // same bond order and same aromaticity flag (either both on or off)
+                ac1.getBond(i).getOrder() == ac2.getBond(j).getOrder()
+                && ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC)
+                == ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))
+                || ( // both bond are aromatic
+                ac1.getBond(i).getFlag(CDKConstants.ISAROMATIC)
+                && ac2.getBond(j).getFlag(CDKConstants.ISAROMATIC))) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean atomMatch(int i, int j, IAtomContainer ac1, IAtomContainer ac2) {
+        if (( // sAtom = tAtom && g2Bond1 = g2Bond2
+                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol())
+                && ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol()))
+                || ( // sAtom = g2Bond2 && g2Bond1 = tAtom
+                ac1.getBond(i).getAtom(0).getSymbol().equals(ac2.getBond(j).getAtom(1).getSymbol())
+                && ac1.getBond(i).getAtom(1).getSymbol().equals(ac2.getBond(j).getAtom(0).getSymbol()))) {
+            return true;
+        }
+        return false;
     }
 }
 

@@ -32,7 +32,6 @@ import java.util.Stack;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.smsd.global.BondType;
 import org.openscience.cdk.smsd.helper.BinaryTree;
 
 /**
@@ -58,7 +57,6 @@ public class McGregor {
         "$47", "$48", "$49", "$50", "$51", "$52", "$53", "$54", "$55"
     };
     protected boolean newMatrix = false;
-    protected boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
      * Creates a new instance of McGregor
@@ -72,16 +70,16 @@ public class McGregor {
         this.source = source;
         this.target = target;
         this.mappings = _mappings;
-        bestarcsleft = 0;
+        this.bestarcsleft = 0;
 
-        if (_mappings.isEmpty()) {
-            this.globalMCSSize = 0;
-        } else {
+        if (!_mappings.isEmpty()) {
             this.globalMCSSize = _mappings.get(0).size();
+        } else {
+            this.globalMCSSize = 0;
         }
-        modifiedARCS = new ArrayList<Integer>();
-        bestARCS = new Stack<List<Integer>>();
-        newMatrix = false;
+        this.modifiedARCS = new ArrayList<Integer>();
+        this.bestARCS = new Stack<List<Integer>>();
+        this.newMatrix = false;
     }
 
     /**
@@ -94,7 +92,6 @@ public class McGregor {
 
         this.globalMCSSize = (largestMappingSize / 2);
         List<String> c_tab1_copy = McGregorChecks.generateCTabCopy(source);
-
         List<String> c_tab2_copy = McGregorChecks.generateCTabCopy(target);
 
 
@@ -121,28 +118,8 @@ public class McGregor {
         List<String> c_bond_setB = new ArrayList<String>();
 
         //find unmapped atoms of molecule A
-        List<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
 
-        int unmapped_numA = 0;
-        boolean atomA_is_unmapped = true;
-
-        for (int a = 0; a < source.getAtomCount(); a++) {
-            //Atomic list are only numbers from 1 to atom_number1
-
-            for (Integer key : present_Mapping.keySet()) {
-                if (key == a) {
-                    atomA_is_unmapped = false;
-                }
-            }
-
-
-            if (atomA_is_unmapped) {
-                unmapped_atoms_molA.add(unmapped_numA, a);
-                unmapped_numA++;
-            }
-            atomA_is_unmapped = true;
-        }
-
+        List<Integer> unmapped_atoms_molA = McGregorChecks.markUnMappedAtoms(source, present_Mapping);
         int counter = 0;
         int gSetBondNumA = 0;
         int gSetBondNumB = 0;
@@ -179,23 +156,7 @@ public class McGregor {
         c_bond_neighborsA = queryProcess.getCBondNeighborsA();
 
         //find unmapped atoms of molecule B
-        List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
-        int unmapped_numB = 0;
-        boolean atomB_is_unmapped = true;
-
-        for (int a = 0; a < target.getAtomCount(); a++) {
-            for (Integer value : present_Mapping.values()) {
-
-                if (a == value) {
-                    atomB_is_unmapped = false;
-                }
-            }
-            if (atomB_is_unmapped) {
-                unmapped_atoms_molB.add(unmapped_numB, a);
-                unmapped_numB++;
-            }
-            atomB_is_unmapped = true;
-        }
+        List<Integer> unmapped_atoms_molB = McGregorChecks.markUnMappedAtoms(target, present_Mapping);
 
 //        System.out.println("unmapped_atoms_molB: " + unmapped_atoms_molB.size());
 
@@ -309,27 +270,10 @@ public class McGregor {
 
 
         //find unmapped atoms of molecule A
-        List<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
+        List<Integer> unmapped_atoms_molA =
+                McGregorChecks.markUnMappedAtoms(true, source, mapped_atoms, clique_siz);
 
-        int unmapped_numA = 0;
-        boolean atomA_is_unmapped = true;
 
-//        System.out.println("Mapped Atoms: " + mappedAtoms);
-
-        for (int a = 0; a < source.getAtomCount(); a++) {
-            //Atomic list are only numbers from 1 to atom_number1
-
-            for (int b = 0; b < clique_siz; b++) {
-                //the number of nodes == number of assigned pairs
-                if (mapped_atoms.get(b * 2) == a) {
-                    atomA_is_unmapped = false;
-                }
-            }
-            if (atomA_is_unmapped == true) {
-                unmapped_atoms_molA.add(unmapped_numA++, a);
-            }
-            atomA_is_unmapped = true;
-        }
 
         int counter = 0;
         int setNumA = 0;
@@ -371,23 +315,8 @@ public class McGregor {
         cBondNeighborsA = queryProcess.getCBondNeighborsA();
 
         //find unmapped atoms of molecule B
-        List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
-        int unmapped_numB = 0;
-        boolean atomB_is_unmapped = true;
-
-//        System.out.println("localNeighborBondnumA After:" + localNeighborBondnumA);
-
-        for (int a = 0; a < target.getAtomCount(); a++) {
-            for (int b = 0; b < clique_siz; b++) {
-                if (a == mapped_atoms.get(b * 2 + 1)) {
-                    atomB_is_unmapped = false;
-                }
-            }
-            if (atomB_is_unmapped == true) {
-                unmapped_atoms_molB.add(unmapped_numB++, a);
-            }
-            atomB_is_unmapped = true;
-        }
+        List<Integer> unmapped_atoms_molB =
+                McGregorChecks.markUnMappedAtoms(false, target, mapped_atoms, clique_siz);
 
 
         //Extract bonds which are related with unmapped atoms of molecule B.
@@ -709,9 +638,7 @@ public class McGregor {
                 String G2B = cBondNeighborsB.get(column * 4 + 1);
 
 
-                if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0) || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
-
-
+                if (matchGAtoms(G1A, G2A, G1B, G2B)) {
                     int Index_I = iBondNeighborAtomsA.get(row * 3 + 0);
                     int Index_IPlus1 = iBondNeighborAtomsA.get(row * 3 + 1);
 
@@ -725,7 +652,7 @@ public class McGregor {
                     IAtom P1_B = target.getAtom(Index_J);
                     IAtom P2_B = target.getAtom(Index_JPlus1);
                     IBond ProductBond = target.getBond(P1_B, P2_B);
-                    if ((bondTypeFlag && McGregorChecks.bondMatch(ReactantBond, ProductBond)) || (!bondTypeFlag)) {
+                    if (McGregorChecks.bondMatch(ReactantBond, ProductBond)) {
                         modifiedARCS.set(row * neighborBondNumB + column, 1);
                     }
                 }
@@ -780,7 +707,7 @@ public class McGregor {
         }
     }
 
-//The function is called in function partsearch. The function is given z temporary matrix.
+//The function is called in function partsearch. The function is given indexZ temporary matrix.
 //The function checks whether the temporary matrix is already found by calling the function
 //"verifyNodes". If the matrix already exists the function returns false which means that
 //the matrix will not be stored. Otherwise the function returns true which means that the
@@ -959,14 +886,11 @@ public class McGregor {
     }
 
     private void extendMapping(int xIndex, int yIndex, McgregorHelper mcGregorHelper, List<Integer> additional_mapping, List<Integer> currentMapping) {
-        int mappedAtomCount = mcGregorHelper.getMappedAtomCount();
-        List<Integer> iBondNeighborAtomsA = mcGregorHelper.getiBondNeighborAtomsA();
-        List<Integer> iBondNeighborAtomsB = mcGregorHelper.getiBondNeighborAtomsB();
 
-        int Atom1_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 0);
-        int Atom2_moleculeA = iBondNeighborAtomsA.get(xIndex * 3 + 1);
-        int Atom1_moleculeB = iBondNeighborAtomsB.get(yIndex * 3 + 0);
-        int Atom2_moleculeB = iBondNeighborAtomsB.get(yIndex * 3 + 1);
+        int Atom1_moleculeA = mcGregorHelper.getiBondNeighborAtomsA().get(xIndex * 3 + 0);
+        int Atom2_moleculeA = mcGregorHelper.getiBondNeighborAtomsA().get(xIndex * 3 + 1);
+        int Atom1_moleculeB = mcGregorHelper.getiBondNeighborAtomsB().get(yIndex * 3 + 0);
+        int Atom2_moleculeB = mcGregorHelper.getiBondNeighborAtomsB().get(yIndex * 3 + 1);
 
         IAtom R1_A = source.getAtom(Atom1_moleculeA);
         IAtom R2_A = source.getAtom(Atom2_moleculeA);
@@ -980,12 +904,12 @@ public class McGregor {
 
         boolean bMatch = McGregorChecks.bondMatch(ReactantBond, ProductBond);
 
-        if ((bondTypeFlag && bMatch) || (!bondTypeFlag)) {
+        if (bMatch) {
 
-            for (int z = 0; z < mappedAtomCount; z++) {
+            for (int indexZ = 0; indexZ < mcGregorHelper.getMappedAtomCount(); indexZ++) {
 
-                int Mapped_Atom_1 = currentMapping.get(z * 2 + 0);
-                int Mapped_Atom_2 = currentMapping.get(z * 2 + 1);
+                int Mapped_Atom_1 = currentMapping.get(indexZ * 2 + 0);
+                int Mapped_Atom_2 = currentMapping.get(indexZ * 2 + 1);
 
                 if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
                     additional_mapping.add(Atom2_moleculeA);
@@ -1002,5 +926,12 @@ public class McGregor {
                 }
             }//for loop
         }
+    }
+
+    private boolean matchGAtoms(String G1A, String G2A, String G1B, String G2B) {
+        return (G1A.compareToIgnoreCase(G1B) == 0
+                && G2A.compareToIgnoreCase(G2B) == 0)
+                || (G1A.compareToIgnoreCase(G2B) == 0
+                && G2A.compareToIgnoreCase(G1B) == 0);
     }
 }

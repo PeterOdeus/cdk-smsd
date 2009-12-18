@@ -67,7 +67,7 @@ public class QueryProcessor {
             int mappingSize,
             List<Integer> i_bond_setA,
             List<String> c_bond_setA) {
-
+ 
         this.c_tab1_copy = c_tab1_copy;
         this.c_tab2_copy = c_tab2_copy;
         this.SignArray = SignArray;
