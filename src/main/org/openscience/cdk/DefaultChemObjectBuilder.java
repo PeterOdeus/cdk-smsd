@@ -45,7 +45,7 @@ import javax.vecmath.Point3d;
 public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 
 	private static DefaultChemObjectBuilder instance = null;
-	
+
 	private DefaultChemObjectBuilder() {}
 
 	public static DefaultChemObjectBuilder getInstance() {
@@ -54,19 +54,19 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 		}
 		return instance;
 	}
-	
+
 	public IAminoAcid newAminoAcid() {
 		return new AminoAcid();
 	}
-	
+
 	public IAtom newAtom() {
 		return new Atom();
 	}
-	
+
     public IAtom newAtom(String elementSymbol) {
     	return new Atom(elementSymbol);
     }
-    
+
     public IAtom newAtom(String elementSymbol, javax.vecmath.Point2d point2d) {
     	return new Atom(elementSymbol, point2d);
     }
@@ -74,20 +74,20 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
     public IAtom newAtom(String elementSymbol, javax.vecmath.Point3d point3d) {
     	return new Atom(elementSymbol, point3d);
     }
-		
+
 	public IAtomContainer newAtomContainer() {
 		return new AtomContainer();
 	}
-    
+
 	public IAtomContainer newAtomContainer(int atomCount, int bondCount, int lonePairCount, int singleElectronCount) {
 		return new AtomContainer(atomCount, bondCount, lonePairCount, singleElectronCount);
 	}
-    
+
 	public IAtomContainer newAtomContainer(IAtomContainer container) {
 		return new AtomContainer(container);
 	}
-	
-    public IAtomParity newAtomParity(IAtom centralAtom, IAtom first, IAtom second, 
+
+    public IAtomParity newAtomParity(IAtom centralAtom, IAtom first, IAtom second,
     		IAtom third, IAtom fourth, int parity) {
     	return new AtomParity(centralAtom, first, second, third, fourth, parity);
     }
@@ -107,15 +107,15 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IBond newBond() {
 		return new Bond();
 	}
-	
+
 	public IBond newBond(IAtom atom1, IAtom atom2) {
 		return new Bond(atom1, atom2);
 	}
-	
+
 	public IBond newBond(IAtom atom1, IAtom atom2, IBond.Order order) {
 		return new Bond(atom1, atom2, order);
 	}
-	
+
 	public IBond newBond(IAtom atom1, IAtom atom2, IBond.Order order,
 			             IBond.Stereo stereo) {
 		return new Bond(atom1, atom2, order, stereo);
@@ -136,27 +136,27 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IChemModel newChemModel() {
 		return new ChemModel();
 	}
-	
+
 	public IChemObject newChemObject() {
 		return new ChemObject();
 	}
-	
+
 	public IChemSequence newChemSequence() {
-		return new ChemSequence();   
+		return new ChemSequence();
 	}
-	
+
     public ICrystal newCrystal() {
     	return new Crystal();
     }
-    
+
     public ICrystal newCrystal(IAtomContainer container) {
     	return new Crystal(container);
     }
-    
+
     public IElectronContainer newElectronContainer() {
     	return new ElectronContainer();
     }
-    
+
     public IElement newElement() {
     	return new Element();
     }
@@ -172,13 +172,13 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IIsotope newIsotope(String elementSymbol) {
 		return new Isotope(elementSymbol);
 	}
-	
-	public IIsotope newIsotope(int atomicNumber, String elementSymbol, 
+
+	public IIsotope newIsotope(int atomicNumber, String elementSymbol,
 			int massNumber, double exactMass, double abundance) {
 		return new Isotope(atomicNumber, elementSymbol, massNumber, exactMass, abundance);
 	}
 
-	public IIsotope newIsotope(int atomicNumber, String elementSymbol, 
+	public IIsotope newIsotope(int atomicNumber, String elementSymbol,
 			double exactMass, double abundance) {
 		return new Isotope(atomicNumber, elementSymbol, exactMass, abundance);
 	}
@@ -198,7 +198,7 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
     public IMapping newMapping(IChemObject objectOne, IChemObject objectTwo) {
 		return new Mapping(objectOne, objectTwo);
 	}
-    
+
 	public IMolecule newMolecule() {
 		return new Molecule();
 	}
@@ -214,19 +214,19 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IMonomer newMonomer () {
 		return new Monomer();
 	}
-	
+
 	public IPolymer newPolymer() {
 		return new Polymer();
 	}
-	
+
 	public IPDBAtom newPDBAtom(IElement element){
 		return new PDBAtom(element);
 	}
-	
+
 	public IPDBAtom newPDBAtom(String symbol){
 		return new PDBAtom(symbol);
 	}
-	
+
 	public IPDBAtom newPDBAtom(String symbol, Point3d coordinate){
 		return new PDBAtom(symbol, coordinate);
 	}
@@ -234,31 +234,31 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IPDBPolymer newPDBPolymer() {
 		return new PDBPolymer();
 	}
-	
+
 	public IPDBStructure newPDBStructure() {
 		return new PDBStructure();
 	}
-	
+
 	public IPDBMonomer newPDBMonomer() {
 		return new PDBMonomer();
 	}
 
     public IReaction newReaction() {
-    	return new Reaction();	
+    	return new Reaction();
     }
-	
+
 	public IRing newRing() {
 		return new Ring();
 	}
-	
+
 	public IRing newRing(IAtomContainer container) {
 		return new Ring(container);
 	}
-	
+
 	public IRing newRing(int ringSize, String elementSymbol) {
 		return new Ring(ringSize, elementSymbol);
 	}
-	
+
 	public IRing newRing(int ringSize) {
 		return new Ring(ringSize);
 	}
@@ -282,13 +282,13 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	public IReactionScheme newReactionScheme() {
 		return new ReactionScheme();
 	}
-	
+
     public ISingleElectron newSingleElectron() {
     	return new SingleElectron();
     }
-    
+
     public ISingleElectron newSingleElectron(IAtom atom) {
-    	return new SingleElectron(atom);   
+    	return new SingleElectron(atom);
     }
 
 	public IStrand newStrand() {
@@ -363,5 +363,4 @@ public class DefaultChemObjectBuilder implements IChemObjectBuilder {
 	    return new MolecularFormulaSet(formula);
     }
 }
-
 
