@@ -473,7 +473,19 @@ public class CDKMCS {
         // reset result
         List<List<CDKRMap>> rMapsList = new ArrayList<List<CDKRMap>>();
         timeManager = new TimeManager();
-
+        // handle single query atom case separately
+        if (targetGraph.getAtomCount() == 1) {
+            List<List<CDKRMap>> matches = new ArrayList<List<CDKRMap>>();
+            IQueryAtom queryAtom = (IQueryAtom) targetGraph.getAtom(0);
+            for (IAtom atom : sourceGraph.atoms()) {
+                if (queryAtom.matches(atom)) {
+                    List<CDKRMap> lmap = new ArrayList<CDKRMap>();
+                    lmap.add(new CDKRMap(sourceGraph.getAtomNumber(atom), 0));
+                    matches.add(lmap);
+                }
+            }
+            return matches;
+        }
         // build the CDKRGraph corresponding to this problem
 
         checkTimeOut();
