@@ -194,7 +194,7 @@ import org.openscience.cdk.smsd.helper.BondEnergy;
 public class BondEnergies {
 
     private static TreeMap<Integer, BondEnergy> bondEngergies = null;
-    private static BondEnergies _instance = null;
+    private static BondEnergies instance = null;
 
     /**
      * 
@@ -204,11 +204,11 @@ public class BondEnergies {
     @TestMethod("testGetInstance")
     public synchronized static BondEnergies getInstance()
             throws CDKException {
-        if (null == _instance) {
-            _instance = new BondEnergies();
+        if (null == instance) {
+            instance = new BondEnergies();
         }
 
-        return _instance;
+        return instance;
     }
 
     protected BondEnergies() {

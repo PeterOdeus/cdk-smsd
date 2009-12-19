@@ -58,6 +58,7 @@ import org.openscience.cdk.smsd.global.BondType;
  */
 public class VFBondMatcher extends Bond implements IQueryBond {
 
+    static final long serialVersionUID = -7861469841127325812L;
     private IBond queryBond;
     private int unsaturation = 0;
     /**
@@ -90,11 +91,14 @@ public class VFBondMatcher extends Bond implements IQueryBond {
     @Override
     public boolean matches(IBond targetBond) {
 
-        if (bondTypeFlag && (queryBond.getFlag(CDKConstants.ISAROMATIC) == targetBond.getFlag(CDKConstants.ISAROMATIC)) && (queryBond.getOrder().equals(targetBond.getOrder()))) {
+        if (bondTypeFlag && (queryBond.getFlag(CDKConstants.ISAROMATIC)
+                == targetBond.getFlag(CDKConstants.ISAROMATIC))
+                && (queryBond.getOrder().equals(targetBond.getOrder()))) {
             return true;
         }
 
-        if (queryBond.getFlag(CDKConstants.ISAROMATIC) && targetBond.getFlag(CDKConstants.ISAROMATIC)) {
+        if (queryBond.getFlag(CDKConstants.ISAROMATIC)
+                && targetBond.getFlag(CDKConstants.ISAROMATIC)) {
             return true;
 
         }
@@ -111,13 +115,8 @@ public class VFBondMatcher extends Bond implements IQueryBond {
     }
 
     private Integer getUnsaturation(IAtom atom) {
-        Integer value = 0;
-        try {
-            value = atom.getValency() - atom.getFormalNeighbourCount();
-        } catch (NullPointerException nep) {
-            value = -1;
-        }
+        return atom.getValency() == null ? -1 : atom.getValency()
+                - atom.getFormalNeighbourCount();
 
-        return value;
     }
 }
