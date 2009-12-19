@@ -50,10 +50,10 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
-    private static List<Map<IAtom, IAtom>> allAtomMCS_copy = null;
+    private static List<Map<IAtom, IAtom>> allAtomMCSCopy = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private static List<TreeMap<Integer, Integer>> allMCS_copy = null;
+    private static List<TreeMap<Integer, Integer>> allMCSCopy = null;
     private IAtomContainer ac1 = null;
     private IAtomContainer ac2 = null;
     private List<Map<INode, IAtom>> vfLibSolutions = null;
@@ -61,11 +61,11 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
     public VFlibMCSHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
-        allAtomMCS_copy = new ArrayList<Map<IAtom, IAtom>>();
+        allAtomMCSCopy = new ArrayList<Map<IAtom, IAtom>>();
         atomsMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
-        allMCS_copy = new ArrayList<TreeMap<Integer, Integer>>();
+        allMCSCopy = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
     /**
@@ -80,9 +80,9 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
         boolean flag = mcgregorFlag();
         if (flag) {
             searchMcGregorMapping();
-        } else if (!allAtomMCS_copy.isEmpty()) {
-            allAtomMCS.addAll(allAtomMCS_copy);
-            allMCS.addAll(allMCS_copy);
+        } else if (!allAtomMCSCopy.isEmpty()) {
+            allAtomMCS.addAll(allAtomMCSCopy);
+            allMCS.addAll(allMCSCopy);
         }
         setFirstMappings();
         return 0;
@@ -241,13 +241,13 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
         }
 
         setVFMCSMappings(RONP, query);
-        this.vfMCSSize = allMCS_copy.isEmpty() ? 0 : allMCS_copy.get(0).size();
+        this.vfMCSSize = allMCSCopy.isEmpty() ? 0 : allMCSCopy.get(0).size();
     }
 
     private void searchMcGregorMapping() throws CDKException, IOException {
         List<List<Integer>> _mappings = new ArrayList<List<Integer>>();
 
-        for (TreeMap<Integer, Integer> firstPassMappings : allMCS_copy) {
+        for (TreeMap<Integer, Integer> firstPassMappings : allMCSCopy) {
             McGregor mgit = new McGregor(ac1, ac2, _mappings);
             mgit.startMcGregorIteration(mgit.getMCSSize(), firstPassMappings); //Start McGregor search
             _mappings = mgit.getMappings();
@@ -291,8 +291,8 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
 
             }
             if (!atomatomMapping.isEmpty()) {
-                allAtomMCS_copy.add(counter, atomatomMapping);
-                allMCS_copy.add(counter, indexindexMapping);
+                allAtomMCSCopy.add(counter, atomatomMapping);
+                allMCSCopy.add(counter, indexindexMapping);
                 counter++;
             }
         }

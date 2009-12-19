@@ -29,7 +29,7 @@ package org.openscience.cdk.smsd.global;
  */
 public class TimeOut {
 
-    private static TimeOut _instance = null;
+    private static TimeOut instance = null;
     private double time = -1;
 
     /**
@@ -37,11 +37,11 @@ public class TimeOut {
      * @return
      */
     public static synchronized TimeOut getInstance() {
-        if (_instance == null) {
+        if (instance == null) {
             // it's ok, we can call this constructor
-            _instance = new TimeOut();
+            instance = new TimeOut();
         }
-        return _instance;
+        return instance;
     }
 
     protected TimeOut() {

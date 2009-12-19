@@ -29,7 +29,7 @@ package org.openscience.cdk.smsd.global;
  */
 public class BondType {
 
-    private static BondType _instance = null;
+    private static BondType instance = null;
     private static boolean bondSensitive = false;
 
     /**
@@ -37,11 +37,11 @@ public class BondType {
      * @return
      */
     public static synchronized BondType getInstance() {
-        if (_instance == null) {
+        if (instance == null) {
             // it's ok, we can call this constructor
-            _instance = new BondType();
+            instance = new BondType();
         }
-        return _instance;
+        return instance;
     }
 
     protected BondType() {

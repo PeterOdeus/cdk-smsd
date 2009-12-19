@@ -63,8 +63,8 @@ public class ChemicalFilters {
     private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
-    private MolHandler RMol = null;
-    private MolHandler PMol = null;
+    private MolHandler rMol = null;
+    private MolHandler pMol = null;
 
     /**
      *
@@ -85,8 +85,8 @@ public class ChemicalFilters {
         this.allMCS = allMCS;
         this.firstAtomMCS = firstAtomMCS;
         this.firstSolution = firstSolution;
-        this.PMol = targetMol;
-        this.RMol = sourceMol;
+        this.pMol = targetMol;
+        this.rMol = sourceMol;
 
         stereoScore = new ArrayList<Double>();
         fragmentSize = new ArrayList<Integer>();
@@ -409,8 +409,8 @@ public class ChemicalFilters {
 
 //      System.out.println("Mol Size Eorg: " + sourceMol.getMolecule().getAtomCount() + " , Mol Size Porg: " + targetMol.getMolecule().getAtomCount());
 
-        IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(RMol.getMolecule());
-        IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(PMol.getMolecule());
+        IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(rMol.getMolecule());
+        IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(pMol.getMolecule());
 
 
         if (MCSAtomSolution != null) {
@@ -464,8 +464,8 @@ public class ChemicalFilters {
 //        System.out.println("\nSort By Energies");
         double totalBondEnergy = -9999.0;
 
-        IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(RMol.getMolecule());
-        IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(PMol.getMolecule());
+        IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(rMol.getMolecule());
+        IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(pMol.getMolecule());
 
         for (IAtom eAtom : Educt.atoms()) {
             eAtom.setFlag(0, false);
@@ -734,8 +734,8 @@ public class ChemicalFilters {
     private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap, Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
 
         boolean stereoMatchFlag = false;
-        IAtomContainer Reactant = RMol.getMolecule();
-        IAtomContainer Product = PMol.getMolecule();
+        IAtomContainer Reactant = rMol.getMolecule();
+        IAtomContainer Product = pMol.getMolecule();
         try {
             CDKHueckelAromaticityDetector.detectAromaticity(Reactant);
             CDKHueckelAromaticityDetector.detectAromaticity(Product);
@@ -749,9 +749,9 @@ public class ChemicalFilters {
             Map<IAtom, IAtom> atomMapMCS = allStereoAtomMCS.get(Key);
 
             score = getAtomScore(score, atomMapMCS, Reactant, Product);
-            Map<IBond, IBond> bondMaps = makeBondMapsOfAtomMaps(RMol.getMolecule(), PMol.getMolecule(), atomsMCS);
-            IAtomContainer subgraphRContainer = getMappedFragment(RMol.getMolecule(), atomMapMCS, 1);
-            IAtomContainer subgraphPContainer = getMappedFragment(PMol.getMolecule(), atomMapMCS, 2);
+            Map<IBond, IBond> bondMaps = makeBondMapsOfAtomMaps(rMol.getMolecule(), pMol.getMolecule(), atomsMCS);
+            IAtomContainer subgraphRContainer = getMappedFragment(rMol.getMolecule(), atomMapMCS, 1);
+            IAtomContainer subgraphPContainer = getMappedFragment(pMol.getMolecule(), atomMapMCS, 2);
 
             score = getBondScore(score, bondMaps);
 

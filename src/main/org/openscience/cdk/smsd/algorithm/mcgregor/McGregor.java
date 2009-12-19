@@ -49,7 +49,7 @@ public class McGregor {
     private int globalMCSSize = 0;
     private List<List<Integer>> mappings = null;
     /*This should be more or equal to all the atom types*/
-    private static final String[] SignArray = {
+    private static final String[] signArray = {
         "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
         "$13", "$15", "$16", "$17", "$18", "$19", "$20", "$21", "$22", "$23", "$24",
         "$25", "$26", "$27", "$28", "$29", "$30", "$31", "$32", "$33", "$34", "$35",
@@ -131,7 +131,7 @@ public class McGregor {
         QueryProcessor queryProcess = new QueryProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                SignArray,
+                signArray,
                 gNeighborBondnumA,
                 gSetBondNumA,
                 i_bond_neighborsA,
@@ -170,7 +170,7 @@ public class McGregor {
         TargetProcessor targetProcess = new TargetProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                SignArray,
+                signArray,
                 gNeighborBondNumB,
                 gSetBondNumB,
                 i_bond_neighborsB,
@@ -290,7 +290,7 @@ public class McGregor {
         QueryProcessor queryProcess = new QueryProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                SignArray,
+                signArray,
                 localNeighborBondnumA,
                 setNumA,
                 iBondNeighborAtomsA,
@@ -330,7 +330,7 @@ public class McGregor {
         TargetProcessor targetProcess = new TargetProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                SignArray,
+                signArray,
                 localNeighborBondNumB,
                 setNumB,
                 iBondNeighborAtomsB,
@@ -402,7 +402,7 @@ public class McGregor {
         setModifedArcs(mcGregorHelper);
         first = last = new BinaryTree(-1);
         last.equal = null;
-        last.not_equal = null;
+        last.notEqual = null;
         bestarcsleft = 0;
 
         startsearch(mcGregorHelper);
@@ -490,7 +490,7 @@ public class McGregor {
                     new QueryProcessor(
                     c_setA_copy,
                     c_setB_copy,
-                    SignArray,
+                    signArray,
                     newNeighborNumA,
                     newSetBondNumA,
                     new_i_neighborsA,
@@ -542,7 +542,7 @@ public class McGregor {
             TargetProcessor targetProcess = new TargetProcessor(
                     c_setA_copy,
                     c_setB_copy,
-                    SignArray,
+                    signArray,
                     newNeighborNumB,
                     newSetBondNumB,
                     new_i_neighborsB,
@@ -747,22 +747,22 @@ public class McGregor {
                 verifyNodes(matrix, currentStructure.equal, index + 1, fieldLength);
             }
             if (matrix.get(index) != currentStructure.getValue()) {
-                if (currentStructure.not_equal != null) {
-                    verifyNodes(matrix, currentStructure.not_equal, index, fieldLength);
+                if (currentStructure.notEqual != null) {
+                    verifyNodes(matrix, currentStructure.notEqual, index, fieldLength);
                 }
 
-                if (currentStructure.not_equal == null) {
-                    currentStructure.not_equal = new BinaryTree(matrix.get(index));
-                    currentStructure.not_equal.not_equal = null;
+                if (currentStructure.notEqual == null) {
+                    currentStructure.notEqual = new BinaryTree(matrix.get(index));
+                    currentStructure.notEqual.notEqual = null;
                     int yIndex = 0;
 
 
-                    BinaryTree last_one = currentStructure.not_equal;
+                    BinaryTree last_one = currentStructure.notEqual;
 
                     while ((yIndex + index + 1) < fieldLength) {
                         last_one.equal = new BinaryTree(matrix.get(yIndex + index + 1));
                         last_one = last_one.equal;
-                        last_one.not_equal = null;
+                        last_one.notEqual = null;
                         yIndex++;
 
                     }
@@ -877,7 +877,7 @@ public class McGregor {
             McGregorChecks.removeTreeStructure(first);
             first = last = new BinaryTree(-1);
             last.equal = null;
-            last.not_equal = null;
+            last.notEqual = null;
             while (!bestARCS.empty()) {
                 bestARCS.pop();
             }

@@ -67,12 +67,12 @@ public class VFQueryBuilder implements IQuery {
 
     private List<INode> nodesList;
     private List<IEdge> edgesList;
-    private Map<INode, IAtom> NodesBonds;
+    private Map<INode, IAtom> nodeBondMap;
 
     public VFQueryBuilder() {
         nodesList = new ArrayList<INode>();
         edgesList = new ArrayList<IEdge>();
-        NodesBonds = new HashMap<INode, IAtom>();
+        nodeBondMap = new HashMap<INode, IAtom>();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class VFQueryBuilder implements IQuery {
 
     public INode getNode(IAtom atom) {
 
-        for (Map.Entry<INode, IAtom> v : NodesBonds.entrySet()) {
+        for (Map.Entry<INode, IAtom> v : nodeBondMap.entrySet()) {
             if (v.getValue().equals(atom)) {
                 return v.getKey();
             }
@@ -132,13 +132,13 @@ public class VFQueryBuilder implements IQuery {
     public INode addNode(IQueryAtom matcher, IAtom atom) {
         NodeBuilder node = new NodeBuilder(matcher);
         nodesList.add(node);
-        NodesBonds.put(node, atom);
+        nodeBondMap.put(node, atom);
         return node;
     }
 
     @Override
     public IAtom getAtom(INode node) {
-        return NodesBonds.get(node);
+        return nodeBondMap.get(node);
     }
 
     @Override

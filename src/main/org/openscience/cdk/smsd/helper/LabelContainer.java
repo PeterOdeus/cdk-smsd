@@ -34,7 +34,7 @@ public class LabelContainer {
 
     private HashMap<String, Integer> labelMap = null;
     private int labelCounter = 1;
-    private static LabelContainer _instance = null;
+    private static LabelContainer instance = null;
 
     protected LabelContainer() {
 
@@ -76,10 +76,10 @@ public class LabelContainer {
      * @return
      */
     synchronized public static LabelContainer getInstance() {
-        if (_instance == null) {
-            _instance = new LabelContainer();
+        if (instance == null) {
+            instance = new LabelContainer();
         }
-        return _instance;
+        return instance;
     }
 
     /**
@@ -123,11 +123,11 @@ public class LabelContainer {
         String indexLabel = null;
         boolean flag = false;
 
-        for (Map.Entry map : labelMap.entrySet()) {
+        for (Map.Entry<String, Integer> map : labelMap.entrySet()) {
 
-            indexLabel = (String) map.getKey();
+            indexLabel = map.getKey();
 
-            if (labelID == map.getValue()) {
+            if (labelID.equals(map.getValue())) {
                 flag = true;
                 break;
             }

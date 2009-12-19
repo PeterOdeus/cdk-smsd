@@ -47,7 +47,7 @@ public class BinaryTree {
     /**
      * not equal is initialized as null
      */
-    public BinaryTree not_equal = null;
+    public BinaryTree notEqual = null;
     private int value = -1;
 
     /**

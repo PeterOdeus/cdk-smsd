@@ -35,25 +35,25 @@ import java.util.TreeMap;
  */
 public class FinalMappings implements IFinalMapping {
 
-    private List<TreeMap<Integer, Integer>> _mappings;
-    private static FinalMappings _instance = null;
+    private List<TreeMap<Integer, Integer>> mappings;
+    private static FinalMappings instance = null;
 
     protected FinalMappings() {
-        _mappings = new ArrayList<TreeMap<Integer, Integer>>();
+        mappings = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
     synchronized public static FinalMappings getInstance() {
-        if (_instance == null) {
+        if (instance == null) {
 
-            _instance = new FinalMappings();
+            instance = new FinalMappings();
 
         }
-        return _instance;
+        return instance;
     }
 
     @Override
     synchronized public void add(TreeMap<Integer, Integer> mapping) {
-        _mappings.add(mapping);
+        mappings.add(mapping);
     }
 
     /**
@@ -63,30 +63,30 @@ public class FinalMappings implements IFinalMapping {
     @Override
     synchronized public final void set(List<TreeMap<Integer, Integer>> mappings) {
 
-        _mappings.clear();
+        this.mappings.clear();
         for (TreeMap<Integer, Integer> mapping : mappings) {
-            _mappings.add(mapping);
+            this.mappings.add(mapping);
         }
     }
 
     @Override
     synchronized public Iterator<TreeMap<Integer, Integer>> getIterator() {
-        Iterator<TreeMap<Integer, Integer>> iterator = _mappings.iterator();
+        Iterator<TreeMap<Integer, Integer>> iterator = mappings.iterator();
         return iterator;
     }
 
     @Override
     synchronized public void clear() {
-        _mappings.clear();
+        mappings.clear();
     }
 
     @Override
     synchronized public List<TreeMap<Integer, Integer>> getFinalMapping() {
-        return _mappings;
+        return mappings;
     }
 
     @Override
     synchronized public int getSize() {
-        return _mappings.size();
+        return mappings.size();
     }
 }

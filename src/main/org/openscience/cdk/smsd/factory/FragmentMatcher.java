@@ -47,18 +47,18 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
  */
 public class FragmentMatcher {
 
-    private MolHandler RMol;
-    private MolHandler PMol;
-    private IAtomContainerSet ReactantSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
-    private IAtomContainerSet ProductSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+    private MolHandler rMol;
+    private MolHandler pMol;
+    private IAtomContainerSet reactantSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+    private IAtomContainerSet productSet = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private List<TreeMap<Integer, Integer>> GallMCS;
-    private TreeMap<Integer, Integer> GfirstSolution;
-    private List<Map<IAtom, IAtom>> GallAtomMCS;
-    private Map<IAtom, IAtom> GfirstAtomMCS;
+    private List<TreeMap<Integer, Integer>> gAllMCS;
+    private TreeMap<Integer, Integer> gFirstSolution;
+    private List<Map<IAtom, IAtom>> gAllAtomMCS;
+    private Map<IAtom, IAtom> gFirstAtomMCS;
     private boolean removeHydrogen = false;
 
     /**
@@ -67,32 +67,32 @@ public class FragmentMatcher {
     public void searchMCS() {
         int SolutionSize = 0;
         try {
-            for (int i = 0; i < ReactantSet.getAtomContainerCount(); i++) {
+            for (int i = 0; i < reactantSet.getAtomContainerCount(); i++) {
 
-                IAtomContainer source = ReactantSet.getAtomContainer(i);
-                RMol = new MolHandler(source, false);
-                for (int j = 0; j < ProductSet.getAtomContainerCount(); j++) {
+                IAtomContainer source = reactantSet.getAtomContainer(i);
+                rMol = new MolHandler(source, false);
+                for (int j = 0; j < productSet.getAtomContainerCount(); j++) {
 
-                    IAtomContainer target = ProductSet.getAtomContainer(j);
-                    PMol = new MolHandler(target, false);
+                    IAtomContainer target = productSet.getAtomContainer(j);
+                    pMol = new MolHandler(target, false);
 
                     builder();
 
                     if (SolutionSize < firstMCS.size()) {
 
-                        GfirstSolution.clear();
-                        GfirstAtomMCS.clear();
-                        GallAtomMCS.clear();
-                        GallMCS.clear();
+                        gFirstSolution.clear();
+                        gFirstAtomMCS.clear();
+                        gAllAtomMCS.clear();
+                        gAllMCS.clear();
 
-                        GfirstSolution.putAll(firstMCS);
-                        GallMCS.addAll(allMCS);
-                        GfirstAtomMCS.putAll(atomsMCS);
-                        GallAtomMCS.addAll(allAtomMCS);
+                        gFirstSolution.putAll(firstMCS);
+                        gAllMCS.addAll(allMCS);
+                        gFirstAtomMCS.putAll(atomsMCS);
+                        gAllAtomMCS.addAll(allAtomMCS);
                         SolutionSize = firstMCS.size();
                     } else if (SolutionSize == firstMCS.size()) {
-                        GallMCS.addAll(allMCS);
-                        GallAtomMCS.addAll(allAtomMCS);
+                        gAllMCS.addAll(allMCS);
+                        gAllAtomMCS.addAll(allAtomMCS);
                     }
                 }
 
@@ -109,11 +109,11 @@ public class FragmentMatcher {
 
         try {
 
-            int rBondCount = RMol.getMolecule().getBondCount();
-            int pBondCount = PMol.getMolecule().getBondCount();
+            int rBondCount = rMol.getMolecule().getBondCount();
+            int pBondCount = pMol.getMolecule().getBondCount();
 
-            int rAtomCount = RMol.getMolecule().getAtomCount();
-            int pAtomCount = PMol.getMolecule().getAtomCount();
+            int rAtomCount = rMol.getMolecule().getAtomCount();
+            int pAtomCount = pMol.getMolecule().getAtomCount();
 
             if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
 //                System.out.println("Single Mapping");
@@ -139,7 +139,7 @@ public class FragmentMatcher {
     private synchronized void mcsPlus() {
         try {
             MCSPlusHandler mcs = new MCSPlusHandler();
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
@@ -155,7 +155,7 @@ public class FragmentMatcher {
 
         try {
             VFlibMCSHandler mcs = new VFlibMCSHandler();
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
 
 
@@ -181,19 +181,19 @@ public class FragmentMatcher {
     public FragmentMatcher(IAtomContainerSet source, IAtomContainerSet target, boolean removeHydrogen) {
 
         this.removeHydrogen = removeHydrogen;
-        GallMCS = new ArrayList<TreeMap<Integer, Integer>>();
-        GfirstSolution = new TreeMap<Integer, Integer>();
-        GallAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
-        GfirstAtomMCS = new HashMap<IAtom, IAtom>();
-        this.ReactantSet = source;
-        this.ProductSet = target;
+        gAllMCS = new ArrayList<TreeMap<Integer, Integer>>();
+        gFirstSolution = new TreeMap<Integer, Integer>();
+        gAllAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
+        gFirstAtomMCS = new HashMap<IAtom, IAtom>();
+        this.reactantSet = source;
+        this.productSet = target;
     }
 
     private void singleMapping() {
         try {
 
             SingleMappingHandler mcs = new SingleMappingHandler(removeHydrogen);
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
@@ -213,7 +213,7 @@ public class FragmentMatcher {
      * @return
      */
     public List<Map<IAtom, IAtom>> getAllAtomMapping() {
-        return GallAtomMCS;
+        return gAllAtomMCS;
     }
 
     /**
@@ -221,7 +221,7 @@ public class FragmentMatcher {
      * @return
      */
     public List<TreeMap<Integer, Integer>> getAllMapping() {
-        return GallMCS;
+        return gAllMCS;
     }
 
     /**
@@ -229,7 +229,7 @@ public class FragmentMatcher {
      * @return
      */
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-        return GfirstAtomMCS;
+        return gFirstAtomMCS;
     }
 
     /**
@@ -237,7 +237,7 @@ public class FragmentMatcher {
      * @return
      */
     public TreeMap<Integer, Integer> getFirstMapping() {
-        return GfirstSolution;
+        return gFirstSolution;
     }
 }
 

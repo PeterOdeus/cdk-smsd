@@ -177,7 +177,7 @@ public class McGregorChecks {
     protected static int removeTreeStructure(BinaryTree cur_struc) {
 
         BinaryTree equal_struc = cur_struc.equal;
-        BinaryTree not_equal_struc = cur_struc.not_equal;
+        BinaryTree not_equal_struc = cur_struc.notEqual;
         cur_struc = null;
 
         if (equal_struc != null) {

@@ -62,10 +62,10 @@ public class SubStructureSearchAlgorithms implements IMCS {
     private TreeMap<Integer, Integer> firstSolution = null;
     private List<Map<IAtom, IAtom>> allAtomMCS = null;
     private Map<IAtom, IAtom> firstAtomMCS = null;
-    private MolHandler RMol = null;
-    private MolHandler PMol = null;
-    private IAtomContainerSet RFrag = null;
-    private IAtomContainerSet PFrag = null;
+    private MolHandler rMol = null;
+    private MolHandler pMol = null;
+    private IAtomContainerSet rFrag = null;
+    private IAtomContainerSet pFrag = null;
     private List<Double> stereoScore = null;
     private List<Integer> fragmentSize = null;
     private List<Double> bEnergies = null;
@@ -93,11 +93,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     private synchronized void mcsBuilder() {
 
-        int rBondCount = RMol.getMolecule().getBondCount();
-        int pBondCount = PMol.getMolecule().getBondCount();
+        int rBondCount = rMol.getMolecule().getBondCount();
+        int pBondCount = pMol.getMolecule().getBondCount();
 
-        int rAtomCount = RMol.getMolecule().getAtomCount();
-        int pAtomCount = PMol.getMolecule().getAtomCount();
+        int rAtomCount = rMol.getMolecule().getAtomCount();
+        int pAtomCount = pMol.getMolecule().getAtomCount();
         if (rBondCount == 0 || rAtomCount == 1 || pBondCount == 0 || pAtomCount == 1) {
             singleMapping();
         } else {
@@ -130,7 +130,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     private synchronized void fragmentBuilder() {
 
-        FragmentMatcher fragmentMatcher = new FragmentMatcher(RFrag, PFrag, removeHydrogen);
+        FragmentMatcher fragmentMatcher = new FragmentMatcher(rFrag, pFrag, removeHydrogen);
         fragmentMatcher.searchMCS();
 
         firstSolution.clear();
@@ -150,7 +150,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         try {
             mcs = new CDKMCSHandler();
 
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -179,7 +179,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
             mcs = new MCSPlusHandler();
 
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -205,7 +205,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
     private void vfTurboHandler() {
         VFlibTurboHandler subGraphTurboSearch = null;
         subGraphTurboSearch = new VFlibTurboHandler();
-        subGraphTurboSearch.set(RMol, PMol);
+        subGraphTurboSearch.set(rMol, pMol);
 
         firstSolution.clear();
         allMCS.clear();
@@ -229,14 +229,14 @@ public class SubStructureSearchAlgorithms implements IMCS {
      */
     private void init(MolHandler Reactant, MolHandler Product, boolean removeHydrogen) {
         this.removeHydrogen = removeHydrogen;
-        this.RMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
-        this.PMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
+        this.rMol = new MolHandler(Reactant.getMolecule(), false, removeHydrogen);
+        this.pMol = new MolHandler(Product.getMolecule(), false, removeHydrogen);
 
-        if (RMol.getConnectedFlag() && PMol.getConnectedFlag()) {
+        if (rMol.getConnectedFlag() && pMol.getConnectedFlag()) {
             mcsBuilder();
         } else {
-            this.RFrag = RMol.getFragmentedMolecule();
-            this.PFrag = PMol.getFragmentedMolecule();
+            this.rFrag = rMol.getFragmentedMolecule();
+            this.pFrag = pMol.getFragmentedMolecule();
             fragmentBuilder();
         }
 
@@ -250,9 +250,9 @@ public class SubStructureSearchAlgorithms implements IMCS {
     @Override
     public synchronized void init(IMolecule Reactant, IMolecule Product, boolean removeHydrogen) {
         this.removeHydrogen = removeHydrogen;
-        this.RMol = new MolHandler(Reactant, false, removeHydrogen);
-        this.PMol = new MolHandler(Product, false, removeHydrogen);
-        init(RMol, PMol, removeHydrogen);
+        this.rMol = new MolHandler(Reactant, false, removeHydrogen);
+        this.pMol = new MolHandler(Product, false, removeHydrogen);
+        init(rMol, pMol, removeHydrogen);
     }
 
     /**
@@ -263,9 +263,9 @@ public class SubStructureSearchAlgorithms implements IMCS {
     @Override
     public synchronized void init(IAtomContainer Reactant, IAtomContainer Product, boolean removeHydrogen) {
         this.removeHydrogen = removeHydrogen;
-        this.RMol = new MolHandler(Reactant, false, removeHydrogen);
-        this.PMol = new MolHandler(Product, false, removeHydrogen);
-        init(RMol, PMol, removeHydrogen);
+        this.rMol = new MolHandler(Reactant, false, removeHydrogen);
+        this.pMol = new MolHandler(Product, false, removeHydrogen);
+        init(rMol, pMol, removeHydrogen);
     }
 
     public void init(String sourceMolFileName, String targetMolFileName, boolean removeHydrogen) throws CDKException {
@@ -281,7 +281,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
     public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
 
         if (firstAtomMCS != null) {
-            ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, RMol, PMol);
+            ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, rMol, pMol);
 
             if (stereoFilter) {
                 chemFilter.sortResultsByStereoAndBondMatch();
@@ -341,12 +341,12 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     @Override
     public IAtomContainer getReactantMolecule() {
-        return RMol.getMolecule();
+        return rMol.getMolecule();
     }
 
     @Override
     public IAtomContainer getProductMolecule() {
-        return PMol.getMolecule();
+        return pMol.getMolecule();
     }
 
     @Override
@@ -355,11 +355,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
         int rAtomCount = 0;
         int pAtomCount = 0;
         if (!removeHydrogen) {
-            rAtomCount = RMol.getMolecule().getAtomCount();
-            pAtomCount = PMol.getMolecule().getAtomCount();
+            rAtomCount = rMol.getMolecule().getAtomCount();
+            pAtomCount = pMol.getMolecule().getAtomCount();
         } else {
-            rAtomCount = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            pAtomCount = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            rAtomCount = rMol.getMolecule().getAtomCount() - getHCount(rMol.getMolecule());
+            pAtomCount = pMol.getMolecule().getAtomCount() - getHCount(pMol.getMolecule());
         }
         double matchCount = getFirstMapping().size();
         double tanimoto = (matchCount) / (rAtomCount + pAtomCount - matchCount);
@@ -379,8 +379,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
     @Override
     public boolean isStereoMisMatch() {
         boolean flag = false;
-        IAtomContainer Reactant = RMol.getMolecule();
-        IAtomContainer Product = PMol.getMolecule();
+        IAtomContainer Reactant = rMol.getMolecule();
+        IAtomContainer Product = pMol.getMolecule();
         int Score = 0;
 
         for (Map.Entry<IAtom, IAtom> mappingI : firstAtomMCS.entrySet()) {
@@ -420,8 +420,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
     @Override
     public boolean isSubgraph() {
 
-        IAtomContainer Reactant = RMol.getMolecule();
-        IAtomContainer Product = PMol.getMolecule();
+        IAtomContainer Reactant = rMol.getMolecule();
+        IAtomContainer Product = pMol.getMolecule();
         if (firstAtomMCS == null || firstAtomMCS.isEmpty()) {
             return false;
         }
@@ -451,11 +451,11 @@ public class SubStructureSearchAlgorithms implements IMCS {
         double source = 0;
         double target = 0;
         if (!removeHydrogen) {
-            source = RMol.getMolecule().getAtomCount();
-            target = PMol.getMolecule().getAtomCount();
+            source = rMol.getMolecule().getAtomCount();
+            target = pMol.getMolecule().getAtomCount();
         } else {
-            source = RMol.getMolecule().getAtomCount() - getHCount(RMol.getMolecule());
-            target = PMol.getMolecule().getAtomCount() - getHCount(PMol.getMolecule());
+            source = rMol.getMolecule().getAtomCount() - getHCount(rMol.getMolecule());
+            target = pMol.getMolecule().getAtomCount() - getHCount(pMol.getMolecule());
         }
         double common = getFirstMapping().size();
 
@@ -472,7 +472,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         IMCSAlgorithm mcs = null;
         try {
             mcs = new VFlibMCSHandler();
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
 
             firstSolution.clear();
@@ -499,7 +499,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         IMCSAlgorithm mcs = null;
         try {
             mcs = new SingleMappingHandler(removeHydrogen);
-            mcs.set(RMol, PMol);
+            mcs.set(rMol, pMol);
             mcs.searchMCS();
 
             firstSolution.clear();

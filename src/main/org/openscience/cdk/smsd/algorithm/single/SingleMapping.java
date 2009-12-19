@@ -44,7 +44,7 @@ public class SingleMapping {
 
     private IAtomContainer source = null;
     private IAtomContainer target = null;
-    private List<TreeMap<Integer, Integer>> _mappings = null;
+    private List<TreeMap<Integer, Integer>> mappings = null;
     private Map<Integer, Integer> connectedBondOrder = null;
 
     /**
@@ -56,7 +56,7 @@ public class SingleMapping {
     protected void getOverLaps(IAtomContainer source, IAtomContainer target, boolean removeHydrogen) {
 
 
-        _mappings = new ArrayList<TreeMap<Integer, Integer>>();
+        mappings = new ArrayList<TreeMap<Integer, Integer>>();
         connectedBondOrder = new TreeMap<Integer, Integer>();
         this.source = source;
         this.target = target;
@@ -68,7 +68,7 @@ public class SingleMapping {
             setTargetSingleAtomMap(removeHydrogen);
         }
         postFilter();
-        _mappings.clear();
+        mappings.clear();
     }
 
     private void setSourceSingleAtomMap(boolean removeHydrogen) {
@@ -90,7 +90,7 @@ public class SingleMapping {
                     }
 
                     connectedBondOrder.put(counter, totalOrder);
-                    _mappings.add(counter++, mapAtoms);
+                    mappings.add(counter++, mapAtoms);
                 }
             }
         } else {
@@ -117,7 +117,7 @@ public class SingleMapping {
                         totalOrder += bondOrder.ordinal() + 1;
                     }
                     connectedBondOrder.put(counter, totalOrder);
-                    _mappings.add(counter++, mapAtoms);
+                    mappings.add(counter++, mapAtoms);
                 }
             }
 
@@ -131,7 +131,7 @@ public class SingleMapping {
         connectedBondOrder = sortByValue(connectedBondOrder);
         for (Map.Entry<Integer, Integer> map : connectedBondOrder.entrySet()) {
 
-            TreeMap<Integer, Integer> mapToBeMoved = _mappings.get(map.getKey());
+            TreeMap<Integer, Integer> mapToBeMoved = mappings.get(map.getKey());
             SortedMap.add(mapToBeMoved);
 
         }
