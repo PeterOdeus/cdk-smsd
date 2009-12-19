@@ -49,7 +49,7 @@ public class McGregor {
     private int globalMCSSize = 0;
     private List<List<Integer>> mappings = null;
     /*This should be more or equal to all the atom types*/
-    private static final String[] signArray = {
+    private static final String[] SIGNS = {
         "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12",
         "$13", "$15", "$16", "$17", "$18", "$19", "$20", "$21", "$22", "$23", "$24",
         "$25", "$26", "$27", "$28", "$29", "$30", "$31", "$32", "$33", "$34", "$35",
@@ -131,7 +131,7 @@ public class McGregor {
         QueryProcessor queryProcess = new QueryProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                signArray,
+                SIGNS,
                 gNeighborBondnumA,
                 gSetBondNumA,
                 i_bond_neighborsA,
@@ -170,7 +170,7 @@ public class McGregor {
         TargetProcessor targetProcess = new TargetProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                signArray,
+                SIGNS,
                 gNeighborBondNumB,
                 gSetBondNumB,
                 i_bond_neighborsB,
@@ -290,7 +290,7 @@ public class McGregor {
         QueryProcessor queryProcess = new QueryProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                signArray,
+                SIGNS,
                 localNeighborBondnumA,
                 setNumA,
                 iBondNeighborAtomsA,
@@ -330,7 +330,7 @@ public class McGregor {
         TargetProcessor targetProcess = new TargetProcessor(
                 c_tab1_copy,
                 c_tab2_copy,
-                signArray,
+                SIGNS,
                 localNeighborBondNumB,
                 setNumB,
                 iBondNeighborAtomsB,
@@ -490,7 +490,7 @@ public class McGregor {
                     new QueryProcessor(
                     c_setA_copy,
                     c_setB_copy,
-                    signArray,
+                    SIGNS,
                     newNeighborNumA,
                     newSetBondNumA,
                     new_i_neighborsA,
@@ -542,7 +542,7 @@ public class McGregor {
             TargetProcessor targetProcess = new TargetProcessor(
                     c_setA_copy,
                     c_setB_copy,
-                    signArray,
+                    SIGNS,
                     newNeighborNumB,
                     newSetBondNumB,
                     new_i_neighborsB,
