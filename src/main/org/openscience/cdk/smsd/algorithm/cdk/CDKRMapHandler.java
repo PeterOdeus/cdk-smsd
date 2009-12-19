@@ -46,7 +46,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
  */
 public class CDKRMapHandler {
 
-    private List<TreeMap<Integer, Integer>> _mapping;
+    private List<TreeMap<Integer, Integer>> mapping;
     static IAtomContainer source;
     static IAtomContainer target;
     private boolean timeoutFlag = false;
@@ -62,7 +62,7 @@ public class CDKRMapHandler {
         source = Molecule1;
         target = Molecule2;
 
-        _mapping = new ArrayList<TreeMap<Integer, Integer>>();
+        mapping = new ArrayList<TreeMap<Integer, Integer>>();
 
 
         if ((source.getAtomCount() == 1) || (target.getAtomCount() == 1)) {
@@ -92,7 +92,7 @@ public class CDKRMapHandler {
             }
         }
 
-        FinalMappings.getInstance().set(_mapping);
+        FinalMappings.getInstance().set(mapping);
 
     }
 
@@ -109,7 +109,7 @@ public class CDKRMapHandler {
         source = Molecule1;
         target = Molecule2;
 
-        _mapping = new ArrayList<TreeMap<Integer, Integer>>();
+        mapping = new ArrayList<TreeMap<Integer, Integer>>();
 
         //System.out.println("Searching: ");
         //List overlaps = UniversalIsomorphismTesterBondTypeInSensitive.getSubgraphAtomsMap(source, target);
@@ -136,7 +136,7 @@ public class CDKRMapHandler {
                 allMaxOverlaps.pop();
             }
         }
-        FinalMappings.getInstance().set(_mapping);
+        FinalMappings.getInstance().set(mapping);
     }
 
     /**
@@ -175,8 +175,8 @@ public class CDKRMapHandler {
      * @param overlaps
      * @return
      */
-    protected List removeRedundantMappingsForSingleAtomCase(List overlaps) {
-        List reducedList = new ArrayList();
+    protected List<CDKRMap> removeRedundantMappingsForSingleAtomCase(List<CDKRMap> overlaps) {
+        List<CDKRMap> reducedList = new ArrayList<CDKRMap>();
         reducedList.add(overlaps.get(0));
         //reducedList.add(overlaps.get(1));
         return reducedList;
@@ -334,7 +334,7 @@ public class CDKRMapHandler {
             atomNumbersFromContainer.put(IndexI, IndexJ);
 
             /*Added the Mapping Numbers to the FinalMapping*/
-            _mapping.add(atomNumbersFromContainer);
+            mapping.add(atomNumbersFromContainer);
         }
     }
 
@@ -379,7 +379,7 @@ public class CDKRMapHandler {
             atomNumbersFromContainer.put(IndexI, IndexJ);
 
             /*Added the Mapping Numbers to the FinalMapping*/
-            _mapping.add(atomNumbersFromContainer);
+            mapping.add(atomNumbersFromContainer);
 
 
         }
