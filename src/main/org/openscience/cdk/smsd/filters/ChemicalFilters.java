@@ -50,7 +50,6 @@ import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 
-
 /**
  * @cdk.module smsd
  */
@@ -292,7 +291,8 @@ public class ChemicalFilters {
                         fragmentScoreMap);
                 counter++;
 //                System.out.println("Fragment Key " + map.getKey() + " Size: " + fragmentScoreMap.get(map.getKey()));
-//                System.out.println("Fragment MCS " + allFragmentMCS.get(map.getKey()) + " Fragment Value: " + fragmentScoreMap.get(map.getKey()));
+//                System.out.println("Fragment MCS " + allFragmentMCS.get(map.getKey()) + " Fragment Value: "
+//                + fragmentScoreMap.get(map.getKey()));
             }
         }
 
@@ -350,7 +350,8 @@ public class ChemicalFilters {
                 counter++;
 
 //            System.out.println("Energy Key " + key + " Size: " + fragmentScoreMap.get(key));
-//            System.out.println("Energy " + allEnergyMCS.get(key) + " Sorted Energy Value: " + sortedEnergyMap.get(key));
+//            System.out.println("Energy " + allEnergyMCS.get(key) + " Sorted Energy Value: "
+//                + sortedEnergyMap.get(key));
 
             }
         }
@@ -526,7 +527,8 @@ public class ChemicalFilters {
             @Override
             public int compare(Map.Entry<Integer, Double> entry, Map.Entry<Integer, Double> entry1) {
                 // Return 0 for eAtom match, -1 for less than and +1 for more then (Decending Order Sort)
-                return (entry.getValue().equals(entry1.getValue()) ? 0 : (entry.getValue() < entry1.getValue() ? 1 : -1));
+                return (entry.getValue().equals(entry1.getValue()) ? 0 :
+                    (entry.getValue() < entry1.getValue() ? 1 : -1));
             }
         });
         // logger.info(list);
@@ -706,7 +708,8 @@ public class ChemicalFilters {
 
     private double getBondEnergy(IBond bond, BondEnergies bondEnergy) {
         double energy = 0.0;
-        if ((bond.getAtom(0).getFlag(0) == true && bond.getAtom(1).getFlag(0) == false) || (bond.getAtom(0).getFlag(0) == false && bond.getAtom(1).getFlag(0) == true)) {
+        if ((bond.getAtom(0).getFlag(0) == true && bond.getAtom(1).getFlag(0) == false)
+                || (bond.getAtom(0).getFlag(0) == false && bond.getAtom(1).getFlag(0) == true)) {
             Integer val = bondEnergy.getEnergies(bond.getAtom(0), bond.getAtom(1), bond.getOrder());
             if (val != null) {
                 energy = val;
