@@ -45,6 +45,7 @@ public class QueryProcessor {
     private List<String> newCNeighborsA;
 
     /**
+     * Query molecule
      * @param cTab1Copy
      * @param cTab2Copy
      * @param SignArray

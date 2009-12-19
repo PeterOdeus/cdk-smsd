@@ -33,9 +33,9 @@ import java.util.List;
  */
 public class ExactMapping {
 
-    //extract atom mapping from the clique List and store it in List clique_MAPPING
+    
     /**
-     * 
+     * Extract atom mapping from the cliques and stores it in a List
      * @param comp_graph_nodes
      * @param clique_List_org
      * @return 

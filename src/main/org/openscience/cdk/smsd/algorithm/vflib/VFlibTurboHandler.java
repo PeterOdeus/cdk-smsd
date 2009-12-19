@@ -52,7 +52,8 @@ public class VFlibTurboHandler implements ISubGraph {
     private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     /**
-     * Constructor
+     * Constructor for the VF Algorithm for substructure search in a fast mode
+     * as this returns only one match if any
      */
     public VFlibTurboHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();

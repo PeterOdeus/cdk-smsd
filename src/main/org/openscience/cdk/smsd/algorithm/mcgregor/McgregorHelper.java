@@ -46,6 +46,24 @@ public class McgregorHelper {
     private final List<Integer> i_bond_setA;
     private final List<Integer> i_bond_setB;
 
+    /**
+     * Stores the variables
+     * @param mappingCheckFlag
+     * @param mappedAtomCount
+     * @param mappedAtomsOrg
+     * @param neighborBondNumA
+     * @param neighborBondNumB
+     * @param iBondNeighborAtomsA
+     * @param iBondNeighborAtomsB
+     * @param cBondNeighborsA
+     * @param cBondNeighborsB
+     * @param setNumA
+     * @param setNumB
+     * @param i_bond_setA
+     * @param i_bond_setB
+     * @param c_bond_setA
+     * @param c_bond_setB
+     */
     public McgregorHelper(boolean mappingCheckFlag,
             int mappedAtomCount,
             List<Integer> mappedAtomsOrg,

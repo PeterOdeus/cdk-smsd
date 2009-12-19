@@ -62,7 +62,7 @@ public class FragmentMatcher {
     private boolean removeHydrogen = false;
 
     /**
-     * ~--- constructors -----
+     * Finds the largest MCS in a fragmented molecule
      */
     public void searchMCS() {
         int SolutionSize = 0;

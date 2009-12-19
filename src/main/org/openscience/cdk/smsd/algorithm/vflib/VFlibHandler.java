@@ -53,7 +53,7 @@ public class VFlibHandler implements ISubGraph {
     private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     /**
-     * Constructor
+     * Constructor for the VF Algorithm for substructure search
      */
     public VFlibHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();

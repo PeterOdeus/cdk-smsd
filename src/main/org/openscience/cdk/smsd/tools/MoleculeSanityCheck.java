@@ -43,7 +43,7 @@ import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 public class MoleculeSanityCheck {
 
     /**
-     * 
+     * Modules for cleaning a molecule
      * @param molecule
      * @return
      */

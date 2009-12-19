@@ -52,7 +52,11 @@ public class BKKCKCF {
     private double cEdgeIterationSize = 0;
 
     /**
-     * Creates index new instance of BronKerboschCazalsKarandeKochCliqueFinder
+     * Creates index new instance of Bron Kerbosch Cazals Karande Koch Clique Finder
+     * This class implements Bron-Kerbosch clique detection algorithm as it is
+     * described in [F. Cazals, vertexOfCurrentClique. Karande: An Algorithm for reporting maximal c-cliques;
+     * processedVertex.Comp. Sc. (2005); vol 349; pp.
+     * 484-490]
      * @param comp_graph_nodes_org
      * @param C_edges_org C-Edges set of allowed edges
      * @param D_edges_org D-Edges set of prohibited edges
@@ -204,7 +208,7 @@ public class BKKCKCF {
         return solution;
     }
 
-    private void findCliques(List<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, 
+    private void findCliques(List<Integer> potentialVertex, List<Integer> vertexOfCurrentClique,
             Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex,
             List<Integer> excludedCVertex) {
         int index = 0;
@@ -267,7 +271,7 @@ public class BKKCKCF {
         }
     }
 
-    private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy, 
+    private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy,
             List<Integer> Q_copy_N_intersec, List<Integer> Q_copy, List<Integer> X_copy_N_intersec,
             List<Integer> X_copy, List<Integer> Y_copy_N_intersec, List<Integer> Y_copy) {
         int nElement = -1;

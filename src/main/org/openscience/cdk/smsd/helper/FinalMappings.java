@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
-/**
+/** 
  * @cdk.module smsd
  */
 public class FinalMappings implements IFinalMapping {
@@ -42,11 +42,13 @@ public class FinalMappings implements IFinalMapping {
         mappings = new ArrayList<TreeMap<Integer, Integer>>();
     }
 
+    /**
+     * Stores mapping solutions
+     * @return
+     */
     synchronized public static FinalMappings getInstance() {
         if (instance == null) {
-
             instance = new FinalMappings();
-
         }
         return instance;
     }

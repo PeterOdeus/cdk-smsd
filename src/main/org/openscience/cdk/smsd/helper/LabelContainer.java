@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 
  * @cdk.module smsd
  */
 public class LabelContainer {
@@ -72,7 +73,7 @@ public class LabelContainer {
     }
 
     /**
-     *
+     * Create ids from atom labels
      * @return
      */
     synchronized public static LabelContainer getInstance() {

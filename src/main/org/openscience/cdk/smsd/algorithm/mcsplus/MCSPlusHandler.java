@@ -51,7 +51,7 @@ public class MCSPlusHandler implements IMCSAlgorithm {
     private boolean flagExchange = false;
 
     /**
-     * constructor
+     * Constructor for the MCS Plus algorithm class
      */
     public MCSPlusHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();

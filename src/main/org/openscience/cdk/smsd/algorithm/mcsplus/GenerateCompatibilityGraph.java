@@ -50,7 +50,7 @@ public class GenerateCompatibilityGraph {
     private static boolean bondTypeFlag = BondType.getInstance().getBondSensitiveFlag();
 
     /**
-     *
+     * Generates a compatibility graph between two molecules
      * @param source
      * @param target
      * @throws java.io.IOException

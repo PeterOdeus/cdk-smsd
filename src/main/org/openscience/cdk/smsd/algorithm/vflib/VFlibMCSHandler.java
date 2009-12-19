@@ -59,6 +59,9 @@ public class VFlibMCSHandler implements IMCSAlgorithm {
     private List<Map<INode, IAtom>> vfLibSolutions = null;
     private int vfMCSSize = 0;
 
+    /**
+     * Constructor for an extended VF Algorithm for the MCS search
+     */
     public VFlibMCSHandler() {
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
         allAtomMCSCopy = new ArrayList<Map<IAtom, IAtom>>();

@@ -48,7 +48,7 @@ public class SingleMapping {
     private Map<Integer, Integer> connectedBondOrder = null;
 
     /**
-     *
+     * Returns single mapping solutions
      * @param source
      * @param target
      * @param removeHydrogen

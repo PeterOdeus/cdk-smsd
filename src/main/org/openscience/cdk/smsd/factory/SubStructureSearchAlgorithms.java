@@ -73,7 +73,13 @@ public class SubStructureSearchAlgorithms implements IMCS {
     private boolean removeHydrogen = false;
 
     /**
-     * 
+     * This is the algorithm factory and entry port for all the MCS algorithm in the SMSD
+     * supported algorithm types
+     * 0 default,
+     * 1 MCS Plus,
+     * 2 VFLib,
+     * 3 CDKMCS
+     * 4 Substructure search
      * @param algorithmType 0 default, 1 mcsPlusAlgorithm, 2 VFLib, 3 CDKMCS 4 subStructureAlgorithm
      * @param bondTypeFlag
      */

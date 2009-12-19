@@ -43,7 +43,7 @@ public class TimeManager {
     private SimpleDateFormat dateFormat;
 
     /**
-     * Constructor
+     * Constructor for storing execution time
      */
     @TestMethod("testTimeManager")
     public TimeManager() {
