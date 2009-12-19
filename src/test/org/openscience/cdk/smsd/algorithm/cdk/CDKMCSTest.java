@@ -121,7 +121,7 @@ public class CDKMCSTest extends CDKTestCase {
         query.addBond(b1);
         query.addBond(b2);
 
-        List list = CDKMCS.getSubgraphMaps(atomContainer, query);
+        List<List<CDKRMap>> list = CDKMCS.getSubgraphMaps(atomContainer, query);
 
         Assert.assertTrue(list.isEmpty());
     }
@@ -192,10 +192,10 @@ public class CDKMCSTest extends CDKTestCase {
         CDKHueckelAromaticityDetector.detectAromaticity(mol);
         CDKHueckelAromaticityDetector.detectAromaticity(frag1);
 
-        List list = CDKMCS.getSubgraphAtomsMaps(mol, frag1);
-        List first = (List) list.get(0);
+        List<List<CDKRMap>> list = CDKMCS.getSubgraphAtomsMaps(mol, frag1);
+        List<CDKRMap> first = list.get(0);
         for (int i = 0; i < first.size(); i++) {
-            CDKRMap rmap = (CDKRMap) first.get(i);
+            CDKRMap rmap = first.get(i);
             Assert.assertEquals(rmap.getId1(), result1[i]);
             Assert.assertEquals(rmap.getId2(), result2[i]);
         }
@@ -225,7 +225,7 @@ public class CDKMCSTest extends CDKTestCase {
         IAtomContainer atomContainer = sp.parseSmiles("C1CCCCC1");
         query2 = QueryAtomContainerCreator.createBasicQueryContainer(atomContainer);
 
-        List list = CDKMCS.getSubgraphMap(mol, query1);
+        List<CDKRMap> list = CDKMCS.getSubgraphMap(mol, query1);
         Assert.assertEquals(11, list.size());
 
         list = CDKMCS.getSubgraphMap(mol, query2);
@@ -252,7 +252,7 @@ public class CDKMCSTest extends CDKTestCase {
         InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
         new MDLV2000Reader(ins2, Mode.STRICT).read(mol2);
 
-        List list = CDKMCS.getOverlaps(mol1, mol2);
+        List<IAtomContainer> list = CDKMCS.getOverlaps(mol1, mol2);
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(11, ((AtomContainer) list.get(0)).getAtomCount());
 
@@ -280,7 +280,7 @@ public class CDKMCSTest extends CDKTestCase {
         InputStream ins2 = this.getClass().getClassLoader().getResourceAsStream(file2);
         new MDLV2000Reader(ins2, Mode.STRICT).read(mol2);
 
-        List list = CDKMCS.getOverlaps(mol1, mol2);
+        List<IAtomContainer> list = CDKMCS.getOverlaps(mol1, mol2);
         Assert.assertEquals(5, list.size());
         list = CDKMCS.getOverlaps(mol2, mol1);
         Assert.assertEquals(5, list.size());
@@ -293,9 +293,9 @@ public class CDKMCSTest extends CDKTestCase {
         int i = 1;
         while (atoms.hasNext()) {
             IAtom nextAtom = atoms.next();
-            System.out.println(i + ": " + nextAtom.getSymbol() +
-                    " T:" + nextAtom.getAtomTypeName() +
-                    " A:" + nextAtom.getFlag(CDKConstants.ISAROMATIC));
+            System.out.println(i + ": " + nextAtom.getSymbol()
+                    + " T:" + nextAtom.getAtomTypeName()
+                    + " A:" + nextAtom.getFlag(CDKConstants.ISAROMATIC));
             i++;
         }
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol2);
@@ -328,8 +328,8 @@ public class CDKMCSTest extends CDKTestCase {
         AtomContainerAtomPermutor permutor = new AtomContainerAtomPermutor(mol2);
         mol2 = new Molecule((AtomContainer) permutor.next());
 
-        List list1 = CDKMCS.getOverlaps(mol1, mol2);
-        List list2 = CDKMCS.getOverlaps(mol2, mol1);
+        List<IAtomContainer> list1 = CDKMCS.getOverlaps(mol1, mol2);
+        List<IAtomContainer> list2 = CDKMCS.getOverlaps(mol2, mol1);
         Assert.assertEquals(1, list1.size());
         Assert.assertEquals(1, list2.size());
         Assert.assertEquals(((AtomContainer) list1.get(0)).getAtomCount(),
@@ -406,5 +406,54 @@ public class CDKMCSTest extends CDKTestCase {
         } catch (Exception e) {
             // OK, it must Assert.fail!
         }
+    }
+
+    /**
+     * @cdk.bug 2888845
+     * @throws Exception
+     */
+    @Test
+    public void testSingleAtomMatching1() throws Exception {
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        IAtomContainer target = sp.parseSmiles("[H]");
+        IAtomContainer queryac = sp.parseSmiles("[H]");
+        QueryAtomContainer query = QueryAtomContainerCreator.createSymbolAndBondOrderQueryContainer(queryac);
+
+        List<List<CDKRMap>> matches = CDKMCS.getIsomorphMaps(target, query);
+        Assert.assertEquals(1, matches.size());
+        Assert.assertEquals(1, matches.get(0).size());
+        CDKRMap mapping = matches.get(0).get(0);
+        Assert.assertEquals(0, mapping.getId1());
+        Assert.assertEquals(0, mapping.getId2());
+        List<List<CDKRMap>> atomMappings = CDKMCS.makeAtomsMapsOfBondsMaps(matches, target, query);
+        Assert.assertEquals(matches, atomMappings);
+    }
+
+    /**
+     * @cdk.bug 2888845
+     * @throws Exception
+     */
+    @Test
+    public void testSingleAtomMatching2() throws Exception {
+        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        IAtomContainer target = sp.parseSmiles("CNC");
+        IAtomContainer queryac = sp.parseSmiles("C");
+        QueryAtomContainer query = QueryAtomContainerCreator.createSymbolAndBondOrderQueryContainer(queryac);
+
+        List<List<CDKRMap>> matches = CDKMCS.getIsomorphMaps(target, query);
+        Assert.assertEquals(2, matches.size());
+        Assert.assertEquals(1, matches.get(0).size());
+        Assert.assertEquals(1, matches.get(1).size());
+        CDKRMap map1 = matches.get(0).get(0);
+        CDKRMap map2 = matches.get(1).get(0);
+
+        Assert.assertEquals(0, map1.getId1());
+        Assert.assertEquals(0, map1.getId2());
+
+        Assert.assertEquals(2, map2.getId1());
+        Assert.assertEquals(0, map2.getId2());
+
+        List<List<CDKRMap>> atomMappings = CDKMCS.makeAtomsMapsOfBondsMaps(matches, target, query);
+        Assert.assertEquals(matches, atomMappings);
     }
 }
