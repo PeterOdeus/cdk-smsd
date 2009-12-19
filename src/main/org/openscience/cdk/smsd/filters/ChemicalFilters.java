@@ -67,7 +67,8 @@ public class ChemicalFilters {
     private MolHandler pMol = null;
 
     /**
-     *
+     * This class has all the three chem filters supportd by the SMSD
+     * a: Bond energy, b: Fragment count and c: Stereo matches
      * @param allMCS
      * @param allAtomMCS
      * @param firstSolution
