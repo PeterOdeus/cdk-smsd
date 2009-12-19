@@ -248,7 +248,8 @@ public class BondEnergies {
             BondEnergy bondEnergy = entry.getValue();
             String atom1 = bondEnergy.getSymbolFirstAtom();
             String atom2 = bondEnergy.getSymbolSecondAtom();
-            if ((atom1.equalsIgnoreCase(sourceAtom.getSymbol()) && atom2.equalsIgnoreCase(targetAtom.getSymbol())) || (atom2.equalsIgnoreCase(sourceAtom.getSymbol()) && atom1.equalsIgnoreCase(targetAtom.getSymbol()))) {
+            if ((atom1.equalsIgnoreCase(sourceAtom.getSymbol()) && atom2.equalsIgnoreCase(targetAtom.getSymbol()))
+                    || (atom2.equalsIgnoreCase(sourceAtom.getSymbol()) && atom1.equalsIgnoreCase(targetAtom.getSymbol()))) {
 
                 Order order = bondEnergy.getBondOrder();
                 if (order.compareTo(bondOrder) == 0) {

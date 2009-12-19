@@ -42,7 +42,7 @@ public class McGregorChecks {
 
     /**
      * 
-     * @param container
+     * @param source
      * @param target
      * @param neighborBondNumA
      * @param neighborBondNumB
@@ -118,7 +118,8 @@ public class McGregorChecks {
         int ProductBondType = ProductBond.getOrder().ordinal();
 
         if (bondTypeFlag) {
-            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType == ProductBondType)) {
+            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC))
+                    && (ReactantBondType == ProductBondType)) {
                 Flag = true;
             }
 
@@ -139,7 +140,8 @@ public class McGregorChecks {
      * @param mapped_atoms_org
      * @return
      */
-    protected static int searchCorrespondingAtom(int mappedAtomsSize, int atomFromOtherMolecule, int molecule, List<Integer> mapped_atoms_org) {
+    protected static int searchCorrespondingAtom(int mappedAtomsSize, int atomFromOtherMolecule, int molecule,
+            List<Integer> mapped_atoms_org) {
 
         List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);
 
@@ -164,7 +166,8 @@ public class McGregorChecks {
      * @return
      */
     protected static boolean isAtomMatch(String G1A, String G2A, String G1B, String G2B) {
-        if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0) || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
+        if ((G1A.compareToIgnoreCase(G1B) == 0 && G2A.compareToIgnoreCase(G2B) == 0)
+                || (G1A.compareToIgnoreCase(G2B) == 0 && G2A.compareToIgnoreCase(G1B) == 0)) {
             return true;
         }
         return false;
@@ -253,7 +256,8 @@ public class McGregorChecks {
                 int column_atom3 = iBondNeighborAtomsB.get(y * 3 + 0);
                 int column_atom4 = iBondNeighborAtomsB.get(y * 3 + 1);
 
-                if (McGregorChecks.cases(G1_atom, G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
+                if (McGregorChecks.cases(G1_atom, G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3,
+                        column_atom4)) {
                     MARCS.set(x * neighborBondNumB + y, 0);
                 }
 
@@ -300,9 +304,11 @@ public class McGregorChecks {
      * @param column_atom4
      * @return
      */
-    protected static boolean case1(int G1_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
+    protected static boolean case1(int G1_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2,
+            int column_atom3, int column_atom4) {
         if (((G1_atom == row_atom1) || (G1_atom == row_atom2))
-                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
+                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom)
+                || (column_atom4 == G4_atom))))) {
             return true;
         }
         return false;
@@ -319,10 +325,12 @@ public class McGregorChecks {
      * @param column_atom4
      * @return
      */
-    protected static boolean case2(int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
+    protected static boolean case2(int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2,
+            int column_atom3, int column_atom4) {
         if (((G2_atom == row_atom1)
                 || (G2_atom == row_atom2))
-                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom) || (column_atom4 == G4_atom))))) {
+                && (!(((column_atom3 == G3_atom) || (column_atom4 == G3_atom)) || ((column_atom3 == G4_atom)
+                || (column_atom4 == G4_atom))))) {
             return true;
         }
         return false;
@@ -339,9 +347,11 @@ public class McGregorChecks {
      * @param column_atom4
      * @return
      */
-    protected static boolean case3(int G1_atom, int G3_atom, int G2_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
+    protected static boolean case3(int G1_atom, int G3_atom, int G2_atom, int row_atom1, int row_atom2,
+            int column_atom3, int column_atom4) {
         if (((G3_atom == column_atom3) || (G3_atom == column_atom4))
-                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
+                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom)
+                || (row_atom2 == G2_atom))))) {
             return true;
         }
         return false;
@@ -358,9 +368,11 @@ public class McGregorChecks {
      * @param column_atom4
      * @return
      */
-    protected static boolean case4(int G1_atom, int G2_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
+    protected static boolean case4(int G1_atom, int G2_atom, int G4_atom, int row_atom1, int row_atom2,
+            int column_atom3, int column_atom4) {
         if (((G4_atom == column_atom3) || (G4_atom == column_atom4))
-                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom) || (row_atom2 == G2_atom))))) {
+                && (!(((row_atom1 == G1_atom) || (row_atom2 == G1_atom)) || ((row_atom1 == G2_atom)
+                || (row_atom2 == G2_atom))))) {
             return true;
         }
         return false;
@@ -378,8 +390,12 @@ public class McGregorChecks {
      * @param column_atom4
      * @return
      */
-    protected static boolean cases(int G1_atom, int G2_atom, int G3_atom, int G4_atom, int row_atom1, int row_atom2, int column_atom3, int column_atom4) {
-        if (case1(G1_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case2(G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case3(G1_atom, G3_atom, G2_atom, row_atom1, row_atom2, column_atom3, column_atom4) || case4(G1_atom, G2_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
+    protected static boolean cases(int G1_atom, int G2_atom, int G3_atom, int G4_atom, int row_atom1,
+            int row_atom2, int column_atom3, int column_atom4) {
+        if (case1(G1_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)
+                || case2(G2_atom, G3_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)
+                || case3(G1_atom, G3_atom, G2_atom, row_atom1, row_atom2, column_atom3, column_atom4)
+                || case4(G1_atom, G2_atom, G4_atom, row_atom1, row_atom2, column_atom3, column_atom4)) {
             return true;
         }
         return false;
@@ -493,15 +509,18 @@ public class McGregorChecks {
      * @param c_bond_neighbors
      * @return
      */
-    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, IAtomContainer atomContainer, List<String> c_bond_neighbors) {
+    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum,
+            IAtomContainer atomContainer, List<String> c_bond_neighbors) {
         for (int atomIndex = 0; atomIndex < neighbor_bondnum; atomIndex++) {
             IBond bond = atomContainer.getBond(atomIndex);
-            if ((atomContainer.getAtomNumber(bond.getAtom(0)) == corresponding_atom) && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            if ((atomContainer.getAtomNumber(bond.getAtom(0)) == corresponding_atom)
+                    && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(atomIndex * 4 + 2, c_bond_neighbors.get(atomIndex * 4 + 0));
                 c_bond_neighbors.set(atomIndex * 4 + 0, new_symbol);
             }
 
-            if ((atomContainer.getAtomNumber(bond.getAtom(1)) == corresponding_atom) && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((atomContainer.getAtomNumber(bond.getAtom(1)) == corresponding_atom)
+                    && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(atomIndex * 4 + 3, c_bond_neighbors.get(atomIndex * 4 + 1));
                 c_bond_neighbors.set(atomIndex * 4 + 1, new_symbol);
             }
@@ -520,15 +539,18 @@ public class McGregorChecks {
      * @param c_bond_neighbors
      * @return
      */
-    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum, List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
+    protected static int changeCharBonds(int corresponding_atom, String new_symbol, int neighbor_bondnum,
+            List<Integer> i_bond_neighbors, List<String> c_bond_neighbors) {
 
         for (int atomIndex = 0; atomIndex < neighbor_bondnum; atomIndex++) {
-            if ((i_bond_neighbors.get(atomIndex * 3 + 0) == (corresponding_atom)) && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
+            if ((i_bond_neighbors.get(atomIndex * 3 + 0) == (corresponding_atom))
+                    && (c_bond_neighbors.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(atomIndex * 4 + 2, c_bond_neighbors.get(atomIndex * 4 + 0));
                 c_bond_neighbors.set(atomIndex * 4 + 0, new_symbol);
             }
 
-            if ((i_bond_neighbors.get(atomIndex * 3 + 1) == (corresponding_atom)) && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
+            if ((i_bond_neighbors.get(atomIndex * 3 + 1) == (corresponding_atom))
+                    && (c_bond_neighbors.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0)) {
                 c_bond_neighbors.set(atomIndex * 4 + 3, c_bond_neighbors.get(atomIndex * 4 + 1));
                 c_bond_neighbors.set(atomIndex * 4 + 1, new_symbol);
             }
@@ -616,7 +638,8 @@ public class McGregorChecks {
         return unmappedMolAtoms;
     }
 
-    static List<Integer> markUnMappedAtoms(boolean flag, IAtomContainer source, List<Integer> mapped_atoms, int clique_siz) {
+    static List<Integer> markUnMappedAtoms(boolean flag, IAtomContainer source,
+            List<Integer> mapped_atoms, int clique_siz) {
         List<Integer> unmappedMolAtoms = new ArrayList<Integer>();
         int unmapped_num = 0;
         boolean atom_is_unmapped = true;

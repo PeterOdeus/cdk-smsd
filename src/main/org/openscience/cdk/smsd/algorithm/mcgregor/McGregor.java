@@ -123,9 +123,10 @@ public class McGregor {
         int counter = 0;
         int gSetBondNumA = 0;
         int gSetBondNumB = 0;
-        int gNeighborBondnumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
-        int gNeighborBondNumB = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
-
+        //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS
+        int gNeighborBondnumA = 0;
+        //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS
+        int gNeighborBondNumB = 0; 
 
 
         QueryProcessor queryProcess = new QueryProcessor(
@@ -278,8 +279,10 @@ public class McGregor {
         int counter = 0;
         int setNumA = 0;
         int setNumB = 0;
-        int localNeighborBondnumA = 0; //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS_1
-        int localNeighborBondNumB = 0; //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS_1
+        int localNeighborBondnumA = 0; //number of remaining molecule A bonds after the clique search,
+//        which are neighbors of the MCS
+        int localNeighborBondNumB = 0; //number of remaining molecule B bonds after the clique search,
+//        which are neighbors of the MCS
 
         //Extract bonds which are related with unmapped atoms of molecule A.
         //In case that unmapped atoms are connected with already mapped atoms, the mapped atoms are labelled with

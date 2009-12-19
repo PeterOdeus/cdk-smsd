@@ -126,7 +126,8 @@ public class CDKRNode {
      */
     @Override
     public String toString() {
-        return ("id1 : " + rMap.id1 + ", id2 : " + rMap.id2 + "\n" + "extension : " + extension + "\n" + "forbiden : " + forbidden);
+        return ("id1 : " + rMap.id1 + ", id2 : " + rMap.id2 + "\n" + "extension : " + extension
+                + "\n" + "forbiden : " + forbidden);
     }
 }
 

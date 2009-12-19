@@ -67,7 +67,8 @@ public class ExactMapping {
      * @param clique_List_org
      * @return
      */
-    public static List<List<Integer>> extractMapping(List<List<Integer>> _mappings, List<Integer> comp_graph_nodes, List<Integer> clique_List_org) {
+    public static List<List<Integer>> extractMapping(List<List<Integer>> _mappings, List<Integer> comp_graph_nodes,
+            List<Integer> clique_List_org) {
 
         try {
 

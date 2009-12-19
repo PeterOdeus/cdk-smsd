@@ -361,7 +361,8 @@ public class ChemicalFilters {
         }
     }
 
-    private Map<IBond, IBond> makeBondMapsOfAtomMaps(IAtomContainer ac1, IAtomContainer ac2, TreeMap<Integer, Integer> mappings) {
+    private Map<IBond, IBond> makeBondMapsOfAtomMaps(IAtomContainer ac1, IAtomContainer ac2,
+            TreeMap<Integer, Integer> mappings) {
 
         HashMap<IBond, IBond> maps = new HashMap<IBond, IBond>();
 
@@ -407,7 +408,8 @@ public class ChemicalFilters {
 
     private synchronized int getMappedMoleculeFragmentSize(Map<IAtom, IAtom> MCSAtomSolution) {
 
-//      System.out.println("Mol Size Eorg: " + sourceMol.getMolecule().getAtomCount() + " , Mol Size Porg: " + targetMol.getMolecule().getAtomCount());
+//      System.out.println("Mol Size Eorg: " + sourceMol.getMolecule().getAtomCount() + " , Mol Size Porg: " +
+//        targetMol.getMolecule().getAtomCount());
 
         IAtomContainer Educt = DefaultChemObjectBuilder.getInstance().newMolecule(rMol.getMolecule());
         IAtomContainer Product = DefaultChemObjectBuilder.getInstance().newMolecule(pMol.getMolecule());
@@ -584,7 +586,8 @@ public class ChemicalFilters {
 
     }
 
-    private double getAtomScore(double score, Map<IAtom, IAtom> atomMapMCS, IAtomContainer Reactant, IAtomContainer Product) {
+    private double getAtomScore(double score, Map<IAtom, IAtom> atomMapMCS, IAtomContainer Reactant,
+            IAtomContainer Product) {
         for (Map.Entry<IAtom, IAtom> mappings : atomMapMCS.entrySet()) {
             IAtom rAtom = mappings.getKey();
             IAtom pAtom = mappings.getValue();
@@ -731,7 +734,8 @@ public class ChemicalFilters {
         return score;
     }
 
-    private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap, Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
+    private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap,
+            Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
 
         boolean stereoMatchFlag = false;
         IAtomContainer Reactant = rMol.getMolecule();

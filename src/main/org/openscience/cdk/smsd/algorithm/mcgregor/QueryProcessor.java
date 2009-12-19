@@ -164,10 +164,12 @@ public class QueryProcessor {
 
             for (Integer unMappedAtomIndex : unmapped_atoms_molA) {
                 if (unMappedAtomIndex.equals(indexI)) {
-                    normal_bond = unMappedAtomsEqualsIndexJ(setNumA, setNumB, i_bond_setA, i_bond_setB, atomIndex, counter, new_Mapping, indexI, indexJ, order);
+                    normal_bond = unMappedAtomsEqualsIndexJ(setNumA, setNumB, i_bond_setA, i_bond_setB, atomIndex,
+                            counter, new_Mapping, indexI, indexJ, order);
                     bond_considered = true;
                 } else if (unMappedAtomIndex.equals(indexJ)) {
-                    normal_bond = unMappedAtomsEqualsIndexI(setNumA, setNumB, i_bond_setA, i_bond_setB, atomIndex, counter, new_Mapping, indexI, indexJ, order);
+                    normal_bond = unMappedAtomsEqualsIndexI(setNumA, setNumB, i_bond_setA, i_bond_setB, atomIndex,
+                            counter, new_Mapping, indexI, indexJ, order);
                     bond_considered = true;
                 }
 
@@ -181,7 +183,8 @@ public class QueryProcessor {
         }
     }
 
-    private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule, List<Integer> mapped_atoms_org) {
+    private int searchCorrespondingAtom(int mapped_atoms_size, int atom_from_other_molecule, int molecule,
+            List<Integer> mapped_atoms_org) {
 
 
         List<Integer> mapped_atoms = new ArrayList<Integer>(mapped_atoms_org);

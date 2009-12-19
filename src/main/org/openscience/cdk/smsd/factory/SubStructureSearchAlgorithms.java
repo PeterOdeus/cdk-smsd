@@ -539,7 +539,8 @@ public class SubStructureSearchAlgorithms implements IMCS {
                 int RBondType = RBond.getOrder().ordinal();
                 int PBondType = PBond.getOrder().ordinal();
 
-                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC) && RBondType == PBondType) {
+                if (RBond.getFlag(CDKConstants.ISAROMATIC) == PBond.getFlag(CDKConstants.ISAROMATIC)
+                        && RBondType == PBondType) {
                     score++;
                 } else if (RBond.getFlag(CDKConstants.ISAROMATIC) && PBond.getFlag(CDKConstants.ISAROMATIC)) {
                     score++;

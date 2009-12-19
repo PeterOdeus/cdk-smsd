@@ -212,7 +212,8 @@ public class CDKMCS {
 
         List<CDKRMap> result = null;
 
-        List<List<CDKRMap>> rMapsList = search(sourceGraph, targetGraph, getBitSet(sourceGraph), getBitSet(targetGraph), false, false);
+        List<List<CDKRMap>> rMapsList = search(sourceGraph, targetGraph, getBitSet(sourceGraph), getBitSet(targetGraph)
+                , false, false);
 
         if (!rMapsList.isEmpty()) {
             result = rMapsList.get(0);
@@ -686,14 +687,17 @@ public class CDKMCS {
     }
 
     /**
-     *  This makes atom map of matching atoms out of atom map of matching bonds as produced by the get(Subgraph|Ismorphism)Map methods.
+     *  This makes atom map of matching atoms out of atom map of matching bonds as produced by the
+     * get(Subgraph|Ismorphism)Map methods.
      *
      * @param  list   The list produced by the getMap method.
      * @param  sourceGraph  first molecule. Must not be an IQueryAtomContainer.
      * @param  targetGraph  second molecule. May be an IQueryAtomContainer.
-     * @return     The mapping found projected on sourceGraph. This is atom List of CDKRMap objects containing Ids of matching atoms.
+     * @return     The mapping found projected on sourceGraph. This is atom List of CDKRMap objects containing Ids of
+     * matching atoms.
      */
-    public static List<CDKRMap> makeAtomsMapOfBondsMap(List<CDKRMap> list, IAtomContainer sourceGraph, IAtomContainer targetGraph) {
+    public static List<CDKRMap> makeAtomsMapOfBondsMap(List<CDKRMap> list, IAtomContainer sourceGraph,
+            IAtomContainer targetGraph) {
         if (list == null) {
             return (list);
         }
@@ -717,18 +721,22 @@ public class CDKMCS {
                                     if (bondsToTest.contains(testBond2)) {
                                         CDKRMap map;
                                         if (j == n) {
-                                            map = new CDKRMap(sourceGraph.getAtomNumber(atom1[0]), targetGraph.getAtomNumber(atom2[0]));
+                                            map = new CDKRMap(sourceGraph.getAtomNumber(atom1[0]),
+                                                    targetGraph.getAtomNumber(atom2[0]));
                                         } else {
-                                            map = new CDKRMap(sourceGraph.getAtomNumber(atom1[1]), targetGraph.getAtomNumber(atom2[0]));
+                                            map = new CDKRMap(sourceGraph.getAtomNumber(atom1[1]),
+                                                    targetGraph.getAtomNumber(atom2[0]));
                                         }
                                         if (!result.contains(map)) {
                                             result.add(map);
                                         }
                                         CDKRMap map2;
                                         if (j == n) {
-                                            map2 = new CDKRMap(sourceGraph.getAtomNumber(atom1[1]), targetGraph.getAtomNumber(atom2[1]));
+                                            map2 = new CDKRMap(sourceGraph.getAtomNumber(atom1[1]),
+                                                    targetGraph.getAtomNumber(atom2[1]));
                                         } else {
-                                            map2 = new CDKRMap(sourceGraph.getAtomNumber(atom1[0]), targetGraph.getAtomNumber(atom2[1]));
+                                            map2 = new CDKRMap(sourceGraph.getAtomNumber(atom1[0]),
+                                                    targetGraph.getAtomNumber(atom2[1]));
                                         }
                                         if (!result.contains(map2)) {
                                             result.add(map2);

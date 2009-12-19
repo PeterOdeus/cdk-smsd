@@ -347,7 +347,8 @@ public class GenerateCompatibilityGraph {
         int ProductBondType = ProductBond.getOrder().ordinal();
 
         if (bondTypeFlag) {
-            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC)) && (ReactantBondType == ProductBondType)) {
+            if ((ReactantBond.getFlag(CDKConstants.ISAROMATIC) == ProductBond.getFlag(CDKConstants.ISAROMATIC))
+                    && (ReactantBondType == ProductBondType)) {
                 Flag = true;
             }
 

@@ -121,7 +121,8 @@ public class BKKCKCF {
 
     }
 
-    private int enumerateCliques(List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
+    private int enumerateCliques(List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex,
+            List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
         List<Integer> potentialVertex = new ArrayList<Integer>();//Defined as potentialCVertex' in the paper
 
 
@@ -203,7 +204,9 @@ public class BKKCKCF {
         return solution;
     }
 
-    private void findCliques(List<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex, List<Integer> excludedCVertex) {
+    private void findCliques(List<Integer> potentialVertex, List<Integer> vertexOfCurrentClique, 
+            Stack<Integer> potentialCVertex, List<Integer> potentialDVertex, List<Integer> excludedVertex,
+            List<Integer> excludedCVertex) {
         int index = 0;
         List<Integer> neighbourVertex = new ArrayList<Integer>(); ////Initialization ArrayList neighbourVertex
 
@@ -264,7 +267,9 @@ public class BKKCKCF {
         }
     }
 
-    private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy, List<Integer> Q_copy_N_intersec, List<Integer> Q_copy, List<Integer> X_copy_N_intersec, List<Integer> X_copy, List<Integer> Y_copy_N_intersec, List<Integer> Y_copy) {
+    private void copyVertex(List<Integer> neighbourVertex, Stack<Integer> P_copy_N_intersec, Stack<Integer> P_copy, 
+            List<Integer> Q_copy_N_intersec, List<Integer> Q_copy, List<Integer> X_copy_N_intersec,
+            List<Integer> X_copy, List<Integer> Y_copy_N_intersec, List<Integer> Y_copy) {
         int nElement = -1;
         int N_size = neighbourVertex.size();
 
