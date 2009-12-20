@@ -139,10 +139,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         FragmentMatcher fragmentMatcher = new FragmentMatcher(rFrag, pFrag, removeHydrogen);
         fragmentMatcher.searchMCS();
 
-        firstSolution.clear();
-        allMCS.clear();
-        allAtomMCS.clear();
-        firstAtomMCS.clear();
+        clearMaps();
         firstSolution.putAll(fragmentMatcher.getFirstMapping());
         allMCS.addAll(fragmentMatcher.getAllMapping());
 
@@ -159,10 +156,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
             mcs.set(rMol, pMol);
             mcs.searchMCS();
 
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
+            clearMaps();
 
             firstSolution.putAll(mcs.getFirstMapping());
             allMCS.addAll(mcs.getAllMapping());
@@ -188,10 +182,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
             mcs.set(rMol, pMol);
             mcs.searchMCS();
 
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
+            clearMaps();
 
             firstSolution.putAll(mcs.getFirstMapping());
             allMCS.addAll(mcs.getAllMapping());
@@ -213,11 +204,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
         subGraphTurboSearch = new VFlibTurboHandler();
         subGraphTurboSearch.set(rMol, pMol);
 
-        firstSolution.clear();
-        allMCS.clear();
-        allAtomMCS.clear();
-        firstAtomMCS.clear();
-
+        clearMaps();
         if (subGraphTurboSearch.isSubgraph()) {
             firstSolution.putAll(subGraphTurboSearch.getFirstMapping());
             allMCS.addAll(subGraphTurboSearch.getAllMapping());
@@ -481,11 +468,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
             mcs.set(rMol, pMol);
             mcs.searchMCS();
 
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
-
+            clearMaps();
             firstSolution.putAll(mcs.getFirstMapping());
             allMCS.addAll(mcs.getAllMapping());
 
@@ -508,11 +491,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
             mcs.set(rMol, pMol);
             mcs.searchMCS();
 
-            firstSolution.clear();
-            allMCS.clear();
-            allAtomMCS.clear();
-            firstAtomMCS.clear();
-
+            clearMaps();
             firstSolution.putAll(mcs.getFirstMapping());
             allMCS.addAll(mcs.getAllMapping());
 
@@ -622,6 +601,13 @@ public class SubStructureSearchAlgorithms implements IMCS {
             TimeOut tmo = TimeOut.getInstance();
             tmo.setTimeOut(0.15);
         }
+    }
+
+    private void clearMaps() {
+        firstSolution.clear();
+        allMCS.clear();
+        allAtomMCS.clear();
+        firstAtomMCS.clear();
     }
 }
 

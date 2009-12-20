@@ -305,6 +305,7 @@ public class ChemicalFilters {
     }
 
     /**
+     * Sort MCS solution by bond breaking energy
      *
      * @throws CDKException
      */
@@ -427,40 +428,8 @@ public class ChemicalFilters {
 
             }
         }
-        boolean EductFragmentFlag = true;
-        boolean ProductFragmentFlag = true;
 
-        IAtomContainerSet EductFragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
-        IAtomContainerSet ProductFragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
-
-        int countEFrag = 0;
-
-        if (Educt.getAtomCount() > 0) {
-            EductFragmentFlag = ConnectivityChecker.isConnected(Educt);
-            if (!EductFragmentFlag) {
-                EductFragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Educt));
-            } else {
-                EductFragmentMolSet.addAtomContainer(Educt);
-            }
-
-            countEFrag = EductFragmentMolSet.getAtomContainerCount();
-        }
-        int countPFrag = 0;
-
-        if (Product.getAtomCount() > 0) {
-            ProductFragmentFlag = ConnectivityChecker.isConnected(Product);
-
-            if (!ProductFragmentFlag) {
-                ProductFragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(Product));
-            } else {
-                ProductFragmentMolSet.addAtomContainer(Product);
-            }
-            countPFrag = ProductFragmentMolSet.getAtomContainerCount();
-        }
-
-        int FragmentSize = countEFrag + countPFrag;
-
-        return FragmentSize;
+        return getFragmentCount(Educt) + getFragmentCount(Product);
     }
 
     private synchronized Double getMappedMoleculeEnergies(TreeMap<Integer, Integer> MCSAtomSolution) throws CDKException {
@@ -527,8 +496,8 @@ public class ChemicalFilters {
             @Override
             public int compare(Map.Entry<Integer, Double> entry, Map.Entry<Integer, Double> entry1) {
                 // Return 0 for eAtom match, -1 for less than and +1 for more then (Decending Order Sort)
-                return (entry.getValue().equals(entry1.getValue()) ? 0 :
-                    (entry.getValue() < entry1.getValue() ? 1 : -1));
+                return (entry.getValue().equals(entry1.getValue()) ? 0
+                        : (entry.getValue() < entry1.getValue() ? 1 : -1));
             }
         });
         // logger.info(list);
@@ -542,7 +511,7 @@ public class ChemicalFilters {
 
     /**
      * 
-     * @return
+     * @return sorted bond breaking energy
      */
     public List<Double> getSortedEnergy() {
         return bEnergies;
@@ -550,7 +519,7 @@ public class ChemicalFilters {
 
     /**
      * 
-     * @return
+     * @return sorted fragment count
      */
     public List<Integer> getSortedFragment() {
         return fragmentSize;
@@ -558,7 +527,7 @@ public class ChemicalFilters {
 
     /**
      * 
-     * @return
+     * @return sorted stereo matches
      */
     public List<Double> getStereoMatches() {
 
@@ -611,15 +580,15 @@ public class ChemicalFilters {
             double BOScore = Math.abs(rBO - pBO);
 
             if (rHCount != pHCount) {
-                score = score - HScore;
+                score -= HScore;
             } else {
-                score = score + HScore;
+                score += HScore;
             }
 
             if (rBO != pBO) {
-                score = score - BOScore;
+                score -= BOScore;
             } else {
-                score = score + BOScore;
+                score += BOScore;
             }
         }
 
@@ -795,5 +764,24 @@ public class ChemicalFilters {
             score = score + Math.abs(RBondType - PBondType);
         }
         return score;
+    }
+
+    private int getFragmentCount(IAtomContainer molecule) {
+        boolean fragmentFlag = true;
+
+        IAtomContainerSet fragmentMolSet = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+
+        int countFrag = 0;
+        if (molecule.getAtomCount() > 0) {
+            fragmentFlag = ConnectivityChecker.isConnected(molecule);
+            if (!fragmentFlag) {
+                fragmentMolSet.add(ConnectivityChecker.partitionIntoMolecules(molecule));
+            } else {
+                fragmentMolSet.addAtomContainer(molecule);
+            }
+            countFrag = fragmentMolSet.getAtomContainerCount();
+        }
+
+        return countFrag;
     }
 }

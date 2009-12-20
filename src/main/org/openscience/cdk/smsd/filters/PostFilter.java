@@ -74,11 +74,7 @@ public class PostFilter {
 
         List<TreeMap<Integer, Integer>> nonRedundantMapping = new ArrayList<TreeMap<Integer, Integer>>();
         for (List<Integer> M : mapping_org) {
-            TreeMap<Integer, Integer> newMap = new TreeMap<Integer, Integer>();
-            for (int index = 0; index < M.size(); index += 2) {
-                newMap.put(M.get(index), M.get(index + 1));
-            }
-
+            TreeMap<Integer, Integer> newMap = getMappingMapFromList(M);
             if (!hasMap(newMap, nonRedundantMapping)) {
                 nonRedundantMapping.add(new TreeMap<Integer, Integer>(newMap));
             }
@@ -87,5 +83,13 @@ public class PostFilter {
 
 //        System.out.println("nonRedundantMapping Solutions " + nonRedundantMapping);
         return nonRedundantMapping;
+    }
+
+    private static TreeMap<Integer, Integer> getMappingMapFromList(List<Integer> map) {
+        TreeMap<Integer, Integer> newMap = new TreeMap<Integer, Integer>();
+        for (int index = 0; index < map.size(); index += 2) {
+            newMap.put(map.get(index), map.get(index + 1));
+        }
+        return newMap;
     }
 }

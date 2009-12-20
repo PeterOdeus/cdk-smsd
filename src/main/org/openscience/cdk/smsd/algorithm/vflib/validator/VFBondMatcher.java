@@ -102,7 +102,6 @@ public class VFBondMatcher extends Bond implements IQueryBond {
             return true;
 
         }
-        //       Asad commented it as CDK does not support it
         if (this.unsaturation >= 0 && this.unsaturation == getUnsaturation(targetBond)) {
             return true;
         }

@@ -781,7 +781,6 @@ public class McGregor {
      * @return mappings
      */
     public List<List<Integer>> getMappings() {
-
         return this.mappings;
     }
 
@@ -789,7 +788,6 @@ public class McGregor {
      * @return MCS size
      */
     public int getMCSSize() {
-
         return this.globalMCSSize;
     }
 

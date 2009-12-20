@@ -55,10 +55,10 @@ public class FragmentMatcher {
     private static Map<IAtom, IAtom> atomsMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
-    private List<TreeMap<Integer, Integer>> gAllMCS;
-    private TreeMap<Integer, Integer> gFirstSolution;
-    private List<Map<IAtom, IAtom>> gAllAtomMCS;
-    private Map<IAtom, IAtom> gFirstAtomMCS;
+    private List<TreeMap<Integer, Integer>> gAllMCS = null;
+    private TreeMap<Integer, Integer> gFirstSolution = null;
+    private List<Map<IAtom, IAtom>> gAllAtomMCS = null;
+    private Map<IAtom, IAtom> gFirstAtomMCS = null;
     private boolean removeHydrogen = false;
 
     /**
@@ -79,12 +79,7 @@ public class FragmentMatcher {
                     builder();
 
                     if (SolutionSize < firstMCS.size()) {
-
-                        gFirstSolution.clear();
-                        gFirstAtomMCS.clear();
-                        gAllAtomMCS.clear();
-                        gAllMCS.clear();
-
+                        clear();
                         gFirstSolution.putAll(firstMCS);
                         gAllMCS.addAll(allMCS);
                         gFirstAtomMCS.putAll(atomsMCS);
@@ -95,8 +90,6 @@ public class FragmentMatcher {
                         gAllAtomMCS.addAll(allAtomMCS);
                     }
                 }
-
-
             }
         } catch (Exception ex) {
             Logger.getLogger(FragmentMatcher.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,9 +114,6 @@ public class FragmentMatcher {
             } else {
                 if (rBondCount >= 6 && rBondCount >= 6) {
                     vfLibMCS();
-                    if (getFirstMapping() == null) {
-                        System.gc();
-                    }
 //                    System.out.println("Mapped with vfLibMCS");
                 } else {
                     mcsPlus();
@@ -141,6 +131,7 @@ public class FragmentMatcher {
             MCSPlusHandler mcs = new MCSPlusHandler();
             mcs.set(rMol, pMol);
             mcs.searchMCS();
+
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
             allAtomMCS = mcs.getAllAtomMapping();
@@ -157,7 +148,6 @@ public class FragmentMatcher {
             VFlibMCSHandler mcs = new VFlibMCSHandler();
             mcs.set(rMol, pMol);
             mcs.searchMCS();
-
 
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
@@ -195,11 +185,11 @@ public class FragmentMatcher {
             SingleMappingHandler mcs = new SingleMappingHandler(removeHydrogen);
             mcs.set(rMol, pMol);
             mcs.searchMCS();
+            
             firstMCS = mcs.getFirstMapping();
             allMCS = mcs.getAllMapping();
             allAtomMCS = mcs.getAllAtomMapping();
             atomsMCS = mcs.getFirstAtomMapping();
-
 
         } catch (IOException ex) {
             Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,6 +228,15 @@ public class FragmentMatcher {
      */
     public TreeMap<Integer, Integer> getFirstMapping() {
         return gFirstSolution;
+    }
+
+    private void clear() {
+
+        gFirstSolution.clear();
+        gFirstAtomMCS.clear();
+        gAllAtomMCS.clear();
+        gAllMCS.clear();
+
     }
 }
 
