@@ -126,7 +126,23 @@ import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
  *
  *  </pre>
  *  </font>
+ **/
+
+/**
+ *  <p>This class implements the SMSD- a multipurpose structure comparison tool.
+ *  It allows users to, i) find the maximal common substructure(s) (MCS);
+ *  ii) perform the mapping of a substructure in another structure, and;
+ *  iii) map two isomorphic structures.</p>
  *
+ *  <p>It also comes with various published algorithms. The user is free to
+ *  choose his favorite algorithm to perform MCS or substructure search.
+ *  For example 0: SMSD algorithm, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS</p>
+ *
+ *  <p>It also has a set of robust chemical filters (i.e. bond energy, fragment
+ *  count, stereo & bond match) to sort the reported MCS solutions in a chemically
+ *  relevant manner. Each comparison can be made with or without using the bond
+ *  sensitive mode and with implicit or explicit hydrogens.</p>
+ * 
  *  @cdk.module smsd
  *  @cdk.require java1.5+
  *  
@@ -137,19 +153,6 @@ public class SMSD implements IMCS {
     IMCS comparison;
 
     /**
-     *  <p>This class implements the SMSD- a multipurpose structure comparison tool.
-     *  It allows users to, i) find the maximal common substructure(s) (MCS);
-     *  ii) perform the mapping of a substructure in another structure, and;
-     *  iii) map two isomorphic structures.</p>
-     *
-     *  <p>It also comes with various published algorithms. The user is free to
-     *  choose his favorite algorithm to perform MCS or substructure search.
-     *  For example 0: SMSD algorithm, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS</p>
-     *
-     *  <p>It also has a set of robust chemical filters (i.e. bond energy, fragment
-     *  count, stereo & bond match) to sort the reported MCS solutions in a chemically
-     *  relevant manner. Each comparison can be made with or without using the bond
-     *  sensitive mode and with implicit or explicit hydrogens.</p>
      *
      * @param algorithmType 0: default, 1: MCSPlus, 2: VFLibMCS, 3: CDKMCS, 4: SubStructure Mode
      * @param bondSensitiveFlag true will activate bond order match else false

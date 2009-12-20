@@ -34,7 +34,7 @@ public class TargetProcessor {
 
     private List<String> cTab1Copy;
     private List<String> cTab2Copy;
-    private String[] SignArray;
+    private String[] signArray;
     //number of remaining molecule A bonds after the clique search, which are
     //neighbors of the MCS
     private int neighborBondNumB = 0;
@@ -51,7 +51,7 @@ public class TargetProcessor {
      *
      * @param cTab1Copy
      * @param cTab2Copy
-     * @param SignArray
+     * @param signArray
      * @param neighbor_bondnum_B
      * @param set_bondnum_B
      * @param iBondNeighborsB
@@ -63,7 +63,7 @@ public class TargetProcessor {
     protected TargetProcessor(
             List<String> cTab1Copy,
             List<String> cTab2Copy,
-            String[] SignArray,
+            String[] signArray,
             int neighbor_bondnum_B,
             int set_bondnum_B,
             List<Integer> iBondNeighborsB,
@@ -74,7 +74,7 @@ public class TargetProcessor {
 
         this.cTab1Copy = cTab1Copy;
         this.cTab2Copy = cTab2Copy;
-        this.SignArray = SignArray;
+        this.signArray = signArray;
         this.neighborBondNumB = neighbor_bondnum_B;
         this.setBondNumB = set_bondnum_B;
         this.iBondNeighborsB = iBondNeighborsB;
@@ -195,13 +195,13 @@ public class TargetProcessor {
                 setBondNeighbors(indexI, indexJ, order);
                 if (cTab2Copy.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0) {
                     step1(atomIndex, counter);
-                    McGregorChecks.changeCharBonds(indexJ, SignArray[counter], target.getBondCount(),
+                    McGregorChecks.changeCharBonds(indexJ, signArray[counter], target.getBondCount(),
                             target, cTab2Copy);
                     int cor_atom = McGregorChecks.searchCorrespondingAtom(mappingSize, indexJ, 2, mapped_atoms);
                     //Commented by Asad
-                    McGregorChecks.changeCharBonds(cor_atom, SignArray[counter], newNeighborNumA,
+                    McGregorChecks.changeCharBonds(cor_atom, signArray[counter], newNeighborNumA,
                             newINeighborsA, newCNeighborsA);
-//                                changeCharBonds(cor_atom, SignArray[counter], query.getBondCount(), query, cTab1Copy);
+//                                changeCharBonds(cor_atom, signArray[counter], query.getBondCount(), query, cTab1Copy);
                     counter++;
                 } else {
                     step2(atomIndex);
@@ -227,12 +227,12 @@ public class TargetProcessor {
                 setBondNeighbors(indexI, indexJ, order);
                 if (cTab2Copy.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0) {
                     step3(atomIndex, counter);
-                    McGregorChecks.changeCharBonds(indexI, SignArray[counter], target.getBondCount(),
+                    McGregorChecks.changeCharBonds(indexI, signArray[counter], target.getBondCount(),
                             target, cTab2Copy);
                     int cor_atom = McGregorChecks.searchCorrespondingAtom(mappingSize, indexI, 2, mapped_atoms);
-                    McGregorChecks.changeCharBonds(cor_atom, SignArray[counter], newNeighborNumA,
+                    McGregorChecks.changeCharBonds(cor_atom, signArray[counter], newNeighborNumA,
                             newINeighborsA, newCNeighborsA);
-//                                changeCharBonds(cor_atom, SignArray[counter], query.getBondCount(), query, cTab1Copy);
+//                                changeCharBonds(cor_atom, signArray[counter], query.getBondCount(), query, cTab1Copy);
                     counter++;
                 } else {
                     step4(atomIndex);
@@ -261,9 +261,9 @@ public class TargetProcessor {
                 setBondNeighbors(indexI, indexJ, order);
                 if (cTab2Copy.get(atomIndex * 4 + 3).compareToIgnoreCase("X") == 0) {
                     step1(atomIndex, counter);
-                    McGregorChecks.changeCharBonds(indexJ, SignArray[counter], setNumB, i_bond_setB, cTab2Copy);
+                    McGregorChecks.changeCharBonds(indexJ, signArray[counter], setNumB, i_bond_setB, cTab2Copy);
                     int cor_atom = McGregorChecks.searchCorrespondingAtom(newMappingSize, indexJ, 2, new_Mapping);
-                    McGregorChecks.changeCharBonds(cor_atom, SignArray[counter], newNeighborNumA,
+                    McGregorChecks.changeCharBonds(cor_atom, signArray[counter], newNeighborNumA,
                             newINeighborsA, newCNeighborsA);
                     counter++;
 
@@ -296,9 +296,9 @@ public class TargetProcessor {
                 if (cTab2Copy.get(atomIndex * 4 + 2).compareToIgnoreCase("X") == 0) {
 
                     step3(atomIndex, counter);
-                    McGregorChecks.changeCharBonds(indexI, SignArray[counter], setNumB, i_bond_setB, cTab2Copy);
+                    McGregorChecks.changeCharBonds(indexI, signArray[counter], setNumB, i_bond_setB, cTab2Copy);
                     int cor_atom = McGregorChecks.searchCorrespondingAtom(newMappingSize, indexI, 2, new_Mapping);
-                    McGregorChecks.changeCharBonds(cor_atom, SignArray[counter], newNeighborNumA,
+                    McGregorChecks.changeCharBonds(cor_atom, signArray[counter], newNeighborNumA,
                             newINeighborsA, newCNeighborsA);
                     counter++;
                 } else {
@@ -341,7 +341,7 @@ public class TargetProcessor {
 
     private void step1(int atomIndex, int counter) {
         cBondNeighborsB.add(cTab2Copy.get(atomIndex * 4 + 0));
-        cBondNeighborsB.add(SignArray[counter]);
+        cBondNeighborsB.add(signArray[counter]);
         cBondNeighborsB.add("X");
         cBondNeighborsB.add(cTab2Copy.get(atomIndex * 4 + 1));
     }
@@ -354,7 +354,7 @@ public class TargetProcessor {
     }
 
     private void step3(int atomIndex, int counter) {
-        cBondNeighborsB.add(SignArray[counter]);
+        cBondNeighborsB.add(signArray[counter]);
         cBondNeighborsB.add(cTab2Copy.get(atomIndex * 4 + 1));
         cBondNeighborsB.add(cTab2Copy.get(atomIndex * 4 + 0));
         cBondNeighborsB.add("X");

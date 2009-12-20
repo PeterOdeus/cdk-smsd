@@ -36,7 +36,8 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
 
 /**
  * This algorithm derives from the algorithm described in
- * [Tonnelier, C. and Jauffret, Ph. and Hanser, Th. and Jauffret, Ph. and Kaufmann, G.,
+ * [Tonnelier, C. and Jauffret, Ph. and Hanser,
+ * Th. and Jauffret, Ph. and Kaufmann, G.,
  * Machine Learning of generic reactions:
  * 3. An efficient algorithm for maximal common substructure determination,
  * Tetrahedron Comput. Methodol., 1990, 3:351-358] and modified in the thesis of

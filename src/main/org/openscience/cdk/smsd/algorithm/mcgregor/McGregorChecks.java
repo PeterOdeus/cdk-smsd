@@ -42,7 +42,7 @@ public class McGregorChecks {
 
     /**
      * 
-     * @param source
+     * @param molecule
      * @param target
      * @param neighborBondNumA
      * @param neighborBondNumB
@@ -638,7 +638,15 @@ public class McGregorChecks {
         return unmappedMolAtoms;
     }
 
-    static List<Integer> markUnMappedAtoms(boolean flag, IAtomContainer source,
+    /**
+     * 
+     * @param flag source is true, target false
+     * @param molecule
+     * @param mapped_atoms
+     * @param clique_siz
+     * @return
+     */
+    protected static List<Integer> markUnMappedAtoms(boolean flag, IAtomContainer molecule,
             List<Integer> mapped_atoms, int clique_siz) {
         List<Integer> unmappedMolAtoms = new ArrayList<Integer>();
         int unmapped_num = 0;
@@ -646,7 +654,7 @@ public class McGregorChecks {
 
 //        System.out.println("Mapped Atoms: " + mappedAtoms);
 
-        for (int a = 0; a < source.getAtomCount(); a++) {
+        for (int a = 0; a < molecule.getAtomCount(); a++) {
             //Atomic list are only numbers from 1 to atom_number1
 
             for (int b = 0; b < clique_siz; b++) {
@@ -662,5 +670,47 @@ public class McGregorChecks {
             atom_is_unmapped = true;
         }
         return unmappedMolAtoms;
+    }
+
+    /**
+     * 
+     * @param G1A
+     * @param G2A
+     * @param G1B
+     * @param G2B
+     * @return
+     */
+    protected static boolean matchGAtoms(String G1A, String G2A, String G1B, String G2B) {
+        return (G1A.compareToIgnoreCase(G1B) == 0
+                && G2A.compareToIgnoreCase(G2B) == 0)
+                || (G1A.compareToIgnoreCase(G2B) == 0
+                && G2A.compareToIgnoreCase(G1B) == 0);
+    }
+
+    /**
+     *
+     * @param Mapped_Atom_1
+     * @param Mapped_Atom_2
+     * @param additional_mapping
+     * @param Atom1_moleculeA
+     * @param Atom1_moleculeB
+     * @param Atom2_moleculeA
+     * @param Atom2_moleculeB
+     */
+    protected static void addMapping(int Mapped_Atom_1, int Mapped_Atom_2, List<Integer> additional_mapping,
+            int Atom1_moleculeA, int Atom1_moleculeB, int Atom2_moleculeA, int Atom2_moleculeB) {
+        if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
+            additional_mapping.add(Atom2_moleculeA);
+            additional_mapping.add(Atom2_moleculeB);
+        } else if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+            additional_mapping.add(Atom2_moleculeA);
+            additional_mapping.add(Atom1_moleculeB);
+        } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
+            additional_mapping.add(Atom1_moleculeA);
+            additional_mapping.add(Atom2_moleculeB);
+        } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
+            additional_mapping.add(Atom1_moleculeA);
+            additional_mapping.add(Atom1_moleculeB);
+        }
     }
 }

@@ -126,7 +126,7 @@ public class McGregor {
         //number of remaining molecule A bonds after the clique search, which are neighbors of the MCS
         int gNeighborBondnumA = 0;
         //number of remaining molecule B bonds after the clique search, which are neighbors of the MCS
-        int gNeighborBondNumB = 0; 
+        int gNeighborBondNumB = 0;
 
 
         QueryProcessor queryProcess = new QueryProcessor(
@@ -427,16 +427,6 @@ public class McGregor {
             Stack<List<Integer>> BESTARCS_copy,
             McgregorHelper mcGregorHelper) throws IOException {
 
-
-        int mappedAtomCount = mcGregorHelper.getMappedAtomCount();
-
-        int setNumA = mcGregorHelper.getSetNumA();
-        int setNumB = mcGregorHelper.getsetNumB();
-        List<Integer> i_bond_setA = mcGregorHelper.getIBondSetA();
-        List<Integer> i_bond_setB = mcGregorHelper.getIBondSetB();
-        List<String> c_bond_setA = mcGregorHelper.getCBondSetA();
-        List<String> c_bond_setB = mcGregorHelper.getCBondSetB();
-
         while (!BESTARCS_copy.empty()) {
 
             List<Integer> MARCS_vector = new ArrayList<Integer>(BESTARCS_copy.peek());
@@ -444,7 +434,7 @@ public class McGregor {
 
             int newMapingSize = new_Mapping.size() / 2;
             boolean no_further_MAPPINGS = false;
-            if (mappedAtomCount == newMapingSize) {
+            if (mcGregorHelper.getMappedAtomCount() == newMapingSize) {
                 no_further_MAPPINGS = true;
             }
 
@@ -459,28 +449,13 @@ public class McGregor {
             //new values for setNumA + setNumB
             //new arrays for i_bond_setA + i_bond_setB + c_bond_setB + c_bond_setB
 
-            List<String> c_setA_copy = McGregorChecks.generateCSetCopy(setNumA, c_bond_setA);
-            List<String> c_setB_copy = McGregorChecks.generateCSetCopy(setNumB, c_bond_setB);
-
+            List<String> c_setA_copy = McGregorChecks.generateCSetCopy(mcGregorHelper.getSetNumA(),
+                    mcGregorHelper.getCBondSetA());
+            List<String> c_setB_copy = McGregorChecks.generateCSetCopy(mcGregorHelper.getsetNumB(),
+                    mcGregorHelper.getCBondSetB());
             //find unmapped atoms of molecule A
-            List<Integer> unmapped_atoms_molA = new ArrayList<Integer>();
-            int unmapped_numA = 0;
-            boolean atomA_is_unmapped = true;
-
-            for (int a = 0; a < source.getAtomCount(); a++) {
-                for (int b = 0; b < newMapingSize; b++) {
-                    if (a == new_Mapping.get(b * 2 + 0)) {
-                        atomA_is_unmapped = false;
-                    }
-
-                }
-                if (atomA_is_unmapped) {
-                    unmapped_atoms_molA.add(unmapped_numA++, a);
-                }
-                atomA_is_unmapped = true;
-            }
-
-
+            List<Integer> unmapped_atoms_molA =
+                    McGregorChecks.markUnMappedAtoms(true, source, new_Mapping, source.getAtomCount());
             //The special signs must be transfered to the corresponding atoms of molecule B
 
             int counter = 0;
@@ -504,10 +479,10 @@ public class McGregor {
 
 
             queryProcess.process(
-                    setNumA,
-                    setNumB,
-                    i_bond_setA,
-                    i_bond_setB,
+                    mcGregorHelper.getSetNumA(),
+                    mcGregorHelper.getsetNumB(),
+                    mcGregorHelper.getIBondSetA(),
+                    mcGregorHelper.getIBondSetB(),
                     unmapped_atoms_molA,
                     new_Mapping,
                     counter);
@@ -521,22 +496,8 @@ public class McGregor {
 
             //find unmapped atoms of molecule B
 
-            List<Integer> unmapped_atoms_molB = new ArrayList<Integer>();
-            int unmapped_numB = 0;
-            boolean atomB_is_unmapped = true;
-
-            for (int a = 0; a < target.getAtomCount(); a++) {
-                for (int b = 0; b < newMapingSize; b++) {
-                    if (a == new_Mapping.get(b * 2 + 1)) {
-                        atomB_is_unmapped = false;
-                    }
-                }
-                if (atomB_is_unmapped) {
-                    unmapped_atoms_molB.add(unmapped_numB++, a);
-                }
-                atomB_is_unmapped = true;
-            }
-
+            List<Integer> unmapped_atoms_molB =
+                    McGregorChecks.markUnMappedAtoms(true, target, new_Mapping, target.getAtomCount());
 
             //number of remaining molecule B bonds after the clique search, which aren't neighbors
             int newSetBondNumB = 0; //instead of setNumB
@@ -556,11 +517,11 @@ public class McGregor {
 
 
             targetProcess.process(
-                    setNumB,
+                    mcGregorHelper.getsetNumB(),
                     unmapped_atoms_molB,
                     newMapingSize,
-                    i_bond_setB,
-                    c_bond_setB,
+                    mcGregorHelper.getIBondSetB(),
+                    mcGregorHelper.getCBondSetB(),
                     new_Mapping,
                     counter,
                     new_i_bond_setB,
@@ -641,7 +602,7 @@ public class McGregor {
                 String G2B = cBondNeighborsB.get(column * 4 + 1);
 
 
-                if (matchGAtoms(G1A, G2A, G1B, G2B)) {
+                if (McGregorChecks.matchGAtoms(G1A, G2A, G1B, G2B)) {
                     int Index_I = iBondNeighborAtomsA.get(row * 3 + 0);
                     int Index_IPlus1 = iBondNeighborAtomsA.get(row * 3 + 1);
 
@@ -914,27 +875,11 @@ public class McGregor {
                 int Mapped_Atom_1 = currentMapping.get(indexZ * 2 + 0);
                 int Mapped_Atom_2 = currentMapping.get(indexZ * 2 + 1);
 
-                if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                    additional_mapping.add(Atom2_moleculeA);
-                    additional_mapping.add(Atom2_moleculeB);
-                } else if ((Mapped_Atom_1 == Atom1_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                    additional_mapping.add(Atom2_moleculeA);
-                    additional_mapping.add(Atom1_moleculeB);
-                } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom1_moleculeB)) {
-                    additional_mapping.add(Atom1_moleculeA);
-                    additional_mapping.add(Atom2_moleculeB);
-                } else if ((Mapped_Atom_1 == Atom2_moleculeA) && (Mapped_Atom_2 == Atom2_moleculeB)) {
-                    additional_mapping.add(Atom1_moleculeA);
-                    additional_mapping.add(Atom1_moleculeB);
-                }
+                McGregorChecks.addMapping(Mapped_Atom_1, Mapped_Atom_2, additional_mapping,
+                        Atom1_moleculeA, Atom1_moleculeB, Atom2_moleculeA, Atom2_moleculeB);
             }//for loop
         }
     }
 
-    private boolean matchGAtoms(String G1A, String G2A, String G1B, String G2B) {
-        return (G1A.compareToIgnoreCase(G1B) == 0
-                && G2A.compareToIgnoreCase(G2B) == 0)
-                || (G1A.compareToIgnoreCase(G2B) == 0
-                && G2A.compareToIgnoreCase(G1B) == 0);
-    }
+   
 }

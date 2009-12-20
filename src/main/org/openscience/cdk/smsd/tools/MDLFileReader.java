@@ -47,7 +47,7 @@ import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
  */
 public class MDLFileReader {
 
-    private static IMolecule Mol = null;
+    private static IMolecule molecule = null;
 
     /**
      *
@@ -59,14 +59,14 @@ public class MDLFileReader {
 
         try {
             MDLV2000Reader reader2 = new MDLV2000Reader(inputStream, mode);
-            Mol = (IMolecule) reader2.read(new Molecule());
+            molecule = (IMolecule) reader2.read(new Molecule());
             reader2.close();
         } catch (CDKException e) {
             String string = e.toString();
             if (string.contains("This file must be read with the MDLV3000Reader.")) {
                 MDLV3000Reader reader2 = new MDLV3000Reader(inputStream, mode);
                 try {
-                    Mol = (IMolecule) reader2.read(new Molecule());
+                    molecule = (IMolecule) reader2.read(new Molecule());
                 } catch (CDKException ex) {
                     Logger.getLogger(MDLFileReader.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -75,7 +75,7 @@ public class MDLFileReader {
             } else if (string.contains("This file must be read with the MDLReader.")) {
                 try {
                     MDLReader reader2 = new MDLReader(inputStream, mode);
-                    Mol = (IMolecule) reader2.read(new Molecule());
+                    molecule = (IMolecule) reader2.read(new Molecule());
                     reader2.close();
                 } catch (CDKException ex) {
                     Logger.getLogger(MDLFileReader.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,14 +119,14 @@ public class MDLFileReader {
 
         try {
             MDLV2000Reader reader2 = new MDLV2000Reader(reader, mode);
-            Mol = (IMolecule) reader2.read(new Molecule());
+            molecule = (IMolecule) reader2.read(new Molecule());
             reader2.close();
         } catch (CDKException e) {
             String string = e.toString();
             if (string.contains("This file must be read with the MDLV3000Reader.")) {
                 MDLV3000Reader reader2 = new MDLV3000Reader(reader, mode);
                 try {
-                    Mol = (IMolecule) reader2.read(new Molecule());
+                    molecule = (IMolecule) reader2.read(new Molecule());
                 } catch (CDKException ex) {
                     Logger.getLogger(MDLFileReader.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -135,7 +135,7 @@ public class MDLFileReader {
             } else if (string.contains("This file must be read with the MDLReader.")) {
                 try {
                     MDLReader reader2 = new MDLReader(reader, mode);
-                    Mol = (IMolecule) reader2.read(new Molecule());
+                    molecule = (IMolecule) reader2.read(new Molecule());
                     reader2.close();
                 } catch (CDKException ex) {
                     Logger.getLogger(MDLFileReader.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,7 +154,7 @@ public class MDLFileReader {
      * @return
      */
     public IMolecule getMolecule() {
-        return Mol;
+        return molecule;
     }
 
     /**
@@ -162,17 +162,17 @@ public class MDLFileReader {
      * @return
      */
     public IMolecule getMoleculeWithLayoutCheck() {
-        if (GeometryTools.has2DCoordinatesNew(Mol) != 2) {
+        if (GeometryTools.has2DCoordinatesNew(molecule) != 2) {
             try {
-                StructureDiagramGenerator sdg = new StructureDiagramGenerator(Mol);
+                StructureDiagramGenerator sdg = new StructureDiagramGenerator(molecule);
                 sdg.generateCoordinates();
-                Mol = sdg.getMolecule();
+                molecule = sdg.getMolecule();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return Mol;
+        return molecule;
     }
 
     /**
@@ -181,13 +181,13 @@ public class MDLFileReader {
      */
     public IChemModel getChemModelWithMoleculeWithLayoutCheck() {
         IChemModel chemModel = new ChemModel();
-        chemModel.setMoleculeSet(ConnectivityChecker.partitionIntoMolecules(Mol));
-        for (IAtomContainer molecule : MoleculeSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
-            if (GeometryTools.has2DCoordinatesNew(molecule) != 2) {
+        chemModel.setMoleculeSet(ConnectivityChecker.partitionIntoMolecules(molecule));
+        for (IAtomContainer mol : MoleculeSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
+            if (GeometryTools.has2DCoordinatesNew(mol) != 2) {
                 try {
-                    StructureDiagramGenerator sdg = new StructureDiagramGenerator((IMolecule) molecule);
+                    StructureDiagramGenerator sdg = new StructureDiagramGenerator((IMolecule) mol);
                     sdg.generateCoordinates();
-                    molecule = sdg.getMolecule();
+                    mol = sdg.getMolecule();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
