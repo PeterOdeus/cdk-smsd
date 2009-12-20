@@ -360,7 +360,8 @@ public class CDKRMapHandler {
      * @return
      */
     protected boolean isSameRMap(CDKRMap sourceRMap, CDKRMap targetRMap) {
-        if (sourceRMap.getId1() == targetRMap.getId1() && sourceRMap.getId2() == targetRMap.getId2()) {
+        if (sourceRMap.getId1() == targetRMap.getId1()
+                && sourceRMap.getId2() == targetRMap.getId2()) {
             return true;
         }
 
@@ -372,13 +373,6 @@ public class CDKRMapHandler {
      * @return time out flag
      */
     public boolean getTimeOutFlag() {
-
-        boolean flag = false;
-
-        if (timeoutFlag) {
-            flag = true;
-        }
-
-        return flag;
+        return this.timeoutFlag;
     }
 }

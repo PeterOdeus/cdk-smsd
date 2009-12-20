@@ -171,8 +171,8 @@ public class CDKMCSHandler implements IMCSAlgorithm {
     protected IMoleculeSet getUncommon(IAtomContainer mol, IAtomContainer mcss) throws CDKException {
         ArrayList<Integer> atomSerialsToDelete = new ArrayList<Integer>();
 
-        List matches = CDKMCS.getSubgraphAtomsMaps(mol, mcss);
-        List mapList = (List) matches.get(0);
+        List<List<CDKRMap>> matches = CDKMCS.getSubgraphAtomsMaps(mol, mcss);
+        List<CDKRMap> mapList = matches.get(0);
         for (Object o : mapList) {
             CDKRMap rmap = (CDKRMap) o;
             atomSerialsToDelete.add(rmap.getId1());
