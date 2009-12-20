@@ -251,10 +251,7 @@ public class CDKMCSHandler implements IMCSAlgorithm {
                 sourceAtom = source.getAtom(IIndex);
                 targetAtom = target.getAtom(JIndex);
                 atomMappings.put(sourceAtom, targetAtom);
-
-
             }
-
             allAtomMCS.add(counter++, atomMappings);
         }
 
