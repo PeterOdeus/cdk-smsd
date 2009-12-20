@@ -52,7 +52,8 @@ public class CDKMCSHandler implements IMCSAlgorithm {
     private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     //~--- constructors -------------------------------------------------------
-    /** Creates a new instance of MappingHandler
+    /**
+     * Creates a new instance of MappingHandler
      */
     public CDKMCSHandler() {
 
