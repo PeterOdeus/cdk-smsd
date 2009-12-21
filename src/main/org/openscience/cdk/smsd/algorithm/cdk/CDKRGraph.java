@@ -93,7 +93,6 @@ import org.openscience.cdk.smsd.global.TimeOut;
  *  <p>This algorithm derives from the algorithm described in
  *  {@cdk.cite HAN90} and modified in the thesis of T. Hanser {@cdk.cite HAN93}.
  */
-
 /**
  * @cdk.module smsd
  */
@@ -326,55 +325,21 @@ public class CDKRGraph {
         BitSet projG1 = projectG1(traversed);
         BitSet projG2 = projectG2(traversed);
 
-        // the solution must follows the search constrains
+        // the solution must follow the search constrains
         // (must contain the mandatory elements in G1 an G2)
         if (isContainedIn(sourceBitSet, projG1) && isContainedIn(targetBitSet, projG2)) {
-            // the solution should not be included in a previous solution
-            // at the CDKRGraph level. So we check against all previous solution
-            // On the other hand if a previous solution is included in the
-            // new one, the previous solution is removed.
-            for (Iterator<BitSet> i = solutionList.listIterator(); i.hasNext() && !included;) {
-                BitSet sol = i.next();
-                checkTimeOut();
-                if (!sol.equals(traversed)) {
-                    // if we asked to save all 'mappings' then keep this mapping
-                    if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
-                        // do nothing
-                    } // if the new solution is included mark maxIterator as included
-                    else if (isContainedIn(projG1, projectG1(sol)) || isContainedIn(projG2, projectG2(sol))) {
-                        included = true;
-                    } // if the previous solution is contained in the new one, remove the previous solution
-                    else if (isContainedIn(projectG1(sol), projG1) || isContainedIn(projectG2(sol), projG2)) {
-                        i.remove();
-                    }
-                } else {
-                    // solution already exists
-                    included = true;
-                }
-            }
-
-            if (included == false) {
-                // if maxIterator is really a new solution add maxIterator to the
-                // list of current solution
-                solutionList.add(traversed);
-            }
-
-            if (!findAllStructure) {
-                // if we need only one solution
-                // stop the search process
-                // (e.g. substructure search)
-                stop = true;
-            }
+            findNewSolutions(projG1, projG2, traversed, included);
+            addNewSolution(included, traversed);
+            isSubstructureFound();
         }
     }
 
     /**
-     *  Determine if there are potential solution remaining.
+     * Determine if there are potential solution remaining.
      * @param       potentialNode  set of remaining potential nodes
      * @return      true if maxIterator is worse to continue the search
      */
     private boolean mustContinue(BitSet potentialNode) throws CDKException {
-        boolean result = true;
         boolean cancel = false;
         BitSet projG1 = projectG1(potentialNode);
         BitSet projG2 = projectG2(potentialNode);
@@ -390,22 +355,7 @@ public class CDKRGraph {
             return false;
         }
 
-        // check if the solution potential is not included in an already
-        // existing solution
-        for (Iterator<BitSet> i = solutionList.iterator(); i.hasNext() && !cancel;) {
-            BitSet sol = i.next();
-            checkTimeOut();
-            // if we want every 'mappings' do not stop
-            if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
-                // do nothing
-            } // if maxIterator is not possible to do better than an already existing solution than stop.
-            else if (isContainedIn(projG1, projectG1(sol)) || isContainedIn(projG2, projectG2(sol))) {
-                result = false;
-                cancel = true;
-            }
-        }
-
-        return result;
+        return checkPotentialSolution(projG1, projG2, cancel);
     }
 
     /**
@@ -568,6 +518,70 @@ public class CDKRGraph {
 
         if (setA.equals(sourceBitSet)) {
             result = true;
+        }
+
+        return result;
+    }
+
+    private void isSubstructureFound() {
+        if (!findAllStructure) {
+            // if we need only one solution
+            // stop the search process
+            // (e.g. substructure search)
+            stop = true;
+        }
+    }
+
+    private void addNewSolution(boolean included, BitSet traversed) {
+        if (included == false) {
+            // if maxIterator is really a new solution add maxIterator to the
+            // list of current solution
+            solutionList.add(traversed);
+        }
+    }
+
+    private void findNewSolutions(BitSet projG1, BitSet projG2, BitSet traversed, boolean included) throws CDKException {
+        // the solution should not be included in a previous solution
+        // at the CDKRGraph level. So we check against all previous solution
+        // On the other hand if a previous solution is included in the
+        // new one, the previous solution is removed.
+        for (Iterator<BitSet> i = solutionList.listIterator(); i.hasNext() && !included;) {
+            BitSet sol = i.next();
+            checkTimeOut();
+            if (!sol.equals(traversed)) {
+                // if we asked to save all 'mappings' then keep this mapping
+                if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
+                    // do nothing
+                } // if the new solution is included mark maxIterator as included
+                else if (isContainedIn(projG1, projectG1(sol)) || isContainedIn(projG2, projectG2(sol))) {
+                    included = true;
+                } // if the previous solution is contained in the new one, remove the previous solution
+                else if (isContainedIn(projectG1(sol), projG1) || isContainedIn(projectG2(sol), projG2)) {
+                    i.remove();
+                }
+            } else {
+                // solution already exists
+                included = true;
+            }
+        }
+    }
+
+    private boolean checkPotentialSolution(BitSet projG1, BitSet projG2, boolean cancel) throws CDKException {
+
+        boolean result = true;
+        // check if the potential solution is not included in an already
+        // existing solution
+        for (Iterator<BitSet> i = solutionList.iterator(); i.hasNext() && !cancel;) {
+            BitSet sol = i.next();
+            checkTimeOut();
+            // if we want every 'mappings' do not stop
+            if (findAllMap && (projG1.equals(projectG1(sol)) || projG2.equals(projectG2(sol)))) {
+                // do nothing
+            } // if maxIterator is not possible to do better than an already existing solution than stop.
+            else if (isContainedIn(projG1, projectG1(sol)) || isContainedIn(projG2, projectG2(sol))) {
+                result = false;
+                cancel = true;
+            }
         }
 
         return result;
