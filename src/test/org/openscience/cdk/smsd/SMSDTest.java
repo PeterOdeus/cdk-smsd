@@ -82,6 +82,7 @@ public class SMSDTest extends CDKTestCase {
         SMSD ebimcs = new SMSD(Algorithm.CDKMCS, false);
         ebimcs.init(Cyclohexane, Benzene, true);
         ebimcs.setChemFilters(true, true, true);
+        Assert.assertEquals(6, ebimcs.getFirstMapping().size());
         Assert.assertEquals(true, ebimcs.isSubgraph());
     }
 
