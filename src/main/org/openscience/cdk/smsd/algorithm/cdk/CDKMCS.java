@@ -537,7 +537,7 @@ public class CDKMCS {
             }
 
             atom = bond.getAtom(0);
-            atom1 = (IAtom) table.get(atom);
+            atom1 = table.get(atom);
 
             if (atom1 == null) {
                 try {
@@ -714,11 +714,11 @@ public class CDKMCS {
                 List<IBond> bondsConnectedToAtom1j = sourceGraph.getConnectedBondsList(atom1[j]);
                 for (int k = 0; k < bondsConnectedToAtom1j.size(); k++) {
                     if (bondsConnectedToAtom1j.get(k) != bond1) {
-                        IBond testBond = (IBond) bondsConnectedToAtom1j.get(k);
+                        IBond testBond = bondsConnectedToAtom1j.get(k);
                         for (int m = 0; m < list.size(); m++) {
                             IBond testBond2;
-                            if (((CDKRMap) list.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
-                                testBond2 = targetGraph.getBond(((CDKRMap) list.get(m)).getId2());
+                            if ((list.get(m)).getId1() == sourceGraph.getBondNumber(testBond)) {
+                                testBond2 = targetGraph.getBond((list.get(m)).getId2());
                                 for (int n = 0; n < 2; n++) {
                                     List<IBond> bondsToTest = targetGraph.getConnectedBondsList(atom2[n]);
                                     if (bondsToTest.contains(testBond2)) {
@@ -840,7 +840,7 @@ public class CDKMCS {
     private static void arcConstructor(CDKRGraph graph, IAtomContainer ac1, IAtomContainer ac2) throws CDKException {
         // each node is incompatible with itself
         for (int i = 0; i < graph.getGraph().size(); i++) {
-            CDKRNode rNodeX = (CDKRNode) graph.getGraph().get(i);
+            CDKRNode rNodeX = graph.getGraph().get(i);
             rNodeX.getForbidden().set(i);
         }
 
