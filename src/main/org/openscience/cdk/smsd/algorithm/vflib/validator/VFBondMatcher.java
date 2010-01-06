@@ -114,8 +114,6 @@ public class VFBondMatcher extends Bond implements IQueryBond {
     }
 
     private Integer getUnsaturation(IAtom atom) {
-        return atom.getValency() == null ? -1 : atom.getValency()
-                - atom.getFormalNeighbourCount();
-
+         return (atom.getValency() == null || atom.getFormalNeighbourCount() == null) ? -1 : atom.getValency() - atom.getFormalNeighbourCount();
     }
 }
