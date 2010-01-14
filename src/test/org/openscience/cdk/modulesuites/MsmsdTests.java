@@ -23,8 +23,16 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 import org.openscience.cdk.coverage.SmsdCoverageTest;
 import org.openscience.cdk.smsd.SMSDTest;
+import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSHandlerTest;
 import org.openscience.cdk.smsd.algorithm.cdk.CDKMCSTest;
+import org.openscience.cdk.smsd.algorithm.mcsplus.MCSPlusHandlerTest;
+import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandlerTest;
 import org.openscience.cdk.smsd.algorithm.vflib.VFLibTest;
+import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandlerTest;
+import org.openscience.cdk.smsd.factory.FragmentMatcherTest;
+import org.openscience.cdk.smsd.factory.SubStructureSearchAlgorithmsTest;
+import org.openscience.cdk.smsd.global.TimeOutTest;
+import org.openscience.cdk.smsd.helper.LabelContainerTest;
 import org.openscience.cdk.smsd.tools.BondEnergiesTest;
 import org.openscience.cdk.smsd.tools.TimeManagerTest;
 
@@ -41,6 +49,14 @@ import org.openscience.cdk.smsd.tools.TimeManagerTest;
     CDKMCSTest.class,
     SMSDTest.class,
     TimeManagerTest.class,
-    VFLibTest.class
+    VFLibTest.class,
+    SubStructureSearchAlgorithmsTest.class,
+    FragmentMatcherTest.class,
+    TimeOutTest.class,
+    LabelContainerTest.class,
+    MCSPlusHandlerTest.class,
+    VFlibMCSHandlerTest.class,
+    SingleMappingHandlerTest.class,
+    CDKMCSHandlerTest.class
 })
 public class MsmsdTests {}

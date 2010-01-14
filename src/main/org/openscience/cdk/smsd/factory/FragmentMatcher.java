@@ -37,6 +37,8 @@ import org.openscience.cdk.smsd.algorithm.single.SingleMappingHandler;
 import org.openscience.cdk.smsd.algorithm.vflib.VFlibMCSHandler;
 import org.openscience.cdk.smsd.helper.MolHandler;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,6 +47,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.factory.FragmentMatcherTest")
 public class FragmentMatcher {
 
     private MolHandler rMol;
@@ -168,6 +171,7 @@ public class FragmentMatcher {
      * @param target
      * @param removeHydrogen
      */
+    @TestMethod("testFragmentMatcher")
     public FragmentMatcher(IAtomContainerSet source, IAtomContainerSet target, boolean removeHydrogen) {
 
         this.removeHydrogen = removeHydrogen;

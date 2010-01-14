@@ -24,9 +24,13 @@
  */
 package org.openscience.cdk.smsd.global;
 
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
+
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.global")
 public class TimeOut {
 
     private static TimeOut instance = null;
@@ -36,6 +40,7 @@ public class TimeOut {
      *
      * @return
      */
+    @TestMethod("testGetInstance")
     public static synchronized TimeOut getInstance() {
         if (instance == null) {
             // it's ok, we can call this constructor
@@ -51,6 +56,7 @@ public class TimeOut {
      *
      * @param timeout
      */
+    @TestMethod("testSetTimeOut")
     public void setTimeOut(double timeout) {
         this.time = timeout;
     }
@@ -59,6 +65,7 @@ public class TimeOut {
      *
      * @return
      */
+    @TestMethod("testSetTimeOut")
     public double getTimeOut() {
         return time;
     }

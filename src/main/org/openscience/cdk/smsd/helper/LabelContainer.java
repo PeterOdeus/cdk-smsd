@@ -27,10 +27,14 @@ package org.openscience.cdk.smsd.helper;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
+
 /**
  * 
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.helper.LabelContainerTest")
 public class LabelContainer {
 
     private HashMap<String, Integer> labelMap = null;
@@ -76,6 +80,7 @@ public class LabelContainer {
      * Create ids from atom labels
      * @return
      */
+    @TestMethod("testGetInstance")
     synchronized public static LabelContainer getInstance() {
         if (instance == null) {
             instance = new LabelContainer();

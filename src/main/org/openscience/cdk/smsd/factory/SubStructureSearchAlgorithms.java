@@ -34,6 +34,8 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -56,6 +58,7 @@ import org.openscience.cdk.smsd.interfaces.IMCSAlgorithm;
 /**
  * @cdk.module smsd
  */
+@TestClass("org.openscience.cdk.smsd.factory.SubStructureSearchAlgorithmsTest")
 public class SubStructureSearchAlgorithms implements IMCS {
 
     private List<TreeMap<Integer, Integer>> allMCS = null;
@@ -83,6 +86,7 @@ public class SubStructureSearchAlgorithms implements IMCS {
      * @param algorithmType 0 default, 1 mcsPlusAlgorithm, 2 VFLib, 3 CDKMCS 4 subStructureAlgorithm
      * @param bondTypeFlag
      */
+    @TestMethod("testSubStructureSearchAlgorithms")
     public SubStructureSearchAlgorithms(Algorithm algorithmType, boolean bondTypeFlag) {
         this.algorithmType = algorithmType;
         firstSolution = new TreeMap<Integer, Integer>();
