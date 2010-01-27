@@ -49,73 +49,70 @@ import org.openscience.cdk.tools.LoggingToolFactory;
  * @cdk.githash
  */
 public class HydrogenPlacer {
-    
-	public final static boolean debug = false;
-	public final static boolean debug1 = false;
-	
-	public  void placeHydrogens2D(IAtomContainer atomContainer, double bondLength){
-	    ILoggingTool logger =
-	        LoggingToolFactory.createLoggingTool(HydrogenPlacer.class);
-	    logger.debug("Entering Hydrogen Placement...");
-	    IAtom atom = null; 
-	    for (int f = 0; f < atomContainer.getAtomCount();f++)
-	    {
-	        atom = atomContainer.getAtom(f);
+
+    public final static boolean debug = false;
+    public final static boolean debug1 = false;
+
+    public void placeHydrogens2D(IAtomContainer atomContainer, double bondLength) {
+        ILoggingTool logger =
+                LoggingToolFactory.createLoggingTool(HydrogenPlacer.class);
+        logger.debug("Entering Hydrogen Placement...");
+        IAtom atom = null;
+        for (int f = 0; f < atomContainer.getAtomCount(); f++) {
+            atom = atomContainer.getAtom(f);
 //	        if (!atom.getSymbol().equals("H"))
 //	        {
-	            if (debug1) System.out.println("Now placing hydrogens at atom " + f);
-	            logger.debug("Now placing hydrogens at atom " + f);
-	            placeHydrogens2D(atomContainer, atom, bondLength);
+            if (debug1) {
+                System.out.println("Now placing hydrogens at atom " + f);
+            }
+            logger.debug("Now placing hydrogens at atom " + f);
+            placeHydrogens2D(atomContainer, atom, bondLength);
 //	        }
-	    }
-	    logger.debug("Hydrogen Placement finished");
-	}
-	
-	
-	public  void placeHydrogens2D(IAtomContainer atomContainer, IAtom atom)
-	{
-		double bondLength = GeometryTools.getBondLengthAverage(atomContainer);
-		placeHydrogens2D(atomContainer, atom, bondLength);
-		
-	
-	}
-	
-	public  void placeHydrogens2D(IAtomContainer atomContainer, IAtom atom, double bondLength){
-		ILoggingTool logger =
-		    LoggingToolFactory.createLoggingTool(HydrogenPlacer.class);
-		
-		//double startAngle = 0.0;
-		//double addAngle = 0.0; 
-		AtomPlacer atomPlacer = new AtomPlacer();
-		atomPlacer.setMolecule(atomContainer);
-		//Vector atomVector = new Vector();
-		logger.debug("bondLength ", bondLength);
-		List<IAtom> connectedAtoms = atomContainer.getConnectedAtomsList(atom);
-		IAtomContainer placedAtoms = atomContainer.getBuilder().newAtomContainer();
-		IAtomContainer unplacedAtoms = atomContainer.getBuilder().newAtomContainer();
-		
-		for (int f = 0; f < connectedAtoms.size(); f++) {
-			IAtom conAtom = (IAtom)connectedAtoms.get(f);
-			if (conAtom.getSymbol().equals("H") && conAtom.getPoint2d()==null) {
-				unplacedAtoms.addAtom(conAtom);
-			} else {
-				placedAtoms.addAtom(conAtom);
-			}
-		}
-		logger.debug("Atom placement before procedure:");
-		logger.debug("Center atom ", atom.getSymbol(), ": ", atom.getPoint2d());
-		for (int f = 0; f < unplacedAtoms.getAtomCount(); f++)
-		{
-			logger.debug("H-" + f, ": ", unplacedAtoms.getAtom(f).getPoint2d());
-		}
+        }
+        logger.debug("Hydrogen Placement finished");
+    }
+
+    public void placeHydrogens2D(IAtomContainer atomContainer, IAtom atom) {
+        double bondLength = GeometryTools.getBondLengthAverage(atomContainer);
+        placeHydrogens2D(atomContainer, atom, bondLength);
+
+
+    }
+
+    public void placeHydrogens2D(IAtomContainer atomContainer, IAtom atom, double bondLength) {
+        ILoggingTool logger =
+                LoggingToolFactory.createLoggingTool(HydrogenPlacer.class);
+
+        //double startAngle = 0.0;
+        //double addAngle = 0.0;
+        AtomPlacer atomPlacer = new AtomPlacer();
+        atomPlacer.setMolecule(atomContainer);
+        //Vector atomVector = new Vector();
+        logger.debug("bondLength ", bondLength);
+        List<IAtom> connectedAtoms = atomContainer.getConnectedAtomsList(atom);
+        IAtomContainer placedAtoms = atomContainer.getBuilder().newAtomContainer();
+        IAtomContainer unplacedAtoms = atomContainer.getBuilder().newAtomContainer();
+
+        for (int f = 0; f < connectedAtoms.size(); f++) {
+            IAtom conAtom = connectedAtoms.get(f);
+            if (conAtom.getSymbol().equals("H") && conAtom.getPoint2d() == null) {
+                unplacedAtoms.addAtom(conAtom);
+            } else {
+                placedAtoms.addAtom(conAtom);
+            }
+        }
+        logger.debug("Atom placement before procedure:");
+        logger.debug("Center atom ", atom.getSymbol(), ": ", atom.getPoint2d());
+        for (int f = 0; f < unplacedAtoms.getAtomCount(); f++) {
+            logger.debug("H-" + f, ": ", unplacedAtoms.getAtom(f).getPoint2d());
+        }
         Point2d centerPlacedAtoms = GeometryTools.get2DCenter(placedAtoms);
         atomPlacer.distributePartners(atom, placedAtoms, centerPlacedAtoms, unplacedAtoms, bondLength);
-		logger.debug("Atom placement after procedure:");
-		logger.debug("Center atom ", atom.getSymbol(), ": ", atom.getPoint2d());
-		for (int f = 0; f < unplacedAtoms.getAtomCount(); f++)
-		{
-			logger.debug("H-" + f, ": ", unplacedAtoms.getAtom(f).getPoint2d());
-		}				
-	}
+        logger.debug("Atom placement after procedure:");
+        logger.debug("Center atom ", atom.getSymbol(), ": ", atom.getPoint2d());
+        for (int f = 0; f < unplacedAtoms.getAtomCount(); f++) {
+            logger.debug("H-" + f, ": ", unplacedAtoms.getAtom(f).getPoint2d());
+        }
+    }
 }
 
