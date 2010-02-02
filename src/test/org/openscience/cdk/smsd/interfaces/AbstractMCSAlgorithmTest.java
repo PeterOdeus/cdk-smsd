@@ -30,7 +30,8 @@ import org.openscience.cdk.Molecule;
  * Unit test class to be extended by test classes for classes that
  * implement the {@link IMCSAlgorithm} interface.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public abstract class AbstractMCSAlgorithmTest {
 

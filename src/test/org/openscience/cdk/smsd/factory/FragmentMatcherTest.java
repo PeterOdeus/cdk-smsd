@@ -28,7 +28,8 @@ import org.openscience.cdk.AtomContainerSet;
 /**
  * Unit testing for the {@link FragmentMatcher} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class FragmentMatcherTest {
 

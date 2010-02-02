@@ -28,7 +28,8 @@ import org.openscience.cdk.smsd.interfaces.AbstractMCSAlgorithmTest;
 /**
  * Unit testing for the {@link MCSPlusHandler} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class MCSPlusHandlerTest extends AbstractMCSAlgorithmTest {
 

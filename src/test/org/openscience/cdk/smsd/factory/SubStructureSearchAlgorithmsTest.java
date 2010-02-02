@@ -28,7 +28,8 @@ import org.openscience.cdk.smsd.interfaces.IMCS.Algorithm;
 /**
  * Unit testing for the {@link SubStructureSearchAlgorithms} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class SubStructureSearchAlgorithmsTest {
 

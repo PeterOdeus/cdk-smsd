@@ -28,7 +28,8 @@ import org.openscience.cdk.smsd.global.TimeOut;
 /**
  * Unit testing for the {@link TimeOut} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class TimeOutTest {
 

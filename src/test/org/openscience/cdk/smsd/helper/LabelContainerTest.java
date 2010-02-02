@@ -28,7 +28,8 @@ import org.openscience.cdk.smsd.helper.LabelContainer;
 /**
  * Unit testing for the {@link LabelContainer} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class LabelContainerTest {
 

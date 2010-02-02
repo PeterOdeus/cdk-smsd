@@ -27,7 +27,8 @@ import org.openscience.cdk.smsd.interfaces.AbstractMCSAlgorithmTest;
 /**
  * Unit testing for the {@link VFlibMCSHandler} class.
  * 
- * @author egonw
+ * @author     egonw
+ * @cdk.module test-smsd
  */
 public class VFlibMCSHandlerTest extends AbstractMCSAlgorithmTest {
 
