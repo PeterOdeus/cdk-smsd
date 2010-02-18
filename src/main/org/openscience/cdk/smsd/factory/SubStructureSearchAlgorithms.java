@@ -275,29 +275,29 @@ public class SubStructureSearchAlgorithms implements IMCS {
         init(Reactant, Product, removeHydrogen);
     }
 
+    @Override
     public void setChemFilters(boolean stereoFilter, boolean fragmentFilter, boolean energyFilter) {
 
         if (firstAtomMCS != null) {
             ChemicalFilters chemFilter = new ChemicalFilters(allMCS, allAtomMCS, firstSolution, firstAtomMCS, rMol, pMol);
 
-            if (stereoFilter) {
+            if (stereoFilter && firstAtomMCS.size() > 1) {
                 chemFilter.sortResultsByStereoAndBondMatch();
+                this.stereoScore = chemFilter.getStereoMatches();
             }
             if (fragmentFilter) {
                 chemFilter.sortResultsByFragments();
+                this.fragmentSize = chemFilter.getSortedFragment();
             }
 
             if (energyFilter) {
                 try {
                     chemFilter.sortResultsByEnergies();
+                    this.bEnergies = chemFilter.getSortedEnergy();
                 } catch (CDKException ex) {
                     Logger.getLogger(SubStructureSearchAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
-            this.stereoScore = chemFilter.getStereoMatches();
-            this.fragmentSize = chemFilter.getSortedFragment();
-            this.bEnergies = chemFilter.getSortedEnergy();
         }
     }
 
