@@ -303,17 +303,18 @@ public class SubStructureSearchAlgorithms implements IMCS {
 
     @Override
     public synchronized Integer getFragmentSize(int Key) {
-        return fragmentSize.get(Key) == null ? null : fragmentSize.get(Key);
+        return (fragmentSize != null && !fragmentSize.isEmpty())
+                ? fragmentSize.get(Key) : null;
     }
 
     @Override
-    public Integer getStereoScore(int Key) {
-        return stereoScore.get(Key) == null ? null : stereoScore.get(Key).intValue();
+    public synchronized Integer getStereoScore(int Key) {
+        return (stereoScore != null && !stereoScore.isEmpty()) ? stereoScore.get(Key).intValue() : null;
     }
 
     @Override
-    public Double getEnergyScore(int Key) {
-        return bEnergies.get(Key) == null ? null : bEnergies.get(Key);
+    public synchronized Double getEnergyScore(int Key) {
+        return (bEnergies != null && !bEnergies.isEmpty()) ? bEnergies.get(Key) : null;
     }
 
     @Override
