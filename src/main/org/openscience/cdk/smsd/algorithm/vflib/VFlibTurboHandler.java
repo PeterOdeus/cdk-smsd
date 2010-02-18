@@ -95,23 +95,14 @@ public class VFlibTurboHandler implements ISubGraph {
             indexindexMapping.put(qIndex, tIndex);
 
         }
-        if (atomatomMapping.size() > 0) {
+        if (!atomatomMapping.isEmpty()) {
             allAtomMCS.add(counter, atomatomMapping);
             allMCS.add(counter, indexindexMapping);
-            counter++;
-        }
-
-        if (allAtomMCS.size() > 0) {
             atomsMCS.putAll(allAtomMCS.get(0));
             firstMCS.putAll(allMCS.get(0));
         }
 
-        if (firstMCS.size() == source.getAtomCount()) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return (!firstMCS.isEmpty() && firstMCS.size() == source.getAtomCount()) ? true : false;
     }
 
     /**
