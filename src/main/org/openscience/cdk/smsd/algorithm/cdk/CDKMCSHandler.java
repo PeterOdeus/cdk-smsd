@@ -47,17 +47,18 @@ public class CDKMCSHandler implements IMCSAlgorithm {
     private IAtomContainer target;
     private boolean rOnPFlag = false;
     private static List<Map<IAtom, IAtom>> allAtomMCS = null;
-    private static Map<IAtom, IAtom> atomsMCS = null;
+    private static Map<IAtom, IAtom> firstAtomMCS = null;
     private static TreeMap<Integer, Integer> firstMCS = null;
     private static List<TreeMap<Integer, Integer>> allMCS = null;
 
     //~--- constructors -------------------------------------------------------
-    /** Creates a new instance of MappingHandler
+    /*
+     * Creates a new instance of MappingHandler
      */
     public CDKMCSHandler() {
 
         allAtomMCS = new ArrayList<Map<IAtom, IAtom>>();
-        atomsMCS = new HashMap<IAtom, IAtom>();
+        firstAtomMCS = new HashMap<IAtom, IAtom>();
         firstMCS = new TreeMap<Integer, Integer>();
         allMCS = new ArrayList<TreeMap<Integer, Integer>>();
     }
@@ -83,6 +84,7 @@ public class CDKMCSHandler implements IMCSAlgorithm {
      * @param source
      * @param target
      */
+    @Override
     public void set(IMolecule source, IMolecule target) throws CDKException {
 
         IMolecule mol1 = source;
@@ -271,8 +273,8 @@ public class CDKMCSHandler implements IMCSAlgorithm {
     }
 
     private final synchronized void setFirstAtomMapping() {
-        if (!atomsMCS.isEmpty()) {
-            atomsMCS = new TreeMap<IAtom, IAtom>(allAtomMCS.get(0));
+        if (!allAtomMCS.isEmpty()) {
+            firstAtomMCS = new HashMap<IAtom, IAtom>(allAtomMCS.get(0));
         }
 
     }
@@ -294,6 +296,7 @@ public class CDKMCSHandler implements IMCSAlgorithm {
 
     @Override
     public Map<IAtom, IAtom> getFirstAtomMapping() {
-        return atomsMCS;
+        return firstAtomMCS;
     }
 }
+
