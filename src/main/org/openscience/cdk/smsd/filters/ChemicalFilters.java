@@ -146,6 +146,9 @@ public class ChemicalFilters {
         Integer Index = 0;
         for (Map<IAtom, IAtom> atomsMCS : allAtomMCS) {
             sortedAllAtomMCS.put(Index, atomsMCS);
+            fragmentScoreMap.put(Index, 0);
+            energySelectionMap.put(Index, 0.0);
+            stereoScoreMap.put(Index, 0.0);
             Index++;
         }
 
@@ -707,7 +710,7 @@ public class ChemicalFilters {
         return score;
     }
 
-    private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap,
+        private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap,
             Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
 
         boolean stereoMatchFlag = false;
@@ -732,11 +735,11 @@ public class ChemicalFilters {
 
             score = getBondScore(score, bondMaps);
 
-            if (!stereoMatchFlag && score > 0) {
+            score += getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
+            if (!stereoMatchFlag) {
                 stereoMatchFlag = true;
             }
-//            System.out.println("\nStart score1 " + score);
-            score = getRingMatchScore(score, subgraphRContainer, subgraphPContainer);
+//            System.out.println("\nStart score " + score);
             stereoScoreMap.put(Key, score);
         }
         return stereoMatchFlag;
