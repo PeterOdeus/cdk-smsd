@@ -390,7 +390,8 @@ public class ChemicalFilters {
                             int ac2ConnectedAtomNumber = mappings.get(ac1ConnectedAtomNumber);
 
                             IBond ac1Bond = ac1.getBond(atoms, cAtoms);
-                            IBond ac2Bond = ac2.getBond(ac2.getAtom(ac2AtomNumber), ac2.getAtom(ac2ConnectedAtomNumber));
+                            IBond ac2Bond = ac2.getBond(ac2.getAtom(ac2AtomNumber),
+                                            ac2.getAtom(ac2ConnectedAtomNumber));
 
                             if (ac2Bond == null) {
                                 ac2Bond = ac2.getBond(ac2.getAtom(ac2ConnectedAtomNumber), ac2.getAtom(ac2AtomNumber));
@@ -710,7 +711,7 @@ public class ChemicalFilters {
         return score;
     }
 
-        private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap,
+    private boolean getStereoMatch(Map<Integer, Double> stereoScoreMap,
             Map<Integer, TreeMap<Integer, Integer>> allStereoMCS, Map<Integer, Map<IAtom, IAtom>> allStereoAtomMCS) {
 
         boolean stereoMatchFlag = false;
